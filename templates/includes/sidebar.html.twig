@@ -1,0 +1,246 @@
+<aside class="sidebar">
+    <div class="logosidebar">
+        <img src="{{ asset('assets/img/LOGODATASOLUTION.png') }}" alt="LOGO DATA SOLUTION" />
+    </div>
+    <h2 class="mobile">Service DPO - {{app.user.user.companyName}}</h2>
+    <a href="{{ path('user_account') }}" class="mobile">Voir mon compte</a>
+
+    <ul class="side-menu mobile">
+        {% if is_granted('ROLE_MANAGER') %}
+            {% if is_granted('ROLE_DPO') %}
+                <li class="menu-item {% if app.request.attributes.get('_route') == 'manager_managers' %}active{% endif %}">
+                    <a href="{{ path('manager_managers') }}">
+                        <i class="fa fa-users"></i> D&eacute;l&eacute;gu&eacute;s
+                    </a>
+                </li>
+            {% endif %}
+            <li class="menu-item {% if app.request.attributes.get('_route') == 'manager_users' %}active{% endif %}">
+                <a href="{{ path('manager_users') }}">
+                    <i class="fa fa-building"></i> Soci&eacute;t&eacute;s
+                </a>
+            </li>
+            <li class="menu-item {% if app.request.attributes.get('_route') == 'manager_documents' %}active{% endif %}">
+                <a href="{{ path('manager_documents') }}">
+                    <i class="fa fa-files-o"></i> Base documentaire
+                </a>
+            </li>
+            {% if is_granted('ROLE_DPO') %}
+                <li class="menu-item {% if app.request.attributes.get('_route') == 'manager_partners' %}active{% endif %}">
+                    <a href="{{ path('manager_partners') }}">
+                        <i class="fa fa-briefcase"></i> Partenaires
+                    </a>
+                </li>
+                <li class="menu-item {% if app.request.attributes.get('_route') == 'manager_infos' %}active{% endif %}">
+                    <a href="{{ path('manager_infos') }}">
+                        <i class="fa fa-newspaper-o"></i> Infos
+                    </a>
+                </li>
+            {% endif %}
+            <li class="menu-item {% if app.request.attributes.get('_route') == 'manager_systems' %}active{% endif %}">
+                <a href="{{ path('manager_systems') }}">
+                    <i class="fa fa-sitemap"></i> Mesures techniques standards
+                </a>
+            </li>
+            <li class="menu-item {% if app.request.attributes.get('_route') == 'manager_treatments' %}active{% endif %}">
+                <a href="{{ path('manager_treatments') }}">
+                    <i class="fa fa-database"></i> Traitements standards
+                </a>
+            </li>
+            <li class="menu-item {% if app.request.attributes.get('_route') == 'manager_subcontractors' %}active{% endif %}">
+                <a href="{{ path('manager_subcontractors') }}">
+                    <i class="fa fa-users"></i> Sous-traitants standards
+                </a>
+            </li>
+            <li class="menu-item {% if app.request.attributes.get('_route') == 'manager_actions' %}active{% endif %}">
+                <a href="{{ path('manager_actions') }}">
+                    <i class="fa fa-map"></i> Actions standards
+                </a>
+            </li>
+            <li class="menu-item {% if app.request.attributes.get('_route') == 'manager_trainings' %}active{% endif %}">
+                <a href="{{ path('manager_trainings') }}">
+                    <i class="fa fa-graduation-cap"></i> Questionnaires
+                </a>
+            </li>
+            <li class="menu-item {% if app.request.attributes.get('_route') == 'manager_current_subscriptions' %}active{% endif %}">
+                <a href="{{ path('manager_current_subscriptions') }}">
+                    <i class="fa fa-book"></i> Abonnements
+                </a>
+            </li>
+      {% else %}
+    <li class="menu-item mobile {% if app.request.attributes.get('_route') == 'user_homepage' %}active{% endif %}">
+        <a href="{{ path('user_homepage') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1"/></svg> Tableau de bord
+        </a>
+    </li>
+    <li class="menu-item mobile {% if app.request.attributes.get('_route') == 'user_treatments' %}active{% endif %}">
+        <a href="{{ path('user_treatments') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20 6c0-2.168-3.663-4-8-4S4 3.832 4 6v2c0 2.168 3.663 4 8 4s8-1.832 8-4zm-8 13c-4.337 0-8-1.832-8-4v3c0 2.168 3.663 4 8 4s8-1.832 8-4v-3c0 2.168-3.663 4-8 4"/><path fill="currentColor" d="M20 10c0 2.168-3.663 4-8 4s-8-1.832-8-4v3c0 2.168 3.663 4 8 4s8-1.832 8-4z"/></svg> Registre des traitements
+        </a>
+      
+    </li>
+
+
+     <li class="menu-item {% if app.request.attributes.get('_route') == 'user_subcontractors' %}active{% endif %}">
+                   <a href="{{ path('user_data_processing') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 512 512"><path fill="currentColor" d="M336 256c-20.56 0-40.44-9.18-56-25.84c-15.13-16.25-24.37-37.92-26-61c-1.74-24.62 5.77-47.26 21.14-63.76S312 80 336 80c23.83 0 45.38 9.06 60.7 25.52c15.47 16.62 23 39.22 21.26 63.63c-1.67 23.11-10.9 44.77-26 61C376.44 246.82 356.57 256 336 256m131.83 176H204.18a27.71 27.71 0 0 1-22-10.67a30.22 30.22 0 0 1-5.26-25.79c8.42-33.81 29.28-61.85 60.32-81.08C264.79 297.4 299.86 288 336 288c36.85 0 71 9 98.71 26.05c31.11 19.13 52 47.33 60.38 81.55a30.27 30.27 0 0 1-5.32 25.78A27.68 27.68 0 0 1 467.83 432M147 260c-35.19 0-66.13-32.72-69-72.93c-1.42-20.6 5-39.65 18-53.62c12.86-13.83 31-21.45 51-21.45s38 7.66 50.93 21.57c13.1 14.08 19.5 33.09 18 53.52c-2.87 40.2-33.8 72.91-68.93 72.91m65.66 31.45c-17.59-8.6-40.42-12.9-65.65-12.9c-29.46 0-58.07 7.68-80.57 21.62c-25.51 15.83-42.67 38.88-49.6 66.71a27.39 27.39 0 0 0 4.79 23.36A25.32 25.32 0 0 0 41.72 400h111a8 8 0 0 0 7.87-6.57c.11-.63.25-1.26.41-1.88c8.48-34.06 28.35-62.84 57.71-83.82a8 8 0 0 0-.63-13.39c-1.57-.92-3.37-1.89-5.42-2.89"/></svg>
+ Destinataires des données
+        </a>
+                    
+                </li>
+
+                <li class="menu-item {% if app.request.attributes.get('_route') == 'user_incidents' %}active{% endif %}">
+        <a href="{{ path('user_incidents') }}">
+           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="m12.866 3l9.526 16.5a1 1 0 0 1-.866 1.5H2.474a1 1 0 0 1-.866-1.5L11.134 3a1 1 0 0 1 1.732 0M11 16v2h2v-2zm0-7v5h2V9z"/></svg>
+Registre des incidents
+        </a>
+       
+    </li>
+      <li class="menu-item {% if app.request.attributes.get('_route') == 'user_systems' %}active{% endif %}">
+        <a href="{{ path('user_systems') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M6.146 2.153a.5.5 0 0 1 .354-.146h3a.5.5 0 0 1 .5.5V4.51a.5.5 0 0 1-.5.5H8.497V7h4.5a.5.5 0 0 1 .5.5V10H14.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h.997V8h-4v2H9.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h.997V8h-4v2H4.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h.997V7.5a.5.5 0 0 1 .5-.5h4.5V5.01H6.5a.5.5 0 0 1-.5-.5V2.508a.5.5 0 0 1 .146-.354" clip-rule="evenodd"/></svg> Cartographie du SI
+        </a>
+        
+    </li>
+    
+    <li class="menu-item {% if app.request.attributes.get('_route') == 'user_exercisingclaims' %}active{% endif %}">
+        <a href="{{ path('user_exercisingclaims') }}">
+           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 32 32"><path fill="currentColor" d="M21.066 20.667c1.227-.682 1.068-3.31-.354-5.874c-.61-1.104-1.36-1.998-2.11-2.623a5.23 5.23 0 0 1-3.1 1.03a5.23 5.23 0 0 1-3.105-1.03c-.75.625-1.498 1.52-2.11 2.623c-1.423 2.563-1.58 5.192-.35 5.874c.548.312 1.126.078 1.722-.496a10.5 10.5 0 0 0-.167 1.874c0 2.938 1.14 5.312 2.543 5.312c.846 0 1.265-.865 1.466-2.188c.2 1.314.62 2.188 1.46 2.188c1.397 0 2.546-2.375 2.546-5.312c0-.66-.062-1.29-.168-1.873c.6.575 1.176.813 1.726.497zM15.5 12.2a4.279 4.279 0 1 0-.003-8.557A4.279 4.279 0 0 0 15.5 12.2m8.594 2.714a3.514 3.514 0 0 0 0-7.025a3.513 3.513 0 1 0 .001 7.027zm4.28 2.13c-.502-.908-1.116-1.642-1.732-2.155a4.3 4.3 0 0 1-2.546.845c-.756 0-1.46-.207-2.076-.55c.496 1.093.803 2.2.86 3.19c.094 1.516-.38 2.64-1.328 3.165a2 2 0 0 1-.653.224c-.057.392-.096.8-.096 1.23c0 2.413.935 4.362 2.088 4.362c.694 0 1.04-.71 1.204-1.796c.163 1.08.508 1.796 1.2 1.796c1.145 0 2.09-1.95 2.09-4.36c0-.543-.053-1.06-.14-1.54c.492.473.966.668 1.418.408c1.007-.56.877-2.718-.29-4.82zm-21.468-2.13a3.512 3.512 0 1 0-3.514-3.512a3.515 3.515 0 0 0 3.514 3.514zm2.535 6.622c-1.592-.885-1.738-3.524-.456-6.354a4.24 4.24 0 0 1-2.078.553c-.956 0-1.832-.32-2.55-.846c-.615.512-1.228 1.246-1.732 2.153c-1.167 2.104-1.295 4.262-.287 4.82c.45.258.925.065 1.414-.406a9 9 0 0 0-.135 1.538c0 2.412.935 4.36 2.088 4.36c.694 0 1.04-.71 1.204-1.795c.165 1.08.51 1.796 1.2 1.796c1.147 0 2.09-1.95 2.09-4.36c0-.433-.04-.842-.097-1.234a2 2 0 0 1-.66-.226z"/></svg> Gestion des droits
+        </a>
+       
+    </li>
+     <li class="menu-item {% if app.request.attributes.get('_route') == 'user_actions' %}active{% endif %}">
+        <a href="{{ path('user_actions') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 48 48"><defs><mask id="ipSPlan0"><g fill="none" stroke-width="4"><path fill="#fff" stroke="#fff" stroke-linejoin="round" d="M5 19h38v22a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z"/><path stroke="#fff" stroke-linejoin="round" d="M5 10a2 2 0 0 1 2-2h34a2 2 0 0 1 2 2v9H5z"/><path stroke="#000" stroke-linecap="round" stroke-linejoin="round" d="m16 31l6 6l12-12"/><path stroke="#fff" stroke-linecap="round" d="M16 5v8m16-8v8"/></g></mask></defs><path fill="currentColor" d="M0 0h48v48H0z" mask="url(#ipSPlan0)"/></svg> Plan d’actions
+        </a>
+      
+    </li>
+    <li class="menu-item {% if app.request.attributes.get('_route') == 'user_documents' %}active{% endif %}">
+        <a href="{{ path('user_documents') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 56 56"><path fill="currentColor" d="M42.624 45.003h1.3c4.54 0 6.81-2.314 6.81-6.92V16.838h-13.07c-2.291 0-3.592-1.3-3.592-3.593V0H22.634c-4.54 0-6.831 2.314-6.831 6.92V8h2.864c3.108 0 5.598.882 8.067 3.35L39.23 23.89c2.49 2.49 3.394 5.047 3.394 8.044Zm-4.519-30.92h11.57c-.131-.706-.594-1.323-1.365-2.094l-9.39-9.565c-.75-.771-1.41-1.256-2.094-1.366l.022 11.746c0 .904.353 1.279 1.257 1.279M11.505 56h21.29c4.54 0 6.831-2.314 6.831-6.92V31.339H23.67c-2.843 0-4.165-1.344-4.165-4.165V10.997h-8c-4.54 0-6.832 2.314-6.832 6.92V49.08c0 4.628 2.292 6.92 6.832 6.92m12.143-27.68h14.81c-.22-.86-.815-1.653-1.807-2.667l-11.46-11.658c-.97-.992-1.83-1.587-2.667-1.83v15.03q0 1.125 1.124 1.125"/></svg> Base documentaire
+        </a>
+    </li>
+    <li class="menu-item {% if app.request.attributes.get('_route') == 'user_trainings' %}active{% endif %}">
+        <a href="{{ path('user_trainings') }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M20 17a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H9.46c.35.61.54 1.3.54 2h10v11h-9v2m4-10v2H9v13H7v-6H5v6H3v-8H1.5V9a2 2 0 0 1 2-2zM8 4a2 2 0 0 1-2 2a2 2 0 0 1-2-2a2 2 0 0 1 2-2a2 2 0 0 1 2 2"/></svg> Formation des &eacute;quipes
+        </a>
+    </li>
+    
+  
+   
+
+       
+    {% if app.user.user.childrenUsers|length %}
+        <li class="menu-item {% if app.request.attributes.get('_route') == 'user_users' %}active{% endif %}">
+            <a href="{{ path('user_users') }}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7.5 5C9.43 5 11 6.57 11 8.5S9.43 12 7.5 12S4 10.43 4 8.5S5.57 5 7.5 5M1 19v-2.5C1 14.57 4.46 13 7.5 13c1.18 0 2.42.24 3.5.64V19zm21 0h-8c-.55 0-1-.45-1-1V6c0-.55.45-1 1-1h5l4 4v9c0 .55-.45 1-1 1m-4-9h3v-.17L18.17 7H18zm-3 2v1.5h6V12zm0 3v1.5h6V15z"/></svg> Comptes rattachés
+            </a>
+        </li>
+    {% endif %}
+   
+    {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+        <li class="menu-item">
+            <a href="{{ path('default_homepage') }}?_switch_user=_exit">
+                <i class="fa fa-sign-out"></i> Revenir à mon compte
+            </a>
+        </li>
+    {% endif %}
+{% endif %}
+
+    </ul>
+
+<div class="mobile">
+    <!-- Profile button -->
+      <div class="dropdown">
+             <button class="submittt" style="width: 100%" onclick="toggleDropdown(event)">Mon profil</button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="{{ path('user_account') }}">Modifier mon compte</a>
+                <a class="dropdown-item" href="{{ path('user_account') }}#export">Exporter mes données</a>
+                <a class="dropdown-item" href="{{ path('user_account') }}#abonnement">Mon abonnement</a>
+                <a class="dropdown-item" href="{{ path('default_logout') }}">Déconnexion</a>
+            </div>
+        </div>
+   
+    <div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
+        <!-- MON MDP Dropdown -->
+        <div class="dropdown">
+            <a href="#" class="dropdown-toggle" onclick="toggleDropdown(event)">MON MDP</a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" data-toggle="modal" data-target="#AgencyModal">Contacter mon agence</a>
+                <a class="dropdown-item" data-toggle="modal" data-target="#ManagerModal">Contacter mon DPO</a>
+                <a class="dropdown-item" href="{{ path('user_intervention') }}">Demander un devis</a>
+                <a class="dropdown-item" href="{{ path('user_legales') }}">Mentions légales</a>
+                <a class="dropdown-item" href="{{ path('user_privacy') }}" target="_blank">Politique de confidentialité</a>
+            </div>
+        </div>
+
+        <!-- LA GALAXIE Dropdown -->
+        <div class="dropdown">
+            <a href="{{ path('user_partners') }}" class="dropdown-toggle" >LA GALAXIE</a>
+            
+        </div>
+    </div>
+</div>
+
+<div class="menu-toggle" id="menu-toggle">
+    <i class="fa fa-bars"></i>
+</div>
+
+<!-- JavaScript -->
+
+
+
+<script>
+// Toggle dropdown visibility
+function toggleDropdown(event) {
+    event.preventDefault(); // Prevent default link behavior
+    const dropdown = event.target.closest('.dropdown');
+    dropdown.classList.toggle('show'); // Add/remove the "show" class
+}
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    // Highlight the active menu based on the current URL
+    const currentPath = window.location.pathname; // Get the current page URL path
+    const menuItems = document.querySelectorAll('.menu-item a');
+
+    menuItems.forEach((menuItem) => {
+        if (menuItem.getAttribute('href') === currentPath) {
+            // Add the 'active' class to the parent menu item
+            menuItem.parentElement.classList.add('active');
+        }
+    });
+
+    // Add click functionality for submenus
+    const menuItemsWithSubmenus = document.querySelectorAll('.menu-item');
+
+    menuItemsWithSubmenus.forEach((menuItem) => {
+        menuItem.addEventListener('click', function (e) {
+            const submenu = menuItem.querySelector('.sub-menu');
+          
+        });
+    });
+});
+
+// Select the menu toggle button
+const menuToggleButton = document.getElementById("menu-toggle");
+
+// Add an event listener to handle the click
+menuToggleButton.addEventListener("click", () => {
+    // Select all elements with the 'mobile' class
+    const mobileElements = document.querySelectorAll(".mobile");
+
+    // Loop through all the elements
+    mobileElements.forEach((element) => {
+        // Toggle display between 'block' and 'none'
+        if (element.style.display === "none" || element.style.display === "") {
+            element.style.display = "block";
+        } else {
+            element.style.display = "none";
+        }
+    });
+});
+
+</script>
+
+
+</aside>

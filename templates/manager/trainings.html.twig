@@ -1,0 +1,161 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Questionnaires
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container">
+            <div class="row align-items-center p-b-100 p-t-60">
+
+                <div class="col-md-6 text-white p-b-30">
+                    <div class="media">
+                        <div class="avatar avatar mr-3">
+                            <div class="avatar-title rounded-circle mdi mdi-briefcase-account">
+
+                            </div>
+                        </div>
+                        <div class="media-body">
+                            <h1>Questionnaires</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-4 col-lg-3">
+                    <a href="{{ path('manager_trainings_add') }}" class="card m-b-30">
+                        <div class="card-body">
+                            <div class="media">
+                                <div class="avatar mr-3">
+                                    <div class="avatar-title rounded-circle bg-primary"><i class="mdi mdi-shape-circle-plus"></i></div>
+                                </div>
+                                <div class="media-body p-t-5">
+                                    <h5 class="m-b-0">Créer</h5>
+                                    <p class="m-0">un questionnaire</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid pull-up">
+        <div class="row justify-content-md-end">
+
+        </div>
+        <div class="row">
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive p-t-10">
+                            <table id="datatable" class="table" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>Titre</th>
+                                    <th>Nombre de questions</th>
+                                    <th>Réponses définies</th>
+                                    <th>Actif</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for training in trainings %}
+                                    <tr>
+                                        <td>{{ training.title }}</td>
+                                        <td>{{ training.questions|length }}</td>
+                                        <td>{% if training.answered %}<span class="badge badge-success">OUI</span>{% else %}<span class="badge badge-danger">NON</span>{% endif %}</td>
+                                        <td>{% if training.active %}<span class="badge badge-success">OUI</span>{% else %}<span class="badge badge-danger">NON</span>{% endif %}</td>
+                                        <td>
+                                            <a href="{{ path('manager_trainings_edit', {'id': training.id}) }}" class="btn btn-sm ml-1 mr-1 btn-secondary">
+                                                <i class="mdi mdi-circle-edit-outline"></i> Modifier
+                                            </a>
+                                            <a href="{{ path('manager_trainings_answer', {'id': training.id}) }}" class="btn btn-sm ml-1 mr-1 btn-primary">
+                                                <i class="mdi mdi-circle-edit-outline"></i> Définir les réponses
+                                            </a>
+                                            <button type="button" class="btn btn-sm ml-1 mr-1 btn-primary" onclick="showStats({{ training.id }})">
+                                                <i class="mdi mdi-poll"></i> Voir les statistiques
+                                            </button>
+                                            <a href="{{ path('manager_trainings_delete', {'id': training.id}) }}" class="btn btn-sm ml-1 mr-1 btn-danger" onclick="return confirm('Confirmer la suppression de ce questionnaire ?');">
+                                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
+                                            </a>
+                                            <a href="{{ path('manager_trainings_translate', {'id': training.id, '_locale': 'en'}) }}" class="btn btn-sm ml-1 mr-1 btn-primary">
+                                                EN
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal_content" tabindex="-1" role="dialog"
+         aria-labelledby="modal_content" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal_content_title">Réponses au questionnaire</h5>
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="Fermer">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal_content_body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                $('#datatable').DataTable({
+                    "language": {
+                        "search": "Rechercher :",
+                        "lengthMenu": "Afficher _MENU_ résultats par page",
+                        "zeroRecords": "Aucun résultat",
+                        "info": "Page _PAGE_ sur _PAGES_",
+                        "infoEmpty": "Aucune données sur ce tableau",
+                        "infoFiltered": "(filtered from _MAX_ total records)",
+                        "paginate": {
+                            "previous": "Précédent",
+                            "next": "Suivant",
+
+                        }
+                    }
+                });
+
+            });
+
+        })(window.jQuery);
+
+        function showStats(t) {
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: "{{ path('manager_trainings_requests_stats') }}",
+                data: {training: t},
+                success: function (content) {
+                    if (content.success) {
+                        document.getElementById("modal_content_body").innerHTML = content.html;
+                        $('#modal_content').modal('show');
+                    }
+                }
+            });
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'editer_un_lment_de_cartographie_du_si'|trans }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="page">
+    <!-- Header -->
+    <div class="table-container-traitements">
+        <div class="header headretour">
+            <a href="javascript:history.back()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024">
+                    <path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
+                </svg>
+            </a>
+            <h2 style="width: 400px;">{{ 'editer_un_lment_de_cartographie_du_si'|trans }}</h2>
+        </div>
+
+        <!-- Form Start -->
+        {{ form_start(form, {"attr": {"class": "sous-traitantform"}}) }}
+
+        <!-- Name Field -->
+        <div class="form-group">
+            <div class="form-group1">
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name, {'attr': {'class': 'form-control ' ~ ((form_errors(form.name) == '') ? '' : 'is-invalid')} }) }}
+                <div class="invalid-feedback">{{ form_errors(form.name) | striptags }}</div>
+            </div>
+        </div>
+
+        <!-- Dynamic Fields -->
+        {% for i in 1..fields %}
+        {% if loop.index0 % 2 == 0 %} <!-- Start a new row for every 2 items -->
+            <div class="form-group">
+        {% endif %}
+        
+        <div class="form-group1">
+            {{ form_label(form["field"~i]) }}
+            {{ form_widget(form["field"~i], {'attr': {'class': 'form-control ' ~ ((form_errors(form["field"~i]) == '') ? '' : 'is-invalid')} }) }}
+            <div class="invalid-feedback">{{ form_errors(form["field"~i]) | striptags }}</div>
+        </div>
+        
+        {% if loop.index0 % 2 == 1 or loop.last %} <!-- Close the row after every 2 items or for the last item -->
+            </div>
+        {% endif %}
+        {% endfor %}
+
+        <!-- Auto-Apply Checkbox -->
+        <div class="checkbox-group">
+            {{ form_widget(form.autoApplyToTreatments, {'attr': {'id': 'auto-apply'}}) }}
+            {{ form_label(form.autoApplyToTreatments, 'Appliquer automatiquement ?', {'label_attr': {'for': 'auto-apply'}}) }}
+        </div>
+
+        <!-- Group Checkbox -->
+        {% if app.user.user.mainGroupAgency %}
+        <div class="checkbox-group" style="margin-top: 10px; margin-bottom: 20px;">
+            {{ form_widget(form.group, {'attr': {'id': 'group-checkbox'}}) }}
+            {{ form_label(form.group, 'Appliquer à tout le groupe ?', {'label_attr': {'for': 'group-checkbox'}}) }}
+        </div>
+        {% endif %}
+
+        <!-- Submit Button -->
+        <button type="submit" class="submit-button">
+            {{ 'enregistrer'|trans }}
+        </button>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

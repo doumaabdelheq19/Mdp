@@ -1,0 +1,16 @@
+
+index:
+    path: /
+    controller: App\Controller\HomepageController::index
+
+login:
+    path: /logi
+    controller: App\Controller\DefaultController::index
+
+global_css:
+    path: /global.css
+    controller: App\Controller\StyleController::css
+
+#index:
+#    path: /
+#    controller: App\Controller\DefaultController::index

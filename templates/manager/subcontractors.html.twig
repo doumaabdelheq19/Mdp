@@ -1,0 +1,125 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Accueil
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container">
+            <div class="row align-items-center p-b-100 p-t-60">
+
+                <div class="col-md-6 text-white p-b-30">
+                    <div class="media">
+                        <div class="avatar avatar mr-3">
+                            <div class="avatar-title rounded-circle mdi mdi-account-multiple  ">
+
+                            </div>
+                        </div>
+                        <div class="media-body">
+                            <h1>Sous-traitants standards</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-4 col-lg-3">
+                    <a href="{{ path('manager_subcontractors_add') }}" class="card m-b-30">
+                        <div class="card-body">
+                            <div class="media">
+                                <div class="avatar mr-3">
+                                    <div class="avatar-title rounded-circle bg-primary"><i class="mdi mdi-shape-circle-plus"></i></div>
+                                </div>
+                                <div class="media-body p-t-5">
+                                    <h5 class="m-b-0">Ajouter</h5>
+                                    <p class="m-0">un nouveau sous-traitant</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid pull-up">
+        <div class="row justify-content-md-end">
+
+        </div>
+        <div class="row">
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive p-t-10">
+                            <table id="datatable" class="table" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>Société</th>
+                                    <th>Typologie</th>
+                                    <th>Contact</th>
+                                    <th>Tél</th>
+                                    <th>Mail</th>
+                                    <th>conformité</th>
+                                    <th>Date</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for subcontractor in subcontractors %}
+                                    <tr>
+                                        <td><a href="{{ path('manager_subcontractors_edit', {'id': subcontractor.id}) }}">{{ subcontractor.name }}</a></td>
+                                        <td>{{ subcontractor.type }}</td>
+                                        <td>{{ subcontractor.contactLastName }} {{ subcontractor.contactFirstName }}</td>
+                                        <td>{{ subcontractor.contactPhone }}</td>
+                                        <td>{{ subcontractor.contactEmail }}</td>
+                                        <td>{{ subcontractor.conformity.libelle }}</td>
+                                        <td>{{ subcontractor.editDate|date('d/m/Y') }}</td>
+                                        <td>
+                                            <a href="{{ path('manager_subcontractors_delete', {'id': subcontractor.id}) }}" class="btn btn-sm ml-1 mr-1 btn-danger" onclick="return confirm('Confirmer la suppression de ce sous-traitant ?');">
+                                                <i class="mdi mdi-close"></i>
+                                            </a>
+                                            <a href="{{ path('manager_subcontractors_translate', {'id': subcontractor.id, '_locale': 'en'}) }}" class="btn btn-sm ml-1 mr-1 btn-primary">
+                                                EN
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                $('#datatable').DataTable({
+                    "language": {
+                        "search": "Rechercher :",
+                        "lengthMenu": "Afficher _MENU_ résultats par page",
+                        "zeroRecords": "Aucun résultat",
+                        "info": "Page _PAGE_ sur _PAGES_",
+                        "infoEmpty": "Aucune données sur ce tableau",
+                        "infoFiltered": "(filtered from _MAX_ total records)",
+                        "paginate": {
+                            "previous": "Précédent",
+                            "next": "Suivant",
+
+                        }
+                    }
+                });
+
+            });
+
+        })(window.jQuery);
+    </script>
+{% endblock %}

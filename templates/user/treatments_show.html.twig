@@ -1,0 +1,192 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'visualiser_un_traitement'|trans }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="page">
+    <div class="table-container-traitements">
+        <div class="header">
+            <h2>{{ 'visualiser_un_traitement'|trans }}</h2>
+        </div>
+
+        <!-- Information Section -->
+        <div class="sectt">
+            <h3>{{ 'informations'|trans }}</h3>
+            <div class="form-group-container">
+                <div class="form-group">
+                    <div class="form-group1">
+                        <strong>{{ 'nom'|trans }}:</strong> {{ treatment.name }}
+                    </div>
+                    <div class="form-group1">
+                        <strong>{{ 'nrf'|trans }}:</strong> {{ treatment.number }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-group1">
+                        <strong>{{ 'date_de_cration_du_traitement'|trans }}:</strong> {{ treatment.creationDate|date('d/m/Y') }}
+                    </div>
+                    <div class="form-group1">
+                        <strong>{{ 'mise_jour_du_traitement'|trans }}:</strong> {{ treatment.editDate|date('d/m/Y') }}
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-group1">
+                        <strong>{{ 'finalit_principale'|trans }}:</strong> {{ treatment.mainPurpose }}
+                    </div>
+                    <div class="form-group1">
+                        <strong>{{ 'autres_finalits'|trans }}:</strong> {{ treatment.othersPurpose }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group1">
+                        <strong>{{ 'description_du_traitement'|trans }}:</strong> {{ treatment.description }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subcontractors Section -->
+        <div class="sectt">
+            <h3>{{ 'sous_traitants'|trans }}</h3>
+            <div class="form-group">
+                <div class="form-group1">
+                    {% if treatment.subcontractors|length > 0 %}
+                        {% for subcontractor in treatment.subcontractors %}
+                            <span>{{ subcontractor.name }}</span><br>
+                        {% endfor %}
+                    {% else %}
+                        <p>{{ 'aucun_sous_traitant_selectionné'|trans }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Systems Section -->
+        <div class="sectt">
+            <h3>{{ 'mesures_techniques'|trans }}</h3>
+            <div class="form-group">
+                <div class="form-group1">
+                    {% if treatment.systems|length > 0 %}
+                        {% for system in treatment.systems %}
+                            <span>{{ system.name }}</span><br>
+                        {% endfor %}
+                    {% else %}
+                        <p>{{ 'aucune_mesure_technique_selectionnée'|trans }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- PIA Criteria Section -->
+        <div class="sectt">
+            <h3>{{ 'pia_analyse_dimpact'|trans }}</h3>
+            <ul>
+                {% for criteria in treatment.piaCriteria %}
+                    <li>
+                        {% if criteria == 1 %}
+                            {{ 'donnes_sensibles_ou_hautement_personnelles_sant_go'|trans }}
+                        {% elseif criteria == 2 %}
+                            {{ 'personnes_vulnrables_enfants_salari_handicap_lien'|trans }}
+                        {% elseif criteria == 3 %}
+                            {{ 'profilage_et_valuation'|trans }}
+                        {% elseif criteria == 4 %}
+                            {{ 'prise_de_dcision_automatise_avec_effet_lgal_ou_sim'|trans }}
+                        {% elseif criteria == 5 %}
+                            {{ 'grande_chelle'|trans }}
+                        {% elseif criteria == 6 %}
+                            {{ 'surveillance_systmatique'|trans }}
+                        {% elseif criteria == 7 %}
+                            {{ 'exclusion_du_bnfice_dun_droit_ou_dun_contrat'|trans }}
+                        {% elseif criteria == 8 %}
+                            {{ 'usages_innovants_utilisation_dune_nouvelle_technol'|trans }}
+                        {% elseif criteria == 9 %}
+                            {{ 'croisement_de_donnes'|trans }}
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Retention Period Section -->
+        <div class="sectt">
+            <h3>{{ 'dure_de_conservation'|trans }}</h3>
+            <div class="form-group">
+                <div class="form-group1">
+                    <strong>{{ 'dure_de_conservation'|trans }}:</strong> {{ treatment.dataRetentionPeriod }}
+                </div>
+            </div>
+        </div>
+
+        <!-- People Data Section -->
+        <div class="sectt">
+            <h3>{{ 'catgories_des_personnes_concernes'|trans }}</h3>
+            <div class="form-group">
+                <div class="form-group1">
+                    <strong>{{ 'catgories_des_personnes_concernes'|trans }}:</strong> {{ treatment.peopleData }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Transfer Outside EU Section -->
+        <div class="sectt">
+            <h3>{{ 'transfert_hors_ue'|trans }}</h3>
+            <div class="form-group">
+                <div class="form-group1">
+                    <strong>{{ 'transfert_hors_ue'|trans }}:</strong> {{ treatment.transferOutsideUeCountries }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Consent Section -->
+        <div class="sectt">
+            <h3>{{ 'consentement'|trans }}</h3>
+            <div class="form-group">
+                <div class="form-group1">
+                    <strong>{{ 'le_consentement_estil_demand'|trans }}:</strong>
+                    {% if treatment.consentAsked %}
+                        <span class="badge badge-success">{{ 'oui'|trans }}</span>
+                    {% else %}
+                        <span class="badge badge-danger">{{ 'non'|trans }}</span>
+                    {% endif %}
+                </div>
+                <div class="form-group1">
+                    <strong>{{ 'base_juridique_du_traitement'|trans }}:</strong> {{ treatment.legalBasis }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Download PIA File Section -->
+        {% if treatment.piaFile %}
+            <div class="sectt">
+                <h3>{{ 'pia_analyse_dimpact_fichier'|trans }}</h3>
+                <div class="form-group">
+                    <div class="form-group1">
+                        <a href="/uploads/documents/{{ treatment.piaFile }}" target="_blank" class="btn btn-light">
+                            {{ 'télécharger_le_fichier_pia'|trans }}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Edit Button -->
+        {% if treatment.user.id == app.user.user.id %}
+            <div class=" mt-4 exporter">
+                <a href="{{ path('user_treatments_edit', {'id': treatment.id}) }}" class="btn btn-primary">{{ 'modifier'|trans }}</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

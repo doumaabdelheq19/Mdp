@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'mentions_lgales'|trans }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+   <div class="page">
+  <div class="table-container-traitements">
+        <div class="header">
+            <h2>Mentions légales</h2>
+            <p>
+
+            </p>
+        </div>
+    <div class="container-fluid pull-up">
+        <div class="row justify-content-md-end">
+
+        </div>
+        <div class="row">
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body" style="display:flex; flex-direction:column; gap:7px">
+                        <p><strong>{{ 'mentions_lgales'|trans }}</strong></p>
+                        <p></p>
+                        <p>© Copyright 2018 mydigitplace | Tous droits réservés</p>
+                        <p></p>
+                        <p><strong>L'ÉDITEUR</strong></p>
+                        <p></p>
+                        <p>Raison sociale : GA MA NEGOCE (MYDIGITPLACE)</p>
+                        <p></p>
+                        <p>Responsable : GARIN Jean Baptiste 06 64 08 98 50 contact@mydigitplace.com</p>
+                        <p></p>
+                        <p>Siège social : 3 bis, impasse des flamboyants 31600 LHERM</p>
+                        <p></p>
+                        <p>RCS : Toulouse 82197084500011</p>
+                        <p>&nbsp;</p>
+                        <p><strong>1. Présentation du site</strong></p>
+                        <p></p>
+                        <p></p>
+                        <p>En vertu de l’article 6 de la loi n° 2004-575 du 21 juin 2004, pour la confiance dans l’économie numérique, il est précisé aux utilisateurs du site www.mydigitplace.com l’identité des différents intervenants dans le cadre de sa réalisation et de son suivi :</p>
+                        <p></p>
+                        <p>Conception et réalisation : Studio Slapp (SAS DNG AGENCY), 19 Place de la Bourse, 31000 Toulouse <br></p>
+                        <p>Responsable publication : Guillaume BERNARD</p>
+                        <p></p>
+                        <p><strong>2. Propriété intellectuelle et contrefaçons.</strong></p>
+                        <p></p>
+                        <p>PROPRIÉTÉ INTELLECTUELLE</p>
+                        <p></p>
+                        <p>La structure du site internet ainsi que les textes, graphiques, images, photographies, sons, vidéos et applications informatiques qui le composent sont la propriété de Jean Baptiste GARIN et sont protégés comme tels par les lois en vigueur au titre de la propriété intellectuelle.</p>
+                        <p></p>
+                        <p>Toute représentation, reproduction, adaptation ou exploitation partielle ou totale des contenus, marques déposées et services proposés par le site www.mydigitplace.com, par quelque procédé que ce soit, sans l’autorisation préalable, expresse et écrite de Jean Baptiste GARIN, est strictement interdite et serait susceptible de constituer une contrefaçon au sens des articles L.335-2 et suivants du Code de la propriété intellectuelle. Et ce, à l’exception des éléments expressément désignés comme libres de droits sur le Site internet.</p>
+                        <p></p>
+                        <p>L’accès au Site Internet www.mydigitplace.com ne vaut pas reconnaissance d’un droit et, de manière générale, ne confère aucun droit de propriété intellectuelle relatif à un élément du Site internet www.mydigitplace.com, lesquels restent la propriété exclusive de GARIN Jean Baptiste.</p>
+                        <p></p>
+                        <p>Il est interdit à l’utilisateur d’introduire des données sur le Site Internet www.mydigitplace.com qui modifieraient ou qui seraient susceptibles d’en modifier le contenu ou l’apparence.</p>
+                        <p></p>
+                        <p>INFORMATIONS NOMINATIVES</p>
+                        <p></p>
+                        <p>Toutes les informations recueillis par le site Internet www.mydigitplace.com auprès de l’utilisateur font l’objet d’un traitement informatique destiné au traitement de l’Inscription, de la société Unitimmo.</p>
+                        <p></p>
+                        <p>Elles peuvent être communiquées et utilisées à titre de prospection commerciale et de communication de promotion liées exclusivement aux activités de Jean Baptiste GARIN, et être transmises aux prestataires ou à toute autorité administrative ou judiciaire qui en ferait la demande.</p>
+                        <p></p>
+                        <p>En sus du droit d’accès, de rectification et d’opposition prévu à l’article 4 ci-avant visé, et conformément à la loi informatique et Libertés n°78-17 du 6 janvier 1978, l’Utilisateur peut à tout moment accéder aux informations personnelles le concernant et détenus par le site www.mydigitplace.com, demander leur modification ou leur suppression par l’envoi d’un message électronique à contatc@mydigitplace.com ou par courrier postal à l’adresse suivante : 3bis, imp des Flamboyants 31600 LHERM</p>
+                        <p></p>
+                        <p>Ainsi, l’Utilisateur peut, à titre irrévocable, demander que soient rectifiées, complétées, clarifiées, mises à jour ou effacées les informations le concernant qui sont inexactes, incomplètes, équivoques, périmées ou dont la collectes ou l’utilisation, la communication ou la conservation est interdite.</p>
+                        <p></p>
+                        <p>GARIN Jean Baptiste s’engage à se conformer aux dispositions du Règlement Européen sur la Protection des Données.</p>
+                        <p>&nbsp;</p>
+                        <p>3. Les principales lois concernées.</p>
+                        <p></p>
+                        <p>Loi n° 78-87 du 6 janvier 1978, notamment modifiée par la loi n° 2004-801 du 6 août 2004 relative à l’informatique, aux fichiers et aux libertés.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     </div>
+      </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                {% if app.request.locale == "fr" %}
+                    $('#datatable').DataTable({
+                        "language": {
+                            "search": "Rechercher :",
+                            "lengthMenu": "Afficher _MENU_ résultats par page",
+                            "zeroRecords": "Aucun résultat",
+                            "info": "Page _PAGE_ sur _PAGES_",
+                            "infoEmpty": "Aucune données sur ce tableau",
+                            "infoFiltered": "(filtered from _MAX_ total records)",
+                            "paginate": {
+                                "previous": "Précédent",
+                                "next": "Suivant",
+
+                            }
+                        }
+                    });
+                {% else %}
+                    $('#datatable').DataTable({});
+                {% endif %}
+
+            });
+
+        })(window.jQuery);
+    </script>
+{% endblock %}

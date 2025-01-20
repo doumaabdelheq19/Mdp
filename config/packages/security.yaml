@@ -1,0 +1,45 @@
+security:
+    role_hierarchy:
+        ROLE_USER: [ ROLE_ALLOWED_TO_SWITCH ]
+        ROLE_MANAGER: [ ROLE_ALLOWED_TO_SWITCH ]
+        ROLE_DPO: [ ROLE_MANAGER ]
+        ROLE_JURISTE: [ ROLE_MANAGER ]
+        ROLE_COMMERCE: [ ROLE_MANAGER ]
+        ROLE_ADMIN: [ ROLE_DPO, ROLE_JURISTE, ROLE_COMMERCE ]
+
+    encoders:
+        App\Entity\Account:
+            id: App\Security\PasswordEncoder
+
+    # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
+    providers:
+        app_db_provider:
+            entity:
+                class: App\Entity\Account
+                property: 'email'
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            pattern: ^/
+            anonymous: ~
+            switch_user: ~
+            form_login:
+                login_path: default_login
+
+            # activate different ways to authenticate
+            # https://symfony.com/doc/current/security.html#firewalls-authentication
+
+            # https://symfony.com/doc/current/security/impersonating_user.html
+            # switch_user: true
+
+    # Easy way to control access for large sections of your site
+    # Note: Only the *first* access control that matches will be used
+    access_control:
+        - { path: ^login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^forgot, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^reset, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/user, roles: [ ROLE_USER, ROLE_SUBUSER ] }
+        - { path: ^/manager, roles: ROLE_MANAGER }

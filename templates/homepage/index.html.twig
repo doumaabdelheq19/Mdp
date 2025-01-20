@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Connexion
+{% endblock %}
+
+{% block body_class %}login-page{% endblock %}
+
+{% block body %}
+    <div class="global">
+        <div class="left">
+            <div class="logoleft">
+                <img src=" {{ asset('assets/img/mdpblue.png') }}" alt="">
+            </div>
+            <div class="blockcenter">
+                <div>
+                    <h2>MDP Campus</h2>
+                    <p>Formez-vous à la conformité</p>
+                </div>
+                <img src="{{ asset('assets/img/login_blue.png') }}" alt="">
+                <br>
+                <button onclick="location.href='https://mdp-campus.teachizy.fr/'">Accéder à MDP Campus</button>
+            </div>
+        </div>
+        <div class="right">
+            <div class="logoright">
+                <img src="{{ asset('assets/img/LOGODATASOLUTION.png') }}" alt="">
+            </div>
+            <div class="blockcenter">
+                <div>
+                    <h2>MDP Pilot</h2>
+                    <p>Pilotez votre conformité</p>
+                </div>
+                <img src=" {{ asset('assets/img/Welcome bureau 1.png') }}" alt="">
+                <br>
+                <button onclick="location.href='{{ path('default_homepage') }}'">Accéder à MDP Pilot</button>
+            </div>
+        </div>
+    </div>
+{% endblock %}

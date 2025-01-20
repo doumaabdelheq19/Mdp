@@ -1,0 +1,144 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Mon compte
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container-fluid px-lg-5 m-b-30">
+            <div class="row">
+                <div class="col-12 text-white p-t-40 p-b-90">
+
+                    <h4 class=""> <span class="btn btn-white-translucent">
+                                <i class="mdi mdi-account "></i></span> Mon compte
+                    </h4>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid px-lg-5 pull-up">
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-body ">
+                    {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
+
+                    <h5>Société</h5>
+
+                    <div class="form-row">
+                        <div class="form-group floating-label col-12">
+                            {{ form_label(form.companyName) }}
+                            {{ form_widget(form.companyName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.companyName) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.companyName) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group floating-label col-md-6">
+                            {{ form_label(form.address) }}
+                            {{ form_widget(form.address, {'attr': {'class': 'form-control ' ~ ((form_errors(form.address) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.address) | striptags  }}</div>
+                        </div>
+                        <div class="form-group floating-label col-md-6">
+                            {{ form_label(form.address2) }}
+                            {{ form_widget(form.address2, {'attr': {'class': 'form-control ' ~ ((form_errors(form.address2) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.address2) | striptags  }}</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group floating-label col-md-6">
+                            {{ form_label(form.zipCode) }}
+                            {{ form_widget(form.zipCode, {'attr': {'class': 'form-control ' ~ ((form_errors(form.zipCode) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.zipCode) | striptags  }}</div>
+                        </div>
+                        <div class="form-group floating-label col-md-6">
+                            {{ form_label(form.city) }}
+                            {{ form_widget(form.city, {'attr': {'class': 'form-control ' ~ ((form_errors(form.city) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.city) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <h5 class="mt-2">Profil</h5>
+
+                    <div class="form-row">
+                        <div class="form-group floating-label col-md-6">
+                            {{ form_label(form.lastName) }}
+                            {{ form_widget(form.lastName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.lastName) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.lastName) | striptags  }}</div>
+                        </div>
+                        <div class="form-group floating-label col-md-6">
+                            {{ form_label(form.firstName) }}
+                            {{ form_widget(form.firstName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.firstName) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.firstName) | striptags  }}</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group floating-label col-md-6">
+                            {{ form_label(form.phone) }}
+                            {{ form_widget(form.phone, {'attr': {'class': 'form-control ' ~ ((form_errors(form.phone) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.phone) | striptags  }}</div>
+                        </div>
+                        <div class="form-group floating-label col-md-6">
+                            {{ form_label(form.email) }}
+                            {{ form_widget(form.email, {'attr': {'class': 'form-control ' ~ ((form_errors(form.email) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.email) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="card m-t-30">
+            <div class="card-header">
+                <div class="card-body ">
+                    {{ form_start(form2, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
+
+                    <h5>Modifier mon mot de passe</h5>
+
+                    <div class="form-row">
+                        <div class="form-group floating-label col-md-6">
+                            {{ form_label(form2.password.first) }}
+                            {{ form_widget(form2.password.first, {'attr': {'class': 'form-control ' ~ ((form_errors(form2.password.first) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form2.password.first) | striptags  }}</div>
+                        </div>
+                        <div class="form-group floating-label col-md-6">
+                            {{ form_label(form2.password.second) }}
+                            {{ form_widget(form2.password.second, {'attr': {'class': 'form-control ' ~ ((form_errors(form2.password.second) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form2.password.second) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <div class="alert alert-secondary show" role="alert">
+                        <b>Règle de mot de passe :</b><br/>
+                        12 caractères de types différents (majuscules, minuscules, chiffres, caractères spéciaux) n’ayant aucun lien avec vous (nom, date de naissance…) et ne figurant pas dans le dictionnaire.
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                    {{ form_end(form2) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

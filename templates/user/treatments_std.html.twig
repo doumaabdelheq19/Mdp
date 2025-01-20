@@ -1,0 +1,195 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'registre_des_traitements'|trans }}
+{% endblock %}
+
+{% block content %}
+<div class="page">
+    <!-- Header Section -->
+    <div class="table-container-traitements">
+        <div class="header">
+            <h2>{{ 'registre_des_traitements'|trans }}</h2>
+            
+            <p>
+                <a href="#" data-toggle="modal" data-target="#RGPDModal">{{ 'le_rglement_gnral_sur_la_protection_des_donnes_rgp'|trans }}</a>
+            </p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display: flex; justify-content: space-between; width: 100%;">
+            <div><p>{{ 'lensemble_de_vos_traitements_exemple_1_exemple_2'|trans }}</p></div>
+            <div class="buttons">
+             <div class="dropdownn">
+                    <button class="traitment-button">
+                        {{ 'Traitements standards'|trans }} <span class="dropdown-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9l-7 7l-7-7"/></svg></span>
+                    </button>
+                    <ul class="traitment-menu">
+                      {% if app.user.user.mainGroupAgency %}
+                          <li>
+                              <a href="{{ path('user_treatments') }}">
+                                  Mes traitements 
+                              </a>
+                          </li>
+                      {% endif %}
+                      {% if app.user.user.parentUser %}
+                          <li>
+                              <a href="{{ path('user_treatments_group') }}">
+                                  Traitements du groupe
+                              </a>
+                          </li>
+                      {% endif %}
+                    </ul>
+                </div>
+                <div class="exporter">
+                    <a href="{{ path('user_treatments_std_add') }}" class="btn btn-primary">
+                        {{ 'crer_un_traitement'|trans }}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <table class="styled-table" id="datatable">
+            <thead>
+                <tr>
+                    <th>{{ 'nom_du_traitement'|trans }}</th>
+                    <th>{{ 'cration'|trans }}</th>
+                    <th>{{ 'mise_jour'|trans }}</th>
+                    <th>{{ 'finalit'|trans }}</th>
+                    <th>{{ 'pia'|trans }}</th>
+                    <th>{{ 'actions'|trans }}</th>
+                </tr>
+            </thead>
+         <tbody>
+    {% if treatments|length > 0 %}
+        {% for treatment in treatments %}
+            <tr>
+                <td>
+                    <a href="{{ path('user_treatments_std_edit', {'id': treatment.id}) }}">{{ treatment.name }}</a>
+                </td>
+                <td>{{ treatment.creationDate|date('d/m/Y') }}</td>
+                <td>{{ treatment.editDate|date('d/m/Y') }}</td>
+                <td>{{ treatment.mainPurpose }}</td>
+                <td>{% if treatment.sensitiveData %}Oui{% else %}Non{% endif %}</td>
+                <td>
+                    <div class="options">
+                        <a href="{{ path('user_treatments_std_delete', {'id': treatment.id}) }}" class="delete" onclick="return confirm('{{ 'Confirmer la suppression de ce traitement ?'|trans }}')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 1 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="6" class="text-center">{{ 'Aucun traitement disponible.'|trans }}</td>
+        </tr>
+    {% endif %}
+</tbody>
+
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination-container">
+            <!-- Results per page selector -->
+            <div class="results-per-page">
+                <label for="results">Afficher</label>
+                <select id="resultsSelect" class="results-select">
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                </select>
+                <span>résultats par page</span>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div class="pagination-controls">
+                <button class="pagination-button" id="prevPage" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19l-7-7l7-7"/></svg>
+                </button>
+                <span class="pagination-info" id="paginationInfo">Page 1 sur 1</span>
+                <button class="pagination-button" id="nextPage" disabled>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5l7 7l-7 7"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- RGPD Modal -->
+<div class="modal fade" id="RGPDModal" tabindex="-1" role="dialog" aria-labelledby="RGPDModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">{{ 'le_rglement_gnral_sur_la_protection_des_donnes_rgp'|trans }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'fermer'|trans }}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>{{ 'rglement_ue_2016679_du_parlement_europen_et_du_con'|trans }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const rows = Array.from(document.querySelectorAll('#datatable tbody tr'));
+            const resultsSelect = document.getElementById('resultsSelect');
+            const paginationInfo = document.getElementById('paginationInfo');
+            const prevPage = document.getElementById('prevPage');
+            const nextPage = document.getElementById('nextPage');
+
+            let currentPage = 1;
+            let resultsPerPage = parseInt(resultsSelect.value);
+
+            function updateTable() {
+                const totalPages = Math.ceil(rows.length / resultsPerPage);
+                const start = (currentPage - 1) * resultsPerPage;
+                const end = start + resultsPerPage;
+
+                rows.forEach((row, index) => {
+                    row.style.display = index >= start && index < end ? '' : 'none';
+                });
+
+                paginationInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
+                prevPage.disabled = currentPage === 1;
+                nextPage.disabled = currentPage === totalPages;
+            }
+
+            resultsSelect.addEventListener('change', function () {
+                resultsPerPage = parseInt(this.value);
+                currentPage = 1;
+                updateTable();
+            });
+
+            prevPage.addEventListener('click', function () {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updateTable();
+                }
+            });
+             document.querySelector('.traitment-button').addEventListener('click', function() {
+            const menu = document.querySelector('.traitment-menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+
+            nextPage.addEventListener('click', function () {
+                if (currentPage < Math.ceil(rows.length / resultsPerPage)) {
+                    currentPage++;
+                    updateTable();
+                }
+            });
+
+            updateTable();
+        });
+
+
+        
+    </script>
+{% endblock %}

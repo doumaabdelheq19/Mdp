@@ -1,0 +1,40 @@
+<div class="pb-4">
+    <h5 class="mb-3">Taux de réponses aux questions</h5>
+    {% if training.questions is defined %}
+        {% for key, item in training.questions %}
+            <div class="p-t-20">
+                <p class="h4">{{ item.title }}</p>
+
+                {% for choiceKey, choice in item.choices %}
+                    {% set iconClass = "mdi-checkbox-blank-circle-outline text-muted" %}
+
+                    {% if item.multiple %}
+                        {% if choiceKey in training.answers[key] %}
+                            {% set iconClass = "mdi-check-circle text-success" %}
+                        {% else %}
+                            {% set iconClass = "mdi-checkbox-blank-circle-outline text-muted" %}
+                        {% endif %}
+                    {% else %}
+                        {% if choiceKey in training.answers[key] or choiceKey == training.answers[key] %}
+                            {% set iconClass = "mdi-checkbox-marked text-success" %}
+                        {% else %}
+                            {% set iconClass = "mdi-checkbox-blank-outline text-muted" %}
+                        {% endif %}
+                    {% endif %}
+
+                    <p class="h5"><i class="mdi {{ iconClass }} mr-2"></i>{{ choice }}
+                    {% if questionsCount[key] %}
+                        <span class="badge badge-info">
+                            {% if questionsChoicesTotal[key][choiceKey] %}
+                                {{ (questionsChoicesTotal[key][choiceKey] / questionsCount[key]) * 100 }}%
+                            {% else %}
+                                0%
+                            {% endif %}
+                        </span>
+                    {% endif %}
+                    </p>
+                {% endfor%}
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>

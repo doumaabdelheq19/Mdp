@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Accueil
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container">
+            <div class="row align-items-center p-b-100 p-t-60">
+
+                <div class="col-md-6 text-white p-b-30">
+                    <div class="media">
+                        <div class="avatar avatar mr-3">
+                            <div class="avatar-title rounded-circle mdi mdi-sitemap  ">
+
+                            </div>
+                        </div>
+                        <div class="media-body">
+                            <h1>Base documentaire - Catégories</h1>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-4 col-lg-3">
+                    <a href="{{ path('manager_documents_types_add') }}" class="card m-b-30">
+                        <div class="card-body">
+                            <div class="media">
+                                <div class="avatar mr-3">
+                                    <div class="avatar-title rounded-circle bg-primary"><i class="mdi mdi-shape-circle-plus"></i></div>
+                                </div>
+                                <div class="media-body p-t-5">
+                                    <h5 class="m-b-0">Créer</h5>
+                                    <p class="m-0">une sous-catégorie</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container pull-up">
+        <div class="row justify-content-md-end">
+
+        </div>
+        <div class="row">
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive p-t-10">
+                            <table id="datatable" class="table" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Catégorie principale</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for type in documentsTypes %}
+                                    <tr>
+                                        <td><a href="{{ path('manager_documents_types_edit', {'id': type.id}) }}">{{ type.libelle }}</a></td>
+                                        <td>{% if type.parent %}{{ type.parent.libelle }}{% endif %}</td>
+                                        <td>
+                                            {% if type.parent %}
+                                                <a href="{{ path('manager_documents_types_delete', {'id': type.id}) }}" class="btn btn-sm ml-1 mr-1 btn-danger" onclick="return confirm('Confirmer la suppression de cette sous-catégorie ?');">
+                                                    <i class="mdi mdi-close"></i>
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                $('#datatable').DataTable({
+                    "language": {
+                        "search": "Rechercher :",
+                        "lengthMenu": "Afficher _MENU_ résultats par page",
+                        "zeroRecords": "Aucun résultat",
+                        "info": "Page _PAGE_ sur _PAGES_",
+                        "infoEmpty": "Aucune données sur ce tableau",
+                        "infoFiltered": "(filtered from _MAX_ total records)",
+                        "paginate": {
+                            "previous": "Précédent",
+                            "next": "Suivant",
+
+                        }
+                    }
+                });
+
+            });
+
+        })(window.jQuery);
+    </script>
+{% endblock %}

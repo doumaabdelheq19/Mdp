@@ -1,0 +1,540 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Accueil
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        #map {
+            height: {{ mindMapHeight }}px;
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container">
+            <div class="row align-items-center p-b-100 p-t-60">
+
+                <div class="col-md-6 text-white p-b-30">
+                    <div class="media">
+                        <div class="avatar avatar mr-3">
+                            <div class="avatar-title rounded-circle mdi mdi-sitemap  ">
+
+                            </div>
+                        </div>
+                        <div class="media-body">
+                            <h1>Mesures techniques standards</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container pull-up">
+        <div class="row justify-content-md-end">
+
+        </div>
+        <div class="row">
+
+            <div class="col-12 m-t-30">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="map"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 m-t-30">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="mb-4">Informatique</h5>
+                        <div class="my-2">
+                            <h5 class="card-title">Réseau</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.computing.network %}
+                                <div class="list-group-item d-flex  align-items-center">
+                                    <div class="">
+                                        <div>{{ item.name }}</div>
+                                        <div class="text-muted">
+                                            {% for spec in item.data %}
+                                                <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="ml-auto">
+                                        <a href="{{ path('manager_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                        <a href="{{ path('manager_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                        <a href="{{ path('manager_systems_translate', {'id': item.id, '_locale': 'en'}) }}" class="btn btn-primary my-1">
+                                            EN
+                                        </a>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('manager_systems_add') }}?type=computing&subtype=network" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> Ajouter un élément</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">Sécurité</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.computing.security %}
+                                    <div class="list-group-item d-flex  align-items-center">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <a href="{{ path('manager_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('manager_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                            <a href="{{ path('manager_systems_translate', {'id': item.id, '_locale': 'en'}) }}" class="btn btn-primary my-1">
+                                                EN
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('manager_systems_add') }}?type=computing&subtype=security" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> Ajouter un élément</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">Administration</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.computing.administration %}
+                                    <div class="list-group-item d-flex  align-items-center">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <a href="{{ path('manager_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('manager_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                            <a href="{{ path('manager_systems_translate', {'id': item.id, '_locale': 'en'}) }}" class="btn btn-primary my-1">
+                                                EN
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('manager_systems_add') }}?type=computing&subtype=administration" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> Ajouter un élément</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">Périphérique</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.computing.device %}
+                                    <div class="list-group-item d-flex  align-items-center">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <a href="{{ path('manager_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('manager_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                            <a href="{{ path('manager_systems_translate', {'id': item.id, '_locale': 'en'}) }}" class="btn btn-primary my-1">
+                                                EN
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('manager_systems_add') }}?type=computing&subtype=device" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> Ajouter un élément</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">Logiciel</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.computing.software %}
+                                    <div class="list-group-item d-flex  align-items-center">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <a href="{{ path('manager_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('manager_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                            <a href="{{ path('manager_systems_translate', {'id': item.id, '_locale': 'en'}) }}" class="btn btn-primary my-1">
+                                                EN
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('manager_systems_add') }}?type=computing&subtype=software" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> Ajouter un élément</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">Serveur</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.computing.server %}
+                                    <div class="list-group-item d-flex  align-items-center">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <a href="{{ path('manager_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('manager_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                            <a href="{{ path('manager_systems_translate', {'id': item.id, '_locale': 'en'}) }}" class="btn btn-primary my-1">
+                                                EN
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('manager_systems_add') }}?type=computing&subtype=server" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> Ajouter un élément</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 m-t-30">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="mb-4">Physique</h5>
+                        <div class="my-2">
+                            <h5 class="card-title">Cloisonnement</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.physical.partitioning %}
+                                    <div class="list-group-item d-flex  align-items-center">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <a href="{{ path('manager_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('manager_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                            <a href="{{ path('manager_systems_translate', {'id': item.id, '_locale': 'en'}) }}" class="btn btn-primary my-1">
+                                                EN
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('manager_systems_add') }}?type=physical&subtype=partitioning" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> Ajouter un élément</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">Information</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.physical.information %}
+                                    <div class="list-group-item d-flex  align-items-center">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <a href="{{ path('manager_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('manager_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                            <a href="{{ path('manager_systems_translate', {'id': item.id, '_locale': 'en'}) }}" class="btn btn-primary my-1">
+                                                EN
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('manager_systems_add') }}?type=physical&subtype=information" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> Ajouter un élément</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 m-t-30">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="mb-4">Action</h5>
+                        <div class="my-2">
+                            <h5 class="card-title">Minimisation</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.action.minimization %}
+                                    <div class="list-group-item d-flex  align-items-center">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <a href="{{ path('manager_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('manager_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                            <a href="{{ path('manager_systems_translate', {'id': item.id, '_locale': 'en'}) }}" class="btn btn-primary my-1">
+                                                EN
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('manager_systems_add') }}?type=action&subtype=minimization" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> Ajouter un élément</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">Anonymisation</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.action.anonymization %}
+                                    <div class="list-group-item d-flex  align-items-center">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <a href="{{ path('manager_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('manager_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                            <a href="{{ path('manager_systems_translate', {'id': item.id, '_locale': 'en'}) }}" class="btn btn-primary my-1">
+                                                EN
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('manager_systems_add') }}?type=action&subtype=anonymization" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> Ajouter un élément</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">Pseudonymisation</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.action.pseudonymization %}
+                                    <div class="list-group-item d-flex  align-items-center">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <a href="{{ path('manager_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('manager_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                            <a href="{{ path('manager_systems_translate', {'id': item.id, '_locale': 'en'}) }}" class="btn btn-primary my-1">
+                                                EN
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('manager_systems_add') }}?type=action&subtype=pseudonymization" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> Ajouter un élément</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">Sensibilisation et formation</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.action.sensitization %}
+                                    <div class="list-group-item d-flex  align-items-center">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <a href="{{ path('manager_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('manager_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                            <a href="{{ path('manager_systems_translate', {'id': item.id, '_locale': 'en'}) }}" class="btn btn-primary my-1">
+                                                EN
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('manager_systems_add') }}?type=action&subtype=sensitization" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> Ajouter un élément</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">Contrôle et qualité</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.action.supervision %}
+                                    <div class="list-group-item d-flex  align-items-center">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <a href="{{ path('manager_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('manager_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                            <a href="{{ path('manager_systems_translate', {'id': item.id, '_locale': 'en'}) }}" class="btn btn-primary my-1">
+                                                EN
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('manager_systems_add') }}?type=action&subtype=supervision" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> Ajouter un élément</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">Destruction et suppression</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.action.destruction %}
+                                    <div class="list-group-item d-flex  align-items-center">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <a href="{{ path('manager_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('manager_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                            <a href="{{ path('manager_systems_translate', {'id': item.id, '_locale': 'en'}) }}" class="btn btn-primary my-1">
+                                                EN
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('manager_systems_add') }}?type=action&subtype=destruction" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> Ajouter un élément</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 m-t-30">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="mb-4">Prestataires du SI</h5>
+                        <div class="my-2">
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.supplier.supplier %}
+                                    <div class="list-group-item d-flex  align-items-center">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-auto">
+                                            <a href="{{ path('manager_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('manager_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                            <a href="{{ path('manager_systems_translate', {'id': item.id, '_locale': 'en'}) }}" class="btn btn-primary my-1">
+                                                EN
+                                            </a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('manager_systems_add') }}?type=supplier&subtype=supplier" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> Ajouter un élément</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modal_content" tabindex="-1" role="dialog"
+             aria-labelledby="modal_content" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal_content_title"></h5>
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Fermer">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modal_content_body"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+
+        var systemsJs = {{ systemsJs|json_encode|raw }};
+
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                $('#datatable').DataTable({
+                    "language": {
+                        "search": "Rechercher :",
+                        "lengthMenu": "Afficher _MENU_ résultats par page",
+                        "zeroRecords": "Aucun résultat",
+                        "info": "Page _PAGE_ sur _PAGES_",
+                        "infoEmpty": "Aucune données sur ce tableau",
+                        "infoFiltered": "(filtered from _MAX_ total records)",
+                        "paginate": {
+                            "previous": "Précédent",
+                            "next": "Suivant",
+
+                        }
+                    }
+                });
+
+                var options = {
+                    container:'map',
+                    editable:false,
+                    theme:'primary',
+                    support_html: true,
+                };
+                var mind = {
+                    meta:{
+                        name: "Cartographie SI",
+                        author: "myDigitplace",
+                        version: "1"
+                    },
+                    format: "node_tree",
+                    data: {{ mindMap|json_encode|raw }}
+                }
+                var jm = new jsMind(options);
+                jm.show(mind);
+            });
+
+        })(window.jQuery);
+
+        function openModalInfo(id) {
+            if (systemsJs[id]) {
+                document.getElementById('modal_content_title').innerText = systemsJs[id].name;
+                var contentHtml = "";
+                systemsJs[id].data.map(item => {
+                    if (item.value !== null) {
+                        contentHtml += "<b><u>" + item.title + "</u></b> : " + item.value + "<br/><br/>";
+                    }
+                })
+                document.getElementById('modal_content_body').innerHTML = contentHtml;
+                $('#modal_content').modal('show');
+            }
+        }
+    </script>
+{% endblock %}

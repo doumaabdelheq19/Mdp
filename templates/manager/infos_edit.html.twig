@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Editer une info
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container-fluid px-lg-5 m-b-30">
+            <div class="row">
+                <div class="col-12 text-white p-t-40 p-b-90">
+
+                    <h4 class=""> <span class="btn btn-white-translucent">
+                                <i class="mdi mdi-account "></i></span> Editer une info
+                    </h4>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid px-lg-5 pull-up">
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-body ">
+                    {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
+
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            {{ form_label(form.title) }}
+                            {{ form_widget(form.title, {'attr': {'class': 'form-control ' ~ ((form_errors(form.title) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.title) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            {{ form_label(form.date) }}
+                            {{ form_widget(form.date, {'attr': {'class': 'form-control datepicker-js ' ~ ((form_errors(form.date) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.date) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <hr/>
+
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            {{ form_label(form.link) }}
+                            {{ form_widget(form.link, {'attr': {'class': 'form-control ' ~ ((form_errors(form.link) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.link) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <p>-- OU --</p>
+
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            {{ form_label(form.content) }}
+                            {{ form_widget(form.content, {'attr': {'class': 'form-control ' ~ ((form_errors(form.content) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.content) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <hr/>
+
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            {{ form_label(form.filePicture) }}
+                            {{ form_widget(form.filePicture, {'attr': {'class': 'form-control ' ~ ((form_errors(form.filePicture) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.filePicture) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <hr/>
+
+                    <div class="custom-control custom-checkbox my-4">
+                        {{ form_widget(form.enabled, {'attr': {'class': 'custom-control-input'}}) }}
+                        {{ form_label(form.enabled, null, {'label_attr': {'class': 'custom-control-label'}}) }}
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Tables to dataTables
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                $(".datepicker-js").datepicker({
+                    language: 'fr',
+                    format: 'yyyy-mm-dd'
+                });
+            });
+        })(window.jQuery);
+
+    </script>
+{% endblock %}

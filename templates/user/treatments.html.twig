@@ -1,0 +1,342 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'Registre des traitements'|trans }}
+{% endblock %}
+
+{% block content %}
+<div class="page">
+    <div class="flex">
+        <!-- Section 1: Header Information -->
+        <div class="three">
+            <div class="gap">
+                <h4>{{ 'registre_des_traitements'|trans }}</h4>
+                <p>{{ 'lensemble_de_vos_traitements_exemple_1_exemple_2'|trans }}</p>
+                <p>
+                    <a href="#" data-toggle="modal" data-target="#RGPDModal">{{ 'le_rglement_gnral_sur_la_protection_des_donnes_rgp'|trans }}</a>
+                </p>
+                <div style="display: flex; gap: 20px;">
+                    <!-- Print Button -->
+                    <div class="imprimer">
+                        <i class="fa fa-print" aria-hidden="true"></i>
+                        <a href="{{ path('user_treatments_export') }}" target="_blanc">
+                            <p>{{ 'imprimer_mon_registre'|trans }}</p>
+                        </a>
+                    </div>
+                    <!-- Export Button -->
+                    <div class="exporter">
+                        <a href="{{ path('user_treatments_export_xlsx') }}">
+                            <p>{{ 'exporter_mon_registre'|trans }}</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Total Treatments -->
+        <div class="three">
+            <div class="gap">
+                <h4 style="font-size: 16px;">{{ 'nombre_total_de_traitements'|trans }}: {{ treatmentsStats.total }}</h4>
+
+                <!-- In Progress -->
+                <div class="checkbox"  onclick="window.location.href='{{ path('user_treatments', {'filter': 'status,inProgress'}) }}'" {% if filter1 == "status" and filter2 != "inProgress" %}style="opacity: 0.3"{% endif %}>
+                    <div style="display: flex; gap: 5px;">
+                        <input type="checkbox" {% if filter1 == "status" and filter2 == "inProgress" %}checked{% endif %}>
+                        <a href="{{ path('user_treatments', {'filter': 'status,inProgress'}) }}">
+                            <p>{{ 'en_cours'|trans }} ({{ treatmentsStats.inProgress }})</p>
+                        </a>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {% if treatmentsStats.total > 0 %}{{ (treatmentsStats.inProgress / treatmentsStats.total) * 100 }}{% else %}0{% endif %}%"></div>
+                    </div>
+                </div>
+
+                <!-- To Audit -->
+                <div class="checkbox" {% if filter1 == "status" and filter2 != "toAudit" %}style="opacity: 0.3"{% endif %}>
+                    <div style="display: flex; gap: 5px;">
+                        <input  onclick="window.location.href='{{ path('user_treatments', {'filter': 'status,toAudit'}) }}'" type="checkbox" {% if filter1 == "status" and filter2 == "toAudit" %}checked{% endif %}>
+                        <a href="{{ path('user_treatments', {'filter': 'status,toAudit'}) }}">
+                            <p>{{ 'auditer_dpo'|trans }} ({{ treatmentsStats.toAudit }})</p>
+                        </a>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {% if treatmentsStats.total > 0 %}{{ (treatmentsStats.toAudit / treatmentsStats.total) * 100 }}{% else %}0{% endif %}%"></div>
+                    </div>
+                </div>
+
+                <!-- Valid -->
+                <div class="checkbox" {% if filter1 == "status" and filter2 != "valid" %}style="opacity: 0.3"{% endif %}>
+                    <div style="display: flex; gap: 5px;">
+                        <input  onclick="window.location.href='{{ path('user_treatments', {'filter': 'status,valid'}) }}'" type="checkbox" {% if filter1 == "status" and filter2 == "valid" %}checked{% endif %}>
+                        <a href="{{ path('user_treatments', {'filter': 'status,valid'}) }}">
+                            <p>{{ 'valids'|trans }} ({{ treatmentsStats.valid }})</p>
+                        </a>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {% if treatmentsStats.total > 0 %}{{ (treatmentsStats.valid / treatmentsStats.total) * 100 }}{% else %}0{% endif %}%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 3: PIA Stats -->
+        <div class="three">
+            <div class="gap">
+                <h4 style="font-size: 16px;">PIA: {{ treatmentsPiaStats.total }}</h4>
+
+                <!-- To Realize -->
+                <div class="checkbox" {% if filter1 == "pia" and filter2 != "inProgress" %}style="opacity: 0.3"{% endif %}>
+                    <div style="display: flex; gap: 5px;">
+                        <input  onclick="window.location.href='{{ path('user_treatments', {'filter': 'pia,inProgress'}) }}'" type="checkbox" {% if filter1 == "pia" and filter2 == "inProgress" %}checked{% endif %}>
+                        <a href="{{ path('user_treatments', {'filter': 'pia,inProgress'}) }}">
+                            <p>{{ 'raliser'|trans }} ({{ treatmentsPiaStats.inProgress }})</p>
+                        </a>
+                    </div>
+                    <div class="progress-bar-two">
+                        <div class="progress-two" style="width: {% if treatmentsPiaStats.total > 0 %}{{ (treatmentsPiaStats.inProgress / treatmentsPiaStats.total) * 100 }}{% else %}0{% endif %}%"></div>
+                    </div>
+                </div>
+
+                <!-- Recommended -->
+                <div class="checkbox" {% if filter1 == "pia" and filter2 != "reco" %}style="opacity: 0.3"{% endif %}>
+                    <div style="display: flex; gap: 5px;">
+                        <input  onclick="window.location.href='{{ path('user_treatments', {'filter': 'pia,reco'}) }}'" type="checkbox" {% if filter1 == "pia" and filter2 == "reco" %}checked{% endif %}>
+                        <a href="{{ path('user_treatments', {'filter': 'pia,reco'}) }}">
+                            <p>{{ 'recommands'|trans }} ({{ treatmentsPiaStats.reco }})</p>
+                        </a>
+                    </div>
+                    <div class="progress-bar-two">
+                        <div class="progress-two" style="width: {% if treatmentsPiaStats.total > 0 %}{{ (treatmentsPiaStats.reco / treatmentsPiaStats.total) * 100 }}{% else %}0{% endif %}%"></div>
+                    </div>
+                </div>
+
+                <!-- Realized -->
+                <div class="checkbox" {% if filter1 == "pia" and filter2 != "valid" %}style="opacity: 0.3"{% endif %}>
+                    <div style="display: flex; gap: 5px;">
+                        <input  onclick="window.location.href='{{ path('user_treatments', {'filter': 'pia,valid'}) }}'" type="checkbox" {% if filter1 == "pia" and filter2 == "valid" %}checked{% endif %}>
+                        <a href="{{ path('user_treatments', {'filter': 'pia,valid'}) }}">
+                            <p>{{ 'raliss'|trans }} ({{ treatmentsPiaStats.valid }})</p>
+                        </a>
+                    </div>
+                    <div class="progress-bar-two">
+                        <div class="progress-two" style="width: {% if treatmentsPiaStats.total > 0 %}{{ (treatmentsPiaStats.valid / treatmentsPiaStats.total) * 100 }}{% else %}0{% endif %}%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="table-container-traitements">
+        <div style="display: flex; justify-content: space-between; width: 100%;">
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <span class="search-icon">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </span>
+                <input id="searchInput" type="text" placeholder="{{ 'Rechercher'|trans }}" />
+            </div>
+            <!-- Buttons -->
+            <div class="buttons">
+                <div class="dropdownn">
+                    <button class="traitment-button">
+                        {{ 'mes_traitements'|trans }} <span class="dropdown-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9l-7 7l-7-7"/></svg></span>
+                    </button>
+                    <ul class="traitment-menu">
+                      {% if app.user.user.mainGroupAgency %}
+                          <li>
+                              <a href="{{ path('user_treatments_std') }}">
+                                  Traitements standards
+                              </a>
+                          </li>
+                      {% endif %}
+                      {% if app.user.user.parentUser %}
+                          <li>
+                              <a href="{{ path('user_treatments_group') }}">
+                                  Traitements du groupe
+                              </a>
+                          </li>
+                      {% endif %}
+                    </ul>
+                </div>
+                <div class="exporter">
+                    <a href="{{ path('user_treatments_add') }}">
+                        <p>{{ 'crer_un_traitement'|trans }}</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <!-- Data Table -->
+        <table class="styled-table" id="datatable">
+            <thead>
+                <tr>
+                    <th>{{ 'RESPONSABILITÉ'|trans }}</th>
+                    <th>{{ 'nom_du_traitement'|trans }}</th>
+                    <th>{{ 'n_du_traitement'|trans }}</th>
+                    <th>{{ 'mise_jour'|trans }}</th>
+                    <th>{{ 'finalit'|trans }}</th>
+                    <th>{{ 'pia'|trans }}</th>
+                    <th>{{ 'actions'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for treatment in treatments %}
+                <tr>
+                    <td>{% if treatment.companySubcontractorType %}{{ treatment.companySubcontractorType.libelle }}{% else %}-{% endif %}</td>
+                    <td>
+                        {% if treatment.user.id == app.user.user.id %}
+                        <a href="{{ path('user_treatments_edit', {'id': treatment.id}) }}">{{ treatment.name }}</a>
+                        {% else %}
+                        <a href="{{ path('user_treatments_show', {'id': treatment.id}) }}">{{ treatment.name }}</a>
+                        {% endif %}
+                    </td>
+                    <td>{{ treatment.number|format_treatment_number }}</td>
+                    <td>{{ treatment.editDate|date('d/m/Y') }}</td>
+                    <td>{{ treatment.mainPurpose }}</td>
+                   
+                       <td>
+    {% if treatment.piaFile %}
+        <span class="badge badge-success">{{ 'realise'|trans }}</span>
+    {% else %}
+        {% if treatment.insufficientCriteria %}
+            <span>{{ 'non_concern'|trans }}</span>
+        {% elseif treatment.piaNeeded %}
+            {% if treatment.piaExoneration %}
+                <span>{{ 'exonr'|trans }}</span>
+            {% else %}
+                <span class="badge badge-danger">{{ 'raliser'|trans }}</span>
+            {% endif %}
+        {% else %}
+            {% if treatment.piaExoneration %}
+                <span>{{ 'exonr'|trans }}</span>
+            {% elseif treatment.sensitiveData or (treatment.piaCriteria|length >= 1) %}
+                <span class="badge badge-warning" data-toggle="tooltip" data-placement="top" title="{{ 'Ce traitement comporte des données sensibles.'|trans }}">
+                    {{ 'recommand'|trans }}
+                </span>
+            {% else %}
+                <span>{{ 'non_concern'|trans }}</span>
+            {% endif %}
+        {% endif %}
+    {% endif %}
+
+                    </td>
+                    <td>
+                        <div class="options">
+                            <a href="{{ path('user_treatments_show', {'id': treatment.id}) }}" class="edit">
+                                <i class="fa fa-eye" aria-hidden="true"></i>
+                            </a>
+                            <a href="{{ path('user_treatments_copy', {'id': treatment.id}) }}" class="edit">
+                                <i class="fa fa-clone" aria-hidden="true"></i>
+                            </a>
+                            <a href="{{ path('user_treatments_delete', {'id': treatment.id}) }}" class="delete" onclick="return confirm('{{ 'confirmer_la_suppression'|trans }}')">
+                               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination-container">
+            <!-- Results per page selector -->
+            <div class="results-per-page">
+                <label for="results">Afficher</label>
+                <select id="resultsSelect" class="results-select">
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                </select>
+                <span>résultats par page</span>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div class="pagination-controls">
+                <button class="pagination-button" id="prevPage" disabled><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19l-7-7l7-7"/></svg></button>
+                <span class="pagination-info" id="paginationInfo">Page 1 sur 1</span>
+                <button class="pagination-button" id="nextPage" disabled><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5l7 7l-7 7"/></svg></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const rows = Array.from(document.querySelectorAll('#datatable tbody tr'));
+        const resultsSelect = document.getElementById('resultsSelect');
+        const paginationInfo = document.getElementById('paginationInfo');
+        const prevPage = document.getElementById('prevPage');
+        const nextPage = document.getElementById('nextPage');
+        const searchInput = document.getElementById('searchInput');
+
+        let currentPage = 1;
+        let resultsPerPage = parseInt(resultsSelect.value);
+        let filteredRows = rows;
+
+        function updateTable() {
+            const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+            const start = (currentPage - 1) * resultsPerPage;
+            const end = start + resultsPerPage;
+
+            rows.forEach((row, index) => {
+                row.style.display = filteredRows.includes(row) && index >= start && index < end ? '' : 'none';
+            });
+
+            paginationInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
+            prevPage.disabled = currentPage === 1;
+            nextPage.disabled = currentPage === totalPages;
+        }
+
+        function filterTable() {
+            const query = searchInput.value.toLowerCase();
+            filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
+            currentPage = 1; // Reset to first page after search
+            updateTable();
+        }
+
+        resultsSelect.addEventListener('change', function () {
+            resultsPerPage = parseInt(this.value);
+            currentPage = 1;
+            updateTable();
+        });
+
+        prevPage.addEventListener('click', function () {
+            if (currentPage > 1) {
+                currentPage--;
+                updateTable();
+            }
+        });
+
+        nextPage.addEventListener('click', function () {
+            const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                updateTable();
+            }
+        });
+
+        searchInput.addEventListener('input', filterTable);
+
+        // Initialize table
+        updateTable();
+    });
+
+
+    document.querySelector('.traitment-button').addEventListener('click', function() {
+            const menu = document.querySelector('.traitment-menu');
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+        });
+
+          // Search Functionality
+        document.getElementById('search-input').addEventListener('keyup', function () {
+            const searchValue = this.value.toLowerCase();
+            const rows = document.querySelectorAll('#datatable tbody tr');
+
+            rows.forEach(row => {
+                const text = row.innerText.toLowerCase();
+                row.style.display = text.includes(searchValue) ? '' : 'none';
+            });
+        });
+</script>
+{% endblock %}

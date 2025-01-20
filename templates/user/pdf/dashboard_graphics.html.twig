@@ -1,0 +1,48 @@
+{% if treatmentsStats.total %}
+<h5 style="text-align: center">{{ 'traitements'|trans }}</h5>
+<table style="width:100%;font-size: 9px;color: white;" border="0" cellpadding="6" cellspacing="0">
+    <tbody>
+        <tr>
+            {% if treatmentsStats.inProgress %}<td style="border: 3px solid #FFFFFF; background-color: #f2545b; width: {{ treatmentsStats.inProgress / treatmentsStats.total * 100 }}%;">En cours : {{ treatmentsStats.inProgress }}</td>{% endif %}
+            {% if treatmentsStats.toAudit %}<td style="border: 3px solid #FFFFFF; background-color: #ffb700; width: {{ treatmentsStats.toAudit / treatmentsStats.total * 100 }}%;">À auditer DPO : {{ treatmentsStats.toAudit }}</td>{% endif %}
+            {% if treatmentsStats.valid %}<td style="border: 3px solid #FFFFFF; background-color: #00e08b; width: {{ treatmentsStats.valid / treatmentsStats.total * 100 }}%;">Validés : {{ treatmentsStats.valid }}</td>{% endif %}
+        </tr>
+    </tbody>
+</table>
+{% endif %}
+{% if treatmentsPiaStats.total %}
+<h5 style="text-align: center">{{ 'pia'|trans }}</h5>
+<table style="width:100%;font-size: 9px;color: white;" border="0" cellpadding="6" cellspacing="0">
+    <tbody>
+    <tr>
+        {% if treatmentsPiaStats.inProgress %}<td style="border: 3px solid #FFFFFF; background-color: #f2545b; width: {{ treatmentsPiaStats.inProgress / treatmentsPiaStats.total * 100 }}%;">À réaliser : {{ treatmentsPiaStats.inProgress }}</td>{% endif %}
+        {% if treatmentsPiaStats.reco %}<td style="border: 3px solid #FFFFFF; background-color: #ffb700; width: {{ treatmentsPiaStats.reco / treatmentsPiaStats.total * 100 }}%;">Recommandés : {{ treatmentsPiaStats.reco }}</td>{% endif %}
+        {% if treatmentsPiaStats.valid %}<td style="border: 3px solid #FFFFFF; background-color: #00e08b; width: {{ treatmentsPiaStats.valid / treatmentsPiaStats.total * 100 }}%;">Réalisés : {{ treatmentsPiaStats.valid }}</td>{% endif %}
+    </tr>
+    </tbody>
+</table>
+{% endif %}
+{% if subcontractorsStats.total %}
+<h5 style="text-align: center">{{ 'sous_traitants'|trans }}</h5>
+<table style="width:100%;font-size: 9px;color: white;" border="0" cellpadding="6" cellspacing="0">
+    <tbody>
+    <tr>
+        {% if subcontractorsStats.invalid %}<td style="border: 3px solid #FFFFFF; background-color: #f2545b; width: {{ subcontractorsStats.invalid / subcontractorsStats.total * 100 }}%;">Non conformes : {{ subcontractorsStats.invalid }}</td>{% endif %}
+        {% if subcontractorsStats.inProgress %}<td style="border: 3px solid #FFFFFF; background-color: #ffb700; width: {{ subcontractorsStats.inProgress / subcontractorsStats.total * 100 }}%;">En cours : {{ subcontractorsStats.inProgress }}</td>{% endif %}
+        {% if subcontractorsStats.valid %}<td style="border: 3px solid #FFFFFF; background-color: #00e08b; width: {{ subcontractorsStats.valid / subcontractorsStats.total * 100 }}%;">Conformes : {{ subcontractorsStats.valid }}</td>{% endif %}
+    </tr>
+    </tbody>
+</table>
+{% endif %}
+{% if actionsStats.total %}
+<h5 style="text-align: center">{{ 'actions'|trans }}</h5>
+<table style="width:100%;font-size: 9px;color: white;" border="0" cellpadding="6" cellspacing="0">
+    <tbody>
+    <tr>
+        {% if actionsStats.invalid %}<td style="border: 3px solid #FFFFFF; background-color: #f2545b; width: {{ actionsStats.invalid / actionsStats.total * 100 }}%;">Non réalisés : {{ actionsStats.invalid }}</td>{% endif %}
+        {% if actionsStats.valid %}<td style="border: 3px solid #FFFFFF; background-color: #00e08b; width: {{ actionsStats.valid / actionsStats.total * 100 }}%;">Réalisés : {{ actionsStats.valid }}</td>{% endif %}
+    </tr>
+    </tbody>
+</table>
+{% endif %}
+<br/><br/><br/><br/>

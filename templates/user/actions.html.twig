@@ -1,0 +1,231 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'Plan dactions'|trans }}
+{% endblock %}
+
+{% block content %}
+<div class="page">
+    <div class="flex">
+        <!-- Plan d'actions Overview -->
+        <div class="four">
+            <div class="gap">
+                <h4>{{ 'plan_dactions'|trans }}</h4>
+                <p>{{ 'lensemble_de_vos_actions'|trans }}</p>
+                <div style="display: flex; gap: 20px;">
+                   <a href="{{ path('user_actions_export') }}" style="text-decoration: none; color: inherit;" target="_blanc">
+    <div class="imprimer" style="width: 100%; cursor: pointer;">
+        <i class="fa fa-print" aria-hidden="true"></i>
+        <p>{{ 'imprimer_mon_plan_dactions'|trans }}</p>
+    </div>
+</a>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions Statistics -->
+        <div class="four">
+            <div class="gap">
+                <h4 style="font-size: 16px;">{{ "Nombre d'actions"|trans }} : {{ actionsStats.total }}</h4>
+                <div class="checkbox">
+                    <div style="display: flex; gap: 5px;">
+                        <input type="checkbox" id="filter-non-realise" checked>
+                        <p>{{ 'non_ralises'|trans }} ({{ actionsStats.invalid }})</p>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {% if actionsStats.total > 0 %}{{ (actionsStats.invalid / actionsStats.total) * 100 }}{% else %}0{% endif %}%"></div>
+                    </div>
+                </div>
+                <div class="checkbox">
+                    <div style="display: flex; gap: 5px;">
+                        <input type="checkbox" id="filter-realise" checked>
+                        <p>{{ 'ralises'|trans }} ({{ actionsStats.valid }})</p>
+                    </div>
+                    <div class="progress-bar-two">
+                        <div class="progress-two" style="width: {% if actionsStats.total > 0 %}{{ (actionsStats.valid / actionsStats.total) * 100 }}{% else %}0{% endif %}%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="table-container-traitements">
+        <div style="display: flex; justify-content: space-between; width: 100%;">
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <span class="search-icon">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </span>
+                <input type="text" placeholder="{{ 'Rechercher'|trans }}" id="search-input">
+            </div>
+            <!-- Action Buttons -->
+            <div class="buttons">
+                
+                <div class="exporter">
+                    <a href="{{ path('user_actions_add') }}">
+                        <p>{{ 'crer_une_action'|trans }}</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actions Table -->
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>{{ 'action'|trans }}</th>
+                    <th>{{ 'a_raliser_par'|trans }}</th>
+                    <th>{{ 'responsable'|trans }}</th>
+                    <th>{{ 'date_de_cration'|trans }}</th>
+                    <th>{{ 'date_de_mise_en_place_souhaite'|trans }}</th>
+                    <th>{{ 'priorite'|trans }}</th>
+                    <th>{{ 'realise'|trans }}</th>
+                    <th>{{ 'actions'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                {% for action in actions %}
+                    <tr 
+                        data-realise="{{ action.terminated ? 'true' : 'false' }}" 
+                        data-priority="{{ action.priority }}" 
+                        data-date="{{ action.date ? action.date|date('Y-m-d') : '' }}" 
+                        data-setup="{{ action.setUpDate ? action.setUpDate|date('Y-m-d') : '' }}">
+                        <td>
+                            <a href="{{ path('user_actions_edit', {'id': action.id}) }}">{{ action.name }}</a>
+                            {% if action.byGroup %}
+                                <span class="badge badge-danger">Groupe</span>
+                            {% endif %}
+                        </td>
+                        <td>{% if action.forDpo %}{{ 'mydigitplace'|trans }}{% else %}{{ 'client'|trans }}{% endif %}</td>
+                        <td>{{ action.accountantLastName }} {{ action.accountantFirstName }}</td>
+                        <td>{{ action.date|date('d/m/Y') }}</td>
+                        <td style="color: #EF6D6F;">{{ action.setUpDate|date('d/m/Y') }}</td>
+                        <td>
+                            {% if action.priority == 1 %}
+                                <span class="badge badge-danger" style="color: #EF6D6F; background-color: #ef6d6f2a; border-radius: 10px; padding: 7px 11px; width: auto;">{{ 'urgente'|trans }}</span>
+                            {% elseif action.priority == 2 %}
+                                <span class="badge badge-warning" style="color: #FFC375; background-color:rgba(255, 195, 117, 0.14); border-radius: 10px; padding: 7px 11px; width: auto;">{{ 'moderee'|trans }}</span>
+                            {% else %}
+                                <span class="badge badge-success" style="color: #52B489; background-color: rgba(82, 180, 138, 0.17); border-radius: 10px; padding: 7px 11px; width: auto;">{{ 'faible'|trans }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="switch">
+                                <input type="checkbox" disabled id="togglee-{{ action.id }}" {% if action.terminated %}checked{% endif %} />
+                                <label for="togglee-{{ action.id }}"></label>
+                            </div>
+                        </td>
+                        <td >
+                        <div class="options">
+                            <a href="{{ path('user_actions_copy', {'id': action.id}) }}" class="edit">
+                                <i class="fa fa-clone" aria-hidden="true"></i>
+                            </a>
+                            <a href="{{ path('user_actions_print', {'id': action.id}) }}" target="_blank" class="edit">
+                               <i class="fa fa-print" aria-hidden="true"></i>
+                            </a>
+                            <a href="{{ path('user_actions_delete', {'id': action.id}) }}" class="delete" onclick="return confirm('{{ 'confirmer_la_suppression'|trans }}');">
+                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
+                            </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination-container">
+            <div class="results-per-page">
+                <label for="resultsSelect">{{ 'Afficher'|trans }}</label>
+                <select id="resultsSelect" class="results-select">
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                </select>
+                <span>{{ 'résultats par page'|trans }}</span>
+            </div>
+            <div class="pagination-controls">
+                <button id="prevPage" class="pagination-button" disabled>&lt;</button>
+                <span id="paginationInfo">{{ 'page'|trans }} 1 {{ 'sur'|trans }} 1</span>
+                <button id="nextPage" class="pagination-button" disabled>&gt;</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const rows = Array.from(document.querySelectorAll('#table-body tr'));
+            const resultsSelect = document.getElementById('resultsSelect');
+            const paginationInfo = document.getElementById('paginationInfo');
+            const prevPage = document.getElementById('prevPage');
+            const nextPage = document.getElementById('nextPage');
+            const searchInput = document.getElementById('search-input');
+            const nonRealiseFilter = document.getElementById('filter-non-realise');
+            const realiseFilter = document.getElementById('filter-realise');
+
+            let currentPage = 1;
+            let resultsPerPage = parseInt(resultsSelect.value);
+            let filteredRows = rows;
+
+            function updateTable() {
+                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+                const start = (currentPage - 1) * resultsPerPage;
+                const end = start + resultsPerPage;
+
+                rows.forEach((row, index) => {
+                    row.style.display = filteredRows.includes(row) && index >= start && index < end ? '' : 'none';
+                });
+
+                paginationInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
+                prevPage.disabled = currentPage === 1;
+                nextPage.disabled = currentPage === totalPages;
+            }
+
+            function filterRows() {
+                filteredRows = rows.filter(row => {
+                    const isRealise = row.dataset.realise === 'true';
+                    const matchesRealise = realiseFilter.checked ? isRealise : false;
+                    const matchesNonRealise = nonRealiseFilter.checked ? !isRealise : false;
+                    const matchesSearch = row.innerText.toLowerCase().includes(searchInput.value.toLowerCase());
+                    return (matchesRealise || matchesNonRealise) && matchesSearch;
+                });
+                currentPage = 1; // Reset to the first page
+                updateTable();
+            }
+
+            resultsSelect.addEventListener('change', () => {
+                resultsPerPage = parseInt(resultsSelect.value);
+                currentPage = 1;
+                updateTable();
+            });
+
+            prevPage.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updateTable();
+                }
+            });
+
+            nextPage.addEventListener('click', () => {
+                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    updateTable();
+                }
+            });
+
+            searchInput.addEventListener('input', filterRows);
+            nonRealiseFilter.addEventListener('change', filterRows);
+            realiseFilter.addEventListener('change', filterRows);
+
+            // Initialize table on page load
+            filterRows();
+        });
+    </script>
+{% endblock %}

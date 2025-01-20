@@ -1,0 +1,475 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'Dashboard'|trans }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+
+<div class="layer" id="popup-layer">
+    <div class="popup">
+   
+        <div class="popup-header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 1024 1024">
+                <path fill="currentColor" d="M685.248 104.704a64 64 0 0 1 0 90.496L368.448 512l316.8 316.8a64 64 0 0 1-90.496 90.496L232.704 557.248a64 64 0 0 1 0-90.496l362.048-362.048a64 64 0 0 1 90.496 0"/>
+            </svg>
+            Imprimer le tableau de bord
+        </div>
+       
+        <div class="divider">
+            <div class="sub-divider"></div>
+        </div>
+        {{ form_start(printForm, {"attr": {"target": "_blank"}}) }}
+
+        <!-- Checkbox Group -->
+        <div class="form-group">
+            {{ form_label(printForm.types, 'Sélectionnez les types') }}
+            <br>
+            {% for chk in printForm.types %}
+                <div class="custom-control custom-checkbox">
+                    {{ form_widget(chk, {'attr': {'class': 'custom-control-input'} }) }}
+                    {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label'}}) }}
+                </div>
+            {% endfor %}
+            <div class="invalid-feedback">{{ form_errors(printForm.types) | striptags }}</div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="mt-4 d-flex justify-content-end">
+            <button type="submit" class="submit-btn" style="align-items: center; display: flex; justify-content: center; gap:5px;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"><path fill="currentColor" d="M18 7H6V3h12zm0 5.5q.425 0 .713-.288T19 11.5t-.288-.712T18 10.5t-.712.288T17 11.5t.288.713t.712.287M16 19v-4H8v4zm2 2H6v-4H2v-6q0-1.275.875-2.137T5 8h14q1.275 0 2.138.863T22 11v6h-4z"/></svg>
+                    <path fill="currentColor" d="M3 3h18v2H3zM3 7h18v2H3zM3 11h18v2H3zM3 15h18v2H3zM3 19h18v2H3z"/>
+                </svg>
+                Imprimer
+            </button>
+        </div>
+        {{ form_end(printForm) }}
+    </div>
+</div>
+
+    <div class="page">
+        <div class="flex">
+            <div class="one">
+                <div class="gap">
+                    <p>{{ 'Outil de pilotage de votre stratégie de conformité'|trans }}</p>
+                    <h4> {{ 'bonjour_et_bienvenue_sur_mydigitplace_data_solutio'|trans({'%contactFirstName%': app.user.user.companyName}) }}</h4>
+
+                    <div class="imprimer"   id="openpopup" style="cursor:pointer;">
+                        <i class="fa fa-print" aria-hidden="true"></i>
+                        <p>{{ 'Imprimer le tableau de bord'|trans }}</p>
+                    </div>
+                    
+                </div>
+                <div class="profile"> 
+                            {{ app.user.user.contactFirstName|slice(0,1)|upper }}{{ app.user.user.contactLastName|slice(0,1)|upper }}</div>
+            </div>
+            <div class="two">
+                <div class="gap">
+                    <div class="flexx">
+                        <div class="imageprofile">
+                            <img src="{{ asset('assets/img/avatar1.png') }}" alt="Avatar" />
+                        </div>
+
+                        <div>
+                            <p>{{ 'Le nombre de requêtes avec votre IA MDP est de :'|trans }}</p>
+                            <h4>{{ requestsCount|default(0) }} {{ 'requêtes'|trans }}</h4>
+                        </div>
+                    </div>
+
+                    <div class="poser">
+                        <p>{{ 'Posez une question à Kaia'|trans }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="two">
+                <div class="gap">
+                    <div class="flexx">
+                        <div class="imageprofile">
+                            <img src="{{ asset('assets/img/pngwing.com (18) 1.png') }}" alt="Avatar" />
+                        </div>
+
+                        <div>
+                            <p>{{ 'Le nombre d\'heures d\'experts qu\'il vous reste est de :'|trans }}</p>
+                            <h4>{{ expertHours|default(0) }} {{ 'heures'|trans }}</h4>
+                        </div>
+                    </div>
+
+                    <div class="poser">
+                        <p>{{ 'Contactez votre expert DPO'|trans }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+   <div class="flex">
+    {% set chartData = [
+        {
+            'title': 'Traitements',
+            'data': [treatmentsStats.inProgress|default(0), treatmentsStats.toAudit|default(0), treatmentsStats.valid|default(0)],
+            'labels': ['En cours', 'A auditer DPO', 'Validés'],
+            'colors': ['#EF6D6F', '#92AEDA', '#438492']
+          
+        },
+        {
+            'title': 'PIA',
+            'data': [treatmentsPiaStats.inProgress|default(0), treatmentsPiaStats.reco|default(0), treatmentsPiaStats.valid|default(0)],
+            'labels': ['En cours', 'Recommandés', 'Réalisés'],
+            'colors': ['#EF6D6F', '#92AEDA', '#438492']
+        },
+        {
+            'title': 'Sous-traitants',
+            'data': [subcontractorsStats.invalid|default(0), subcontractorsStats.inProgress|default(0), subcontractorsStats.valid|default(0)],
+            'labels': ['Non conformes', 'En cours', 'Conformes'],
+            'colors': ['#EF6D6F', '#92AEDA', '#438492']
+        },
+        {
+            'title': 'Actions',
+            'data': [actionsStats.invalid|default(0), actionsStats.valid|default(0)],
+            'labels': ['Non réalisés', 'Réalisés'],
+            'colors': ['#EF6D6F',  '#438492']
+        }
+    ] %}
+    
+    {% for i, chart in chartData %}
+        <div class="two  charts">
+        <h2 class="chart-containerh2">{{ chart.title|trans }}</h2>
+        <div class="flexx">
+            <div class="chart-container">
+                
+                <div class="chart-wrapper">
+                    <canvas id="donut-chart{{ i }}" width="100" height="100"></canvas>
+                </div>
+            </div>
+            <ul class="chart-legend">
+                {% for j, label in chart.labels %}
+                    {% if j < chart.data|length %}
+                        <li>
+                            <span class="legend-color" style="background-color: {{ chart.colors[j] }}"></span>
+                            {{ label|trans }}
+                        </li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+
+
+
+        <div class="flex">
+            <div class="table-container">
+                <h2>{{ 'Actions à réaliser sous 30 jours'|trans }}</h2>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>{{ 'Action'|trans }}</th>
+                            <th>{{ 'Responsable'|trans }}</th>
+                            <th>{{ 'Date de mise en place'|trans }}</th>
+                            <th>{{ 'Options'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for action in actionsToTreat %}
+                            <tr>
+                                <td>{{ action.name }}</td>
+                                <td>{{ action.accountantLastName }} {{ action.accountantFirstName }}</td>
+                                <td>{{ action.setUpDate|date('d/m/Y') }}</td>
+                                <td >
+                                <div class="options"> <a href="{{ path('user_actions_edit', {"id": action.id}) }}"><button class="edit"><i class="fa fa-clone" aria-hidden="true"></i></button></a>
+                                   <a href="{{ path('user_actions_delete', {'id': action.id}) }}"> <button class="delete"><svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg></button> </a></div>
+                                  
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="4">{{ 'Aucune action disponible'|trans }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-container">
+                <h2>{{ 'Incidents à traiter'|trans }}</h2>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>{{ 'Délai de 72H'|trans }}</th>
+                            <th>{{ 'Nature'|trans }}</th>
+                            <th>{{ 'Date de mise en place'|trans }}</th>
+                            <th>{{ 'Options'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for incident in incidentsToTreat %}
+                            <tr>
+                                <td>{% if incident.notice72H %}{{ 'oui'|trans }}{% else %}{{ 'non'|trans }}{% endif %}</td>
+                                <td>{{ incident.type }}</td>
+                                <td>{{ incident.date|date('d/m/Y') }}</td>
+                                <td class="options">
+                                    <button class="edit"><i class="fa fa-clone" aria-hidden="true"></i></button>
+                                    <button class="delete"><i class="fa fa-trash-o" aria-hidden="true"></i></button>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="4">{{ 'Aucun incident disponible'|trans }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="flex">
+            <div class="table-container">
+                <h2>{{ 'Demandes d\'exercices de droits à traiter'|trans }}</h2>
+                <table class="styled-table">
+                    <thead>
+                        <tr>
+                            <th>{{ 'Date de la demande'|trans }}</th>
+                            <th>{{ 'Droit'|trans }}</th>
+                            <th>{{ 'Personne concernée'|trans }}</th>
+                            <th>{{ 'Délai de 30 jours'|trans }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for exercisingclaim in exercisingClaimRequestsToTreat %}
+                            <tr>
+                                <td>{% if exercisingclaim.requestDate %}{{ exercisingclaim.requestDate|date('d/m/Y H:i') }}{% endif %}</td>
+                                <td> {% if exercisingclaim.rights == "acces" %}
+                                                {{ 'accs'|trans }}
+                                            {% elseif exercisingclaim.rights == "rectification" %}
+                                                {{ 'rectification'|trans }}
+                                            {% elseif exercisingclaim.rights == "effacement" %}
+                                                {{ 'effacement'|trans }}
+                                            {% elseif exercisingclaim.rights == "limitation" %}
+                                                {{ 'limitation'|trans }}
+                                            {% elseif exercisingclaim.rights == "portabilite" %}
+                                                {{ 'portabilit'|trans }}
+                                            {% elseif exercisingclaim.rights == "opposition" %}
+                                                {{ 'opposition'|trans }}
+                                            {% endif %}</td>
+                                <td>{{ exercisingclaim.customer }}</td>
+                                <td> {% if exercisingclaim.answerDate %}
+                                                <span class="badge badge-success">{{ 'valid'|trans }}</span>
+                                            {% else %}
+                                                <span class="badge badge-danger">{{ 'en_cours'|trans }}</span>
+                                                {% if exercisingclaim.requestDate %}
+                                                    {% set difference = date().diff(date(exercisingclaim.requestDate)) %}
+                                                    {% set leftDays = difference.days %}
+                                                    {% if leftDays > 30 %}
+                                                        <span class="badge badge-warning">{{ 'dpass'|trans }}</span>
+                                                    {% endif %}
+                                                {% endif %}
+                                            {% endif %}</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="4">{{ 'Aucune demande disponible'|trans }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-container">
+                <h2>{{ 'Niveau de sensibilisation des équipes'|trans }}</h2>
+                <div class="column">
+                    <div class="item">
+                        <h3>{{ 'Personnes sensibilisées'|trans }}</h3>
+                        <h3>{{ trainingStats.sensitized|default(0) }}</h3>
+                    </div>
+                    <div class="item">
+                        <h3>{{ 'Questionnaires envoyés'|trans }}</h3>
+                        <h3>{{ trainingStats.sent|default(0) }}</h3>
+                    </div>
+                    <div class="item">
+                        <h3>{{ 'Réponses au questionnaire'|trans }}</h3>
+                        <h3>{{ trainingStats.responses|default(0) }}</h3>
+                    </div>
+                    <div class="item">
+                        <h3>{{ 'Note moyenne (questionnaires)'|trans }}</h3>
+                        <h3>{{ trainingStats.averageScore|default('0.00%') }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex">
+            <div class="tablee-container">
+                <h3>{{ 'Infos myDigitplace'|trans }}</h3>
+                {% for info in infos %}
+                    <div class="item">
+                        <div style="display: flex; gap: 15px; align-items: center;">
+                            <img src="{{ asset(info.picture) }}" alt="">
+                            <div>
+                                <h4>{{ info.title }}</h4>
+                                <h5>{{ info.date|date('d/m/Y') }}</h5>
+                            </div>
+                        </div>
+
+                        <button class="edit"><i class="fa fa-external-link" aria-hidden="true"></i></button>
+                    </div>
+                {% else %}
+                    <p>{{ 'Aucune information disponible'|trans }}</p>
+                {% endfor %}
+            </div>
+            <div class="tablee-container">
+    <h3>{{ 'sites_institutionnels'|trans }}</h3>
+
+    {% set sites = [
+        {
+            'img': asset('assets/img/cnil.jpg'),
+            'title': 'plainte_information',
+            'subtitle': 'site_officiel_de_la_cnil',
+            'link': 'https://www.cnil.fr/fr'
+        },
+        {
+            'img': asset('assets/img/cybermalveillance.png'),
+            'title': 'piratage_sensibilisation',
+            'subtitle': 'site_officiel_cybermalveillancegouv',
+            'link': 'https://www.cybermalveillance.gouv.fr/'
+        },
+        {
+            'img': asset('assets/img/anssi.png'),
+            'title': 'conseils_outils',
+            'subtitle': 'anssi',
+            'link': 'https://www.ssi.gouv.fr/'
+        }
+    ] %}
+
+    {% for site in sites %}
+        <div class="item">
+            <div style="display: flex; gap: 15px; align-items: center;">
+                <img src="{{ site.img }}" alt="">
+                <div>
+                    <h4>{{ site.title|trans }}</h4>
+                    <h5>{{ site.subtitle|trans }}</h5>
+                </div>
+            </div>
+
+            <button class="edit" onclick="window.open('{{ site.link }}', '_blank')">
+                <i class="fa fa-external-link" aria-hidden="true"></i>
+            </button>
+        </div>
+    {% endfor %}
+</div>
+
+
+          
+        </div>
+    </div>
+
+  
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('assets/vendor/chartjs/Chart.bundle.min.js') }}"></script>
+     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ <script>
+  
+      document.addEventListener('DOMContentLoaded', function () {
+        'use strict';
+
+        const popupLayer = document.getElementById('popup-layer');
+        const popupp = popupLayer.querySelector('.popup');
+
+        // Hide layer when clicking outside the popup
+        popupLayer.addEventListener('click', function (event) {
+            if (!popupp.contains(event.target)) {
+                popupLayer.style.display="none"; // Hide the layer
+            }
+        });
+
+       const closeIcon = document.querySelector(".popup-header svg");
+    const openButton = document.querySelector("#openpopup");
+    const popup = document.querySelector(".layer");
+    const alertMessage = document.querySelector(".alertt");
+
+    // Ensure elements exist
+    if (closeIcon && openButton && popup) {
+        // Close popup
+        closeIcon.addEventListener("click", () => {
+            popup.style.display = "none"; // Hide popup
+            if (alertMessage) {
+                alertMessage.style.display = "flex"; // Show alert if available
+            }
+        });
+
+        // Open popup
+        openButton.addEventListener("click", () => {
+            popup.style.display = "flex"; // Show popup
+            if (alertMessage) {
+                alertMessage.style.display = "none"; // Hide alert if available
+            }
+        });
+    } else {
+        console.error("Popup elements not found. Check your DOM structure.");
+    }
+
+        // Data for charts passed through the backend
+        const chartData = [
+            { 
+                id: 'donut-chart0', 
+                data: [{{ treatmentsStats.inProgress }}, {{ treatmentsStats.toAudit }}, {{ treatmentsStats.valid }}], 
+                labels: ['{{ 'En cours'|trans }}', '{{ 'A auditer DPO'|trans }}', '{{ 'Validés'|trans }}'],
+                colors: ['#EF6D6F', '#92AEDA', '#438492']
+            },
+            { 
+                id: 'donut-chart1', 
+                data: [{{ treatmentsPiaStats.inProgress }}, {{ treatmentsPiaStats.reco }}, {{ treatmentsPiaStats.valid }}], 
+                labels: ['{{ 'En cours'|trans }}', '{{ 'Recommandés'|trans }}', '{{ 'Réalisés'|trans }}'],
+               colors: ['#EF6D6F', '#92AEDA', '#438492']
+            },
+            { 
+                id: 'donut-chart2', 
+                data: [{{ subcontractorsStats.invalid }}, {{ subcontractorsStats.inProgress }}, {{ subcontractorsStats.valid }}], 
+                labels: ['{{ 'Non conformes'|trans }}', '{{ 'En cours'|trans }}', '{{ 'Conformes'|trans }}'],
+                colors: ['#EF6D6F', '#92AEDA', '#438492']
+            },
+            { 
+                id: 'donut-chart3', 
+                data: [{{ actionsStats.invalid }}, {{ actionsStats.valid }}], 
+                labels: ['{{ 'Non réalisés'|trans }}', '{{ 'Réalisés'|trans }}'],
+                colors: ['#EF6D6F',  '#438492']
+            }
+        ];
+        console.log(chartData)
+
+        // Loop through chart data and initialize charts
+        chartData.forEach(chart => {
+            const ctx = document.getElementById(chart.id).getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: chart.labels,
+                    datasets: [{
+                        data: chart.data,
+                        backgroundColor: chart.colors
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+        });
+        
+    });
+</script>
+
+{% endblock %}

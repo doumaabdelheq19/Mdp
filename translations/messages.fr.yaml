@@ -1,0 +1,425 @@
+tableau_de_bord: 'Tableau de bord'
+registre_des_traitements_menu: 'Registre<br/>des traitements'
+mes_traitements: 'Mes traitements'
+crer_un_traitement: 'Créer un traitement'
+traitements_du_groupe: 'Traitements du groupe'
+mon_profil: 'Mon profil'
+comptes_rattachs: 'Comptes rattachés'
+imprimer_mon_plan_dactions: 'Imprimer mon plan d''actions'
+mes_demandes_dexercices_des_droits: 'Mes demandes d’exercices des droits'
+gestion_des_droits: 'Gestion des droits'
+imprimer_la_cartographie: 'Imprimer la cartographie'
+imprimer_la_cartographie_groupe: 'Imprimer la cartographie groupe'
+mon_systme_dinformation: 'Mon système d''information'
+cartographie_du_systme_dinformation: 'Cartographie du<br/>système d''information'
+imprimer_mon_registre: 'Imprimer mon registre'
+mes_incidents: 'Mes incidents'
+registre_des_incidents_menu: 'Registre<br/>des incidents'
+ajouter_un_soustraitant_groupe: 'Ajouter un sous-traitant groupe'
+mes_soustraitants_groupe: 'Mes sous-traitants groupe'
+registre_des_soustraitants_menu: 'Registre<br/>de la sous-traitance'
+editer_un_soustraitant: 'Editer un sous-traitant'
+soustraitants_groupe: 'Sous-traitants groupe'
+lensemble_de_vos_soustraitants_groupe: 'L''ensemble de vos sous-traitants groupe'
+societe: Société
+relai_principal: 'Relai principal'
+responsable_de_traitement: 'Responsable de traitement'
+imprimer: Imprimer
+mon: Mon
+dpo: DPO
+consultant: consultant
+modifier_mon_mot_de_passe: 'Modifier mon mot de passe'
+12_caractres_de_types_diffrents_majuscules_minuscu: '<br/> 12 caractères de types différents (majuscules, minuscules, chiffres, caractères spéciaux) n’ayant aucun lien avec vous (nom, date de naissance…) et ne figurant pas dans le dictionnaire.'
+rgle_de_mot_de_passe: 'Règle de mot de passe :'
+cration_dutilisateurs: 'Création d''utilisateurs'
+vous_avez_atteint_la_limite_maximum_de_cration_dut: 'Vous avez atteint la limite maximum de création d''utilisateurs'
+vous_pouvez_crer_jusqu_3_utilisateurs: 'Vous pouvez créer jusqu''à 3 utilisateurs'
+action: Action
+responsable_de_laction: 'Responsable de l''action'
+nom: Nom
+prnom: Prénom
+email: Email
+tlphone: Téléphone
+informations: Informations
+budget: Budget
+objectif: Objectif
+informations_complmentaires: 'Informations complémentaires'
+lien_utile: 'Lien utile'
+date_de_mise_en_place_souhaite: 'Date de mise en place souhaitée'
+action_ralise: 'Action réalisée'
+oui: Oui
+non: Non
+traitements_lis: 'Traitements liés'
+plan_dactions: 'Plan d''actions'
+editeur: Editeur
+date_de_cration: 'Date de création'
+budget_prvisionnel: 'Budget prévisionnel'
+votre_dlgu: 'Votre délégué'
+mon_compte: 'Mon compte'
+utilisateur: Utilisateur
+realise: Réalisé
+accueil: Accueil
+outil_daide_la_mise_en_conformit_au: 'Outil d''accompagnement à la mise en conformité au'
+crdit_temps_expert_heures: 'Crédit temps expert (heures) : %credit%'
+client: Client
+responsable: Responsable
+a_raliser_par: 'A réaliser par'
+crer_une_action: 'Créer une action'
+ralises: 'Réalisées'
+non_ralises: 'Non réalisées'
+nombre_de_dactions: 'Nombre d''actions'
+lensemble_de_vos_actions: 'L''ensemble de vos actions'
+annexer_des_fiches_pratiques: 'Annexer des fiches pratiques'
+plus_crer_un_traitement: '+ Créer un traitement'
+rechercher_une_action: 'Rechercher une action'
+rechercher_une_action_standard: 'Rechercher une action standard'
+joindre_un_document: 'Joindre un document'
+enregistrer: Enregistrer
+mydigitplace: myDigitplace
+modifier_une_action: 'Modifier une action'
+titre: Titre
+tlverser_un_document: 'Téléverser un document'
+ressources_documentaires: 'Ressources Documentaires'
+mes_actions: 'Mes actions'
+mes_soustraitants: 'Mes sous-traitants'
+documentation_rgpd: 'Documentation RGPD'
+mes_pia: 'Mes PIA'
+registre_complet: 'Registre complet'
+mon_registre: 'Mon registre'
+ma_conformit: 'Ma conformité'
+base_documentaire: 'Base documentaire'
+tlverser: Téléverser
+fermer: Fermer
+demandes_dexercices_des_droits: 'Demandes d’exercices des droits'
+dpass: dépassé
+en_cours: 'En cours'
+valid: validé
+opposition: Opposition
+portabilit: Portabilité
+limitation: Limitation
+effacement: Effacement
+rectification: Rectification
+accs: Accès
+date_de_la_rponse: 'Date de la réponse'
+dlai_de_30_jours: 'Délai de 30 jours'
+personne_concerne: 'Personne concernée'
+droit: Droit
+date_de_la_demande: 'Date de la demande'
+crer_une_demande: 'Créer une demande'
+rponse: Réponse
+demande: Demande
+ajouter_une_demande: 'Ajouter une demande'
+modifier_une_demande: 'Modifier une demande'
+date: Date
+mesures_prises: 'Mesures Prises'
+consquences: Conséquences
+type_de_fichier: 'Type de fichier'
+nbre_de_personnes: 'Nbre de Personnes'
+nature: Nature
+dlai_de_72h: 'Délai de 72H'
+cnil_informe: 'CNIL Informée'
+registre_des_incidents: 'Registre des incidents'
+dclarer_un_incident: 'Déclarer un incident'
+lensemble_de_vos_incidents: 'L''ensemble de vos incidents'
+editer_un_incident: 'Editer un incident'
+anssi: ANSSI
+conseils_outils: 'Conseils & outils'
+site_officiel_cybermalveillancegouv: 'Site officiel CYBERMALVEILLANCE.GOUV'
+piratage_sensibilisation: 'Piratage & sensibilisation'
+site_officiel_de_la_cnil: 'Site officiel de la CNIL'
+plainte_information: 'Plainte & Information'
+sites_institutionnels: 'Sites institutionnels'
+infos_mydigitplace: 'Infos myDigitplace'
+aucun_questionnaire_de_sensibilisation_envoy_cliqu: 'Aucun questionnaire de sensibilisation envoyé. Cliquez-ici pour diffuser votre premier questionnaire'
+note_moyenne: 'Note moyenne'
+note_moyenne_questionnaires: 'Note moyenne (questionnaires)'
+rponses_au_questionnaire: 'Réponses au questionnaire'
+questionnaires_envoys: 'Questionnaires envoyés'
+personnes_sensibilises: 'Personnes sensibilisées'
+niveau_de_sensibilisation_des_quipes: 'Niveau de sensibilisation des équipes'
+demandes_dexercices_de_droits_traiter: 'Demandes d''exercices de droits à traiter'
+incidents_traiter: 'Incidents à traiter'
+date_de_mise_en_place: 'Date de mise en place'
+actions_raliser_sous_30_jours: 'Actions à réaliser sous 30 jours'
+aucune_action_identifie_cliquezici_pour_crer_votre: 'Aucune action identifiée. Cliquez-ici pour créer votre première action'
+actions: Actions
+aucun_soustraitant_identifi_cliquezici_pour_crer_v: 'Aucun sous-traitant identifié. Cliquez-ici pour créer votre premier sous-traitant'
+aucun_traitement_identifi_cliquezici_pour_crer_vot: 'Aucun traitement identifié. Cliquez-ici pour créer votre premier traitement'
+vous_navez_pas_rdig_de_pia_analyse_dimpact: 'Vous n’avez pas rédigé de PIA (analyse d’impact)'
+pia: PIA
+traitements: Traitements
+demande_de_devis_dintervention: 'Demande de devis d''intervention'
+envoyer_la_demande: 'Envoyer la demande'
+mentions_lgales: 'Mentions légales'
+doc: Doc
+conformit: conformité
+mail: Mail
+tl: Tél
+contact: Contact
+typologie: Typologie
+registre_des_soustraitants: 'Registre des sous-traitants'
+article_28_soustraitant: 'Article 28 - Sous-traitant'
+ajouter_un_soustraitant: 'Ajouter une entité'
+conformes: 'Conformes'
+conformes_with_progress: 'Conformes (%valid%)'
+en_cours_with_progress: 'En cours (%inProgress%)'
+non_conformes: 'Non conformes'
+non_conformes_with_progress: 'Non conformes (%invalid%)'
+nombre_total_de_soustraitants: 'Nombre total de sous-traitants : %total%'
+lensemble_de_vos_soustraitants: 'L''ensemble de vos sous-traitants'
+conformit_maj: Conformité
+rechercher_un_soustraitant: 'Rechercher un sous-traitant'
+rechercher_un_soustraitant_standard: 'Rechercher un sous-traitant standard'
+fichiers: Fichiers
+est_soustraitant_groupe: 'Sous-traitant groupe ?'
+mon_dlgu_la_protection_des_donnes: 'Mon délégué à la protection des données'
+nos_partenaires_maj: 'LA GALAXIE'
+politique_de_confidentialit: 'Politique de confidentialité'
+demander_un_devis: 'Demander un devis'
+contacter_mon_dpo: 'Contacter mon DPO'
+contacter_mon_agence: 'Contacter mon agence'
+mydigitplace_maj: MDP
+dconnexion: Déconnexion
+modifier_mon_compte: 'Modifier mon compte'
+mon_compte_maj: 'MON COMPTE'
+admin: ADMIN
+bonjour_et_bienvenue_sur_mydigitplace_data_solutio: 'Bonjour %contactFirstName% et bienvenue sur Pilot !'
+contactez_votre_dlgu: 'Contactez votre délégué %firstName% %lastName%'
+par_mail: 'Par mail'
+par_tlphone: 'Par téléphone'
+mon_agence: 'Mon agence'
+non_maj: NON
+oui_maj: OUI
+statut: Statut
+cration: Création
+dlgu: Délégué
+adresse: Adresse
+se_connecter: 'Se connecter'
+visualiser_un_traitement: 'Visualiser un traitement'
+le_traitement: 'le traitement'
+nrf: N°/RÉF
+date_de_cration_du_traitement: 'Date de création du traitement'
+mise_jour_du_traitement: 'Mise à jour du traitement'
+finalit_principale: 'Finalité principale'
+sousfinalit_1: 'Sous-finalité 1'
+sousfinalit_2: 'Sous-finalité 2'
+sousfinalit_3: 'Sous-finalité 3'
+sousfinalit_4: 'Sous-finalité 4'
+sousfinalit_5: 'Sous-finalité 5'
+autres_finalits: 'Autres finalités'
+description_du_traitement: 'Description du traitement'
+responsable_du_service_concern: 'Responsable du service concerné'
+rdacteur_de_la_fiche: 'Rédacteur de la fiche'
+catgories_de_donnes_personnelles_concernes: 'Catégories de données personnelles concernées'
+dure_de_conservation: 'Durée de conservation'
+source_des_donnes: 'Source des données'
+catgories_des_personnes_concernes: 'Catégories des personnes concernées'
+sous_traitants: 'Sous-traitants'
+mesures_techniques: 'Mesures Techniques'
+transfert_hors_ue: 'Transfert Hors UE'
+consentement: Consentement
+le_consentement_estil_demand: 'Le consentement est-il demandé ?'
+base_juridique_du_traitement: 'Base juridique du traitement'
+si_oui_comment: 'Si oui, comment ?'
+pia_analyse_dimpact: 'PIA (Analyse d''impact)'
+usages_innovants_utilisation_dune_nouvelle_technol: 'Usages innovants (utilisation d''une nouvelle technologie ex: drones, intélligence artificielle...)'
+exclusion_du_bnfice_dun_droit_ou_dun_contrat: 'Exclusion du bénéfice d''un droit ou d''un contrat'
+surveillance_systmatique: 'Surveillance systématique'
+grande_chelle: 'Grande échelle'
+prise_de_dcision_automatise_avec_effet_lgal_ou_sim: 'Prise de décision automatisée avec effet légal ou similaire'
+profilage_et_valuation: 'Profilage et évaluation'
+personnes_vulnrables_enfants_salari_handicap_lien: 'Personnes vulnérables (enfants, salarié, handicap, lien de subordination fort)'
+donnes_sensibles_ou_hautement_personnelles_sant_go: 'Données sensibles ou hautement personnelles (santé, géolocalisation...)'
+croisement_de_donnes: 'Croisement de données'
+modifier: Modifier
+fichier_pia: 'Fichier PIA'
+formation_des_quipes: 'Formation des équipes'
+nos_partenaires: 'La galaxie'
+cliquez_sur_le_partenaire_pour_effectuer_un_demand: 'Cliquez sur le partenaire pour effectuer un demande d''accès à la remise'
+socit: Société
+soustraitants_standards: 'Sous-traitants standards'
+ajouter: Ajouter
+un_nouveau_soustraitant: 'un nouveau sous-traitant'
+ajouter_un_soustraitant_standard: 'Ajouter un sous-traitant standard'
+editer_un_soustraitant_standard: 'Editer un sous-traitant standard'
+rseau: Réseau
+rechercher_un_standard: 'Rechercher un standard'
+rechercher_une_mesure_standard: 'Rechercher une mesure standard'
+export_excel: 'Export Excel'
+informatique: Informatique
+lensemble_des_lments_de_votre_systme_dinformation: 'L''ensemble des éléments de votre système d''information'
+cartographie_du_si: 'Cartographie du SI'
+cartographie_du_si_groupe: 'Cartographie du SI groupe'
+ajouter_un_lment: 'Ajouter un élément'
+scurit: Sécurité
+administration: Administration
+priphrique: Périphérique
+logiciel: Logiciel
+serveur: Serveur
+physique: Physique
+cloisonnement: Cloisonnement
+minimisation: Minimisation
+anonymisation: Anonymisation
+pseudonymisation: Pseudonymisation
+sensibilisation: Sensibilisation et formation
+information: Information
+contrle: Contrôle et qualité
+destruction_et_suppression: Destruction et supression
+fournisseur: Prestataires du SI
+ajouter_un_lment_de_cartographie_du_si: 'Ajouter un élément de cartographie du SI'
+editer_un_lment_de_cartographie_du_si: 'Editer un élément de cartographie du SI'
+score: Score
+taux_de_rponses_aux_questions: 'Taux de réponses aux questions'
+diffuser_le_questionnaire: 'Diffuser le questionnaire'
+questionnaires_diffuss: 'Questionnaires diffusés'
+taux_de_russite: 'Taux de réussite'
+questionnaires_rpondus: 'Questionnaires répondus'
+questionnaire: Questionnaire
+formation_ralise: 'Formation réalisée'
+crer_un_campagne: 'Créer une campagne'
+crer: Créer
+questionnaire_diffuser_aux_personnes: 'Questionnaire à diffuser aux personnes'
+collez_ici_la_liste_des_adresses_mails_ou_saisisse: '<i class="mdi mdi-help-circle mr-1"></i>Collez ici la liste des adresses mail ou saisissez chaque adresse en appuyant sur la touche "Entrée" pour valider.'
+si_oui: 'Si oui :'
+formation_ralise_au_pralable: 'Formation ou sensibilisation RGPD réalisée au préalable ?'
+scores: Scores
+fonction: Fonction
+voir_les_statistiques: 'Voir les statistiques'
+traitement: Traitement
+non_concern: 'Non concerné'
+recommand: Recommandé
+exonr: Exonéré
+raliser: 'À réaliser'
+finalit: Finalité
+date_mise_jour: 'Date mise à jour'
+date_cration: 'Date création'
+n_du_traitement: 'N° du traitement'
+nom_du_traitement: 'Nom du traitement'
+registre_des_traitements: 'Registre des traitements'
+vous_pouvez_importer_un_nouveau_fichier_pia: 'Vous pouvez importer un nouveau fichier PIA'
+editer_un_traitement: 'Editer un traitement'
+plus_ajouter_un_soustraitant: '+ Ajouter un sous-traitant'
+plus_ajouter_une_mesure_technique: '+ Ajouter une mesure technique'
+cas_dxonration_de_ralisation_de_pia: 'Cas d''éxonération de réalisation de PIA ?'
+abscence_de_critere_suffisant: 'Absence de critère suffisant'
+veuillez_cocher_les_critres_qui_concernent_votre_t: 'Veuillez cocher les critères qui concernent votre traitement de données. Si 2 critères sur 9 sont cochés, un PIA sera obligatoire'
+une_liste_dexonration_de_pia_est_toutefois_disponi: 'Une liste d''exonération de PIA est toutefois disponible ici'
+ajouter_un_traitement: 'Ajouter un traitement'
+rechercher_un_traitement_standard: 'Rechercher un traitement standard'
+le_rglement_gnral_sur_la_protection_des_donnes_rgp: '(Le règlement général sur la protection des données - RGPD)'
+lensemble_de_vos_traitements_exemple_1_exemple_2: 'L''ensemble de vos traitements (Exemple 1, exemple 2, ...)'
+nombre_total_de_traitements: 'Nombre total de traitements'
+auditer_dpo: 'À auditer DPO'
+valids: Validés
+recommands: Recommandés
+raliss: Réalisés
+filtre_appliqu: 'Filtre appliqué'
+mise_jour: 'Mise à jour'
+rglement_ue_2016679_du_parlement_europen_et_du_con: 'Règlement (UE) 2016/679 du Parlement européen et du Conseil du 27 avril 2016, relatif à la protection des personnes physiques à l''égard du traitement des données à caractère personnel et à la libre circulation de ces données, et abrogeant la directive 95/46/CE (règlement général sur la protection des données).'
+plan_dactions_menu: Plan<br/>d'actions
+tat_civil_identit_donnes_didentification_images: 'État civil, identité, données d''identification, images...'
+donnes_relatives_des_condamnations_pnales_ou_infra: 'Données relatives à des condamnations pénales ou infractions'
+donnes_concernant_la_vie_sexuelle_ou_lorientation: 'Données concernant la vie sexuelle ou l''orientation sexuelle'
+donnes_concernant_la_sant: 'Données concernant la santé'
+donnes_biomtriques_aux_fins_didentifier_une_person: 'Données biométriques aux fins d''identifier une personne physique de manière unique'
+donnes_gntiques: 'Données génétiques'
+donnes_rvlant_lappartenance_syndicale: 'Données révélant l''appartenance syndicale'
+donnes_rvlant_les_convictions_religieuses_ou_philo: 'Données révélant les convictions religieuses ou philosophiques'
+donnes_rvlant_les_opinions_politiques: 'Données révélant les opinions politiques'
+donnes_rvlant_lorigine_raciale_ou_ethnique: 'Données révélant l''origine raciale ou ethnique'
+numro_de_scurit_sociale_ou_nir: 'Numéro de Sécurité Sociale (ou NIR)'
+donnes_bancaires_donnes_courantes_non_sensible_mai: 'Données Bancaires (données courantes « non sensible » mais classifié comme tel au vu des risques financiers)'
+donnes_de_localisation_dplacements_donnes_gps_gsm: 'Données de localisation (déplacements, données GPS, GSM, etc.)'
+donnes_de_connexion_adress_ip_logs_etc: 'Données de connexion (adress IP, logs, etc.)'
+infos_dordre_conomique_et_financier_revenus_situat: 'Infos d''ordre économique et financier (revenus, situation financière, situation fiscale, etc.)'
+vie_personnelle_habitudes_de_vie_situation_familia: 'Vie personnelle (habitudes de vie, situation familiale, etc.)'
+pays: 'Pays'
+cochez_les_cases_correspondantes: 'Cochez les cases correspondantes'
+personnes_vulnerables: 'Personnes vulnérables'
+donnees_sensibles_ou_hautement_personnelles: 'Données sensibles ou hautement personnelles'
+exclusion_du_benefice_d_un_droit_ou_d_un_contrat: 'Exclusion du bénéfice d''un droit ou d''un contrat'
+usages_innovants: 'Usages innovants'
+etat_du_traitement: 'État du traitement'
+le_traitement_est_il_finalise: 'Le traitement est-il finalisé ?'
+supprimer_le_pia: 'Supprimer le PIA'
+zone_de_saisie: 'Zone de saisie'
+nom_std: 'Nom'
+https_base: 'https://'
+lien_vers_la_politique_de_confidentialite: 'Lien vers la politique de confidentialité'
+consultation_non_autorisee: 'Consultation non autorisée'
+modification: 'Modification'
+copie_non_autorisee: 'Copie non autorisée'
+perte: 'Perte'
+nombre_de_personnes: 'Nombre de Personnes'
+ex_fichier_client: 'Ex : Fichier Client'
+risque_de_demarchage_p: 'Risque de démarchage...'
+information_des_clients_p: 'Information des clients...'
+les_personnes_ont_ete_informees: 'Les personnes ont été informées'
+budget_en_euros: "Budget en €"
+selectionnez_les_traitements_lies: 'Sélectionnez les traitements liés'
+action_a_realiser_par_mdp: 'Action à réaliser par MDP'
+temps_de_realisation_facture_en_heures: 'Temps de réalisation facturé en heures'
+temps_de_realisation_en_heures: 'Temps de réalisation effectif en heures'
+temps_de_realisation_estime_en_heures: 'Temps de réalisation estimé en heures'
+nom_du_responsable: 'Nom du responsable'
+email_du_responsable: 'Email du responsable'
+precisions_sur_la_demande: 'Précisions sur la demande'
+siret: 'SIRET'
+complement: 'Complément'
+code_postal: 'Code postal'
+ville: 'Ville'
+nombre_de_salaries: 'Nombre de salariés'
+langue_de_l_interface: 'Langue de l''interface'
+français: 'Français'
+anglais: 'Anglais'
+email_identifiant_de_connexion: 'Email (identifiant de connexion)'
+les_mots_de_passe_ne_sont_pas_identiques: 'Les mots de passe ne sont pas identiques'
+changer_mot_de_passe: 'Changer mot de passe'
+merci_de_saisir_un_mot_de_passe: 'Merci de saisir un mot de passe'
+votre_mot_de_passe_doit_respecter_les_recommandations_de_l_anssi: 'Votre mot de passe doit respecter les recommandations de l''ANSSI : au moins 12 caractères de types différents (majuscules, minuscules, chiffres, caractères spéciaux)'
+nouveau_mot_de_passe: 'Nouveau mot de passe'
+confirmation_mot_de_passe: 'Confirmation mot de passe'
+confirmez_le_mot_de_passe: 'Confirmez le mot de passe'
+exporter_mes_donnees: 'Exporter mes données'
+choix_des_exports: 'Choix des exports'
+e_traitements: 'Traitements'
+e_sous_traitance: 'Sous-traitance'
+e_Cartographie_du_si: 'Cartographie du SI'
+e_demandes_d_exercices_de_droits: 'Demandes d''exercices de droits'
+e_incidents: 'Incidents'
+e_plan_d_actions: 'Plan d’actions'
+e_formations_des_equipes: 'Formations des équipes'
+e_informations_utilisateur: 'Informations utilisateur'
+mon_abonnement: 'Mon abonnement'
+imprimer_le_tableau_de_bord: 'Imprimer le tableau de bord'
+ce_traitement_concerne_le_groupe: 'Ce traitement concerne le groupe'
+exporter_mon_registre: 'Exporter mon registre'
+traitements_standards: 'Traitements standards'
+type_sous_traitants: 'Sous-traitants'
+type_cotraitant: 'Cotraitants'
+type_responsable_de_traitement: 'Responsables de traitements'
+type_de_sous_traitance: 'Type de sous-traitance'
+cet_incident_touche_le_groupe: 'Cet incident touche le groupe'
+priorite: 'Priorité'
+urgente: 'Urgente'
+moderee: 'Modérée'
+faible: 'Faible'
+en_savoir_plus_sur_les_droits_des_personnes: 'En savoir plus sur les droits des personnes'
+gerer_les_equipes: 'Gérer les équipes'
+nombre_d_adresses: 'Nombre d''adresses'
+adresses_erronees: 'Adresses erronées'
+nombre_de_campagnes: 'Nombre de campagnes'
+creer_une_equipe: 'Créer une équipe'
+retour_aux_campagnes: 'Retour aux campagnes'
+relancer: 'Relancer'
+tout_relancer: 'Tout relancer'
+titre_de_la_campagne: 'Titre de la campagne'
+nom_et_prenom_du_formateur: 'Nom et prénom du formateur'
+date_de_la_formation: 'Date de la formation'
+equipes_sensibilisees_ou_a_interroger: 'Équipes sensibilisées ou à interroger'
+ou_saisissez_les_adresses_mail: 'Ou saisissez les adresses mail'
+campagne_interne: 'Campagne interne'
+campagne_externe: 'Campagne externe'
+mes_sous_traitants: 'Mes sous-traitants'
+mes_cotraitant: 'Mes cotraitants'
+mes_responsable_de_traitement: 'Mes responsables de traitements'

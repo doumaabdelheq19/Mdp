@@ -1,0 +1,175 @@
+{% if not is_granted('ROLE_MANAGER') %}
+    <header class="admin-header">
+
+        <a href="#" class="sidebar-toggle" data-toggleclass="sidebar-open" data-target="body"> </a>
+
+        <nav class=" mr-auto my-auto d-none d-md-block">
+            <ul class="nav align-items-center">
+                <li class="nav-item ml-4">
+                    {{ 'bonjour_et_bienvenue_sur_mydigitplace_data_solutio'|trans({'%contactFirstName%': app.user.user.companyName}) }}
+                </li>
+            </ul>
+        </nav>
+
+        <nav class=" ml-auto">
+            <ul class="nav align-items-center">
+
+                {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                    <li class="nav-item mr-2">
+                        <a href="{{ path('default_homepage') }}?_switch_user=_exit" class="btn btn-secondary"
+                           aria-expanded="false">
+                            {{ 'admin'|trans }}
+                        </a>
+                    </li>
+                {% endif %}
+
+                <li class="nav-item mr-2">
+                    <div class="dropdown">
+                        <a href="#" class="btn btn-primary btn-primary-red" data-toggle="dropdown" aria-haspopup="true"
+                           aria-expanded="false">
+                            {{ 'mon_compte_maj'|trans }}
+                        </a>
+
+                        <div class="dropdown-menu notification-container dropdown-menu-right">
+                            <div class="notification-events bg-gray-300">
+                                <a href="{{ path('user_account') }}" class="text-left btn btn-light w-100 py-3 mb-3">
+                                    {{ 'modifier_mon_compte'|trans }}
+                                </a>
+                                <a href="{{ path('user_account') }}#export" class="text-left btn btn-light w-100 py-3 mb-3">
+                                    {{ 'exporter_mes_donnees'|trans }}
+                                </a>
+                                <a href="{{ path('user_account') }}#abonnement" class="text-left btn btn-light w-100 py-3 mb-3">
+                                    {{ 'mon_abonnement'|trans }}
+                                </a>
+                                <a href="{{ path('default_logout') }}" class="text-left btn btn-light w-100 py-3 mb-3">
+                                    {{ 'dconnexion'|trans }}
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item mr-2">
+                    <div class="dropdown">
+                        <a href="#" class="btn btn-primary btn-primary-red" data-toggle="dropdown" aria-haspopup="true"
+                           aria-expanded="false">
+                            {{ 'mydigitplace_maj'|trans }}
+                        </a>
+
+                        <div class="dropdown-menu notification-container dropdown-menu-right">
+                            <div class="notification-events bg-gray-300">
+                                <a href="#" data-toggle="modal" data-target="#AgencyModal" class="text-left btn btn-light w-100 py-3 mb-3">
+                                    {{ 'contacter_mon_agence'|trans }}
+                                </a>
+                                <a href="#" data-toggle="modal" data-target="#ManagerModal" class="text-left btn btn-light w-100 py-3 mb-3">
+                                    {{ 'contacter_mon_dpo'|trans }}
+                                </a>
+                                <a href="{{ path('user_intervention') }}" class="text-left btn btn-light w-100 py-3 mb-3">
+                                    {{ 'demander_un_devis'|trans }}
+                                </a>
+                                <a href="{{ path('user_legales') }}" class="text-left btn btn-light w-100 py-3 mb-3">
+                                    {{ 'mentions_lgales'|trans }}
+                                </a>
+                                <a href="{{ path('user_privacy') }}" target="_blank" class="text-left btn btn-light w-100 py-3 mb-3">
+                                    {{ 'politique_de_confidentialit'|trans }}
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item mr-2">
+                    <a href="{{ path('user_partners') }}" class="btn btn-primary btn-primary-red"
+                       aria-expanded="false">
+                        {{ 'nos_partenaires_maj'|trans }}
+                    </a>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+
+    <!-- Modal -->
+    <div class="modal fade" id="ManagerModal" tabindex="-1" role="dialog"
+         aria-labelledby="ManagerModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">{{ 'mon_dlgu_la_protection_des_donnes'|trans }}</h5>
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="{{ 'fermer'|trans }}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>{{ 'contactez_votre_dlgu'|trans({'%firstName%': app.user.user.manager.firstName, '%lastName%': app.user.user.manager.lastName}) }}:</p>
+                    <ul>
+                        <li>{{ 'par_mail'|trans }}: <a href="mailto:{{ app.user.user.manager.email }}">{{ app.user.user.manager.email }}</a></li>
+                        <li>{{ 'par_tlphone'|trans }}: <a href="tel:{{ app.user.user.manager.phone }}">{{ app.user.user.manager.phone }}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="AgencyModal" tabindex="-1" role="dialog"
+         aria-labelledby="AgencyModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">{{ 'mon_agence'|trans }}</h5>
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="{{ 'fermer'|trans }}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>{{ 'contacter_mon_agence'|trans }}:</p>
+                    <p>
+                        {{ app.user.user.manager.companyName }}<br/>
+                        {{ app.user.user.manager.address }}{% if app.user.user.manager.address2 %}, {{ app.user.user.manager.address2 }}{% endif %}<br/>
+                        {{ app.user.user.manager.zipCode }}, {{ app.user.user.manager.city }}<br/>
+                        <br/>
+                        <a href="mailto:{{ app.user.user.manager.email }}">{{ app.user.user.manager.email }}</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <header class="admin-header">
+
+        <a href="#" class="sidebar-toggle" data-toggleclass="sidebar-open" data-target="body"> </a>
+
+        <nav class=" mr-auto my-auto d-none d-md-block">
+            <ul class="nav align-items-center">
+                <li class="nav-item ml-4">
+                    Bonjour {{ app.user.manager.firstName }} et bienvenue sur MDP Data Solution
+                </li>
+            </ul>
+        </nav>
+
+        <nav class=" ml-auto">
+            <ul class="nav align-items-center">
+                <li class="nav-item dropdown ">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                        <div class="avatar avatar-sm avatar-online">
+                            <span class="avatar-title rounded-circle bg-dark">{{ app.user.manager.firstName|slice(0,1)|upper }}{{ app.user.manager.lastName|slice(0,1)|upper }}</span>
+                        </div>
+                    </a>
+                    <div class="dropdown-menu  dropdown-menu-right">
+                        <a class="dropdown-item" href="{{ path('manager_account') }}"> Modifier mon compte</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ path('default_logout') }}"> Déconnexion</a>
+                    </div>
+                </li>
+
+            </ul>
+
+        </nav>
+
+    </header>
+{% endif %}

@@ -1,0 +1,124 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'nos_partenaires'|trans }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="page">
+        <div class="table-container-traitements">
+            <div class="header-con">
+                <div class="header" style="width:100%; justify-content:space-between">
+                    <h2>{{ 'La galaxie'|trans }}</h2>
+                    <p>{{ 'Cliquez sur le partenaire pour effectuer un demande acces remise'|trans }}</p>
+                </div>
+            </div>
+            
+           
+
+            <div class="con">
+            
+                    {% for partner in partners %}
+                        <div class="cart_item">
+                            <img src="{{ partner.logoUrl|default('./imgs/default_logo.png') }}" alt="{{ partner.name }}">
+                            <h3>{{ partner.name }}</h3>
+                            <p>{{ partner.description|nl2br|raw }}</p>
+                        </div>
+                    {% endfor %}
+                
+            </div>
+
+            <div class="pagination-container">
+                <div class="results-per-page">
+                    <label for="results">{{ 'Afficher'|trans }}</label>
+                    <select id="resultsSelect" class="results-select">
+                        <option value="5">5</option>
+                        <option value="10" selected>10</option>
+                        <option value="20">20</option>
+                    </select>
+                    <span>{{ 'résultats par page'|trans }}</span>
+                </div>
+
+                <div class="pagination-controls">
+                    <button class="pagination-button" id="prevPage" disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19l-7-7l7-7"/>
+                        </svg>
+                    </button>
+                    <span class="pagination-info" id="paginationInfo">{{ 'page'|trans }} 1 {{ 'sur'|trans }} 1</span>
+                    <button class="pagination-button" id="nextPage" disabled>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                            <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5l7 7l-7 7"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const rows = Array.from(document.querySelectorAll('.cart_item'));
+            const resultsSelect = document.getElementById('resultsSelect');
+            const paginationInfo = document.getElementById('paginationInfo');
+            const prevPage = document.getElementById('prevPage');
+            const nextPage = document.getElementById('nextPage');
+      
+
+            let currentPage = 1;
+            let resultsPerPage = parseInt(resultsSelect.value);
+            let filteredRows = rows;
+
+            function updateTable() {
+                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+                const start = (currentPage - 1) * resultsPerPage;
+                const end = start + resultsPerPage;
+
+                rows.forEach((row, index) => {
+                    row.style.display = filteredRows.includes(row) && index >= start && index < end ? '' : 'none';
+                });
+
+                paginationInfo.textContent = `{{ 'page'|trans }} ${currentPage} {{ 'sur'|trans }} ${totalPages}`;
+                prevPage.disabled = currentPage === 1;
+                nextPage.disabled = currentPage === totalPages;
+            }
+
+            function filterTable() {
+                const query = searchInput.value.toLowerCase();
+                filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
+                currentPage = 1; // Reset to first page after search
+                updateTable();
+            }
+
+            resultsSelect.addEventListener('change', function () {
+                resultsPerPage = parseInt(this.value);
+                currentPage = 1;
+                updateTable();
+            });
+
+            prevPage.addEventListener('click', function () {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updateTable();
+                }
+            });
+
+            nextPage.addEventListener('click', function () {
+                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    updateTable();
+                }
+            });
+
+          
+
+            // Initialize table
+            updateTable();
+        });
+    </script>
+{% endblock %}

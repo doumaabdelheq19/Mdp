@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Nouveau mot de passe
+{% endblock %}
+
+{% block body_class %}jumbo-page{% endblock %}
+
+{% block body %}
+    <main class="admin-main gradient-01">
+
+        <div class="container">
+            <div class="row m-h-100 ">
+                <div class="col-md-8 col-lg-4  m-auto">
+                    <div class="card shadow-lg ">
+                        <div class="card-body ">
+                            <div class=" padding-box-2 ">
+                                <h3 class="text-center mt-2">Votre nouveau mot de passe</h3>
+                                <div class="text-center mb-5">
+                                    {% for type, messages in app.session.flashbag.all %}
+                                        {% for message in messages %}
+                                            <div class="alert alert-border-{{ type }} alert-dismissible fade show" role="alert">
+                                                <div class="d-flex">
+                                                    <div class="icon">
+                                                        <i class="icon mdi mdi-alert-circle-outline"></i>
+                                                    </div>
+                                                    <div class="content">
+                                                        {{ message }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {% endfor %}
+                                    {% endfor %}
+                                </div>
+                                {{ form_start(form) }}
+                                    <div class="form-group">
+                                        <label>Mot de passe</label>
+                                        <div class="input-group input-group-flush mb-3">
+                                            {{ form_widget(form.password.first, {'attr': {'class': 'form-control  form-control-prepended'}}) }}
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <span class="mdi mdi-lock"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-danger">{{ form_errors(form.password.first) | striptags  }}</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Confirmez le mot de passe</label>
+                                        <div class="input-group input-group-flush mb-3">
+                                            {{ form_widget(form.password.second, {'attr': {'class': 'form-control  form-control-prepended'}}) }}
+                                            <div class="input-group-prepend">
+                                                <div class="input-group-text">
+                                                    <span class="mdi mdi-lock-alert"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-danger">{{ form_errors(form.password.second) | striptags  }}</div>
+                                    </div>
+
+                                    <div class="alert alert-secondary show" role="alert">
+                                        <b>Règle de mot de passe :</b><br/>
+                                        12 caractères de types différents (majuscules, minuscules, chiffres, caractères spéciaux) n’ayant aucun lien avec vous (nom, date de naissance…) et ne figurant pas dans le dictionnaire.
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button class="btn text-uppercase btn-block btn-primary">
+                                            Réinitialiser
+                                        </button>
+                                    </div>
+                                {{ form_end(form) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

@@ -1,0 +1,184 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'formation_des_quipes'|trans }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container">
+            <div class="row align-items-center p-b-100 p-t-60">
+
+                <div class="col-md-6 text-white p-b-30">
+                    <div class="media">
+                        <div class="avatar avatar mr-3">
+                            <div class="avatar-title rounded-circle mdi mdi-briefcase-account">
+
+                            </div>
+                        </div>
+                        <div class="media-body">
+                            <h1>{{ 'formation_des_quipes'|trans }}</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-4 col-lg-3">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid pull-up">
+        <div class="row justify-content-md-end">
+
+        </div>
+        <div class="row">
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <h5>{{ trainingCampain.training.title }}</h5>
+                        <div>
+                            <button class="btn btn-primary" onclick="showStats()">{{ 'voir_les_statistiques'|trans }}</button>
+                            <a href="{{ path('user_trainings_requests_revive_all', {"trainingCampain": trainingCampain.id}) }}" class="btn btn-secondary" onclick="return confirm('{% if app.request.locale == "fr" %}Vous allez relancer l\'ensemble des personnes n\'ayant pas répondu à ce questionnaire.{% else %}You are going to send a reminder to all the people who didn\'t answer this questionnaire.{% endif %}');">{{ 'tout_relancer'|trans }}</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive p-t-10">
+                            <table id="datatable" class="table" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>{{ 'nom'|trans }}</th>
+                                    <th>{{ 'prnom'|trans }}</th>
+                                    <th>{{ 'fonction'|trans }}</th>
+                                    <th>{{ 'email'|trans }}</th>
+                                    <th>{{ 'scores'|trans }}</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for trainingRequest in trainingRequests %}
+                                    <tr>
+                                        <td>{{ trainingRequest.lastName }}</td>
+                                        <td>{{ trainingRequest.firstName }}</td>
+                                        <td>{{ trainingRequest.position }}</td>
+                                        <td>{{ trainingRequest.email }}</td>
+                                        <td>
+                                            {% if trainingRequest.answerDate %}
+                                                {% set dataRateClass = "badge-danger" %}
+                                                {% if trainingRequest.result == 1 %}
+                                                    {% set dataRateClass = "badge-success" %}
+                                                {% elseif trainingRequest.result >= 0.5 %}
+                                                    {% set dataRateClass = "badge-warning" %}
+                                                {% endif %}
+                                                <span class="badge {{ dataRateClass }}" style="cursor: pointer;" onclick="showAnswers({{ trainingRequest.id }})">
+                                                    {{ trainingRequest.result * 100|round(2) }}%
+                                                </span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% set reviveAllowed = training_request_revive_allowed(trainingRequest) %}
+                                            {% if reviveAllowed %}
+                                                <a href="{{ path('user_trainings_requests_revive', {"trainingCampain": trainingRequest.trainingCampain.id, "trainingRequest": trainingRequest.id}) }}" class="btn btn-secondary">{{ 'relancer'|trans }}</a>
+                                            {% else %}
+                                                <a href="#" title="Vous ne pouvez envoyer des relances que toutes les 48h" class="btn btn-secondary disabled">{{ 'relancer'|trans }}</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal_content" tabindex="-1" role="dialog"
+         aria-labelledby="modal_content" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal_content_title">{{ 'rponses_au_questionnaire'|trans }}</h5>
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="{{ 'fermer'|trans }}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal_content_body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                {% if app.request.locale == "fr" %}
+                    $('#datatable').DataTable({
+                        "language": {
+                            "search": "Rechercher :",
+                            "lengthMenu": "Afficher _MENU_ résultats par page",
+                            "zeroRecords": "Aucun résultat",
+                            "info": "Page _PAGE_ sur _PAGES_",
+                            "infoEmpty": "Aucune données sur ce tableau",
+                            "infoFiltered": "(filtered from _MAX_ total records)",
+                            "paginate": {
+                                "previous": "Précédent",
+                                "next": "Suivant",
+
+                            }
+                        }
+                    });
+                {% else %}
+                    $('#datatable').DataTable({});
+                {% endif %}
+
+            });
+        })(window.jQuery);
+
+        function showAnswers(r, h) {
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: "{{ path('user_trainings_requests_answers', {"training": trainingCampain.id}) }}",
+                data: {request: r},
+                success: function (content) {
+                    if (content.success) {
+                        document.getElementById("modal_content_body").innerHTML = content.html;
+                        $('#modal_content').modal('show');
+                    }
+                }
+            });
+        }
+
+        function showStats() {
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: "{{ path('user_trainings_requests_stats', {"training": trainingCampain.id}) }}",
+                data: {},
+                success: function (content) {
+                    if (content.success) {
+                        document.getElementById("modal_content_body").innerHTML = content.html;
+                        $('#modal_content').modal('show');
+                    }
+                }
+            });
+        }
+
+    </script>
+{% endblock %}

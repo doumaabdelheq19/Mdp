@@ -1,0 +1,121 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Accueil
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container">
+            <div class="row align-items-center p-b-100 p-t-60">
+
+                <div class="col-md-6 text-white p-b-30">
+                    <div class="media">
+                        <div class="avatar avatar mr-3">
+                            <div class="avatar-title rounded-circle mdi mdi-account-multiple  ">
+
+                            </div>
+                        </div>
+                        <div class="media-body">
+                            <h1>Traitements standards</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-4 col-lg-3">
+                    <a href="{{ path('manager_treatments_add') }}" class="card m-b-30">
+                        <div class="card-body">
+                            <div class="media">
+                                <div class="avatar mr-3">
+                                    <div class="avatar-title rounded-circle bg-primary"><i class="mdi mdi-shape-circle-plus"></i></div>
+                                </div>
+                                <div class="media-body p-t-5">
+                                    <h5 class="m-b-0">Créer</h5>
+                                    <p class="m-0">un nouveau traitement standard</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid pull-up">
+        <div class="row justify-content-md-end">
+
+        </div>
+        <div class="row">
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive p-t-10">
+                            <table id="datatable" class="table" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>Nom du traitement</th>
+                                    <th>Date création</th>
+                                    <th>Date mise à jour</th>
+                                    <th>Finalité</th>
+                                    <th>Données sensibles</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for treatment in treatments %}
+                                    <tr>
+                                        <td><a href="{{ path('manager_treatments_edit', {'id': treatment.id}) }}">{{ treatment.name }}</a></td>
+                                        <td>{{ treatment.creationDate|date('d/m/Y') }}</td>
+                                        <td>{{ treatment.editDate|date('d/m/Y') }}</td>
+                                        <td>{{ treatment.mainPurpose }}</td>
+                                        <td>{% if treatment.sensitiveData %}Oui{% else %}Non{% endif %}</td>
+                                        <td style="min-width: 100px;">
+                                            <a href="{{ path('manager_treatments_delete', {'id': treatment.id}) }}" class="btn btn-sm ml-1 mr-1 btn-danger" onclick="return confirm('Confirmer la suppression de ce traitement ?');">
+                                                <i class="mdi mdi-close"></i>
+                                            </a>
+                                            <a href="{{ path('manager_treatments_translate', {'id': treatment.id, '_locale': 'en'}) }}" class="btn btn-sm ml-1 mr-1 btn-primary">
+                                                EN
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                $('#datatable').DataTable({
+                    "language": {
+                        "search": "Rechercher :",
+                        "lengthMenu": "Afficher _MENU_ résultats par page",
+                        "zeroRecords": "Aucun résultat",
+                        "info": "Page _PAGE_ sur _PAGES_",
+                        "infoEmpty": "Aucune données sur ce tableau",
+                        "infoFiltered": "(filtered from _MAX_ total records)",
+                        "paginate": {
+                            "previous": "Précédent",
+                            "next": "Suivant",
+
+                        }
+                    }
+                });
+
+            });
+
+        })(window.jQuery);
+    </script>
+{% endblock %}

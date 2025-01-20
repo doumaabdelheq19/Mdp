@@ -1,0 +1,202 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'ajouter_un_soustraitant_groupe'|trans }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container-fluid px-lg-5 m-b-30">
+            <div class="row">
+                <div class="col-12 text-white p-t-40 p-b-90">
+
+                    <h4 class=""> <span class="btn btn-white-translucent">
+                                <i class="mdi mdi-account "></i></span> {{ 'ajouter_un_soustraitant_groupe'|trans }}
+                    </h4>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid px-lg-5 pull-up">
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-body ">
+                    <div class="my-2">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="form_subcontractor_std">{{ 'rechercher_un_soustraitant_standard'|trans }}</label>
+                                <select id="form_subcontractor_std" name="form_subcontractor_std" class="form-control js-select2" onchange="selectStd(this)">
+                                    <option id="foo" selected="selected" disabled="disabled">{{ 'rechercher_un_soustraitant'|trans }}</option>
+                                    {% for subcontractorStd in subcontractorsStd %}
+                                        <option value="{{ subcontractorStd.id }}">{{ subcontractorStd.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
+
+                    <h5>{{ 'type_de_sous_traitance'|trans }}</h5>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ form_widget(form.subcontractorType, {'attr': {'class': 'form-control ' ~ ((form_errors(form.subcontractorType) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.subcontractorType) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <h5>{{ 'societe'|trans }}</h5>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.name) }}
+                            {{ form_widget(form.name, {'attr': {'class': 'form-control ' ~ ((form_errors(form.name) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.name) | striptags  }}</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.type) }}
+                            {{ form_widget(form.type, {'attr': {'class': 'form-control ' ~ ((form_errors(form.type) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.type) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <h5 class="mt-2">{{ 'contact'|trans }}</h5>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.contactLastName) }}
+                            {{ form_widget(form.contactLastName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.contactLastName) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.contactLastName) | striptags  }}</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.contactFirstName) }}
+                            {{ form_widget(form.contactFirstName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.contactFirstName) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.contactFirstName) | striptags  }}</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.contactEmail) }}
+                            {{ form_widget(form.contactEmail, {'attr': {'class': 'form-control ' ~ ((form_errors(form.contactEmail) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.contactEmail) | striptags  }}</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.contactPhone) }}
+                            {{ form_widget(form.contactPhone, {'attr': {'class': 'form-control ' ~ ((form_errors(form.contactPhone) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.contactPhone) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <h5 class="mt-2">{{ 'conformit_maj'|trans }}</h5>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            {{ form_label(form.conformity) }}
+                            {{ form_widget(form.conformity, {'attr': {'class': 'form-control ' ~ ((form_errors(form.conformity) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.conformity) | striptags  }}</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            {{ form_label(form.privacyPolicyLink) }}
+                            {{ form_widget(form.privacyPolicyLink, {'attr': {'class': 'form-control ' ~ ((form_errors(form.privacyPolicyLink) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.privacyPolicyLink) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row mb-5 mt-3">
+                        <div class="col-12 mb-2">
+                            <button type="button" class="btn btn-success mb-2" id="add_document_button"><i class="mdi mdi-file-plus"></i> {{ 'fichiers'|trans }}</button>
+                        </div>
+                        {% if fromStd %}
+                            <div id="block_old_documents" class="row col-12">
+                                {% for document in subcontractorStd.documents %}
+                                    <div class="form-group col-md-12 d-flex block_document"><div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" checked="checked" class="custom-control-input" id="appbundle_subcontractor_documents_{{ document.id }}" name="appbundle_subcontractor_documents_{{ document.id }}" value="1" /><label class="custom-control-label" for="appbundle_subcontractor_documents_{{ document.id }}">{{ document.name }}</label></div><a href="/uploads/documents/{{ document.filename }}" class="btn btn-info ml-2" target="_blank"><i class="mdi mdi-eye"></i></a></div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div id="block_documents" class="row col-12">
+                        </div>
+                    </div>
+
+                    {% if app.user.user.mainGroupAgency %}
+                        <div class="custom-control custom-checkbox mb-4">
+                            {{ form_widget(form.group, {'attr': {'class': 'custom-control-input'}}) }}
+                            {{ form_label(form.group, null, {'label_attr': {'class': 'custom-control-label'}}) }}
+                        </div>
+                    {% endif %}
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">{{ 'enregistrer'|trans }}</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Tables to dataTables
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                document.getElementById("add_document_button").addEventListener("click", function () {
+                    var div = document.createElement("div");
+                    div.className = "form-group col-md-12 d-flex block_document";
+
+                    var nameInput = document.createElement("input");
+                    nameInput.className = "form-control";
+                    nameInput.setAttribute("type", "text");
+                    nameInput.setAttribute("placeholder", "Titre");
+                    nameInput.setAttribute("name", "appbundle_subcontractor_documents_names[]");
+
+                    var fileInput = document.createElement("input");
+                    fileInput.className = "form-control ml-2";
+                    fileInput.setAttribute("type", "file");
+                    fileInput.setAttribute("name", "appbundle_subcontractor_documents[]");
+
+                    var fileInputRemoveButton = document.createElement("button");
+                    fileInputRemoveButton.className = "btn btn-danger ml-2 remove_document_button";
+                    fileInputRemoveButton.setAttribute("type", "button");
+                    fileInputRemoveButton.setAttribute("onclick", "removeDocument(this)");
+
+                    var fileInputRemoveButtonI = document.createElement("i");
+                    fileInputRemoveButtonI.className = "mdi mdi-file-remove";
+
+                    fileInputRemoveButton.appendChild(fileInputRemoveButtonI);
+
+                    div.appendChild(nameInput);
+                    div.appendChild(fileInput);
+                    div.appendChild(fileInputRemoveButton);
+
+                    var element = document.getElementById("block_documents");
+                    element.appendChild(div);
+                });
+            });
+        })(window.jQuery);
+
+        function removeDocument(element) {
+            element.parentNode.remove();
+        }
+
+        function selectStd(e) {
+            saved = true;
+            window.location.href = "{{ path('user_subcontractors_grp_add') }}?std=" + e.value;
+        }
+    </script>
+{% endblock %}

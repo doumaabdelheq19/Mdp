@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'formation_des_quipes'|trans }}
+{% endblock %}
+
+{% block content %}
+<div class="page">
+    <!-- Header Section -->
+    <div class="table-container-traitements">
+        <div class="header">
+            <h2>{{ 'formation_des_quipes'|trans }}</h2>
+            <p><a href="#" class="text-primary">{{ 'En savoir plus sur les campagnes et les équipes'|trans }}</a></p>
+        </div>
+
+        <!-- Search and Action Buttons -->
+        <div style="display: flex; justify-content: space-between; width: 100%;">
+            <div class="search-bar">
+                <span class="search-icon">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </span>
+                <input type="text" id="searchInput" placeholder="{{ 'Rechercher'|trans }}" />
+            </div>
+            <div class="buttons">
+                <div class="gerer">
+                    <a href="{{ path('user_trainings') }}" class="btn btn-secondary">
+                        {{ 'Retour aux campagnes'|trans }}
+                    </a>
+                </div>
+                <div class="exporter">
+                    <a href="{{ path('user_trainings_teams_add') }}" class="btn btn-primary">
+                        {{ 'Créer une équipe'|trans }}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>{{ 'nom_std'|trans }}</th>
+                    <th>{{ 'nombre_d_adresses'|trans }}</th>
+                    <th>{{ 'adresses_erronees'|trans }}</th>
+                    <th>{{ 'nombre_de_campagnes'|trans }}</th>
+                    <th>{{ 'actions'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                {% if teams|length > 0 %}
+                    {% for team in teams %}
+                        {% set emailsCount = get_user_training_team_addresses_count(team.emailAddresses) %}
+                        {% set emailsErrorCount = get_user_training_team_addresses_error_count(team.emailAddresses) %}
+                        <tr>
+                            <td>{{ team.name }}</td>
+                            <td>{{ emailsCount }}</td>
+                            <td>{{ emailsErrorCount }}</td>
+                            <td>{{ team.campains|length }}</td>
+                            <td class="options">
+                                <div style="display: flex; gap: 10px;">
+
+                                 <a href="{{ path('user_trainings_teams_edit', {'id': team.id}) }}">
+                                <button class="edit">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><g class="edit-outline"><g fill="currentColor" fill-rule="evenodd" class="Vector" clip-rule="evenodd"><path d="M2 6.857A4.857 4.857 0 0 1 6.857 2H12a1 1 0 1 1 0 2H6.857A2.857 2.857 0 0 0 4 6.857v10.286A2.857 2.857 0 0 0 6.857 20h10.286A2.857 2.857 0 0 0 20 17.143V12a1 1 0 1 1 2 0v5.143A4.857 4.857 0 0 1 17.143 22H6.857A4.857 4.857 0 0 1 2 17.143z"/><path d="m15.137 13.219l-2.205 1.33l-1.033-1.713l2.205-1.33l.003-.002a1.2 1.2 0 0 0 .232-.182l5.01-5.036a3 3 0 0 0 .145-.157c.331-.386.821-1.15.228-1.746c-.501-.504-1.219-.028-1.684.381a6 6 0 0 0-.36.345l-.034.034l-4.94 4.965a1.2 1.2 0 0 0-.27.41l-.824 2.073a.2.2 0 0 0 .29.245l1.032 1.713c-1.805 1.088-3.96-.74-3.18-2.698l.825-2.072a3.2 3.2 0 0 1 .71-1.081l4.939-4.966l.029-.029c.147-.15.641-.656 1.24-1.02c.327-.197.849-.458 1.494-.508c.74-.059 1.53.174 2.15.797a2.9 2.9 0 0 1 .845 1.75a3.15 3.15 0 0 1-.23 1.517c-.29.717-.774 1.244-.987 1.457l-5.01 5.036q-.28.281-.62.487m4.453-7.126s-.004.003-.013.006z"/></g></g></svg>
+                                </button>
+                                </a>
+                                  
+
+                                    <a ref="{{ path('user_trainings_teams_delete', {'id': team.id}) }}">
+                                <button class="delete">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
+                                </button>
+                                 </a>
+                                  
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">{{ 'Aucune équipe disponible'|trans }}</td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination-container">
+            <!-- Results per page selector -->
+            <div class="results-per-page">
+                <label for="results">{{ 'Afficher'|trans }}</label>
+                <select id="results" class="results-select">
+                    <option value="12" {% if app.request.query.get('results') == '12' %}selected{% endif %}>12</option>
+                    <option value="24" {% if app.request.query.get('results') == '24' %}selected{% endif %}>24</option>
+                    <option value="48" {% if app.request.query.get('results') == '48' %}selected{% endif %}>48</option>
+                </select>
+                <span>{{ 'résultats par page'|trans }}</span>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div class="pagination-controls">
+                {% set currentPage = app.request.query.get('page')|default('1')|number_format(0, '', '', '') %}
+                {% set totalPages = totalPages|default(1) %}
+                <button class="pagination-button" {% if currentPage == 1 %}disabled{% endif %}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024"><path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/></svg></button>
+                <span class="pagination-info">{{ 'Page'|trans }} {{ currentPage }} {{ 'sur'|trans }} {{ totalPages }}</span>
+                <button class="pagination-button" {% if currentPage == totalPages %}disabled{% endif %}><svg xmlns="http://www.w3.org/2000/svg" width="8" height="16" viewBox="0 0 12 24"><defs><path id="weuiArrowOutlined0" fill="currentColor" d="m7.588 12.43l-1.061 1.06L.748 7.713a.996.996 0 0 1 0-1.413L6.527.52l1.06 1.06l-5.424 5.425z"/></defs><use fill-rule="evenodd" href="#weuiArrowOutlined0" transform="rotate(-180 5.02 9.505)"/></svg></button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchInput = document.getElementById('searchInput');
+            const rows = Array.from(document.querySelectorAll('#tableBody tr'));
+
+            searchInput.addEventListener('input', function () {
+                const query = this.value.toLowerCase();
+                rows.forEach(row => {
+                    row.style.display = row.innerText.toLowerCase().includes(query) ? '' : 'none';
+                });
+            });
+        });
+    </script>
+{% endblock %}

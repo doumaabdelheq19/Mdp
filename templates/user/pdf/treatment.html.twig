@@ -1,0 +1,169 @@
+<h4 style="text-align: center">{{ 'traitement'|trans }} {{ treatment.number|format_treatment_number }}</h4>
+<h5 style="text-align: center">Le {{ "now"|date('d/m/Y') }}</h5>
+
+<h5>{{ 'informations'|trans }}</h5>
+<table border="1" cellpadding="6" style="font-size: 9px;">
+    <tr>
+        <td style="width: 30%;">{{ 'nom'|trans }}</td>
+        <td style="width: 70%;">{{ treatment.name }}</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;">{{ 'nrf'|trans }}</td>
+        <td style="width: 70%;">{{ treatment.number }} {% if treatment.user.id != app.user.user.id %} <span style="color: #f2545b;">groupe</span>{% endif %}</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;">{{ 'date_de_cration_du_traitement'|trans }}</td>
+        <td style="width: 70%;">{{ treatment.creationDate|date('d/m/Y') }}</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;">{{ 'mise_jour_du_traitement'|trans }}</td>
+        <td style="width: 70%;">{{ treatment.editDate|date('d/m/Y') }}</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;">{{ 'finalit_principale'|trans }}</td>
+        <td style="width: 70%;">{{ treatment.mainPurpose }}</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;">Sous-finalité 1</td>
+        <td style="width: 70%;">{{ treatment.purpose1 }}</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;">Sous-finalité 2</td>
+        <td style="width: 70%;">{{ treatment.purpose2 }}</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;">Sous-finalité 3</td>
+        <td style="width: 70%;">{{ treatment.purpose3 }}</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;">Sous-finalité 4</td>
+        <td style="width: 70%;">{{ treatment.purpose4 }}</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;">Sous-finalité 5</td>
+        <td style="width: 70%;">{{ treatment.purpose5 }}</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;">{{ 'autres_finalits'|trans }}</td>
+        <td style="width: 70%;">{{ treatment.othersPurpose }}</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;">{{ 'description_du_traitement'|trans }}</td>
+        <td style="width: 70%;">{{ treatment.description }}</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;">{{ 'responsable_de_traitement'|trans }}</td>
+        <td style="width: 70%;">{{ treatment.treatmentAccountant }}</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;">{{ 'dpo'|trans }}</td>
+        <td style="width: 70%;">{{ treatment.dpo }}</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;">{{ 'responsable_du_service_concern'|trans }}</td>
+        <td style="width: 70%;">{{ treatment.serviceAccountant }}</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;">{{ 'rdacteur_de_la_fiche'|trans }}</td>
+        <td style="width: 70%;">{{ treatment.editor }}</td>
+    </tr>
+</table>
+
+<br pagebreak="true"/>
+
+<h5>{{ 'catgories_de_donnes_personnelles_concernes'|trans }}</h5>
+
+<table border="1" cellpadding="6" style="font-size: 9px;">
+    {% for personalData in treatment.personalData %}
+        <tr>
+            <td style="width: 30%;background-color: {% if personalData.level == 1 %}#d9f1fe{% elseif personalData.level == 2 %}#fff1cc{% else %}#fcddde{% endif %}">{{ personalData.title }}</td>
+            <td style="width: 70%;">{{ personalData.text }}</td>
+        </tr>
+    {% endfor %}
+</table>
+
+<br pagebreak="true"/>
+
+<p style="font-size: 9px;">{{ 'dure_de_conservation'|trans }}: {{ treatment.dataRetentionPeriod|nl2br|raw }}</p>
+
+<br/><br/>
+
+<p style="font-size: 9px;">{{ 'source_des_donnes'|trans }}: {{ treatment.dataSource|nl2br|raw }}</p>
+
+<br/><br/>
+
+<h5>{{ 'catgories_des_personnes_concernes'|trans }}</h5>
+
+<p style="font-size: 9px;">{{ treatment.peopleData|nl2br|raw }}</p>
+
+<br/><br/>
+
+<table border="1" cellpadding="6" style="font-size: 9px;">
+    <tr>
+        <th style="background-color: #264465; color: white;"><h5>{{ 'sous_traitants'|trans }}</h5></th>
+    </tr>
+    {% for subcontractor in treatment.subcontractors %}
+        <tr><td>{{ subcontractor.name }}</td></tr>
+    {% endfor %}
+</table>
+
+<br/><br/>
+
+<table border="1" cellpadding="6" style="font-size: 9px;">
+    <tr>
+        <th style="background-color: #264465; color: white;"><h5>{{ 'mesures_techniques'|trans }}</h5></th>
+    </tr>
+    {% for system in treatment.systems %}
+        <tr><td>{{ system.name }}</td></tr>
+    {% endfor %}
+</table>
+
+<br/>
+
+<h5>{{ 'transfert_hors_ue'|trans }}</h5>
+
+<p style="font-size: 9px;">{{ treatment.transferOutsideUeCountries }}</p>
+
+<br pagebreak="true"/>
+
+<h5>{{ 'consentement'|trans }}</h5>
+<table border="1" cellpadding="6" style="font-size: 9px;">
+    <tr>
+        <td style="width: 30%;">{{ 'le_consentement_estil_demand'|trans }}</td>
+        <td style="width: 70%;">{% if treatment.consentAsked %}{{ 'oui'|trans }}{% else %}{{ 'non'|trans }}{% endif %}</td>
+    </tr>
+    <tr>
+        <td style="width: 30%;">{{ 'si_oui_comment'|trans }}</td>
+        <td style="width: 70%;">{{ treatment.consentHow }}</td>
+    </tr>
+</table>
+
+<br/><br/>
+
+<p style="font-size: 9px;">{{ 'base_juridique_du_traitement'|trans }}: {{ treatment.legalBasis|nl2br|raw }}</p>
+
+<h5>{{ 'pia_analyse_dimpact'|trans }}</h5>
+
+<ul style="font-size: 9px;">
+    {% for criteria in treatment.piaCriteria %}
+        {% if criteria == 1 %}
+            <li>{{ 'donnes_sensibles_ou_hautement_personnelles_sant_go'|trans }}</li>
+        {% elseif criteria == 2 %}
+            <li>{{ 'personnes_vulnrables_enfants_salari_handicap_lien'|trans }}</li>
+        {% elseif criteria == 3 %}
+            <li>{{ 'profilage_et_valuation'|trans }}</li>
+        {% elseif criteria == 4 %}
+            <li>{{ 'prise_de_dcision_automatise_avec_effet_lgal_ou_sim'|trans }}</li>
+        {% elseif criteria == 5 %}
+            <li>{{ 'grande_chelle'|trans }}</li>
+        {% elseif criteria == 6 %}
+            <li>{{ 'surveillance_systmatique'|trans }}</li>
+        {% elseif criteria == 7 %}
+            <li>{{ 'exclusion_du_bnfice_dun_droit_ou_dun_contrat'|trans }}</li>
+        {% elseif criteria == 8 %}
+            <li>{{ 'usages_innovants_utilisation_dune_nouvelle_technol'|trans }}</li>
+        {% elseif criteria == 9 %}
+            <li>{{ 'croisement_de_donnes'|trans }}</li>
+        {% endif %}
+    {% endfor %}
+</ul>

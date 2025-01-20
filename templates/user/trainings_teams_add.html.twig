@@ -1,0 +1,101 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'formation_des_quipes'|trans }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="page">
+    <!-- Header Section -->
+    <div class="table-container-traitements">
+        <div class="header">
+            <h2>{{ 'formation_des_quipes'|trans }}</h2>
+        </div>
+
+        <!-- Form Start -->
+        {{ form_start(form, {"attr": {"class": "sous-traitantform", "enctype": "multipart/form-data"}}) }}
+
+        <!-- Name Section -->
+        <div class="sectt">
+            <h3>{{ 'Nom de l\'équipe'|trans }}</h3>
+            <div class="form-group">
+                <div class="form-group1">
+                    {{ form_label(form.name, 'Nom') }}
+                    {{ form_widget(form.name, {
+                        'attr': {
+                            'class': 'form-control ' ~ ((form_errors(form.name) == '') ? '' : 'is-invalid'),
+                            'placeholder': 'Nom de l\'équipe'
+                        }
+                    }) }}
+                    <div class="invalid-feedback">{{ form_errors(form.name) | striptags }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email Addresses Section -->
+        <div class="sectt">
+            <h3>{{ 'Adresses Email'|trans }}</h3>
+            <div class="form-group">
+                <div class="form-group1">
+                    {{ form_label(form.emailAddresses, 'Adresses mail (1 par ligne)') }}
+                    {{ form_widget(form.emailAddresses, {
+                        'attr': {
+                            'class': 'form-control ' ~ ((form_errors(form.emailAddresses) == '') ? '' : 'is-invalid'),
+                            'placeholder': 'Adresses mail (1 par ligne)'
+                        }
+                    }) }}
+                    <div class="invalid-feedback">{{ form_errors(form.emailAddresses) | striptags }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="submit-button">
+            {{ 'enregistrer'|trans }}
+        </button>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                {% if app.request.locale == "fr" %}
+                    $('#datatable').DataTable({
+                        "language": {
+                            "search": "Rechercher :",
+                            "lengthMenu": "Afficher _MENU_ résultats par page",
+                            "zeroRecords": "Aucun résultat",
+                            "info": "Page _PAGE_ sur _PAGES_",
+                            "infoEmpty": "Aucune données sur ce tableau",
+                            "infoFiltered": "(filtered from _MAX_ total records)",
+                            "paginate": {
+                                "previous": "Précédent",
+                                "next": "Suivant",
+
+                            }
+                        }
+                    });
+                {% else %}
+                    $('#datatable').DataTable({});
+                {% endif %}
+
+            });
+        })(window.jQuery);
+    </script>
+{% endblock %}

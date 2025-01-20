@@ -1,0 +1,454 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'editer_un_traitement'|trans }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="page">
+    <div class="table-container-traitements">
+        <div class="header headretour">
+            <a href="javascript:history.back()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024"><path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/></svg></a>
+
+            <h2>{{ 'Ajouter un traitement'|trans }}</h2>
+        </div>
+
+        {{ form_start(form, { "attr": { "class": "sous-traitantform", "enctype": "multipart/form-data" } }) }}
+
+        <!-- Standard Information Section -->
+        <div class="sectt">
+            <h3>{{ 'informations'|trans }}</h3>
+            <div class="form-group-container">
+                {% for field in ['name', 'mainPurpose', 'purpose1', 'purpose2', 'purpose3', 'purpose4', 'purpose5', 'othersPurpose', 'description'] %}
+                    {% if loop.index0 % 2 == 0 %} <!-- Start a new row for every 2 items -->
+                        <div class="form-group">
+                    {% endif %}
+
+                    <div class="form-group1">
+                        {{ form_label(attribute(form, field)) }}
+                        {{ form_widget(attribute(form, field), { 'attr': { 'class': 'form-control ' ~ ((form_errors(attribute(form, field)) == '') ? '' : 'is-invalid')} }) }}
+                        <div class="invalid-feedback">{{ form_errors(attribute(form, field)) | striptags }}</div>
+                    </div>
+
+                    {% if loop.index0 % 2 == 1 or loop.last %} <!-- Close the row after every 2 items or for the last item -->
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Responsibility Section -->
+        <div class="sectt">
+            <h3>{{ 'Responsabilité liée à ce traitement'|trans }}</h3>
+            <div class="form-group-container">
+                <div class="form-group">
+                    <div class="form-group1">
+                        <label>{{ 'Responsabilité liée à ce traitement'|trans }}</label>
+                        <div style="display: flex; margin-top: 20px; width: 100%; justify-content: space-between;" class="radiosbutt">
+                            {% for chk in form.companySubcontractorType %}
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    {{ form_widget(chk, { 'attr': { 'class': 'custom-control-input' } }) }}
+                                    {{ form_label(chk, null, { 'label_attr': { 'class': 'custom-control-label' } }) }}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group-container">
+                    {% for field in ['treatmentAccountant', 'dpo', 'serviceAccountant', 'editor'] %}
+                        {% if loop.index0 % 2 == 0 %} <!-- Start a new row for every 2 items -->
+                            <div class="form-group">
+                        {% endif %}
+
+                        <div class="form-group1">
+                            {{ form_label(attribute(form, field)) }}
+                            {{ form_widget(attribute(form, field), { 'attr': { 'class': 'form-control ' ~ ((form_errors(attribute(form, field)) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(attribute(form, field)) | striptags }}</div>
+                        </div>
+
+                        {% if loop.index0 % 2 == 1 or loop.last %} <!-- Close the row after every 2 items or for the last item -->
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Personal Data Categories Section -->
+        <div class="sectt">
+            <h3>{{ 'catgories_de_donnes_personnelles_concernes'|trans }}</h3>
+            <div class="form-group-container">
+                {% for personalDataField in personalDataFields %}
+                    <div class="form-group" style="align-items:center;">
+                        <div class="form-group1">
+                            <div style="height: 100%; margin-bottom: 0px; border: 1px solid {% if personalDataField.level == 1 %}#D4E5FF{% elseif personalDataField.level == 2 %}#FFC375{% else %}#E26262{% endif %};
+                                border-left: 4px solid {% if personalDataField.level == 1 %}#D4E5FF{% elseif personalDataField.level == 2 %}#FFC375{% else %}#E26262{% endif %};
+                                display: flex; align-items: center; padding: 10px;">
+                                {{ personalDataField.title }}
+                            </div>
+                        </div>
+                        <div class="form-group1">
+                            {{ form_widget(form['field_text_' ~ loop.index0], { 'attr': { 'class': 'form-control', 'style': 'margin-bottom: 0px;' } }) }}
+                        </div>
+                    </div>
+                {% endfor %}
+
+                <!-- Additional Fields -->
+                <div class="form-group">
+                    <div class="form-group1">
+                        {{ form_label(form.dataRetentionPeriod) }}
+                        {{ form_widget(form.dataRetentionPeriod, { 'attr': { 'class': 'form-control ' ~ ((form_errors(form.dataRetentionPeriod) == '') ? '' : 'is-invalid')} }) }}
+                        <div class="invalid-feedback">{{ form_errors(form.dataRetentionPeriod) | striptags }}</div>
+                    </div>
+                    <div class="form-group1">
+                        {{ form_label(form.dataSource) }}
+                        {{ form_widget(form.dataSource, { 'attr': { 'class': 'form-control ' ~ ((form_errors(form.dataSource) == '') ? '' : 'is-invalid')} }) }}
+                        <div class="invalid-feedback">{{ form_errors(form.dataSource) | striptags }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories of Concerned People Section -->
+        <div class="sectt">
+            <h3>{{ 'catgories_des_personnes_concernes'|trans }}</h3>
+            <div class="form-group">
+                <div class="form-group1">
+                    {{ form_label(form.peopleData, 'Catégories des personnes concernées') }}
+                    {{ form_widget(form.peopleData, {
+                        'attr': {
+                            'class': 'form-control ' ~ ((form_errors(form.peopleData) == '') ? '' : 'is-invalid'),
+                            'id': 'concernées',
+                            'placeholder': 'Nom'
+                        }
+                    }) }}
+                    <div class="invalid-feedback">
+                        {{ form_errors(form.peopleData) | striptags }}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Subcontractors Section -->
+        <div class="sectt">
+            <h3>{{ 'sous_traitants'|trans }}</h3>
+            <div class="form-group">
+                <div style="display: flex; gap: 10px; width: auto; align-items: center;">
+                    <button type="button" onclick="openSubcontractorsModal();" class="btn btn-primary exporter" style="width: auto; padding: 0px 10px;">
+                        {{ 'Sélectionner des sous-traitants pour ce traitement'|trans }}
+                    </button>
+                    <a href="{{ path('user_subcontractors_add') }}" target="_blank" class="btn btn-secondary" style="margin-bottom: 10px; color: #438492;">
+                        {{ 'plus_ajouter_un_soustraitant'|trans }}
+                    </a>
+                </div>
+            </div>
+            <div id="subcontractors-selected">{{ subcontractorsStr|join(', ') }}</div>
+            {% do form.subcontractors.setRendered() %}
+        </div>
+
+        <!-- Systems Section -->
+        <div class="sectt">
+            <h3>{{ 'mesures_techniques'|trans }}</h3>
+            <div class="form-group">
+                <div style="display: flex; gap: 10px; width: auto; align-items: center;">
+                    <button type="button" onclick="openSystemsModal();" class="btn btn-primary exporter" style="width: auto; padding: 0px 10px;">
+                        {{ 'Sélectionner des mesures techniques pour ce traitement'|trans }}
+                    </button>
+                    <a href="{{ path('user_systems') }}" target="_blank" class="btn btn-secondary" style="margin-bottom: 10px; color: #438492;">
+                        {{ 'plus_ajouter_une_mesure_technique'|trans }}
+                    </a>
+                </div>
+            </div>
+            <div id="systems-selected">{{ systemsStr|join(', ') }}</div>
+        </div>
+
+        <div class="modal fade" id="ModalSystems" tabindex="-1" role="dialog" aria-labelledby="ModalSystems" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalCenterTitle">{{ 'mesures_techniques'|trans }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'fermer'|trans }}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <span onclick="selectAllSystems();" style="cursor: pointer;">Tout sélectionner</span> / 
+                    <span onclick="unselectAllSystems();" style="cursor: pointer;">Tout désélectionner</span>
+                </div>
+                <div id="ModalSystemsContent">
+                    {% for chk in form.systems %}
+                        <div class="custom-control custom-checkbox">
+                            {{ form_widget(chk, {'attr': {'class': 'custom-control-input checkbox-system'} }) }}
+                            {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label'}}) }}
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                    {{ 'fermer'|trans }}
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+        
+        <div class="sectt">
+    <h3>{{ 'transfert_hors_ue'|trans }}</h3>
+    <div class="form-group">
+        <div class="form-group1">
+            {{ form_label(form.transferOutsideUeCountries, 'Pays') }}
+            {{ form_widget(form.transferOutsideUeCountries, {
+                'attr': {
+                    'class': 'form-control ' ~ ((form_errors(form.transferOutsideUeCountries) == '') ? '' : 'is-invalid'),
+                    'id': 'payd',
+                    'placeholder': 'Pays'
+                }
+            }) }}
+            <div class="invalid-feedback">
+                {{ form_errors(form.transferOutsideUeCountries) | striptags }}
+            </div>
+        </div>
+    </div>
+</div>
+
+             <!-- Consent Section -->
+        <div class="sectt">
+            <h3>{{ 'consentement'|trans }}</h3>
+            <div class="form-group">
+                <div class="form-group1">
+                    <label>{{ 'le_consentement_estil_demand'|trans }}</label>
+                    <div style="display: flex; gap: 30px;">
+                        {% for chk in form.consentAsked %}
+                            <div style="display:flex;gap:10px; align-items:center;margin-top:10px">
+                                {{ form_widget(chk, { 'attr': { 'class': 'custom-control-input' } }) }}
+                                {{ form_label(chk, null, { 'label_attr': { 'class': 'custom-control-label' } }) }}
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="form-group1">
+    {{ form_label(form.legalBasis, 'Finalité principale*') }}
+    {{ form_widget(form.legalBasis, {
+        'attr': {
+            'class': 'form-control ' ~ ((form_errors(form.legalBasis) == '') ? '' : 'is-invalid'),
+            'id': 'Finalitéprincipale*',
+            'placeholder': 'Finalité principale*'
+        }
+    }) }}
+    <div class="invalid-feedback">
+        {{ form_errors(form.legalBasis) | striptags }}
+    </div>
+</div>
+</div>
+
+<div class="form-group">
+
+                <div class="form-group1">
+                    {{ form_label(form.consentHow) }}
+                    {{ form_widget(form.consentHow, { 'attr': { 'class': 'form-control ' ~ ((form_errors(form.consentHow) == '') ? '' : 'is-invalid')} }) }}
+                    <div class="invalid-feedback">{{ form_errors(form.consentHow) | striptags }}</div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Added section  -->
+        <div class="sectt">
+    <h3>{{ 'pia_analyse_dimpact'|trans }}</h3>
+
+    <div class="form-group" style="flex-direction: column; margin-bottom:0px;" >
+        <div class="form-group1">
+            <label for="societe-nom">
+                {{ 'veuillez_cocher_les_critres_qui_concernent_votre_t'|trans }}.<br/>
+                <a href="https://www.cnil.fr/sites/default/files/atoms/files/liste-traitements-aipd-non-requise.pdf" target="_blank">
+                    {{ 'une_liste_dexonration_de_pia_est_toutefois_disponi'|trans }}
+                </a>.
+            </label>
+
+            <div style="display: flex; flex-wrap  wrap; flex-direction:column; gap: 10px; margin-top: 10px; ">
+                {% set chkI = 1 %}
+                {% for chk in form.piaCriteria %}
+                    <div style="display: flex; gap: 10px; align-items: center; font-size: 14px; flex: 1 1 calc(50% - 20px);">
+                        {{ form_widget(chk, {'attr': {'style': 'width: 15px; margin:0;'}}) }}
+                        {{ form_label(chk, null, {'label_attr': {'style': 'margin:0;'}}) }}
+                        
+                        {% if chkI in [1, 2, 8] %}
+                            <div class="tooltip-container">
+                                <span style="font-size: 15px; color: #438492;"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><g fill="none"><path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"/><path fill="currentColor" d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2m0 14a1 1 0 1 0 0 2a1 1 0 0 0 0-2m0-9.5a3.625 3.625 0 0 0-3.625 3.625a1 1 0 1 0 2 0a1.625 1.625 0 1 1 2.23 1.51c-.676.27-1.605.962-1.605 2.115V14a1 1 0 1 0 2 0c0-.244.05-.366.261-.47l.087-.04A3.626 3.626 0 0 0 12 6.5"/></g></svg></span>
+                                <div class="tooltip-content">
+                                    {% if chkI == 1 %}
+                                        {{ 'santé, géolocalisation...'|trans }}
+                                    {% elseif chkI == 2 %}
+                                        {{ 'enfants, salarié, handicap, lien de subordination fort...'|trans }}
+                                    {% elseif chkI == 8 %}
+                                        {{ 'utilisation d\'une nouvelle technologie ex: drones, IA...'|trans }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    {% set chkI = chkI + 1 %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 0px;">
+      <div style="display: flex; width: 100%; gap: 30px; margin-top: 10px;">
+    <div style="display: flex; gap: 10px; align-items: center; font-size: 11px; color: #586E90;font-weight:bold;">
+        <div class="switch">
+            {{ form_widget(form.piaExoneration, {'attr': {'id': 'togglee', 'class': 'cstm-switch-input'}}) }}
+            <label for="togglee"></label>
+        </div>
+        {{ 'cas_dxonration_de_ralisation_de_pia'|trans }}
+        <a href="https://www.cnil.fr/sites/default/files/atoms/files/liste-traitements-aipd-non-requise.pdf" target="_blank">
+            <i class="mdi mdi-help-circle"></i>
+        </a>
+    </div>
+</div>
+
+
+      <div style="display: flex; width: 100%; gap: 30px; margin-top: 10px;">
+    <div style="display: flex; gap: 10px; align-items: center; font-size: 11px; color: #586E90;font-weight:bold;">
+        <div class="switch">
+            {{ form_widget(form.insufficientCriteria, {'attr': {'id': 'togglee', 'class': 'cstm-switch-input'}}) }}
+            <label for="togglee"></label>
+        </div>
+        {{ 'abscence_de_critere_suffisant'|trans }}
+    </div>
+</div>
+
+    </div>
+
+<div class="form-group mt-3" style="margin-bottom: 40px; flex-direction:column; margin-top:20px; gap:10px">
+    <label for="piaFileFileInput">{{ 'Fichier PIA'|trans }}</label>
+    
+    <!-- Custom File Button -->
+    <button type="button" class="file-button" onclick="document.getElementById('piaFileFileInput').click();">
+        <i class="fa fa-file" aria-hidden="true"></i> {{ 'joindre_un_document'|trans }}
+    </button>
+
+    <!-- Hidden File Input -->
+    {{ form_widget(form.piaFileFile, {
+        'attr': {
+            'id': 'piaFileFileInput',
+            'style': 'opacity: 0; pointer-events: none; position: absolute; z-index: -1;width:2px;',
+            'onchange': 'updateFileName(this)',  
+        }
+    }) }}
+
+    <!-- Validation Error -->
+    <div class="invalid-feedback">{{ form_errors(form.piaFileFile) | striptags }}</div>
+</div>
+
+
+
+</div>
+
+
+        <!-- Final Section -->
+      <div class="sectt">
+    <!-- Radio Group for State -->
+    <div class="form-group" style="background-color: #e5f4f861;
+    border-radius: 10px; margin-top:10px;padding:0 10px">
+        <div class="form-group1 containrr" >
+            
+            <label for="societe-nom">{{ 'le_traitement_est_il_finalise'|trans }}</label>
+            <div style="display: flex; width: 100%; justify-content: space-between;">
+                {% for chk in form.state %}
+                    <div style="display: flex; gap: 10px; align-items: center; font-size: 14px;">
+                        {{ form_widget(chk, {'attr': {'class': 'custom-control-input', 'style': 'width: 15px; margin:0;'}}) }}
+                        {{ form_label(chk, null, {'label_attr': {'style': 'margin: 0;'}}) }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="invalid-feedback">{{ form_errors(form.state) | striptags }}</div>
+        </div>
+    </div>
+
+    <!-- Checkbox Group -->
+    {% if app.user.user.mainGroupAgency %}
+        <div class="form-group" style="background-color: #e5f4f861;
+    border-radius: 10px; margin-top:10px;padding:0 10px; margin-bottom:20px;">
+            <div class="form-group1 containrr" >
+              
+                <div style="display: flex; width: 100%; gap: 30px; margin-top: 10px;">
+                    <div style="display: flex; gap: 10px; align-items: center; font-size: 14px;">
+                        {{ form_widget(form.group, {'attr': {'class': 'custom-control-input', 'style': 'width: 15px; margin:0;'}}) }}
+                        {{ form_label(form.group, null, {'label_attr': {'style': 'margin: 0;'}}) }}
+                    </div>
+                </div>
+                {% if app.request.locale == "fr" %}
+                    <label for="societe-nom">Ce traitement sera mis à disposition de vos comptes affiliés</label>
+                {% else %}
+                    <label for="societe-nom">This processing will be made available to your affiliate accounts</label>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+</div>
+
+        <button type="submit" class="submit-button">{{ 'enregistrer'|trans }}</button>
+        {{ form_end(form) }}
+    </div>
+</div>
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var subcontractors = {{ subcontractors|json_encode|raw }};
+        var systems = {{ systems|json_encode|raw }};
+        var subcontractorsStrAssoc = {};
+        var systemsStrAssoc = {};
+
+        function openSubcontractorsModal() {
+            $.ajax({
+                type: "POST",
+                url: "{{ path('user_json_subcontractors') }}",
+                success: function (content) {
+                    var ModalSubcontractorsContent = document.getElementById("ModalSubcontractorsContent");
+                    ModalSubcontractorsContent.innerHTML = null;
+                    content.map(item => {
+                        subcontractorsStrAssoc[item.id] = item.text;
+                        var div = document.createElement("div");
+                        div.className = "custom-control custom-checkbox";
+                        var input = document.createElement("input");
+                        input.type = "checkbox";
+                        input.className = "custom-control-input";
+                        input.value = item.id;
+                        input.id = `sub_${item.id}`;
+                        div.appendChild(input);
+                        var label = document.createElement("label");
+                        label.className = "custom-control-label";
+                        label.setAttribute("for", `sub_${item.id}`);
+                        label.innerText = item.text;
+                        div.appendChild(label);
+                        ModalSubcontractorsContent.appendChild(div);
+                    });
+                }
+            });
+        }
+
+        function updateFileName(input) {
+            const button = document.querySelector('.file-button');
+            if (input.files.length > 0) {
+                button.innerHTML = `<i class="fa fa-file" aria-hidden="true"></i> ${input.files[0].name}`;
+            } else {
+                button.innerHTML = `<i class="fa fa-file" aria-hidden="true"></i> {{ 'joindre_un_document'|trans }}`;
+            }
+        }
+
+        window.onbeforeunload = function () {
+            return 'Êtes-vous sûr de vouloir quitter cette page?';
+        };
+    </script>
+{% endblock %}
+{% endblock %}

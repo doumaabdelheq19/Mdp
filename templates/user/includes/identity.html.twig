@@ -1,0 +1,10 @@
+<div>
+    <div>
+        <div class="avatar mr-3 avatar-xxl">
+            {{ get_user_avatar_header(app.user.user)|raw }}
+        </div>
+    </div>
+    <h5 class="text-white m-t-1 pl-1">
+        {{ app.user.user.companyName }}
+    </h5>
+</div>

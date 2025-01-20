@@ -1,0 +1,691 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'cartographie_du_si'|trans }}
+{% endblock %}
+
+{% block stylesheets %}
+    <style>
+         #map {
+          min-height:600px;
+            height: auto;
+            width: 100%;
+            border: 1px solid #ddd;
+            margin: 20px auto;
+        }
+        .parent {
+  position: relative;
+  width: 400px; /* Adjust width as needed */
+  height: 120px; /* Adjust height as needed */
+  background-color: #eaf8fb; /* Light blue background color */
+  border-radius: 16px; /* Rounded corners */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid transparent; /* Base border to ensure shape */
+}
+.jm-line {
+    stroke: #666; /* Set line color */
+    stroke-width: 2px; /* Adjust line thickness */
+}
+
+
+.parent::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 16px;
+  border: 2px dashed #3b8397; /* Dashed border for dotted look */
+  box-sizing: border-box;
+  clip-path: polygon(
+    5% 0%, 95% 0%, 95% 10%, 100% 10%, 100% 90%, 95% 90%, 
+    95% 100%, 5% 100%, 5% 90%, 0% 90%, 0% 10%, 5% 10%
+  ); /* Adjusted to create "breaks" */
+}
+
+.icon {
+  color: #3b8397; /* Icon color */
+  font-size: 32px; /* Adjust font size */
+  text-align: center;
+}
+jmnodes.theme-primary jmnode{
+ border:3px solid #438492;
+ background-color: #E5F4F8;
+ color: #438492;
+ padding: 20px 34px;
+ border-radius: 16px;
+ box-shadow: none;
+ font-weight: 700;
+ font-size: 14px;
+ text-align: center;
+ overflow: visible;
+ min-width:120px;
+ height:80px;
+ align-content:center;
+ font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+jmnodes.theme-primary jmnode i {
+  font-size:40px;
+  margin:10px;
+}
+img {
+    width: 40px;
+    margin:0 auto 15px;
+
+}
+.border {
+    background-color: #E5F4F8;
+    z-index: 1212;
+    position: absolute;
+    width: 20px;
+    height: 4px;
+}
+.border1 .circle {
+    width: 6px;
+    height: 6px;
+    background-color: #438492;
+    border-radius: 50%;
+    position: absolute;
+    top: -2px;
+    left: -3px;
+
+}
+.border.border1 {
+    top: -2.5px;
+    left: 30px;
+} .border.border2 {
+    top: 20px;
+  right: -3px;
+  height: 20px;
+  width: 4px;
+}  
+.border2 .circle {
+    width: 6px;
+    height: 6px;
+    background-color: #438492;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -2px;
+    left: -0;
+
+}
+.border.border3 {
+    bottom: -2.5px;
+  right: 25px;
+  width: 20px;
+  height: 4px;
+}  
+.border3 .circle {
+    width: 6px;
+    height: 6px;
+    background-color: #438492;
+    border-radius: 50%;
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+
+}
+.border.border4 {
+    bottom: 20px;
+  left: -2.5px;
+  height: 20px;
+  width: 4px;
+}  
+.border4 .circle {
+    width: 6px;
+    height: 6px;
+    background-color: #438492;
+    border-radius: 50%;
+    position: absolute;
+    top: -2px;
+    left: -2px;
+
+}
+
+
+jmnode[nodeid="root"] {
+    background-color: #EFEFEF!important; /* A different background color */
+    color:#A2A2A2 !important;
+    border: 3px solid #A2A2A2 !important;
+    }
+    jmnode[nodeid="root"] .circle{
+    background-color: #A2A2A2!important; /* A different background color */
+ 
+    }
+    jmnode[nodeid="root"] .border{
+    background-color: #EFEFEF!important; /* A different background color */
+ 
+    }
+jmnode[nodeid="physical"] {
+    background-color: #E5ECF8 !important; /* A different background color */
+    color:#7096D1 !important;
+    border: 3px solid #7096D1 !important;
+}
+
+ jmnode[nodeid="physical"] .circle{
+    background-color: #7096D1 !important; /* A different background color */
+ 
+    }
+    jmnode[nodeid="physical"] .border{
+    background-color: #E5ECF8!important; /* A different background color */
+ 
+    }
+
+
+
+    /* General styling for specific jmnode elements */
+jmnode[nodeid="physical_partitioning"],
+jmnode[nodeid="physical_information"],
+jmnode[nodeid="921"],
+jmnode[nodeid="1068"] {
+    background-color: #E5ECF8 !important; /* A different background color */
+    color: #7096D1 !important;
+    border: 3px solid #7096D1 !important;
+}
+
+/* Styling the circles inside these nodes */
+jmnode[nodeid="physical_partitioning"] .circle,
+jmnode[nodeid="physical_information"] .circle,
+jmnode[nodeid="921"] .circle,
+jmnode[nodeid="1068"] .circle {
+    background-color: #7096D1 !important; /* Circle background color */
+}
+
+/* Styling the borders inside these nodes */
+jmnode[nodeid="physical_partitioning"] .border,
+jmnode[nodeid="physical_information"] .border,
+jmnode[nodeid="921"] .border,
+jmnode[nodeid="1068"] .border {
+    background-color: #E5ECF8 !important; /* Border background color */
+}
+
+jmnode[nodeid="action"] {
+    background-color: #F8E5E5 !important; /* A different background color */
+    color:#EF6D6F !important;
+    border: 3px solid #EF6D6F !important;
+}
+
+jmnode[nodeid="action"] .circle{
+    background-color: #EF6D6F !important; /* A different background color */
+ 
+    }
+    jmnode[nodeid="action"] .border{
+    background-color: #F8E5E5 !important; /* A different background color */
+ 
+    }
+
+
+/* General styling for specific jmnode elements */
+jmnode[nodeid="action_minimization"],
+jmnode[nodeid="action_anonymization"],
+jmnode[nodeid="action_pseudonymization"],
+jmnode[nodeid="action_sensitization"],
+jmnode[nodeid="action_supervision"],
+jmnode[nodeid="action_destruction"],
+jmnode[nodeid="1069"],
+jmnode[nodeid="1070"] {
+    background-color: #F8E5E5 !important; /* A different background color */
+    color: #EF6D6F !important;
+    border: 3px solid #EF6D6F !important;
+}
+
+/* Styling the circles inside these nodes */
+jmnode[nodeid="action_minimization"] .circle,
+jmnode[nodeid="action_anonymization"] .circle,
+jmnode[nodeid="action_pseudonymization"] .circle,
+jmnode[nodeid="action_sensitization"] .circle,
+jmnode[nodeid="action_supervision"] .circle,
+jmnode[nodeid="action_destruction"] .circle,
+jmnode[nodeid="1069"] .circle,
+jmnode[nodeid="1070"] .circle {
+    background-color: #EF6D6F !important; /* Circle background color */
+}
+
+/* Styling the borders inside these nodes */
+jmnode[nodeid="action_minimization"] .border,
+jmnode[nodeid="action_anonymization"] .border,
+jmnode[nodeid="action_pseudonymization"] .border,
+jmnode[nodeid="action_sensitization"] .border,
+jmnode[nodeid="action_supervision"] .border,
+jmnode[nodeid="action_destruction"] .border,
+jmnode[nodeid="1069"] .border,
+jmnode[nodeid="1070"] .border {
+    background-color: #F8E5E5 !important; /* Border background color */
+}
+
+jmnode[nodeid="supplier"] {
+    background-color: #E5ECF8 !important; /* A different background color */
+    color:#7096D1 !important;
+    border: 3px solid #7096D1 !important;
+} 
+jmnode[nodeid="supplier"] .circle{
+    background-color: #7096D1 !important; /* A different background color */
+ 
+    }
+    jmnode[nodeid="supplier"] .border{
+    background-color: #E5ECF8 !important; /* A different background color */
+ 
+    }
+/* General styling for specific jmnode elements */
+jmnode[nodeid="supplier_supplier"],
+jmnode[nodeid="997"],
+jmnode[nodeid="996"] {
+    background-color: #E5ECF8 !important; /* Background color */
+    color: #7096D1 !important; /* Text color */
+    border: 3px solid #7096D1 !important; /* Border color */
+}
+
+/* Styling the circles inside these nodes */
+jmnode[nodeid="supplier_supplier"] .circle,
+jmnode[nodeid="997"] .circle,
+jmnode[nodeid="996"] .circle {
+    background-color: #7096D1 !important; /* Circle background color */
+}
+
+/* Styling the borders inside these nodes */
+jmnode[nodeid="supplier_supplier"] .border,
+jmnode[nodeid="997"] .border,
+jmnode[nodeid="996"] .border {
+    background-color: #E5ECF8 !important; /* Border background color */
+}
+
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="page">
+    <div class="flex">
+        <div class="four">
+            <div class="gap">
+                <h4>{{ 'cartographie_du_si'|trans }}</h4>
+                <p>{{ 'lensemble des elements de votre systeme dinformation'|trans }}</p>
+                <div style="display: flex; gap: 20px;">
+                    <div class="imprimer" style="width: 50%;">
+                        <p><a href="{{ path('user_systems_export_excel', {type: 'computing'}) }}">{{ 'Exporter au format Excel'|trans }}</a></p>
+                    </div>
+                    <div class="exporter" style="width: 50%;">
+                        <p><a href="{{ path('user_systems_export') }}" target="_blanc">{{ 'Exporter au format PDF'|trans }}</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="four">
+            <div class="gap">
+                <div style="width: 100%; display: flex; justify-content: space-between;">
+                    <h4 style="font-size: 16px;">{{ 'Mode d’affichage'|trans }}</h4>
+                    <div class="dropdownn">
+                        <button class="dropdown-button">{{ 'Mon systeme d’information'|trans }} <i class="fa fa-angle-down" aria-hidden="true"></i></button>
+                        <ul class="dropdown-menu">
+                            <li>{{ 'Option 1'|trans }}</li>
+                            <li>{{ 'Option 2'|trans }}</li>
+                            <li>{{ 'Option 3'|trans }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <p>{{ 'Choisissez entre vue mindmap, tableur et vue client'|trans }}</p>
+                <div style="display: flex; gap: 10px;">
+                    <p style="color: #438492;">{{ 'Vue mindmap'|trans }}</p>
+                    <div class="switch">
+                        <input type="checkbox" id="togglee" />
+                        <label for="togglee"></label>
+                    </div>
+                    <p>{{ 'Vue tableur'|trans }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mindmap Section -->
+    <div class="table-container-traitements mindmap">
+        <div id="map"></div>
+    </div>
+
+    <!-- Tableur Section -->
+
+
+
+
+
+    <div class="flex tableur" >
+  <!-- Informatique Section -->
+  <div class="table-container-traitements catogro" style="width:100%">
+    <div class="header">
+      <h2>{{ 'informatique'|trans }}</h2>
+      <a href="{{ path('user_systems_export_excel', {'type': 'computing'}) }}" class="btn btn-primary">{{ 'export_excel'|trans }}</a>
+    </div>
+    <div style="display: flex; justify-content: space-between; width: 100%;">
+      <div class="search-bar">
+        <span class="search-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
+        <input type="text" placeholder="Rechercher" />
+      </div>
+    </div>
+
+    <!-- Dynamically Generated Tables -->
+    {% for category, title in {'network': 'Reseau', 'security': 'Sécurité', 'administration': 'Administration', 'device': 'Périphérique', 'software': 'Logiciel', 'server': 'Serveur'} %}
+    <div class="container-catogrophie">
+      <div class="title-cat">
+        <h4>{{ title }}</h4>
+        <a href="{{ path('user_systems_add') }}?type=computing&subtype={{ category }}">+ Ajouter un element</a>
+      </div>
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Type</th>
+            <th>Informations</th>
+            <th>Type de Wifi</th>
+            <th>Protocole Wifi</th>
+            <th>Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in systems.computing[category] %}
+          <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.type }}</td>
+            <td>
+              {% for spec in item.data %}
+              <span>• {{ spec.title }}: {{ spec.value }}</span><br />
+              {% endfor %}
+            </td>
+            <td>tt</td>
+            <td>tt</td>
+            <td >
+            <div class="options">
+              <button class="edit">
+                <a href="{{ path('user_systems_edit', {'id': item.id}) }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="m7 17.013l4.413-.015l9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583zM18.045 4.458l1.589 1.583l-1.597 1.582l-1.586-1.585zM9 13.417l6.03-5.973l1.586 1.586l-6.029 5.971L9 15.006z"/><path fill="currentColor" d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2"/></svg></a>
+              </button>
+              <button class="delete">
+                <a href="{{ path('user_systems_delete', {'id': item.id}) }}" onclick="return confirm('Confirmer la suppression de cet élément ?');"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg></a>
+              </button>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Physical Section -->
+  <div class="table-container-traitements catogro" style="width:100%">
+    <div class="header">
+      <h2>{{ 'physique'|trans }}</h2>
+      <a href="{{ path('user_systems_export_excel', {'type': 'physical'}) }}" class="btn btn-primary">{{ 'export_excel'|trans }}</a>
+    </div>
+    <div style="display: flex; justify-content: space-between; width: 100%;">
+      <div class="search-bar">
+        <span class="search-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
+        <input type="text" placeholder="Rechercher" />
+      </div>
+    </div>
+
+    {% for category, title in {'partitioning': 'Cloisonnement', 'information': 'Information'} %}
+    <div class="container-catogrophie">
+      <div class="title-cat">
+        <h4>{{ title }}</h4>
+        <a href="{{ path('user_systems_add') }}?type=physical&subtype={{ category }}">+ Ajouter un element</a>
+      </div>
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Type</th>
+            <th>Informations</th>
+            <th>Type de Wifi</th>
+            <th>Protocole Wifi</th>
+            <th>Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in systems.physical[category] %}
+          <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.type }}</td>
+            <td>
+              {% for spec in item.data %}
+              <span>• {{ spec.title }}: {{ spec.value }}</span><br />
+              {% endfor %}
+            </td>
+            <td>t</td>
+            <td>t</td>
+            <td >
+            <div class="options">
+              <button class="edit">
+                <a href="{{ path('user_systems_edit', {'id': item.id}) }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="m7 17.013l4.413-.015l9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583zM18.045 4.458l1.589 1.583l-1.597 1.582l-1.586-1.585zM9 13.417l6.03-5.973l1.586 1.586l-6.029 5.971L9 15.006z"/><path fill="currentColor" d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2"/></svg></a>
+              </button>
+              <button class="delete">
+                <a href="{{ path('user_systems_delete', {'id': item.id}) }}" onclick="return confirm('Confirmer la suppression de cet élément ?');"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg></a>
+              </button>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endfor %}
+  </div>
+  </div>
+   <div class="flex tableur" >
+  <!-- Action section --> 
+  <div class="table-container-traitements catogro" style="width:100%">
+
+    <div class="header">
+        <h2>{{ 'action'|trans }}</h2>
+        <a href="{{ path('user_systems_export_excel', {'type': 'action'}) }}" class="btn btn-primary">{{ 'export_excel'|trans }}</a>
+    </div>
+    <div style="display: flex; justify-content: space-between; width: 100%;">
+        <div class="search-bar">
+            <span class="search-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
+            <input type="text" placeholder="Rechercher" />
+        </div>
+    </div>
+
+    {% for category, title in {
+        'minimization': 'Minimisation',
+        'anonymization': 'Anonymisation',
+        'pseudonymization': 'Pseudonymisation',
+        'sensitization': 'Sensibilisation',
+        'supervision': 'Contrôle',
+        'destruction': 'Destruction et Suppression'
+    } %}
+    <div class="container-catogrophie">
+        <div class="title-cat">
+            <h4>{{ title }}</h4>
+            <a href="{{ path('user_systems_add') }}?type=action&subtype={{ category }}">+ Ajouter un element</a>
+        </div>
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Type</th>
+                    <th>Informations</th>
+                    <th>Type de Wifi</th>
+                    <th>Protocole Wifi</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in systems.action[category] %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.type }}</td>
+                    <td>
+                        {% for spec in item.data %}
+                        <span>• {{ spec.title }}: {{ spec.value }}</span><br />
+                        {% endfor %}
+                    </td>
+                    <td>t</td>
+                    <td>t</td>
+                    <td>
+                        <div class="options">
+                            <button class="edit">
+                                <a href="{{ path('user_systems_edit', {'id': item.id}) }}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="m7 17.013l4.413-.015l9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583zM18.045 4.458l1.589 1.583l-1.597 1.582l-1.586-1.585zM9 13.417l6.03-5.973l1.586 1.586l-6.029 5.971L9 15.006z"/>
+                                        <path fill="currentColor" d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2"/>
+                                    </svg>
+                                </a>
+                            </button>
+                            <button class="delete">
+                                <a href="{{ path('user_systems_delete', {'id': item.id}) }}" onclick="return confirm('Confirmer la suppression de cet élément ?');">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/>
+                                    </svg>
+                                </a>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endfor %}
+</div>
+<!-- Suppler section -->
+<div class="table-container-traitements catogro" style="width:100%">
+    <div class="header">
+      <h2>{{ 'fournisseur'|trans }}</h2>
+      <a href="{{ path('user_systems_export_excel', {'type': 'supplier'}) }}" class="btn btn-primary">{{ 'export_excel'|trans }}</a>
+    </div>
+    <div style="display: flex; justify-content: space-between; width: 100%;">
+      <div class="search-bar">
+        <span class="search-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
+        <input type="text" placeholder="Rechercher" />
+      </div>
+    </div>
+
+    <div class="container-catogrophie">
+      <div class="title-cat">
+        <h4>{{ 'Prestataires du SI'|trans }}</h4>
+        <a href="{{ path('user_systems_add') }}?type=supplier&subtype=supplier">+ Ajouter un element</a>
+      </div>
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Type</th>
+            <th>Informations</th>
+            <th>Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in systems.supplier.supplier %}
+          <tr>
+            <td>{{ item.name }}</td>
+            <td>{{ item.type }}</td>
+            <td>
+              {% for spec in item.data %}
+              <span>• {{ spec.title }}: {{ spec.value }}</span><br />
+              {% endfor %}
+            </td>
+            <td>
+              <div class="options">
+                <button class="edit">
+                  <a href="{{ path('user_systems_edit', {'id': item.id}) }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="m7 17.013l4.413-.015l9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583zM18.045 4.458l1.589 1.583l-1.597 1.582l-1.586-1.585zM9 13.417l6.03-5.973l1.586 1.586l-6.029 5.971L9 15.006z"/><path fill="currentColor" d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2"/></svg></a>
+                </button>
+                <button class="delete">
+                  <a href="{{ path('user_systems_delete', {'id': item.id}) }}" onclick="return confirm('Confirmer la suppression de cet élément ?');"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg></a>
+                </button>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+    
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/jsmind/es6/jsmind.js"></script>
+    <script type="module">
+
+     document.addEventListener("DOMContentLoaded", () => {
+
+    // Initialize Mindmap
+    const options = {
+        container: 'map', // ID of the container
+        editable: false,
+        theme: 'primary',
+        zoom: 0.8,
+        support_html: true,
+        view: {
+          engine: "canvas", 
+            line_width: 2, // Adjust line width as needed
+            line_color: '#000', // Set line color
+          line_style: 'straight', // Use straight lines
+    custom_line_render: function ({ ctx, start_point, end_point }) {
+        ctx.beginPath();
+
+        // Determine the direction and adjust the line's start/end points
+        const mid_x = (start_point.x + end_point.x) / 2; // Midpoint for horizontal alignment
+        const mid_y = (start_point.y + end_point.y) / 2; // Midpoint for vertical alignment
+
+        // Move to the start point
+        ctx.moveTo(start_point.x, start_point.y);
+
+        // Draw a horizontal or vertical line depending on position
+        ctx.lineTo(mid_x, start_point.y); // Horizontal line
+        ctx.lineTo(mid_x, end_point.y);   // Vertical line
+        ctx.lineTo(end_point.x, end_point.y); // Final horizontal/vertical line
+
+        // Apply styles
+        ctx.strokeStyle = '#E1E8F4'; // Line color (black)
+        ctx.lineWidth = 3;        // Line width
+        ctx.stroke();
+    },
+        },
+        layout: {
+            hspace: 180, // Horizontal spacing
+            vspace: 30, // Vertical spacing
+            pspace: 20, // Parent-child spacing
+        },
+    };
+
+    // Render the mind map
+    const mindData = {{ mindMap|json_encode|raw }}; // Replace with your server-rendered mind map data
+    const jm = new jsMind(options);
+    jm.show(mindData);
+    const initialZoom = 0.8; // Example: 80%
+jm.view.setZoom(initialZoom);
+
+    // Dynamically adjust the container height
+    const mapContainer = document.getElementById('map');
+    const mindMapCanvas = mapContainer.querySelector('canvas');
+
+    setTimeout(() => {
+        const canvasHeight = mindMapCanvas.height; // Get the canvas height
+        mapContainer.style.height = `${canvasHeight}px`; // Update container height dynamically
+    }, 100);// Add a slight delay for rendering
+
+
+            // Toggle Views
+            const toggleSwitch = document.getElementById("togglee");
+            const mindmapElement = document.querySelector(".mindmap");
+            const tableurElements = document.querySelectorAll(".tableur");
+
+            toggleSwitch.addEventListener("change", () => {
+                if (toggleSwitch.checked) {
+                    mindmapElement.style.display = "none";
+                    tableurElements.forEach((tableur) => tableur.style.display = "flex");
+                } else {
+                    mindmapElement.style.display = "flex";
+                    tableurElements.forEach((tableur) => tableur.style.display = "none");
+                }
+            });
+        });
+    </script>
+{% endblock %}

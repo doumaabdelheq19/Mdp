@@ -1,0 +1,62 @@
+<h4 style="text-align: center">{{ 'action'|trans }}</h4>
+<h5 style="text-align: center">Le {{ "now"|date('d/m/Y') }}</h5>
+
+<h5>{{ 'responsable_de_laction'|trans }}</h5>
+<table border="1" cellpadding="6">
+    <tr>
+        <td>{{ 'nom'|trans }}</td>
+        <td>{{ action.accountantLastName }}</td>
+    </tr>
+    <tr>
+        <td>{{ 'prnom'|trans }}</td>
+        <td>{{ action.accountantFirstName }}</td>
+    </tr>
+    <tr>
+        <td>{{ 'email'|trans }}</td>
+        <td>{{ action.accountantEmail }}</td>
+    </tr>
+    <tr>
+        <td>{{ 'tlphone'|trans }}</td>
+        <td>{{ action.accountantPhone }}</td>
+    </tr>
+</table>
+
+<h5>{{ 'informations'|trans }}</h5>
+<table border="1" cellpadding="6">
+    <tr>
+        <td>{{ 'nom'|trans }}</td>
+        <td>{{ action.name }}</td>
+    </tr>
+    <tr>
+        <td>{{ 'budget'|trans }}</td>
+        <td>{{ action.budget }}</td>
+    </tr>
+    <tr>
+        <td>{{ 'objectif'|trans }}</td>
+        <td>{{ action.goal }}</td>
+    </tr>
+    <tr>
+        <td>{{ 'informations_complmentaires'|trans }}</td>
+        <td>{{ action.information }}</td>
+    </tr>
+    <tr>
+        <td>{{ 'lien_utile'|trans }}</td>
+        <td>{{ action.usefulLink }}</td>
+    </tr>
+    <tr>
+        <td>{{ 'date_de_mise_en_place_souhaite'|trans }}</td>
+        <td>{% if action.setUpDate %}{{ action.setUpDate|date('d/m/Y') }}{% endif %}</td>
+    </tr>
+    <tr>
+        <td>{{ 'action_ralise'|trans }}</td>
+        <td>{% if action.terminated %}{{ 'oui'|trans }}{% else %}{{ 'non'|trans }}{% endif %}</td>
+    </tr>
+    <tr>
+        <td>{{ 'traitements_lis'|trans }}</td>
+        <td>
+            {% for treatment in action.treatments %}
+                <span>{{ treatment.number|format_treatment_number }}<br/></span>
+            {% endfor %}
+        </td>
+    </tr>
+</table>

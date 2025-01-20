@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Partenaires
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container">
+            <div class="row align-items-center p-b-100 p-t-60">
+
+                <div class="col-md-6 text-white p-b-30">
+                    <div class="media">
+                        <div class="avatar avatar mr-3">
+                            <div class="avatar-title rounded-circle mdi mdi-briefcase-account">
+
+                            </div>
+                        </div>
+                        <div class="media-body">
+                            <h1>Partenaires</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-4 col-lg-3">
+                    <a href="{{ path('manager_partners_add') }}" class="card m-b-30">
+                        <div class="card-body">
+                            <div class="media">
+                                <div class="avatar mr-3">
+                                    <div class="avatar-title rounded-circle bg-primary"><i class="mdi mdi-shape-circle-plus"></i></div>
+                                </div>
+                                <div class="media-body p-t-5">
+                                    <h5 class="m-b-0">Ajouter</h5>
+                                    <p class="m-0">un nouveau partenaire</p>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid pull-up">
+        <div class="row justify-content-md-end">
+
+        </div>
+        <div class="row">
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive p-t-10">
+                            <table id="datatable" class="table" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>Logo</th>
+                                    <th>Nom</th>
+                                    <th>Description</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for partner in partners %}
+                                    <tr>
+                                        <td><div class="avatar avatar-sm">{{ get_partner_avatar(partner)|raw }}</div></td>
+                                        <td>{{ partner.name }}</td>
+                                        <td>{{ partner.description }}</td>
+                                        <td>
+                                            <a href="{{ path('manager_partners_edit', {'id': partner.id}) }}" class="btn btn-sm ml-1 mr-1 btn-secondary">
+                                                <i class="mdi mdi-circle-edit-outline"></i> Modifier
+                                            </a>
+                                            <a href="{{ path('manager_partners_delete', {'id': partner.id}) }}" class="btn btn-sm ml-1 mr-1 btn-danger" onclick="return confirm('Confirmer la suppression de ce partner ?');">
+                                                <i class="mdi mdi-close"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                $('#datatable').DataTable({
+                    "language": {
+                        "search": "Rechercher :",
+                        "lengthMenu": "Afficher _MENU_ résultats par page",
+                        "zeroRecords": "Aucun résultat",
+                        "info": "Page _PAGE_ sur _PAGES_",
+                        "infoEmpty": "Aucune données sur ce tableau",
+                        "infoFiltered": "(filtered from _MAX_ total records)",
+                        "paginate": {
+                            "previous": "Précédent",
+                            "next": "Suivant",
+
+                        }
+                    }
+                });
+
+            });
+
+        })(window.jQuery);
+    </script>
+{% endblock %}

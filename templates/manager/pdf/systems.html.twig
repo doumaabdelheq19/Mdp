@@ -1,0 +1,70 @@
+<h4 style="text-align: center">Cartographie du SI</h4>
+<h5 style="text-align: center">Le {{ "now"|date('d/m/Y') }}</h5>
+<table style="width:100%;font-size: 9px;" border="1" cellpadding="6">
+    <tbody>
+    <tr>
+        <td rowspan="6" style="text-align: center; background-color: #bfbfbf;">Informatique</td>
+        <td style="background-color: #d6d6d6;">Réseau</td>
+        <td>{% for item in systems.computing.network %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #d6d6d6;">Sécurité</td>
+        <td>{% for item in systems.computing.security %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #d6d6d6;">Administration</td>
+        <td>{% for item in systems.computing.administration %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #d6d6d6;">Périphérique</td>
+        <td>{% for item in systems.computing.device %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #d6d6d6;">Logiciel</td>
+        <td>{% for item in systems.computing.software %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #d6d6d6;">Serveur</td>
+        <td>{% for item in systems.computing.server %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td rowspan="7" style="text-align: center; background-color: #bfbfbf;">Physique</td>
+        <td style="background-color: #d6d6d6;">Cloisonnement</td>
+        <td>{% for item in systems.physical.partitioning %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #d6d6d6;">Information</td>
+        <td>{% for item in systems.physical.information %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td rowspan="7" style="text-align: center; background-color: #bfbfbf;">Action</td>
+        <td style="background-color: #d6d6d6;">Minimisation</td>
+        <td>{% for item in systems.action.minimization %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #d6d6d6;">Anonymisation</td>
+        <td>{% for item in systems.action.anonymization %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #d6d6d6;">Pseudonymisation</td>
+        <td>{% for item in systems.action.pseudonymization %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #d6d6d6;">Sensibilisation et formation</td>
+        <td>{% for item in systems.action.sensitization %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #d6d6d6;">Contrôle et qualité</td>
+        <td>{% for item in systems.action.supervision %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #d6d6d6;">Destruction et suppression</td>
+        <td>{% for item in systems.action.destruction %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="text-align: center; background-color: #bfbfbf;">Prestataires du SI</td>
+        <td style="background-color: #d6d6d6;">Prestataires du SI</td>
+        <td>{% for item in systems.supplier.supplier %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    </tbody>
+</table>

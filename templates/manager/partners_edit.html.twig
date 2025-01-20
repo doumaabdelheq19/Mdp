@@ -1,0 +1,112 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Modifier le partenaire
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container-fluid px-lg-5 m-b-30">
+            <div class="row">
+                <div class="col-12 text-white p-t-40 p-b-90">
+
+                    <h4 class=""> <span class="btn btn-white-translucent">
+                                <i class="mdi mdi-account "></i></span> Modifier le partenaire
+                    </h4>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid px-lg-5 pull-up">
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-body ">
+                    {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
+
+                    <div class="form-row justify-content-center mt-5 mb-5">
+                        <label class="avatar-input" style="overflow: visible">
+                            <span class="avatar avatar-xxl">
+                                {{ get_partner_avatar(partner)|raw }}
+                                <span class="avatar-input-icon rounded-circle">
+                                    <i class="mdi mdi-upload mdi-24px"></i>
+                                </span>
+                            </span>
+                            {{ form_widget(form.pictureFile, {'attr': {'class': 'avatar-file-picker'} }) }}
+                        </label>
+                        <div class="invalid-feedback">{{ form_errors(form.pictureFile) | striptags  }}</div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            {{ form_label(form.name) }}
+                            {{ form_widget(form.name, {'attr': {'class': 'form-control ' ~ ((form_errors(form.name) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.name) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            {{ form_label(form.description) }}
+                            {{ form_widget(form.description, {'attr': {'class': 'form-control ' ~ ((form_errors(form.description) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.description) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            {{ form_label(form.discount) }}
+                            {{ form_widget(form.discount, {'attr': {'class': 'form-control ' ~ ((form_errors(form.discount) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.discount) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Tables to dataTables
+        (function ($) {
+            function readFile(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        var avatarImg = $(input).parents('.avatar-input').find('.avatar-img');
+                        if (avatarImg && avatarImg.length > 0) {
+                            avatarImg.attr('src', e.target.result);
+                        } else {
+                            $(input).parents('.avatar-input').find('.avatar-title').remove();
+                            $(input).parents('.avatar-input').find('.avatar').prepend('<img src="'+e.target.result+'" class="avatar-img rounded-circle">');
+                        }
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+            $('.avatar-file-picker').on('change', function () {
+                readFile(this);
+            });
+        })(window.jQuery);
+    </script>
+{% endblock %}

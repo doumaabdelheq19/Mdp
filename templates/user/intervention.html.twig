@@ -1,0 +1,105 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'demande_de_devis_dintervention'|trans }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="page">
+    <!-- Header -->
+    <div class="table-container-traitements">
+        <div class="header headretour">
+            <a href="javascript:history.back()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024">
+                    <path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
+                </svg>
+            </a>
+            <h2>{{ 'demande_de_devis_dintervention'|trans }}</h2>
+        </div>
+
+        <!-- Form Start -->
+        {{ form_start(form, {"attr": {"class": "sous-traitantform", "enctype": "multipart/form-data"}}) }}
+
+        <!-- First Row -->
+        <div class="form-group">
+            <div class="form-group1">
+                <label style="display:flex">{{ form_label(form.lastName, 'Nom') }}*</label>
+                {{ form_widget(form.lastName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.lastName) == '') ? '' : 'is-invalid')} }) }}
+                <div class="invalid-feedback">{{ form_errors(form.lastName) | striptags }}</div>
+            </div>
+            <div class="form-group1">
+                <label style="display:flex">{{ form_label(form.firstName, 'Prénom') }}*</label>
+                {{ form_widget(form.firstName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.firstName) == '') ? '' : 'is-invalid')} }) }}
+                <div class="invalid-feedback">{{ form_errors(form.firstName) | striptags }}</div>
+            </div>
+        </div>
+
+        <!-- Second Row -->
+        <div class="form-group">
+            <div class="form-group1">
+              <label style="display:flex">  {{ form_label(form.email, 'Email') }}*</label>
+                {{ form_widget(form.email, {'attr': {'class': 'form-control ' ~ ((form_errors(form.email) == '') ? '' : 'is-invalid')} }) }}
+                <div class="invalid-feedback">{{ form_errors(form.email) | striptags }}</div>
+            </div>
+            <div class="form-group1">
+                <label style="display:flex">{{ form_label(form.phone, 'Téléphone') }}*</label>
+                {{ form_widget(form.phone, {'attr': {'class': 'form-control ' ~ ((form_errors(form.phone) == '') ? '' : 'is-invalid')} }) }}
+                <div class="invalid-feedback">{{ form_errors(form.phone) | striptags }}</div>
+            </div>
+        </div>
+
+        <!-- Third Row -->
+        <div class="form-group">
+            <div class="form-group1">
+                <label style="display:flex">{{ form_label(form.object, 'Objet') }}*</label>
+                {{ form_widget(form.object, {'attr': {'class': 'form-control ' ~ ((form_errors(form.object) == '') ? '' : 'is-invalid')} }) }}
+                <div class="invalid-feedback">{{ form_errors(form.object) | striptags }}</div>
+            </div>
+            <div class="form-group1">
+                {{ form_label(form.precision, 'Précision') }}
+                {{ form_widget(form.precision, {'attr': {'class': 'form-control ' ~ ((form_errors(form.precision) == '') ? '' : 'is-invalid')} }) }}
+                <div class="invalid-feedback">{{ form_errors(form.precision) | striptags }}</div>
+            </div>
+        </div>
+
+      
+
+        <!-- Submit Button -->
+        <div class="form-group">
+            <div class="form-group1">
+        <button type="submit" class="submit-button">
+            {{ 'envoyer_la_demande'|trans }}
+        </button>
+</div>
+</div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            flatpickr(".datepicker-js", {
+                dateFormat: "Y-m-d",
+                altInput: true,
+                altFormat: "d/m/Y",
+                locale: "fr",
+                allowInput: true,
+            });
+        });
+
+      
+    </script>
+{% endblock %}

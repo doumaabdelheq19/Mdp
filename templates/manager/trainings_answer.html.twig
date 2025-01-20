@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Répondre au questionnaire
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container-fluid px-lg-5 m-b-30">
+            <div class="row">
+                <div class="col-12 text-white p-t-40 p-b-90">
+
+                    <h4 class=""> <span class="btn btn-white-translucent">
+                                <i class="mdi mdi-account "></i></span> Répondre au questionnaire
+                    </h4>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid px-lg-5 pull-up">
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-body ">
+                    {{ form_start(form, {"attr": {"class": "needs-validation"}}) }}
+
+                    <div class="row my-3">
+                        <div class="col-12 mb-2">
+                            <h4>Questions</h4>
+                        </div>
+
+                        <div class="col-12" id="content_container_1">
+                            {% if training.questions is defined %}
+                                {% for key, item in training.questions %}
+                                    <h5>{{ item.title }}</h5>
+
+                                    {% if item.links %}
+                                        <p class="mb-0 text-muted"><i class="mdi mdi-help-circle"></i> Pour répondre à cette question</p>
+                                        <ul class="list-unstyled text-muted">
+                                            {% for link in item.links %}
+                                                <li><a href="{{ link }}" target="_blank" class="text-muted">{{ link }}</a></li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+
+                                    {% for chk in form["question_" ~ key] %}
+                                        <div class="custom-control {% if item.multiple %}custom-checkbox{% else %}custom-radio{% endif %}">
+                                            {{ form_widget(chk, {'attr': {'class': 'custom-control-input'} }) }}
+                                            {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label'}}) }}
+                                        </div>
+                                    {% endfor%}
+
+                                    {% if item.explanations %}
+                                        <p class="mb-0 text-primary mt-3">{{ item.explanations|nl2br|raw }}</p>
+                                    {% endif %}
+                                    <hr/>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

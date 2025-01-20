@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Journaux de connexion
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container">
+            <div class="row align-items-center p-b-100 p-t-60">
+
+                <div class="col-md-6 text-white p-b-30">
+                    <div class="media">
+                        <div class="avatar avatar mr-3">
+                            <div class="avatar-title rounded-circle mdi mdi-book-outline">
+
+                            </div>
+                        </div>
+                        <div class="media-body">
+                            <h1>Journaux de connexion</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid pull-up">
+        <div class="row justify-content-md-end">
+
+        </div>
+        <div class="row">
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive p-t-10">
+                            <table class="table" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>Date de connexion</th>
+                                    <th>Dernière action</th>
+                                    <th>IP</th>
+                                    <th>Compte</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for loginLog in loginLogs %}
+                                    <tr>
+                                        <td>{{ loginLog.date|date('d/m/Y H:i') }}</td>
+                                        <td>{{ loginLog.endDate|date('d/m/Y H:i') }}</td>
+                                        <td>{{ loginLog.ip }}</td>
+                                        <td>
+                                            {% if loginLog.account %}
+                                                {{ loginLog.account.email }}
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                $('#datatable').DataTable({
+                    "language": {
+                        "search": "Rechercher :",
+                        "lengthMenu": "Afficher _MENU_ résultats par page",
+                        "zeroRecords": "Aucun résultat",
+                        "info": "Page _PAGE_ sur _PAGES_",
+                        "infoEmpty": "Aucune données sur ce tableau",
+                        "infoFiltered": "(filtered from _MAX_ total records)",
+                        "paginate": {
+                            "previous": "Précédent",
+                            "next": "Suivant",
+
+                        }
+                    }
+                });
+
+            });
+
+        })(window.jQuery);
+    </script>
+{% endblock %}

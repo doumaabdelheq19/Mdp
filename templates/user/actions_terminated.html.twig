@@ -1,0 +1,225 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'plan_dactions'|trans }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container-fluid">
+            <div class="row align-items-center p-b-100 p-t-30">
+                <div class="col-md-6 text-white p-b-30">
+                    {{ include('user/includes/identity.html.twig') }}
+                </div>
+                <div class="col-md-6 text-white p-b-30">
+                    <div class="media">
+                        <div class="avatar avatar mr-3">
+                            <div class="avatar-title rounded-circle mdi mdi-map-legend">
+
+                            </div>
+                        </div>
+                        <div class="media-body">
+                            <h1>{{ 'plan_dactions'|trans }}</h1>
+                            <p class="mb-1 opacity-75">
+                                {{ 'lensemble_de_vos_actions'|trans }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row col-12 align-items-start">
+                    <div class="col-sm-6 col-12 mb-3">
+                        <p class="text-white">{{ 'nombre_de_dactions'|trans }} : {{ actionsStats.total }}</p>
+                        <div {% if filter and filter != "notterminated" %}style="opacity: 0.3"{% endif %}>
+                            <a href="{{ path('user_actions') }}">
+                                <p class="text-white mb-0">{{ 'non_ralises'|trans }} ({{ actionsStats.invalid }})</p>
+                                <div class="progress mb-3">
+                                    <div class="progress-bar progress-bar-danger bg-danger" role="progressbar" style="width:{% if actionsStats.total > 0 %}{{ (actionsStats.invalid/actionsStats.total)*100 }}{% else %}0{% endif %}%"></div>
+                                    <div class="progress-bar progress-bar-danger bg-primary" role="progressbar" style="width:{% if actionsStats.total > 0 %}{{ (100 - (actionsStats.invalid/actionsStats.total)*100) }}{% else %}100{% endif %}%"></div>
+                                </div>
+                            </a>
+                        </div>
+                        <div {% if filter and filter != "terminated" %}style="opacity: 0.3"{% endif %}>
+                            <a href="{{ path('user_actions_terminated') }}">
+                                <p class="text-white mb-0">{{ 'ralises'|trans }} ({{ actionsStats.valid }})</p>
+                                <div class="progress mb-3">
+                                    <div class="progress-bar progress-bar-success bg-success" role="progressbar" style="width:{% if actionsStats.total > 0 %}{{ (actionsStats.valid/actionsStats.total)*100 }}{% else %}0{% endif %}%"></div>
+                                    <div class="progress-bar progress-bar-success bg-primary" role="progressbar" style="width:{% if actionsStats.total > 0 %}{{ (100 - (actionsStats.valid/actionsStats.total)*100) }}{% else %}100{% endif %}%"></div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid pull-up">
+        <div class="row justify-content-md-end">
+
+        </div>
+        <div class="row">
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        {% if filter %}
+                            <h5>{{ 'filtre_appliqu'|trans }} :
+                                {% if filter == "terminated" %}
+                                    {{ 'ralises'|trans }}
+                                {% elseif filter == "notterminated" %}
+                                    {{ 'non_ralises'|trans }}
+                                {% endif %}
+                            </h5>
+                            <a href="{{ path('user_actions') }}" class="btn btn-danger"><span class="mr-2"><i class="mdi mdi-backup-restore"></i></span>Supprimer le filtre</a>
+                        {% endif %}
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-end">
+                            <a href="{{ path('user_actions_add') }}" class="btn btn-primary mb-2 mx-2">{{ 'crer_une_action'|trans }}</a>
+                            {% if app.user.user.mainGroupAgency %}<a href="{{ path('user_actions_grp_add') }}" class="btn btn-primary mb-2 mx-2">Créer une action de groupe</a>{% endif %}
+                        </div>
+                        <div class="table-responsive p-t-10">
+                            <table class="table" style="width:100%">
+                                <thead>
+                                <tr>
+                                    <th>{{ 'action'|trans }}</th>
+                                    <th>{{ 'a_raliser_par'|trans }}</th>
+                                    <th>{{ 'responsable'|trans }}</th>
+                                    <th>{{ 'date_de_cration'|trans }}</th>
+                                    <th>{{ 'date_de_mise_en_place_souhaite'|trans }}</th>
+                                    <th>{{ 'priorite'|trans }}</th>
+                                    <th>{{ 'realise'|trans }}</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for action in actions %}
+                                    <tr>
+                                        <td><a href="{{ path('user_actions_edit', {'id': action.id}) }}">{{ action.name }}</a>
+                                            {% if action.byGroup %}
+                                                <span class="badge badge-danger">groupe</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if action.forDpo %}
+                                                {{ 'mydigitplace'|trans }}
+                                            {% else %}
+                                                {{ 'client'|trans }}
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ action.accountantLastName }} {{ action.accountantFirstName }}</td>
+                                        <td>{{ action.date|date('d/m/Y') }}</td>
+                                        <td>{{ action.setUpDate|date('d/m/Y') }}</td>
+                                        <td>
+                                            {% if action.priority == 1 %}
+                                                <span class="badge badge-danger">{{ 'urgente'|trans }}</span>
+                                            {% elseif action.priority == 2 %}
+                                                <span class="badge badge-warning">{{ 'moderee'|trans }}</span>
+                                            {% else %}
+                                                <span class="badge badge-success">{{ 'faible'|trans }}</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <span class="d-none" id="action_r_label_{{ action.id }}">{% if action.terminated %}{{ 'oui'|trans }}{% else %}{{ 'non'|trans }}{% endif %}</span>
+                                            <div class=" m-b-10">
+                                                <label class="cstm-switch cstm-switch-bool">
+                                                    <input type="checkbox" name="option" value="1" class="cstm-switch-input" id="action_r_input_{{ action.id }}" {% if action.terminated %}checked="checked"{% endif %} onchange="toggleRSwitch(this, {{ action.id }});">
+                                                    <span class="cstm-switch-indicator"></span>
+                                                    <span class="cstm-switch-description"></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="min-width: 240px;">
+                                                <a href="{{ path('user_actions_copy', {'id': action.id}) }}" class="btn btn-md ml-1 mr-1 btn-primary" data-toggle="tooltip" data-placement="top" data-original-title="Dupliquer">
+                                                    <i class="mdi mdi-content-copy"></i>
+                                                </a>
+                                                <a href="{{ path('user_actions_print', {'id': action.id}) }}" target="_blank" class="btn btn-md ml-1 mr-1 btn-info" data-toggle="tooltip" data-placement="top" data-original-title="Imprimer">
+                                                    <i class="mdi mdi-printer"></i>
+                                                </a>
+                                                {% if (not action.byGroup) or (action.byGroup and action.user.id == action.groupUser.id) %}
+                                                    <a href="{{ path('user_actions_delete', {'id': action.id}) }}" class="btn btn-md ml-1 mr-1 btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Supprimer" onclick="return confirm('Confirmer la suppression de cette action ?');">
+                                                        <i class="mdi mdi-close"></i>
+                                                    </a>
+                                                {% endif %}
+                                                {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                                                    <br/>
+                                                    <a href="{{ path('user_actions_standardize', {'id': action.id}) }}" class="btn btn-outline-secondary mt-2">Générer un standard</a>
+                                                {% endif %}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                {% if app.request.locale == "fr" %}
+                    $('#datatable').DataTable({
+                        "language": {
+                            "search": "Rechercher :",
+                            "lengthMenu": "Afficher _MENU_ résultats par page",
+                            "zeroRecords": "Aucun résultat",
+                            "info": "Page _PAGE_ sur _PAGES_",
+                            "infoEmpty": "Aucune données sur ce tableau",
+                            "infoFiltered": "(filtered from _MAX_ total records)",
+                            "paginate": {
+                                "previous": "Précédent",
+                                "next": "Suivant",
+
+                            }
+                        }
+                    });
+                {% else %}
+                    $('#datatable').DataTable({});
+                {% endif %}
+
+            });
+
+        })(window.jQuery);
+
+        function toggleRSwitch(element, id) {
+            element.disabled = true;
+
+            const initialState = !element.checked;
+
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: "{{ path('user_json_toggle_action') }}",
+                data: {id: id},
+                success: function (content) {
+                    console.log(content);
+                    if (content.success) {
+                        element.checked = content.state;
+                    } else {
+                        element.checked = initialState;
+                    }
+                    if(element.checked === false) {
+                        $("#action_r_label_"+id).text("Non");
+                    }
+                    else {
+                        $("#action_r_label_"+id).text("Oui");
+                    }
+                    element.disabled = false;
+                }
+            });
+        }
+    </script>
+{% endblock %}

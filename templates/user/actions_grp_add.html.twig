@@ -1,0 +1,375 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'crer_une_action'|trans }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container-fluid px-lg-5 m-b-30">
+            <div class="row">
+                <div class="col-12 text-white p-t-40 p-b-90">
+
+                    <h4 class=""> <span class="btn btn-white-translucent">
+                                <i class="mdi mdi-map-legend"></i></span> {{ 'crer_une_action'|trans }}
+                    </h4>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid px-lg-5 pull-up">
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-body ">
+                    <div class="my-2">
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="form_action_std">{{ 'rechercher_une_action_standard'|trans }}</label>
+                                <select id="form_action_std" name="form_action_std" class="form-control js-select2" onchange="selectStd(this)">
+                                    <option id="foo" selected="selected" disabled="disabled">{{ 'rechercher_une_action'|trans }}</option>
+                                    {% for actionStd in actionsStd %}
+                                        <option value="{{ actionStd.id }}">{{ actionStd.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
+
+                    <h5>{{ 'action'|trans }}</h5>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.name) }}
+                            {{ form_widget(form.name, {'attr': {'class': 'form-control ' ~ ((form_errors(form.name) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.name) | striptags  }}</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.budget) }}
+                            {{ form_widget(form.budget, {'attr': {'class': 'form-control ' ~ ((form_errors(form.budget) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.budget) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <h5 class="mt-2">{{ 'informations'|trans }}</h5>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            {{ form_label(form.goal) }}
+                            {{ form_widget(form.goal, {'attr': {'class': 'form-control ' ~ ((form_errors(form.goal) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.goal) | striptags  }}</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            {{ form_label(form.information) }}
+                            {{ form_widget(form.information, {'attr': {'class': 'form-control ' ~ ((form_errors(form.information) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.information) | striptags  }}</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            {{ form_label(form.usefulLink) }}
+                            {{ form_widget(form.usefulLink, {'attr': {'class': 'form-control ' ~ ((form_errors(form.usefulLink) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.usefulLink) | striptags  }}</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            {{ form_label(form.setUpDate) }}
+                            {{ form_widget(form.setUpDate, {'attr': {'class': 'form-control datepicker-js ' ~ ((form_errors(form.setUpDate) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.setUpDate) | striptags  }}</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <p>{{ 'action_ralise'|trans }}</p>
+                            {% for chk in form.terminated %}
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    {{ form_widget(chk, {'attr': {'class': 'custom-control-input'} }) }}
+                                    {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label'}}) }}
+                                </div>
+                            {% endfor %}
+                            <div class="invalid-feedback">{{ form_errors(form.terminated) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            <p>{{ 'priorite'|trans }}</p>
+                            {% for chk in form.priority %}
+                                <div class="custom-control custom-radio custom-control-inline">
+                                    {{ form_widget(chk, {'attr': {'class': 'custom-control-input'} }) }}
+                                    {% if loop.index == 1 %}
+                                        {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label text-danger'}}) }}
+                                    {% elseif loop.index == 2 %}
+                                        {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label text-warning'}}) }}
+                                    {% else %}
+                                        {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label text-success'}}) }}
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                            <div class="invalid-feedback">{{ form_errors(form.priority) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <h5 class="mt-2">{{ 'traitements_lis'|trans }}</h5>
+                    <a href="{{ path('user_treatments_add') }}" target="_blank" class="btn btn-secondary mb-2">{{ 'plus_crer_un_traitement'|trans }}</a>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            {{ form_label(form.treatments) }}
+                            {{ form_widget(form.treatments, {'attr': {'class': 'form-control ' ~ ((form_errors(form.treatments) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.treatments) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <h5 class="mt-2">{{ 'annexer_des_fiches_pratiques'|trans }}</h5>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            {{ form_label(form.sheets) }}
+                            {{ form_widget(form.sheets, {'attr': {'class': 'form-control js-select2 ' ~ ((form_errors(form.sheets) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.sheets) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row mb-5 mt-3">
+                        <div class="col-12 mb-2">
+                            <button type="button" class="btn btn-success mb-2" id="add_document_button"><i class="mdi mdi-file-plus"></i> {{ 'joindre_un_document'|trans }}</button>
+                        </div>
+                        {% if fromStd %}
+                            <div id="block_old_documents" class="row col-12">
+                                {% for document in actionStd.documents %}
+                                    <div class="form-group col-md-12 d-flex block_document"><div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" checked="checked" class="custom-control-input" id="appbundle_action_documents_{{ document.id }}" name="appbundle_action_documents_{{ document.id }}" value="1" /><label class="custom-control-label" for="appbundle_action_documents_{{ document.id }}">{{ document.name }}</label></div><a href="/uploads/documents/{{ document.filename }}" class="btn btn-info ml-2" target="_blank"><i class="mdi mdi-eye"></i></a></div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div id="block_documents" class="row col-12">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.estimationTime) }}
+                            {{ form_widget(form.estimationTime, {'attr': {'class': 'form-control ' ~ ((form_errors(form.estimationTime) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.estimationTime) | striptags  }}</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.realTime) }}
+                            {{ form_widget(form.realTime, {'attr': {'class': 'form-control ' ~ ((form_errors(form.realTime) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.realTime) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex my-3">
+                        <button type="button" onclick="openUsersModal();" class="btn btn-primary mb-2">Sélectionner les entités concernées</button>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div id="users-selected">{{ usersStr|join(', ') }}</div>
+                            <div class="invalid-feedback">{{ form_errors(form.users) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="ModalUsers" tabindex="-1" role="dialog"
+                         aria-labelledby="ModalUsers" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalCenterTitle">Entités</h5>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Fermer">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <span onclick="selectAllUsers();" style="cursor: pointer;">Tout sélectionner</span> / <span onclick="unselectAllUsers();" style="cursor: pointer;">Tout désélectionner</span>
+                                    </div>
+                                    <div id="ModalUsersContent">
+                                        {% for chk in form.users %}
+                                            <div class="custom-control custom-checkbox">
+                                                {{ form_widget(chk, {'attr': {'class': 'custom-control-input checkbox-user'} }) }}
+                                                {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label'}}) }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                                        Fermer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">{{ 'enregistrer'|trans }}</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var inputTreatmentsSelector;
+        var users = {{ users|json_encode|raw }};
+        var usersStr = {{ usersStr|json_encode|raw }};
+        var usersStrAssoc = {{ usersStrAssoc|json_encode|raw }};
+        // Tables to dataTables
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                $(".datepicker-js").datepicker({
+                    language: 'fr',
+                    format: 'yyyy-mm-dd'
+                });
+
+                inputTreatmentsSelector = $('#appbundle_action_treatments');
+                inputTreatmentsSelector.select2({
+                    language: {
+                        searching: function() {
+                            return null;
+                        }
+                    },
+                    dropdownAutoWidth: true,
+                    width: '100%',
+                    height: 'auto',
+                    placeholder: "Rechercher un traitement",
+                    ajax: {
+                        url: '{{ path('user_json_treatments_grp') }}',
+                        type: 'POST',
+                        data: function (params) {
+                            return {
+                                name: params.term,
+                            };
+                        },
+                        processResults: function (data) {
+                            if (data) {
+                                return {
+                                    results: data
+                                };
+                            }
+                            return {
+                                results: []
+                            };
+                        }
+                    }
+                });
+
+                document.getElementById("add_document_button").addEventListener("click", function () {
+                    var div = document.createElement("div");
+                    div.className = "form-group col-md-12 d-flex block_document";
+
+                    var nameInput = document.createElement("input");
+                    nameInput.className = "form-control";
+                    nameInput.setAttribute("type", "text");
+                    nameInput.setAttribute("placeholder", "Titre");
+                    nameInput.setAttribute("name", "appbundle_action_documents_names[]");
+
+                    var fileInput = document.createElement("input");
+                    fileInput.className = "form-control ml-2";
+                    fileInput.setAttribute("type", "file");
+                    fileInput.setAttribute("name", "appbundle_action_documents[]");
+
+                    var fileInputRemoveButton = document.createElement("button");
+                    fileInputRemoveButton.className = "btn btn-danger ml-2 remove_document_button";
+                    fileInputRemoveButton.setAttribute("type", "button");
+                    fileInputRemoveButton.setAttribute("onclick", "removeDocument(this)");
+
+                    var fileInputRemoveButtonI = document.createElement("i");
+                    fileInputRemoveButtonI.className = "mdi mdi-file-remove";
+
+                    fileInputRemoveButton.appendChild(fileInputRemoveButtonI);
+
+                    div.appendChild(nameInput);
+                    div.appendChild(fileInput);
+                    div.appendChild(fileInputRemoveButton);
+
+                    var element = document.getElementById("block_documents");
+                    element.appendChild(div);
+                });
+
+                const usersCheckboxes = document.getElementsByClassName("checkbox-user");
+                for (var i = 0; i < usersCheckboxes.length; i++) {
+                    usersCheckboxes.item(i).addEventListener('change', function() {
+                        if (this.checked) {
+                            if (!users.includes(parseInt(this.value))) {
+                                users.push(parseInt(this.value));
+                            }
+                        } else {
+                            const index = users.indexOf(parseInt(this.value));
+                            if (index > -1) {
+                                users.splice(index, 1);
+                            }
+                        }
+                        refreshUsersContent();
+                    });
+                }
+            });
+        })(window.jQuery);
+
+        function removeDocument(element) {
+            element.parentNode.remove();
+        }
+
+        function selectStd(e) {
+            saved = true;
+            window.location.href = "{{ path('user_actions_grp_add') }}?std=" + e.value;
+        }
+
+        function openUsersModal() {
+            $('#ModalUsers').modal('show');
+        }
+
+        function selectAllUsers() {
+            $('.checkbox-user').prop('checked',true);
+            $('.checkbox-user').each(function () {
+                if (!users.includes(parseInt($(this).val()))) {
+                    users.push(parseInt($(this).val()));
+                }
+            })
+            refreshUsersContent();
+        }
+
+        function unselectAllUsers() {
+            $('.checkbox-user').prop('checked', false);
+            $('.checkbox-user').each(function () {
+                const index = users.indexOf(parseInt($(this).val()));
+                if (index > -1) {
+                    users.splice(index, 1);
+                }
+            })
+            refreshUsersContent();
+        }
+
+        function refreshUsersContent() {
+            usersStr = [];
+            users.map(function (subcontractor) {
+                usersStr.push(usersStrAssoc[subcontractor]);
+            })
+            usersStr.sort();
+            document.getElementById("users-selected").innerText = usersStr.join(", ");
+        }
+
+    </script>
+{% endblock %}

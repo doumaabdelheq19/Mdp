@@ -1,0 +1,109 @@
+<h4 style="text-align: center">Fiche société</h4>
+<h5 style="text-align: center">Le {{ "now"|date('d/m/Y') }}</h5>
+<table style="width:100%;font-size: 9px;" border="1" cellpadding="6">
+    <thead>
+    <tr style="background-color: #1b2955; color: white; text-align: center; font-weight: bold">
+        <th colspan="2">Société</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Raison sociale</td>
+        <td>{{ user.companyName }}</td>
+    </tr>
+    <tr>
+        <td>Siret</td>
+        <td>{{ user.siret }}</td>
+    </tr>
+    <tr>
+        <td>Adresse</td>
+        <td>{{ user.address }}</td>
+    </tr>
+    <tr>
+        <td>Complément d'adresse</td>
+        <td>{{ user.address2 }}</td>
+    </tr>
+    <tr>
+        <td>Code postal</td>
+        <td>{{ user.zipCode }}</td>
+    </tr>
+    <tr>
+        <td>Ville</td>
+        <td>{{ user.city }}</td>
+    </tr>
+    <tr>
+        <td>Téléphone</td>
+        <td>{{ user.companyPhone }}</td>
+    </tr>
+    </tbody>
+</table>
+<div></div>
+<table style="width:100%;font-size: 9px;" border="1" cellpadding="6">
+    <thead>
+    <tr style="background-color: #1b2955; color: white; text-align: center; font-weight: bold">
+        <th colspan="2">Responsable de traitement</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>Nom</td>
+        <td>{{ user.accountantLastName }}</td>
+    </tr>
+    <tr>
+        <td>Prénom</td>
+        <td>{{ user.accountantFirstName }}</td>
+    </tr>
+    <tr>
+        <td>Adresse mail</td>
+        <td>{{ user.accountantEmail }}</td>
+    </tr>
+    <tr>
+        <td>Téléphone</td>
+        <td>{{ user.accountantPhone }}</td>
+    </tr>
+    <tr>
+        <td>Fonction</td>
+        <td>{{ user.accountantJob }}</td>
+    </tr>
+    </tbody>
+</table>
+{% if user.managerDpo %}
+    <div></div>
+    <table style="width:100%;font-size: 9px;" border="1" cellpadding="6">
+        <thead>
+        <tr style="background-color: #1b2955; color: white; text-align: center; font-weight: bold">
+            <th colspan="2">DPO</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Société</td>
+            <td>{{ user.manager.companyName }}</td>
+        </tr>
+        <tr>
+            <td>Prénom</td>
+            <td>{{ user.manager.firstName }}</td>
+        </tr>
+        <tr>
+            <td>Nom</td>
+            <td>{{ user.manager.lastName }}</td>
+        </tr>
+        <tr>
+            <td>Adresse</td>
+            <td>{{ user.manager.address }}</td>
+        </tr>
+        <tr>
+            <td>Complément d'adresse</td>
+            <td>{{ user.manager.address2 }}</td>
+        </tr>
+        <tr>
+            <td>Code postal</td>
+            <td>{{ user.manager.zipCode }}</td>
+        </tr>
+        <tr>
+            <td>Ville</td>
+            <td>{{ user.manager.city }}</td>
+        </tr>
+        </tbody>
+    </table>
+{% endif %}

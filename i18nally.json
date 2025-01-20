@@ -1,0 +1,47 @@
+{
+  "version" : "1.0",
+  "profiles" : [ {
+    "id" : "f3848f09-929d-4953-b7ea-a90612ddc130",
+    "name" : "MyDigitPlace",
+    "keyNamingPattern" : "SNAKE_CASE_PATTERN",
+    "sink" : {
+      "id" : "1434fcdb-317e-457b-90f0-ce49f6244ca5",
+      "type" : "symfony",
+      "translationsDirectory" : "$PROJECT_DIR$/translations",
+      "fileType" : "yaml",
+      "defaultLocale" : "fr",
+      "namespaces" : [ "messages" ],
+      "outputFilenameTemplate" : "%namespace%.%locale%.yaml",
+      "nestingType" : "DISABLED",
+      "placeholderFormatterName" : "SYMFONY_REPLACEMENT"
+    },
+    "sources" : [ {
+      "id" : "7f8514f4-e5a7-4568-8f81-c9c3292f17d8",
+      "type" : "twig",
+      "scopeName" : "user template",
+      "scopePattern" : "file[MyDigitPlace]:src/AppBundle/Resources/views/user//*||file[MyDigitPlace]:src/AppBundle/Resources/views/includes//*",
+      "filterName" : "trans",
+      "argumentsTemplate" : "%map%",
+      "inlineTagNames" : [ "small", "tt", "big", "sub", "img", "strong", "code", "data", "samp", "wbr", "del", "slot", "sup", "br", "output", "abbr", "a", "b", "acronym", "bdi", "meter", "var", "em", "i", "label", "bdo", "kbd", "dfn", "ins", "ruby", "input", "q", "s", "u", "cite", "progress", "time", "mark", "span" ],
+      "translatableAttributeNames" : [ "alt", "placeholder", "label", "title", "aria-label" ],
+      "skipDefaultNamespace" : false
+    }, {
+      "id" : "2d3be55a-290e-4638-b33e-2387becbc4e3",
+      "type" : "php",
+      "scopeName" : "user controller",
+      "scopePattern" : "",
+      "functionName" : "$translator->trans",
+      "argumentsTemplate" : "'%key%', %map%, '%namespace%'",
+      "skipDefaultNamespace" : false,
+      "sprintfMode" : false
+    } ]
+  } ],
+  "ignores" : {
+    "valuesInProject" : [ "Le {{ \"now\"|date('d/m/Y') }}", "Modifier mon compte", "Bonjour {{ app.user.manager.firstName }} et bienvenue sur MyDigitplace Data Solution", "Lorsqu'un traitement doit être effectué pour le compte d'un responsable du traitement, celui-ci fait uniquement appel à des sous-traitants qui présentent des garanties suffisantes quant à la mise en œuvre de mesures techniques et organisationnelles appropriées de manière à ce que le traitement réponde aux exigences du présent règlement et garantisse la protection des droits de la personne concernée.\n                        Le sous-traitant ne recrute pas un autre sous- traitant sans l'autorisation écrite préalable, spécifique ou générale, du responsable du traitement. Dans le cas d'une autorisation écrite générale, le sous-traitant informe le responsable du traitement de tout changement prévu concernant l'ajout ou le remplacement d'autres sous-traitants, donnant ainsi au responsable du traitement la possibilité d'émettre des objections à l'encontre de ces changements.\n                        Le traitement par un sous-traitant est régi par un contrat ou un autre acte juridique au titre du droit de l'Union ou du droit d'un État membre, qui lie le sous-traitant à l'égard du responsable du traitement, définit l'objet et la durée du traitement, la nature et la finalité du traitement, le type de données à caractère personnel et les catégories de personnes concernées, et les obligations et les droits du responsable du traitement. Ce contrat ou cet autre acte juridique prévoit, notamment, que le sous-traitant:...etc. <a href=\"https://www.cnil.fr/fr/reglement-europeen- protection-donnees/chapitre4\" target=\"_blank\">https://www.cnil.fr/fr/reglement-europeen- protection-donnees/chapitre4</a>", "Déconnexion" ],
+    "valuesInFile" : { },
+    "filesInProject" : [ ],
+    "unignoredFunctionNames" : [ ],
+    "unignoredFunctionArguments" : { },
+    "ignoredArrayKeys" : [ ]
+  }
+}

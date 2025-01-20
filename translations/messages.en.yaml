@@ -1,0 +1,425 @@
+tableau_de_bord: 'Dashboard'
+registre_des_traitements_menu: 'Records of<br/>processing activities'
+mes_traitements: 'My processing activities'
+crer_un_traitement: 'Add a new processing'
+traitements_du_groupe: 'Group processing activities'
+mon_profil: 'My profile'
+comptes_rattachs: 'Linked accounts'
+imprimer_mon_plan_dactions: 'Print my action plan'
+mes_demandes_dexercices_des_droits: 'Requests'
+gestion_des_droits: 'Manage rights requests'
+imprimer_la_cartographie: 'Print my information system cartography'
+imprimer_la_cartographie_groupe: 'Print my group information system cartography'
+mon_systme_dinformation: 'My information system'
+cartographie_du_systme_dinformation: 'Information system<br/>cartography'
+imprimer_mon_registre: 'Print my record'
+mes_incidents: 'My incidents'
+registre_des_incidents_menu: 'Records<br/>of incidents'
+ajouter_un_soustraitant_groupe: 'Add a group data processor'
+mes_soustraitants_groupe: 'My group data processors'
+registre_des_soustraitants_menu: 'Records of<br/>data processing'
+editer_un_soustraitant: 'Edit a data processor'
+soustraitants_groupe: 'Group data processors'
+lensemble_de_vos_soustraitants_groupe: 'All your group data processors'
+societe: Company
+relai_principal: 'RGPD contact person'
+responsable_de_traitement: 'Data controller'
+imprimer: Print
+mon: My
+dpo: DPO
+consultant: consultant
+modifier_mon_mot_de_passe: 'Edit my password'
+12_caractres_de_types_diffrents_majuscules_minuscu: '<br/> 12 different types of character (capital letters, lowercase, numbers, special characters) wich have no links with you (name, date of birth…) and wich are not in the dictionnary.'
+rgle_de_mot_de_passe: 'Password rule :'
+cration_dutilisateurs: 'Create users'
+vous_avez_atteint_la_limite_maximum_de_cration_dut: 'You have reached the maximum limit of users creation'
+vous_pouvez_crer_jusqu_3_utilisateurs: 'You can create up to 3 users'
+action: Action
+responsable_de_laction: 'Responsible for the action'
+nom: Last name
+prnom: First name
+email: Email
+tlphone: Phone
+informations: Information
+budget: Budget
+objectif: Objective
+informations_complmentaires: 'Additional information'
+lien_utile: 'Usefull link'
+date_de_mise_en_place_souhaite: 'Desired date for implementation'
+action_ralise: 'Action performed'
+oui: Yes
+non: No
+traitements_lis: 'Linked processing activities'
+plan_dactions: 'Action plans'
+editeur: Editor
+date_de_cration: 'Date of creation'
+budget_prvisionnel: 'Estimated budget'
+votre_dlgu: 'Your Officer'
+mon_compte: 'My account'
+utilisateur: User
+realise: Performed
+accueil: Home
+outil_daide_la_mise_en_conformit_au: 'Compliance assistance tool to'
+crdit_temps_expert_heures: 'Expert time credits (hours) : %credit%'
+client: Client
+responsable: Manager
+a_raliser_par: 'To be achieved by'
+crer_une_action: 'Add a new action'
+ralises: 'Achieved'
+non_ralises: 'Not achieved'
+nombre_de_dactions: 'Actions numbers'
+lensemble_de_vos_actions: 'All your actions'
+annexer_des_fiches_pratiques: 'Attach best practice sheets'
+plus_crer_un_traitement: '+ Create a processing activity'
+rechercher_une_action: 'Search for an action'
+rechercher_une_action_standard: 'Search for a standard action'
+joindre_un_document: 'Attach a file'
+enregistrer: Save
+mydigitplace: myDigitplace
+modifier_une_action: 'Edit an action'
+titre: Title
+tlverser_un_document: 'Upload a file'
+ressources_documentaires: 'Documents library'
+mes_actions: 'My actions'
+mes_soustraitants: 'My data processors'
+documentation_rgpd: 'GDPR documentation'
+mes_pia: 'My PIA'
+registre_complet: 'Full register'
+mon_registre: 'My register'
+ma_conformit: 'My compliance'
+base_documentaire: 'Information resources'
+tlverser: Upload
+fermer: Close
+demandes_dexercices_des_droits: 'Right exercises requests'
+dpass: exceeded
+en_cours: 'In progress'
+valid: validated
+opposition: Object
+portabilit: Portability
+limitation: Restriction
+effacement: Erasure
+rectification: Rectification
+accs: Access
+date_de_la_rponse: 'Date of anwser'
+dlai_de_30_jours: '30 days delays'
+personne_concerne: 'Concerned person'
+droit: Right
+date_de_la_demande: 'Date of request'
+crer_une_demande: 'Create a request'
+rponse: Answer
+demande: Request
+ajouter_une_demande: 'Add a request'
+modifier_une_demande: 'Modify a request'
+date: Date
+mesures_prises: 'Technical measures taken'
+consquences: Consequences
+type_de_fichier: 'File type'
+nbre_de_personnes: 'Numbers of persons'
+nature: Nature
+dlai_de_72h: '72 hours delay'
+cnil_informe: 'CNIL informed'
+registre_des_incidents: 'Incident register'
+dclarer_un_incident: 'Declare an incident'
+lensemble_de_vos_incidents: 'All your incidents'
+editer_un_incident: 'Edit an incident'
+anssi: ANSSI
+conseils_outils: 'Tips and tools'
+site_officiel_cybermalveillancegouv: 'CYBERMALVEILLANCE.GOUV official site'
+piratage_sensibilisation: 'Hacking & awareness'
+site_officiel_de_la_cnil: 'CNIL official site'
+plainte_information: 'Complaint & Information'
+sites_institutionnels: 'Institutional websites'
+infos_mydigitplace: 'myDigitplace informations'
+aucun_questionnaire_de_sensibilisation_envoy_cliqu: 'no awareness questionnaire sent. Clic here to send your first questionnaire'
+note_moyenne: 'Average note'
+note_moyenne_questionnaires: 'Average note (questionnaires)'
+rponses_au_questionnaire: 'Answers to questionnaire'
+questionnaires_envoys: 'Questionnaires sent'
+personnes_sensibilises: 'Informed individuals'
+niveau_de_sensibilisation_des_quipes: 'Teams awareness rate'
+demandes_dexercices_de_droits_traiter: 'Rights exercising requests to be processed'
+incidents_traiter: 'Incidents to be processed'
+date_de_mise_en_place: 'Start date'
+actions_raliser_sous_30_jours: 'Actions to be taken within 30 days'
+aucune_action_identifie_cliquezici_pour_crer_votre: 'No action identified. Clic here to start your first action'
+actions: Actions
+aucun_soustraitant_identifi_cliquezici_pour_crer_v: 'No data processors identified. Clic here to create your first data processor'
+aucun_traitement_identifi_cliquezici_pour_crer_vot: 'No data processing identified. Cliquez-ici pour créer votre premier traitement'
+vous_navez_pas_rdig_de_pia_analyse_dimpact: 'No PIA(privacy impact assesment) performed'
+pia: PIA
+traitements: Data processing
+demande_de_devis_dintervention: 'Quote request'
+envoyer_la_demande: 'Send the request'
+mentions_lgales: 'Legal notice'
+doc: Doc
+conformit: compliance
+mail: Mail
+tl: Tel
+contact: Contact
+typologie: Typology
+registre_des_soustraitants: 'Data processor''s register'
+article_28_soustraitant: 'Article 28 - Data processor'
+ajouter_un_soustraitant: 'Add an entry'
+conformes: 'Compliant'
+conformes_with_progress: 'Compliant (%valid%)'
+en_cours_with_progress: 'In progress (%inProgress%)'
+non_conformes: 'Non compliant'
+non_conformes_with_progress: 'Non compliant (%invalid%)'
+nombre_total_de_soustraitants: 'Total number of data processors : %total%'
+lensemble_de_vos_soustraitants: 'All of your data processors'
+conformit_maj: Compliance
+rechercher_un_soustraitant: 'Search for a data processor'
+rechercher_un_soustraitant_standard: 'Search for a standard data processor'
+fichiers: Fichiers
+est_soustraitant_groupe: 'Common ?'
+mon_dlgu_la_protection_des_donnes: 'My Data Protection Officer'
+nos_partenaires_maj: 'THE GALAXY'
+politique_de_confidentialit: 'Privacy policy'
+demander_un_devis: 'Ask for a quote'
+contacter_mon_dpo: 'Contact my DPO'
+contacter_mon_agence: 'Contact my agency'
+mydigitplace_maj: MDP
+dconnexion: Logout
+modifier_mon_compte: 'Edit my account'
+mon_compte_maj: 'MY ACCOUNT'
+admin: ADMIN
+bonjour_et_bienvenue_sur_mydigitplace_data_solutio: 'Hello %contactFirstName%, welcome to Pilot !'
+contactez_votre_dlgu: 'Contact your DPO %firstName% %lastName%'
+par_mail: 'By email'
+par_tlphone: 'By phone'
+mon_agence: 'My agency'
+non_maj: NO
+oui_maj: YES
+statut: Status
+cration: Creation
+dlgu: Officer
+adresse: Address
+se_connecter: 'Sign in'
+visualiser_un_traitement: 'View a data processing'
+le_traitement: 'the data process'
+nrf: N°/REF
+date_de_cration_du_traitement: 'Data processing creation date'
+mise_jour_du_traitement: 'Data processing update'
+finalit_principale: 'Main purpose'
+sousfinalit_1: 'Underlying purpose n°1'
+sousfinalit_2: 'Underlying purpose n°2'
+sousfinalit_3: 'Underlying purpose n°3'
+sousfinalit_4: 'Underlying purpose n°4'
+sousfinalit_5: 'Underlying purpose n°5'
+autres_finalits: 'Other purposes'
+description_du_traitement: 'Describe processing'
+responsable_du_service_concern: 'Department manager'
+rdacteur_de_la_fiche: 'Sheet writer'
+catgories_de_donnes_personnelles_concernes: 'Personnal data processing categories concerned'
+dure_de_conservation: 'Storage period'
+source_des_donnes: 'Data source'
+catgories_des_personnes_concernes: 'Concerned category persons'
+sous_traitants: 'Data processors'
+mesures_techniques: 'Technical measures'
+transfert_hors_ue: 'Transfert outside EU'
+consentement: Consent
+le_consentement_estil_demand: 'Has consent been asked for ?'
+base_juridique_du_traitement: 'Legal basis for the processing'
+si_oui_comment: 'If yes, how ?'
+pia_analyse_dimpact: 'PIA (Privacy Impact Assesment)'
+usages_innovants_utilisation_dune_nouvelle_technol: 'Innovative uses (use of a new technology ex: drones, artificial intelligence...)'
+exclusion_du_bnfice_dun_droit_ou_dun_contrat: 'Exclusion from a right or a contract'
+surveillance_systmatique: 'Systematic monitoring'
+grande_chelle: 'Large scale'
+prise_de_dcision_automatise_avec_effet_lgal_ou_sim: 'Automatised decision making process that produce legal effect or similar'
+profilage_et_valuation: 'Evaluation or scoring'
+personnes_vulnrables_enfants_salari_handicap_lien: 'Data about vulnerable subjects (kids, employees, handicaped, strong subordinate relationship)'
+donnes_sensibles_ou_hautement_personnelles_sant_go: 'Processing of sensitive data (health, geo-tracking...)'
+croisement_de_donnes: 'Datasets that have been matched or combined'
+modifier: Modify
+fichier_pia: 'PIA file'
+formation_des_quipes: 'Teams training'
+nos_partenaires: 'The galaxy'
+cliquez_sur_le_partenaire_pour_effectuer_un_demand: 'Clic on the partner to request a discount access'
+socit: Company
+soustraitants_standards: 'Standard data processors'
+ajouter: Ajouter
+un_nouveau_soustraitant: 'a new data processor'
+ajouter_un_soustraitant_standard: 'Add a standard data processor'
+editer_un_soustraitant_standard: 'Edit a standard data processor'
+rseau: Network
+rechercher_un_standard: 'Search for a standard'
+rechercher_une_mesure_standard: 'Search for a standard measure'
+export_excel: 'Export Excel'
+informatique: Computing
+lensemble_des_lments_de_votre_systme_dinformation: 'All the elements of your information system'
+cartographie_du_si: 'Mapping of your information system'
+cartographie_du_si_groupe: 'Mapping of your group information system'
+ajouter_un_lment: 'Add an element'
+scurit: Security
+administration: Administration
+priphrique: Peripheral
+logiciel: Software
+serveur: Server
+physique: Physical setting
+cloisonnement: Partionning
+minimisation: Minimization
+anonymisation: Anonymization
+pseudonymisation: Pseudonimization
+sensibilisation: Employee awareness
+information: Information
+contrle: Control
+destruction_et_suppression: Destruction and suppression
+fournisseur: Provider
+ajouter_un_lment_de_cartographie_du_si: 'Add an element in your information system'
+editer_un_lment_de_cartographie_du_si: 'Edit an element of your information system'
+score: Score
+taux_de_rponses_aux_questions: 'Response rate to questions'
+diffuser_le_questionnaire: 'Disseminate the questionnaire'
+questionnaires_diffuss: 'Questionnaires disseminated'
+taux_de_russite: 'Success rate'
+questionnaires_rpondus: 'Questionnaire answered'
+questionnaire: Questionnaire
+formation_ralise: 'Training achieved'
+crer_un_campagne: 'Create a campaign'
+crer: Create
+questionnaire_diffuser_aux_personnes: 'Questionnaire to be disseminated to people'
+collez_ici_la_liste_des_adresses_mails_ou_saisisse: '<i class="mdi mdi-help-circle mr-1"></i>Paste here the email adresses list or type each adress by pressing "Enter" in order to validate.'
+si_oui: 'If so :'
+formation_ralise_au_pralable: 'Training carried out beforehand ?'
+scores: Scores
+fonction: Function
+voir_les_statistiques: 'View statistics'
+traitement: Traitement
+non_concern: 'Does not apply'
+recommand: Recommanded
+exonr: Exempted
+raliser: 'To do'
+finalit: Purpose
+date_mise_jour: 'Update date'
+date_cration: 'Creation date'
+n_du_traitement: 'Data processing N°'
+nom_du_traitement: 'Data processing name'
+registre_des_traitements: 'Register of processing operations'
+vous_pouvez_importer_un_nouveau_fichier_pia: 'You can upload a new PIA file'
+editer_un_traitement: 'Edit a data processing'
+plus_ajouter_un_soustraitant: '+ Add a data processor'
+plus_ajouter_une_mesure_technique: '+ Add a technical measure'
+cas_dxonration_de_ralisation_de_pia: 'Exemption case of PIA execution ?'
+abscence_de_critere_suffisant: 'Lack of sufficient criteria'
+veuillez_cocher_les_critres_qui_concernent_votre_t: 'Please tick the criteria that concern your data processing . if 2 of the 9 criteria are checked, a pia is mandatory'
+une_liste_dexonration_de_pia_est_toutefois_disponi: 'An PIA exemption list is nevertheless avalaible here'
+ajouter_un_traitement: 'Add a data processing'
+rechercher_un_traitement_standard: 'Search for a standard data processing'
+le_rglement_gnral_sur_la_protection_des_donnes_rgp: '(The General Data Protection Regulation - GDPR)'
+lensemble_de_vos_traitements_exemple_1_exemple_2: 'All your data processing (Example 1, Example 2, ...)'
+nombre_total_de_traitements: 'Total number of processing operations'
+auditer_dpo: 'To audit by DPO'
+valids: Validated
+recommands: Recommended
+raliss: Completed
+filtre_appliqu: 'Filter applied'
+mise_jour: 'Update'
+rglement_ue_2016679_du_parlement_europen_et_du_con: 'Regulation (EU) 2016/679 of the European Parliament and of the Council of April 27, 2016, on the protection of individuals with regard to the processing of personal data and on the free movement of such data, and repealing the directive 95/46 / EC (general data protection regulation).'
+plan_dactions_menu: Action<br/>plans
+tat_civil_identit_donnes_didentification_images: 'Civil status, identity, identification data, pictures...'
+donnes_relatives_des_condamnations_pnales_ou_infra: 'Personal data relating to criminal convictions and offences'
+donnes_concernant_la_vie_sexuelle_ou_lorientation: 'Data regarding sexual life and orientation'
+donnes_concernant_la_sant: 'Health data'
+donnes_biomtriques_aux_fins_didentifier_une_person: 'Biometric data for personal identification'
+donnes_gntiques: 'Genetic data'
+donnes_rvlant_lappartenance_syndicale: 'Union membership data'
+donnes_rvlant_les_convictions_religieuses_ou_philo: 'Religious and philosophical data'
+donnes_rvlant_les_opinions_politiques: 'Political opinion data'
+donnes_rvlant_lorigine_raciale_ou_ethnique: 'Ethnic and racial data'
+numro_de_scurit_sociale_ou_nir: 'Numéro de Sécurité Sociale (ou NIR)'
+donnes_bancaires_donnes_courantes_non_sensible_mai: 'Bank information ( « non sensitive » common data classified as such regarding financial risks)'
+donnes_de_localisation_dplacements_donnes_gps_gsm: 'Location data (trips, GPS data, Phone etc.)'
+donnes_de_connexion_adress_ip_logs_etc: 'Connection data ( IP address, logs etc.)'
+infos_dordre_conomique_et_financier_revenus_situat: 'Economic and financial information (income, financial situation, tax situation etc.)'
+vie_personnelle_habitudes_de_vie_situation_familia: 'Personal life (habits, family situation, etc.)'
+pays: 'Country'
+cochez_les_cases_correspondantes: 'Check the corresponding boxes'
+personnes_vulnerables: 'Vulnerable subjects'
+donnees_sensibles_ou_hautement_personnelles: 'Sensitive or highly personal data'
+exclusion_du_benefice_d_un_droit_ou_d_un_contrat: 'Exclusion from a right or a contract'
+usages_innovants: 'Innovative uses'
+etat_du_traitement: 'Data processing status'
+le_traitement_est_il_finalise: 'Is the data processing complete ?'
+supprimer_le_pia: 'Delete PIA'
+zone_de_saisie: 'Entry field'
+nom_std: 'Name'
+https_base: 'https://'
+lien_vers_la_politique_de_confidentialite: 'Privacy policy link'
+consultation_non_autorisee: 'Unauthorised viewing'
+modification: 'Modification'
+copie_non_autorisee: 'Unauthorised copy'
+perte: 'Loss'
+nombre_de_personnes: 'Number of persons'
+ex_fichier_client: 'E.g : customer file'
+risque_de_demarchage_p: 'commercial canvassing risk...'
+information_des_clients_p: 'Clients information...'
+les_personnes_ont_ete_informees: 'Persons have been informed'
+budget_en_euros: "Budget in €"
+selectionnez_les_traitements_lies: 'Select the linked data processing'
+action_a_realiser_par_mdp: 'Action to be done by myDigitplace'
+temps_de_realisation_facture_en_heures: 'Completion time invoiced in hours'
+temps_de_realisation_en_heures: 'Completion time in hours'
+temps_de_realisation_estime_en_heures: 'Completion time estimated in hours'
+nom_du_responsable: 'Name of the person in charge'
+email_du_responsable: 'Email of the person in charge'
+precisions_sur_la_demande: 'Details on the request'
+siret: 'SIRET'
+complement: 'Additional address'
+code_postal: 'Postal code'
+ville: 'City'
+nombre_de_salaries: 'Numbers of employees'
+langue_de_l_interface: 'Interface Language'
+français: 'French'
+anglais: 'English'
+email_identifiant_de_connexion: 'Email (Username)'
+les_mots_de_passe_ne_sont_pas_identiques: 'Passwords are not identical'
+changer_mot_de_passe: 'Change password'
+merci_de_saisir_un_mot_de_passe: 'Thank you to enter your password'
+votre_mot_de_passe_doit_respecter_les_recommandations_de_l_anssi: 'Your password must respect ANSSI recommendations : at least 12 characters of different types (uppercase, lowercase, numbers, special characters)'
+nouveau_mot_de_passe: 'New password'
+confirmation_mot_de_passe: 'Password confirmation'
+confirmez_le_mot_de_passe: 'Confirm the password'
+exporter_mes_donnees: 'Export my Data'
+choix_des_exports: 'Selection of exports'
+e_traitements: 'Records of processing activities'
+e_sous_traitance: 'Regors of data processing'
+e_Cartographie_du_si: 'Information system cartography'
+e_demandes_d_exercices_de_droits: 'Manage right requests'
+e_incidents: 'Records of incidents'
+e_plan_d_actions: 'Action plans'
+e_formations_des_equipes: 'Teams training'
+e_informations_utilisateur: 'Users'' informations'
+mon_abonnement: 'Subscription'
+imprimer_le_tableau_de_bord: 'Print dashboard'
+ce_traitement_concerne_le_groupe: 'This processing applies to all entities'
+exporter_mon_registre: 'Export my record'
+traitements_standards: 'Standardized processings'
+type_sous_traitants: 'Processors'
+type_cotraitant: 'Joint controllers'
+type_responsable_de_traitement: 'Controllers'
+type_de_sous_traitance: 'Processing responsabilities'
+cet_incident_touche_le_groupe: 'This incident concerns all entities'
+priorite: 'Priority'
+urgente: 'Urgent'
+moderee: 'Moderate'
+faible: 'Low'
+en_savoir_plus_sur_les_droits_des_personnes: 'Learn more about individual''s rights'
+gerer_les_equipes: 'Managing teams'
+nombre_d_adresses: 'Number'
+adresses_erronees: 'Incorrect addresses'
+nombre_de_campagnes: 'No of campaigns'
+creer_une_equipe: 'Create a team'
+retour_aux_campagnes: 'Back to campaigns'
+relancer: 'Relaunch'
+tout_relancer: 'Relaunch all'
+titre_de_la_campagne: 'Campaign title'
+nom_et_prenom_du_formateur: 'Full name of the trainer'
+date_de_la_formation: 'Date of training'
+equipes_sensibilisees_ou_a_interroger: 'Teams involved'
+ou_saisissez_les_adresses_mail: 'Or enter the email addresses'
+campagne_interne: 'internal campaign'
+campagne_externe: 'external campaign'
+mes_sous_traitants: 'My Processors'
+mes_cotraitant: 'My Joint controllers'
+mes_responsable_de_traitement: 'My Controllers'

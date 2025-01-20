@@ -1,0 +1,259 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'base_documentaire'|trans }}
+{% endblock %}
+
+{% block content %}
+<div class="layer" id="popup-layer">
+    <div class="popup">
+        <div class="popup-header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 1024 1024"><path fill="currentColor" d="M685.248 104.704a64 64 0 0 1 0 90.496L368.448 512l316.8 316.8a64 64 0 0 1-90.496 90.496L232.704 557.248a64 64 0 0 1 0-90.496l362.048-362.048a64 64 0 0 1 90.496 0"/></svg> {{ 'tlverser_un_document'|trans }}
+        </div>
+        <div class="divider">
+            <div class="sub-divider"></div>
+        </div>
+        {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
+        
+      <!-- File Upload -->
+<div class="form-group">
+    {{ form_label(form.file, 'Fichier*') }}
+    <label class="custom-file-input" for="form_file">
+        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"><path fill="currentColor" d="M13 1H3v22h10.876A6.5 6.5 0 0 1 21 12.814V9h-8z"/><path fill="currentColor" d="M21 7v-.414L15.414 1H15v6zm-1 11v-4h-2v4h-4v2h4v4h2v-4h4v-2z"/></svg>
+        <span id="file-name">{{ 'Joindre un fichier'|trans }}</span>
+    </label>
+    {{ form_widget(form.file, {'attr': {'class': 'form-control', 'id': 'form_file'}}) }}
+    <div class="invalid-feedback">{{ form_errors(form.file) | striptags }}</div>
+</div>
+
+
+        <!-- Name Field -->
+        <div class="form-group">
+            {{ form_label(form.name, 'Nom') }}
+            {{ form_widget(form.name, {'attr': {'class': 'form-control ' ~ ((form_errors(form.name) == '') ? '' : 'is-invalid')} }) }}
+            <div class="invalid-feedback">{{ form_errors(form.name) | striptags }}</div>
+        </div>
+
+        <!-- Checkbox -->
+     
+        <div class="checkbox-group">
+            {{ form_widget(form.children, {'attr': {'class': 'custom-control-input'} }) }}
+            {{ form_label(form.children, 'Fichier disponible pour les comptes rattachés', {'label_attr': {'class': 'accounts'}}) }}
+            <div class="invalid-feedback">{{ form_errors(form.children) | striptags }}</div>
+        </div>
+       
+<div class="form-group">
+        <!-- Submit Button -->
+        <button type="submit" class="submit-btn">{{ 'tlverser'|trans }}</button>
+</div>
+        {{ form_end(form) }}
+    </div>
+</div>
+<div class="page">
+    <!-- Section: Ma Conformité -->
+    <div class="table-container-traitements">
+        <div class="header">
+            <h2>{{ 'ma_conformit'|trans }}</h2>
+            <div >
+                <button class="televeser" type="button" id="openpopup" class="btn btn-secondary">
+                    {{ 'tlverser_un_document'|trans }}
+                </button>
+            </div>
+        </div>
+        <div class="mon-container">
+            <div class="mon">
+                {% for documentTypeI, documentType in conformityJson %}
+                    <a href="#" style="display:flex;" class="mon-item " onclick="return open1({{ documentTypeI }}, null);">
+                        {{ documentType.label }}
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                {% endfor %}
+            </div>
+            <div class="mon" id="section1_col2" ></div>
+            <div class="mon" id="section1_col3"></div>
+        </div>
+    </div>
+
+    <!-- Section: Ressources Documentaires -->
+    <div class="table-container-traitements">
+        <div class="header">
+            <h2>{{ 'ressources_documentaires'|trans }}</h2>
+        </div>
+        <div class="mon-container">
+            <div class="mon">
+                {% for documentTypeI, documentType in documentsTypesJson %}
+                    <a href="#" style="display:flex;" class="mon-item1 " onclick="return open2({{ documentTypeI }}, null);">
+                        {{ documentType.label }}
+                        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+                    </a>
+                {% endfor %}
+            </div>
+            <div class="mon" id="section2_col2" ></div>
+            <div class="mon" id="section2_col3"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Add Document -->
+
+
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+
+  
+    const fileInput = document.getElementById("form_file");
+    const fileNameDisplay = document.getElementById("file-name");
+
+    fileInput.addEventListener("change", (event) => {
+        const fileName = event.target.files[0]?.name || "{{ 'Choose File'|trans }}";
+        fileNameDisplay.textContent = fileName;
+    });
+const popupLayer = document.getElementById('popup-layer');
+        const popupp = popupLayer.querySelector('.popup');
+
+        // Hide layer when clicking outside the popup
+        popupLayer.addEventListener('click', function (event) {
+            if (!popupp.contains(event.target)) {
+                popupLayer.style.display="none"; // Hide the layer
+            }
+        });
+
+      const closeIcon = document.querySelectorAll(".popup-header svg")
+       const open = document.querySelectorAll("#openpopup")
+    const popup = document.querySelectorAll(".layer")
+    const alert = document.querySelectorAll(".alertt")
+    closeIcon[0].addEventListener("click",()=> {
+        popup[0].style.display = "none"
+        alert[0].style.display = "flex"
+    })
+
+     open[0].addEventListener("click",()=> {
+        popup[0].style.display = "flex"
+        alert[0].style.display = "none"
+    })
+        const documentsTypesJson = {{ documentsTypesJson|json_encode|raw }};
+        const conformityJson = {{ conformityJson|json_encode|raw }};
+
+        function setColContent (open, col, data, i = null) {
+            var newHtml = "";
+
+            if (data !== undefined && data !== null && data.type === "d") {
+                data.children.map(function (item, index) {
+                    var htmlChild = null;
+                    if (item.type === "d") {
+                        htmlChild = '<a href="#" class=" mon-item2 d-flex justify-content-between py-3" style=" display: flex; justify-content: space-between;" onclick="return open'+open+'('+i+','+index+');"> <p class="mb-0">'+item.label+'</p> <p class="mb-0"><i class="fa fa-chevron-right"></i></p> </a>';
+                    } else {
+                        if (item.url !== undefined && item.url !== null) {
+                            if (item.deleteUrl !== undefined && item.deleteUrl !== null) {
+                                htmlChild = '<div class="d-flex justify-content-between py-3" style=" display: flex; justify-content: space-between;"><a href="'+item.url+'" target="_blank">'+item.label+'</a><a href="'+item.deleteUrl+'" target="_blank" class="text-danger" onclick="return confirm(\'Confirmer la suppression de ce fichier ?\');"><i class="mdi mdi-trash-can"></i></a></div>';
+                            } else {
+                                htmlChild = '<a href="'+item.url+'" target="_blank" class="mon-item2 d-flex justify-content-between py-3" style=" display: flex; justify-content: space-between;"> <p class="mb-0">'+item.label+'</p> <p class="mb-0"></p> </a>';
+                            }
+                        } else {
+                            if (item.read) {
+                                htmlChild = '<a href="/user/mdpdocuments/'+item.root+'/'+item.id+'" target="_blank" class="d-flex justify-content-between py-3" style=" display: flex; justify-content: space-between;"> <p class="mb-0">'+item.label+'</p> <p class="mb-0"></p> </a>';
+                            } else {
+                                htmlChild = '<a href="#" class="mon-item3 d-flex justify-content-between py-3" style=" display: flex; justify-content: space-between;"  onclick="alert(\'Votre abonnement actuel ne vous permet pas de consulter ce document\');"> <p class="mb-0">'+item.label+'</p> <p class="mb-0"></p> </a>';
+                            }
+                        }
+                    }
+                    newHtml += htmlChild;
+                });
+            }
+
+            if (newHtml !== "") {
+                col.innerHTML = newHtml;
+            }
+        }
+
+        function open2(i = null, j = null)  {
+            var col2 = document.getElementById("section2_col2");
+            var col3 = document.getElementById("section2_col3");
+
+            var data = null;
+
+            if (j !== null) {
+                col3.innerHTML = null;
+                data = documentsTypesJson[i]["children"][j];
+                setColContent(2, col3, data, i);
+            } else {
+                col2.innerHTML = null;
+                col3.innerHTML = null;
+                data = documentsTypesJson[i];
+                setColContent(2, col2, data, i);
+            }
+            return false;
+        }
+
+        function open1(i = null, j = null)  {
+            var col2 = document.getElementById("section1_col2");
+            var col3 = document.getElementById("section1_col3");
+
+            var data = null;
+
+            if (j !== null) {
+                col3.innerHTML = null;
+                data = conformityJson[i]["children"][j];
+                setColContent(1, col3, data, i);
+            } else {
+                col2.innerHTML = null;
+                col3.innerHTML = null;
+                data = conformityJson[i];
+                setColContent(1, col2, data, i);
+            }
+            return false;
+        }
+
+
+
+
+          const monItems = document.querySelectorAll('.mon-item');
+
+    monItems.forEach(item => {
+        // Attach a click event listener to each item
+        item.addEventListener('click', function () {
+            // Remove the "active" class from all items
+            monItems.forEach(i => i.classList.remove('active'));
+
+            // Add the "active" class to the clicked item
+            this.classList.add('active');
+        });
+    });
+
+
+      const monItemss = document.querySelectorAll('.mon-item1');
+
+    monItemss.forEach(item => {
+        // Attach a click event listener to each item
+        item.addEventListener('click', function () {
+            // Remove the "active" class from all items
+            monItemss.forEach(i => i.classList.remove('active'));
+
+            // Add the "active" class to the clicked item
+            this.classList.add('active');
+        });
+    });
+
+
+
+    const monItemsss = document.querySelectorAll('.mon-item2');
+
+    monItemsss.forEach(item => {
+        // Attach a click event listener to each item
+        item.addEventListener('click', function () {
+            // Remove the "active" class from all items
+            monItemsss.forEach(i => i.classList.remove('active'));
+
+            // Add the "active" class to the clicked item
+            this.classList.add('active');
+        });
+    });
+
+
+    </script>
+{% endblock %}

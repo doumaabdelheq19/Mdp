@@ -1,0 +1,139 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Questionnaire de formation
+{% endblock %}
+
+{% block body_class %}jumbo-page{% endblock %}
+
+{% block body %}
+    <section>
+        <div class="container ">
+            <div class="row m-h-100 ">
+                <div class="col-md-10 col-lg-8 m-auto">
+                    <div class="bg-white rounded m-t-100 m-b-80  shadow-lg  ">
+                        <div class=" padding-box-2 p-all-25">
+                            <div class="">
+                                <div class="text-center p-b-20 pull-up-sm">
+                                    <div class="avatar avatar-lg">
+                                        <span class="avatar-title rounded-circle bg-success"> <i class="mdi mdi-format-list-checks"></i> </span>
+                                    </div>
+
+                                </div>
+                                <h3 class="text-center">Questionnaire de formation</h3>
+                                <p class="text-muted text-center">
+                                    {{ trainingRequest.trainingCampain.training.title }}
+                                </p>
+
+                                {% set percentColor = "black" %}
+                                {% if trainingRequest.result == 1 %}
+                                    {% set percentColor = "#00e08b" %}
+                                {% elseif trainingRequest.result >= 0.5 %}
+                                    {% set percentColor = "#ffb700" %}
+                                {% else %}
+                                    {% set percentColor = "#f2545b" %}
+                                {% endif %}
+
+                                {% if trainingRequest.answerDate %}
+                                    <div class="text-center">
+                                        <h5 class="mb-3">Votre score</h5>
+                                        <div class="col-12 d-flex justify-content-center mb-5">
+                                            <div class="box-circle-progress-min">
+                                                <svg width="75" height="75" viewPort="0 0 100 100">
+                                                    <circle r="35" cx="35" cy="35" fill="transparent" stroke-dasharray="220" stroke-dashoffset="0" stroke="#f3f3f3"></circle>
+                                                    <circle r="35" cx="35" cy="35" fill="transparent" stroke-dasharray="220" stroke-dashoffset="{{ get_circle_progress(trainingRequest.result * 100, 35) }}" stroke="{{ percentColor }}"></circle>
+                                                </svg>
+                                                <div class="number" style="color: {{ percentColor }};">{{ trainingRequest.result * 100 }}<span>%</span></div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {% if trainingRequest.trainingCampain.questions is defined %}
+                                        {% for key, item in trainingRequest.trainingCampain.questions %}
+                                            <div class="p-t-20">
+                                                {% set goodAnswer = false %}
+                                                {% if trainingRequest.trainingCampain.answers[key] is iterable %}
+                                                    {% if trainingRequest.userAnswers[key] is iterable %}
+                                                        {% if consists_of_the_same_values(trainingRequest.userAnswers[key], trainingRequest.trainingCampain.answers[key]) %}
+                                                            {% set goodAnswer = true %}
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% else %}
+                                                    {% if trainingRequest.userAnswers[key] == trainingRequest.trainingCampain.answers[key] %}
+                                                        {% set goodAnswer = true %}
+                                                    {% endif %}
+                                                {% endif %}
+
+                                                <p class="h4 mb-3">{% if goodAnswer %}<i class="mdi mdi-check-circle text-success mr-2"></i>{% else %}<i class="mdi mdi-close-circle text-danger mr-2"></i>{% endif %}{{ item.title }}</p>
+                                                {% if item.links %}
+                                                    <p class="mb-0 text-muted"><i class="mdi mdi-help-circle"></i> Pour répondre à cette question</p>
+                                                    <ul class="list-unstyled text-muted">
+                                                        {% for link in item.links %}
+                                                            <li><a href="{{ link }}" target="_blank" class="text-muted">{{ link }}</a></li>
+                                                        {% endfor %}
+                                                    </ul>
+                                                {% endif %}
+
+                                                {% for choiceKey, choice in item.choices %}
+                                                    {% set iconClass = "mdi-checkbox-blank-circle-outline text-muted" %}
+
+                                                    {% if item.multiple %}
+                                                        {% if choiceKey in trainingRequest.trainingCampain.answers[key] %}
+                                                            {% if choiceKey in trainingRequest.userAnswers[key] %}
+                                                                {% set iconClass = "mdi-check-circle text-success" %}
+                                                            {% else %}
+                                                                {% set iconClass = "mdi-check-circle-outline text-success" %}
+                                                            {% endif %}
+                                                        {% else %}
+                                                            {% if choiceKey in trainingRequest.userAnswers[key] %}
+                                                                {% set iconClass = "mdi-close-circle text-danger" %}
+                                                            {% else %}
+                                                                {% set iconClass = "mdi-checkbox-blank-circle-outline text-muted" %}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% else %}
+                                                        {% if choiceKey in trainingRequest.trainingCampain.answers[key] or choiceKey == trainingRequest.trainingCampain.answers[key] %}
+                                                            {% if choiceKey in trainingRequest.userAnswers[key] or trainingRequest.userAnswers[key] == choiceKey %}
+                                                                {% set iconClass = "mdi-checkbox-marked text-success" %}
+                                                            {% else %}
+                                                                {% set iconClass = "mdi-checkbox-marked-outline text-success" %}
+                                                            {% endif %}
+                                                        {% else %}
+                                                            {% if choiceKey in trainingRequest.userAnswers[key] or trainingRequest.userAnswers[key] == choiceKey %}
+                                                                {% set iconClass = "mdi-close-box text-danger" %}
+                                                            {% else %}
+                                                                {% set iconClass = "mdi-checkbox-blank-outline text-muted" %}
+                                                            {% endif %}
+                                                        {% endif %}
+                                                    {% endif %}
+
+                                                    <p class="h5"><i class="mdi {{ iconClass }} mr-2"></i>{{ choice }}</p>
+                                                {% endfor%}
+
+                                                {% if item.explanations is defined %}
+                                                    <p class="{% if goodAnswer %}text-success{% else %}text-danger{% endif %}">{{ item.explanations|nl2br }}</p>
+                                                {% endif %}
+
+                                                <hr class="mb-2 mt-4">
+                                            </div>
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endif %}
+
+                                <div class="p-t-20 text-center">
+                                    <a href="{{ path("default_training", {"email": app.request.get("email"), "token": app.request.get("token")}) }}" class="btn btn-primary">Retour</a>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

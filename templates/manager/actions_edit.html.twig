@@ -1,0 +1,160 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Modifier une action standard
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container-fluid px-lg-5 m-b-30">
+            <div class="row">
+                <div class="col-12 text-white p-t-40 p-b-90">
+
+                    <h4 class=""> <span class="btn btn-white-translucent">
+                                <i class="mdi mdi-account "></i></span> Modifier une action standard
+                    </h4>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid px-lg-5 pull-up">
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-body ">
+                    {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
+
+                    <h5>Action</h5>
+
+                    <div class="form-row">
+                        <div class="form-group floating-label col-md-6">
+                            {{ form_label(form.name) }}
+                            {{ form_widget(form.name, {'attr': {'class': 'form-control ' ~ ((form_errors(form.name) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.name) | striptags  }}</div>
+                        </div>
+                        <div class="form-group floating-label col-md-6">
+                            {{ form_label(form.budget) }}
+                            {{ form_widget(form.budget, {'attr': {'class': 'form-control ' ~ ((form_errors(form.budget) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.budget) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <h5 class="mt-2">Informations</h5>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            {{ form_label(form.goal) }}
+                            {{ form_widget(form.goal, {'attr': {'class': 'form-control ' ~ ((form_errors(form.goal) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.goal) | striptags  }}</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            {{ form_label(form.information) }}
+                            {{ form_widget(form.information, {'attr': {'class': 'form-control ' ~ ((form_errors(form.information) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.information) | striptags  }}</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            {{ form_label(form.usefulLink) }}
+                            {{ form_widget(form.usefulLink, {'attr': {'class': 'form-control ' ~ ((form_errors(form.usefulLink) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.usefulLink) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <h5 class="mt-2">Annexer des fiches pratiques</h5>
+
+                    <div class="form-row">
+                        <div class="form-group floating-label col-md-12">
+                            {{ form_label(form.sheets) }}
+                            {{ form_widget(form.sheets, {'attr': {'class': 'form-control js-select2 ' ~ ((form_errors(form.sheets) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.sheets) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row mb-5 mt-3">
+                        <div class="col-12 mb-2">
+                            <button type="button" class="btn btn-success mb-2" id="add_document_button"><i class="mdi mdi-file-plus"></i> Fichiers</button>
+                        </div>
+                        <div id="block_old_documents" class="row col-12">
+                            {% for document in action.documents %}
+                                <div class="form-group col-md-12 d-flex block_document"><input class="form-control" type="text" placeholder="Titre" name="appbundle_action_documents_{{ document.id }}" value="{{ document.name }}"><a href="{{ path('manager_actions_deletedoc', {'action': action.id, 'document': document.id}) }}" class="btn btn-danger ml-2" onclick="return confirm('Confirmer la suppression de ce fichier ?\nCette action actualisera la page, toute autre modification sera perdue.');"><i class="mdi mdi-file-remove"></i></a><a href="/uploads/documents/{{ document.filename }}" class="btn btn-info ml-2" target="_blank"><i class="mdi mdi-eye"></i></a></div>
+                            {% endfor %}
+                        </div>
+                        <div id="block_documents" class="row col-12">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                $(".datepicker-js").datepicker({
+                    language: 'fr',
+                    format: 'yyyy-mm-dd'
+                });
+
+                document.getElementById("add_document_button").addEventListener("click", function () {
+                    var div = document.createElement("div");
+                    div.className = "form-group col-md-12 d-flex block_document";
+
+                    var nameInput = document.createElement("input");
+                    nameInput.className = "form-control";
+                    nameInput.setAttribute("type", "text");
+                    nameInput.setAttribute("placeholder", "Titre");
+                    nameInput.setAttribute("name", "appbundle_action_documents_names[]");
+
+                    var fileInput = document.createElement("input");
+                    fileInput.className = "form-control ml-2";
+                    fileInput.setAttribute("type", "file");
+                    fileInput.setAttribute("name", "appbundle_action_documents[]");
+
+                    var fileInputRemoveButton = document.createElement("button");
+                    fileInputRemoveButton.className = "btn btn-danger ml-2 remove_document_button";
+                    fileInputRemoveButton.setAttribute("type", "button");
+                    fileInputRemoveButton.setAttribute("onclick", "removeDocument(this)");
+
+                    var fileInputRemoveButtonI = document.createElement("i");
+                    fileInputRemoveButtonI.className = "mdi mdi-file-remove";
+
+                    fileInputRemoveButton.appendChild(fileInputRemoveButtonI);
+
+                    div.appendChild(nameInput);
+                    div.appendChild(fileInput);
+                    div.appendChild(fileInputRemoveButton);
+
+                    var element = document.getElementById("block_documents");
+                    element.appendChild(div);
+                });
+            });
+        })(window.jQuery);
+
+        function removeDocument(element) {
+            element.parentNode.remove();
+        }
+
+    </script>
+{% endblock %}

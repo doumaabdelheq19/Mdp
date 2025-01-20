@@ -1,0 +1,94 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Traduire le questionnaire
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container-fluid px-lg-5 m-b-30">
+            <div class="row">
+                <div class="col-12 text-white p-t-40 p-b-90">
+
+                    <h4 class=""> <span class="btn btn-white-translucent">
+                                <i class="mdi mdi-account "></i></span> Traduire le questionnaire
+                    </h4>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid px-lg-5 pull-up">
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-body ">
+                    {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
+
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            {{ form_label(form.title) }}
+                            {{ form_widget(form.title, {'attr': {'class': 'form-control ' ~ ((form_errors(form.title) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.title) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <div class="row my-3">
+                        <div class="col-12 mb-2">
+                            <h4>Contenu</h4>
+                        </div>
+                        <div class="col-12" id="content_container_1">
+                            {% if training.questions is defined %}
+                                {% for item in training.questions %}
+                                    <div class="w-100 my-4">
+                                        <div class="w-100 question-number-block">
+                                            <p class="h5 question-number">Question {{ loop.index }}</p>
+                                        </div>
+                                        <div class="w-100 d-flex">
+                                            <div class="w-100 d-flex flex-column">
+                                                <input class="w-100 form-control mb-2" type="text" placeholder="Intitulé de la question" name="form_e_items[{{ loop.index0 }}][0]" id="form_items_0_{{ loop.index0 }}" value="{{ item.title }}">
+                                                <textarea class="w-100 form-control mb-2" placeholder="Choix (1 par ligne)" rows="12" name="form_e_items[{{ loop.index0 }}][1]" id="form_items_1_{{ loop.index0 }}">{{ item.choices|array_to_textarea }}</textarea>
+                                                <div class="mb-4">
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input class="custom-control-input" type="radio" value="0" name="form_e_items[{{ loop.index0 }}][2]" id="form_items_2_0_{{ loop.index0 }}" {% if not item.multiple %}checked="checked"{% endif %} disabled="disabled">
+                                                        <label class="custom-control-label" for="form_items_2_0_{{ loop.index0 }}">Choix unique</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input class="custom-control-input" type="radio" value="1" name="form_e_items[{{ loop.index0 }}][2]" id="form_items_2_1_{{ loop.index0 }}" {% if item.multiple %}checked="checked"{% endif %} disabled="disabled">
+                                                        <label class="custom-control-label" for="form_items_2_1_{{ loop.index0 }}">Choix multiples</label>
+                                                    </div>
+                                                </div>
+                                                <textarea class="w-100 form-control" placeholder="Liens utiles (1 par ligne)" rows="4" name="form_e_items[{{ loop.index0 }}][3]" id="form_items_3_{{ loop.index0 }}">{{ item.links|array_to_textarea }}</textarea>
+                                                <textarea class="w-100 form-control" placeholder="Explications réponse" rows="4" name="form_e_items[{{ loop.index0 }}][4]" id="form_items_4_{{ loop.index0 }}">{{ item.explanations }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+    </script>
+{% endblock %}

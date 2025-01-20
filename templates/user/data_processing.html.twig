@@ -1,0 +1,128 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'accueil'|trans }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container-fluid">
+            <div class="row align-items-center p-b-100 p-t-30">
+                <div class="col-md-6 text-white p-b-30">
+                    {{ include('user/includes/identity.html.twig') }}
+                </div>
+                <div class="col-md-6 text-white p-b-30">
+                    <div class="media">
+                        <div class="avatar avatar mr-3">
+                            <div class="avatar-title rounded-circle mdi mdi-account-multiple  ">
+
+                            </div>
+                        </div>
+                        <div class="media-body">
+                            <h1>Registre de la sous-traitance</h1>
+                            <p class="mb-1 opacity-75">
+                                {{ 'lensemble_de_vos_soustraitants'|trans }}
+                            </p>
+                            <p class="text-underline d-inline-block">
+                                <a data-toggle="modal" data-target="#RGPDModal" href="#">(Article 28 - Sous-traitant)</a>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row col-12 align-items-start">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid pull-up">
+        <div class="row justify-content-md-end">
+
+        </div>
+        <div class="row">
+
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="text-danger">Contenu explicatif du registre accompagné d’un visuel</p>
+                        <div class="d-flex justify-content-between">
+                            <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                                <a href="{{ path('user_subcontractors', {type: 1}) }}" class="btn btn-primary">Sous-traitants</a>
+                                <a href="{{ path('user_subcontractors', {type: 2}) }}" class="btn btn-primary">Co-traitants</a>
+                                <a href="{{ path('user_subcontractors', {type: 3}) }}" class="btn btn-primary">Responsables de traitements</a>
+
+                                <div class="btn-group" role="group">
+                                    <button id="btnGroupDrop1" type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Export
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="btnGroupDrop1" x-placement="bottom-start">
+                                        <a class="dropdown-item" href="{{ path('user_subcontractors_export') }}" target="_blank">PDF</a>
+                                        <a class="dropdown-item" href="{{ path('user_subcontractors_export_xlsx') }}" target="_blank">Excel</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="RGPDModal" tabindex="-1" role="dialog"
+         aria-labelledby="RGPDModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalCenterTitle">{{ 'article_28_soustraitant'|trans }}</h5>
+                    <button type="button" class="close" data-dismiss="modal"
+                            aria-label="{{ 'fermer'|trans }}">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        Lorsqu'un traitement doit être effectué pour le compte d'un responsable du traitement, celui-ci fait uniquement appel à des sous-traitants qui présentent des garanties suffisantes quant à la mise en œuvre de mesures techniques et organisationnelles appropriées de manière à ce que le traitement réponde aux exigences du présent règlement et garantisse la protection des droits de la personne concernée.
+                        Le sous-traitant ne recrute pas un autre sous- traitant sans l'autorisation écrite préalable, spécifique ou générale, du responsable du traitement. Dans le cas d'une autorisation écrite générale, le sous-traitant informe le responsable du traitement de tout changement prévu concernant l'ajout ou le remplacement d'autres sous-traitants, donnant ainsi au responsable du traitement la possibilité d'émettre des objections à l'encontre de ces changements.
+                        Le traitement par un sous-traitant est régi par un contrat ou un autre acte juridique au titre du droit de l'Union ou du droit d'un État membre, qui lie le sous-traitant à l'égard du responsable du traitement, définit l'objet et la durée du traitement, la nature et la finalité du traitement, le type de données à caractère personnel et les catégories de personnes concernées, et les obligations et les droits du responsable du traitement. Ce contrat ou cet autre acte juridique prévoit, notamment, que le sous-traitant:...etc. <a href="https://www.cnil.fr/fr/reglement-europeen- protection-donnees/chapitre4" target="_blank">https://www.cnil.fr/fr/reglement-europeen- protection-donnees/chapitre4</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                {% if app.request.locale == "fr" %}
+                    $('#datatable').DataTable({
+                        "language": {
+                            "search": "Rechercher :",
+                            "lengthMenu": "Afficher _MENU_ résultats par page",
+                            "zeroRecords": "Aucun résultat",
+                            "info": "Page _PAGE_ sur _PAGES_",
+                            "infoEmpty": "Aucune données sur ce tableau",
+                            "infoFiltered": "(filtered from _MAX_ total records)",
+                            "paginate": {
+                                "previous": "Précédent",
+                                "next": "Suivant",
+
+                            }
+                        }
+                    });
+                {% else %}
+                    $('#datatable').DataTable({});
+                {% endif %}
+
+            });
+
+        })(window.jQuery);
+    </script>
+{% endblock %}

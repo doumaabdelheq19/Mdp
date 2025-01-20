@@ -1,0 +1,590 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'accueil'|trans }}
+{% endblock %}
+
+{% block stylesheets %}
+    <link type="text/css" rel="stylesheet" href="{{ asset('/assets/vendor/jsmind/style/jsmind.css') }}" />
+    <style>
+        #map {
+            height: {{ mindMapHeight }}px;
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container-fluid">
+            <div class="row align-items-center p-b-100 p-t-30">
+                <div class="col-md-6 text-white p-b-30">
+                    {{ include('user/includes/identity.html.twig') }}
+                </div>
+                <div class="col-md-6 text-white p-b-30">
+                    <div class="media">
+                        <div class="avatar avatar mr-3">
+                            <div class="avatar-title rounded-circle mdi mdi-sitemap  ">
+
+                            </div>
+                        </div>
+                        <div class="media-body">
+                            <h1>{{ 'cartographie_du_si_groupe'|trans }} </h1>
+                            <p class="mb-1 opacity-75">
+                                {{ 'lensemble_des_lments_de_votre_systme_dinformation'|trans }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container pull-up">
+        <div class="row justify-content-md-end">
+
+        </div>
+        <div class="row">
+
+            <div class="col-12 m-t-30">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="map"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 m-t-30">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-4">
+                            <h5 class="mb-0">{{ 'informatique'|trans }}</h5>
+                            <a href="{{ path("user_systems_export_excel", {"type": "computing"}) }}" class="btn btn-primary">{{ 'export_excel'|trans }}</a>
+                        </div>
+                        <div class="my-2">
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label for="form_computing_std">{{ 'rechercher_une_mesure_standard'|trans }}</label>
+                                    <select id="form_computing_std" name="form_computing_std" class="form-control js-select2" onchange="selectStd(this)">
+                                        <option id="foo" selected="selected" disabled="disabled">{{ 'rechercher_un_standard'|trans }}</option>
+                                        {% for type in systemsStd.computing %}
+                                            <optgroup label="{{ type.label }}">
+                                                {% for item in type.items %}
+                                                    <option value="{{ item.id }}">{{ item.name }}</option>
+                                                {% endfor %}
+                                            </optgroup>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">{{ 'rseau'|trans }}</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.computing.network %}
+                                <div class="list-group-item d-flex align-items-center justify-content-between">
+                                    <div class="">
+                                        <div>{{ item.name }}</div>
+                                        <div class="text-muted">
+                                            {% for spec in item.data %}
+                                                <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="ml-2 d-flex flex-nowrap">
+                                        <a href="{{ path('user_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1 mr-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                        <a href="{{ path('user_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('user_systems_add') }}?group=1&type=computing&subtype=network" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> {{ 'ajouter_un_lment'|trans }}</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">{{ 'scurit'|trans }}</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.computing.security %}
+                                    <div class="list-group-item d-flex align-items-center justify-content-between">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-2 d-flex flex-nowrap">
+                                            <a href="{{ path('user_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1 mr-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('user_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('user_systems_add') }}?group=1&type=computing&subtype=security" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> {{ 'ajouter_un_lment'|trans }}</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">{{ 'administration'|trans }}</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.computing.administration %}
+                                    <div class="list-group-item d-flex align-items-center justify-content-between">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-2 d-flex flex-nowrap">
+                                            <a href="{{ path('user_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1 mr-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('user_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('user_systems_add') }}?group=1&type=computing&subtype=administration" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> {{ 'ajouter_un_lment'|trans }}</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">{{ 'priphrique'|trans }}</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.computing.device %}
+                                    <div class="list-group-item d-flex align-items-center justify-content-between">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-2 d-flex flex-nowrap">
+                                            <a href="{{ path('user_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1 mr-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('user_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('user_systems_add') }}?group=1&type=computing&subtype=device" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> {{ 'ajouter_un_lment'|trans }}</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">{{ 'logiciel'|trans }}</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.computing.software %}
+                                    <div class="list-group-item d-flex align-items-center justify-content-between">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-2 d-flex flex-nowrap">
+                                            <a href="{{ path('user_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1 mr-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('user_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('user_systems_add') }}?group=1&type=computing&subtype=software" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> {{ 'ajouter_un_lment'|trans }}</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">{{ 'serveur'|trans }}</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.computing.server %}
+                                    <div class="list-group-item d-flex align-items-center justify-content-between">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-2 d-flex flex-nowrap">
+                                            <a href="{{ path('user_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1 mr-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('user_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('user_systems_add') }}?group=1&type=computing&subtype=server" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> {{ 'ajouter_un_lment'|trans }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 m-t-30">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-4">
+                            <h5 class="mb-0">{{ 'physique'|trans }}</h5>
+                            <a href="{{ path("user_systems_export_excel", {"type": "physical"}) }}" class="btn btn-primary">{{ 'export_excel'|trans }}</a>
+                        </div>
+                        <div class="my-2">
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label for="form_physical_std">{{ 'rechercher_une_mesure_standard'|trans }}</label>
+                                    <select id="form_physical_std" name="form_physical_std" class="form-control js-select2" onchange="selectStd(this)">
+                                        <option id="foo" selected="selected" disabled="disabled">{{ 'rechercher_un_standard'|trans }}</option>
+                                        {% for type in systemsStd.physical %}
+                                            <optgroup label="{{ type.label }}">
+                                                {% for item in type.items %}
+                                                    <option value="{{ item.id }}">{{ item.name }}</option>
+                                                {% endfor %}
+                                            </optgroup>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">{{ 'cloisonnement'|trans }}</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.physical.partitioning %}
+                                    <div class="list-group-item d-flex align-items-center justify-content-between">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-2 d-flex flex-nowrap">
+                                            <a href="{{ path('user_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1 mr-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('user_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('user_systems_add') }}?group=1&type=physical&subtype=partitioning" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> {{ 'ajouter_un_lment'|trans }}</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">{{ 'information'|trans }}</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.physical.information %}
+                                    <div class="list-group-item d-flex align-items-center justify-content-between">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-2 d-flex flex-nowrap">
+                                            <a href="{{ path('user_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1 mr-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('user_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('user_systems_add') }}?group=1&type=physical&subtype=information" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> {{ 'ajouter_un_lment'|trans }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 m-t-30">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-4">
+                            <h5 class="mb-0">{{ 'action'|trans }}</h5>
+                            <a href="{{ path("user_systems_export_excel", {"type": "action"}) }}" class="btn btn-primary">{{ 'export_excel'|trans }}</a>
+                        </div>
+                        <div class="my-2">
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label for="form_action_std">{{ 'rechercher_une_mesure_standard'|trans }}</label>
+                                    <select id="form_action_std" name="form_action_std" class="form-control js-select2" onchange="selectStd(this)">
+                                        <option id="foo" selected="selected" disabled="disabled">{{ 'rechercher_un_standard'|trans }}</option>
+                                        {% for type in systemsStd.action %}
+                                            <optgroup label="{{ type.label }}">
+                                                {% for item in type.items %}
+                                                    <option value="{{ item.id }}">{{ item.name }}</option>
+                                                {% endfor %}
+                                            </optgroup>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">{{ 'minimisation'|trans }}</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.action.minimization %}
+                                    <div class="list-group-item d-flex align-items-center justify-content-between">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-2 d-flex flex-nowrap">
+                                            <a href="{{ path('user_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1 mr-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('user_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('user_systems_add') }}?group=1&type=action&subtype=minimization" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> {{ 'ajouter_un_lment'|trans }}</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">{{ 'anonymisation'|trans }}</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.action.anonymization %}
+                                    <div class="list-group-item d-flex align-items-center justify-content-between">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-2 d-flex flex-nowrap">
+                                            <a href="{{ path('user_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1 mr-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('user_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('user_systems_add') }}?group=1&type=action&subtype=anonymization" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> {{ 'ajouter_un_lment'|trans }}</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">{{ 'pseudonymisation'|trans }}</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.action.pseudonymization %}
+                                    <div class="list-group-item d-flex align-items-center justify-content-between">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-2 d-flex flex-nowrap">
+                                            <a href="{{ path('user_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1 mr-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('user_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('user_systems_add') }}?group=1&type=action&subtype=pseudonymization" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> {{ 'ajouter_un_lment'|trans }}</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">{{ 'sensibilisation'|trans }}</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.action.sensitization %}
+                                    <div class="list-group-item d-flex align-items-center justify-content-between">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-2 d-flex flex-nowrap">
+                                            <a href="{{ path('user_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1 mr-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('user_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('user_systems_add') }}?group=1&type=action&subtype=sensitization" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> {{ 'ajouter_un_lment'|trans }}</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">{{ 'contrle'|trans }}</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.action.supervision %}
+                                    <div class="list-group-item d-flex align-items-center justify-content-between">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-2 d-flex flex-nowrap">
+                                            <a href="{{ path('user_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1 mr-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('user_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('user_systems_add') }}?group=1&type=action&subtype=supervision" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> {{ 'ajouter_un_lment'|trans }}</a>
+                        </div>
+                        <div class="my-2">
+                            <h5 class="card-title">{{ 'destruction_et_suppression'|trans }}</h5>
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.action.destruction %}
+                                    <div class="list-group-item d-flex align-items-center justify-content-between">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-2 d-flex flex-nowrap">
+                                            <a href="{{ path('user_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1 mr-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('user_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('user_systems_add') }}?group=1&type=action&subtype=destruction" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> {{ 'ajouter_un_lment'|trans }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 m-t-30">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-4">
+                            <h5 class="mb-0">{{ 'fournisseur'|trans }}</h5>
+                            <a href="{{ path("user_systems_export_excel", {"type": "supplier"}) }}" class="btn btn-primary">{{ 'export_excel'|trans }}</a>
+                        </div>
+                        <div class="my-2">
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label for="form_supplier_std">{{ 'rechercher_une_mesure_standard'|trans }}</label>
+                                    <select id="form_supplier_std" name="form_supplier_std" class="form-control js-select2" onchange="selectStd(this)">
+                                        <option id="foo" selected="selected" disabled="disabled">{{ 'rechercher_un_standard'|trans }}</option>
+                                        {% for type in systemsStd.supplier %}
+                                            <optgroup label="{{ type.label }}">
+                                                {% for item in type.items %}
+                                                    <option value="{{ item.id }}">{{ item.name }}</option>
+                                                {% endfor %}
+                                            </optgroup>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="my-2">
+                            <div class="list-group list-group-flush ">
+                                {% for item in systems.supplier.supplier %}
+                                    <div class="list-group-item d-flex align-items-center justify-content-between">
+                                        <div class="">
+                                            <div>{{ item.name }}</div>
+                                            <div class="text-muted">
+                                                {% for spec in item.data %}
+                                                    <span>• {{ spec.title }}: {{ spec.value }}</span><br/>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="ml-2 d-flex flex-nowrap">
+                                            <a href="{{ path('user_systems_edit', {'id': item.id}) }}" class="btn btn-white my-1 mr-1"><i class="mdi mdi-circle-edit-outline"></i></a>
+                                            <a href="{{ path('user_systems_delete', {'id': item.id}) }}" class="btn btn-danger my-1"  onclick="return confirm('Confirmer la suppression de cet élément ?');"><i class="mdi mdi-close"></i></a>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <a href="{{ path('user_systems_add') }}?group=1&type=supplier&subtype=supplier" class="btn btn-success btn-block mb-5"><i class="mdi mdi-plus"></i> {{ 'ajouter_un_lment'|trans }}</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="modal_content" tabindex="-1" role="dialog"
+             aria-labelledby="modal_content" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal_content_title"></h5>
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-label="{{ 'fermer'|trans }}">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modal_content_body"></div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('/assets/vendor/jsmind/js/jsmind.js') }}"></script>
+    <script>
+
+        var systemsJs = {{ systemsJs|json_encode|raw }};
+
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                {% if app.request.locale == "fr" %}
+                    $('#datatable').DataTable({
+                        "language": {
+                            "search": "Rechercher :",
+                            "lengthMenu": "Afficher _MENU_ résultats par page",
+                            "zeroRecords": "Aucun résultat",
+                            "info": "Page _PAGE_ sur _PAGES_",
+                            "infoEmpty": "Aucune données sur ce tableau",
+                            "infoFiltered": "(filtered from _MAX_ total records)",
+                            "paginate": {
+                                "previous": "Précédent",
+                                "next": "Suivant",
+
+                            }
+                        }
+                    });
+                {% else %}
+                    $('#datatable').DataTable({});
+                {% endif %}
+
+                var options = {
+                    container:'map',
+                    editable:false,
+                    theme:'primary',
+                    support_html: true,
+                };
+                var mind = {
+                    meta:{
+                        name: "Cartographie SI",
+                        author: "myDigitplace",
+                        version: "1"
+                    },
+                    format: "node_tree",
+                    data: {{ mindMap|json_encode|raw }}
+                }
+                var jm = new jsMind(options);
+                jm.show(mind);
+            });
+
+        })(window.jQuery);
+
+        function selectStd(e) {
+            window.location.href = "{{ path('user_systems_add') }}?group=1&std=" + e.value;
+        }
+
+        function openModalInfo(id) {
+            if (systemsJs[id]) {
+                document.getElementById('modal_content_title').innerText = systemsJs[id].name;
+                var contentHtml = "";
+                systemsJs[id].data.map(item => {
+                    if (item.value !== null) {
+                        contentHtml += "<b><u>" + item.title + "</u></b> : " + item.value + "<br/><br/>";
+                    }
+                })
+                document.getElementById('modal_content_body').innerHTML = contentHtml;
+                $('#modal_content').modal('show');
+            }
+        }
+    </script>
+{% endblock %}

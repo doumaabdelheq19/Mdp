@@ -1,0 +1,178 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'demandes_dexercices_des_droits'|trans }}
+{% endblock %}
+
+{% block content %}
+<div class="page">
+    <div class="table-container-traitements">
+        <div class="header">
+            <h2>Demandes d’exercices des droits</h2>
+            <p>
+                <a href="https://www.cnil.fr/fr/respecter-les-droits-des-personnes" target="_blank">
+                    En savoir plus sur les droits des personnes
+                </a>
+            </p>
+        </div>
+
+        <!-- Search and Action Buttons -->
+        <div style="display: flex; justify-content: space-between; width: 100%;">
+            <div class="search-bar">
+                <span class="search-icon">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </span>
+                <input type="text" id="searchInput" placeholder="Rechercher" />
+            </div>
+            <div class="buttons">
+                <div class="exporter">
+                    <a href="{{ path('user_exercisingclaims_add') }}" class="btn btn-primary">Créer une demande</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <table class="styled-table" id="claimsTable">
+            <thead>
+                <tr>
+                    <th>Date de la demande</th>
+                    <th>Droit</th>
+                    <th>Personne concernée</th>
+                    <th>Délai de 30 jours</th>
+                    <th>Date de la réponse</th>
+                    <th>Responsable</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+             {% if exercisingclaims|length > 0 %}
+                {% for exercisingclaim in exercisingclaims %}
+                    <tr>
+                        <td style="color: #EF6D6F;">{{ exercisingclaim.requestDate|date('d/m/Y') }}</td>
+                        <td>{{ exercisingclaim.rights }}</td>
+                        <td>{{ exercisingclaim.customer }}</td>
+                        <td>
+                            <div style="  {% if exercisingclaim.answerDate %}
+                                    color: #52B489; background-color:rgba(82, 180, 138, 0.15);
+                                {% else %}
+                                    color: #EF6D6F; background-color: #ef6d6f2a;
+                                {% endif %} border-radius: 10px; padding: 2px; width: auto;">
+                                {% if exercisingclaim.answerDate %}
+                                    {{ 'Réponse fournie' }}
+                                {% else %}
+                                    {{ 'En cours' }}
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td style="color: #438492;">{{ exercisingclaim.answerDate|date('d/m/Y') }}</td>
+                        <td>{{ exercisingclaim.accountantName }}</td>
+                        <td >
+                        <div class="options">
+                            <a href="{{ path('user_exercisingclaims_edit', {'id': exercisingclaim.id}) }}" class="btn btn-secondary">
+                                <button class="edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+
+
+            </button>
+          
+                            </a>
+                            <a href="{{ path('user_exercisingclaims_delete', {'id': exercisingclaim.id}) }}" class="btn btn-danger">
+                                  <button class="delete"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
+            </button>
+                            </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                 {% else %}
+                <tr>
+                    <td colspan="8" class="text-center">{{ 'Aucune Demandes d’exercices des droits disponible'|trans }}</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination-container">
+            <!-- Results per page selector -->
+            <div class="results-per-page">
+                <label for="resultsSelect">Afficher</label>
+                <select id="resultsSelect" class="results-select">
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                </select>
+                <span>résultats par page</span>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div class="pagination-controls">
+                <button class="pagination-button" id="prevPage" disabled>&lt;</button>
+                <span class="pagination-info" id="paginationInfo">Page 1 sur 1</span>
+                <button class="pagination-button" id="nextPage" disabled>&gt;</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const rows = Array.from(document.querySelectorAll('#tableBody tr'));
+        const resultsSelect = document.getElementById('resultsSelect');
+        const paginationInfo = document.getElementById('paginationInfo');
+        const prevPage = document.getElementById('prevPage');
+        const nextPage = document.getElementById('nextPage');
+        const searchInput = document.getElementById('searchInput');
+
+        let currentPage = 1;
+        let resultsPerPage = parseInt(resultsSelect.value);
+        let filteredRows = rows;
+
+        function updateTable() {
+            const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+            const start = (currentPage - 1) * resultsPerPage;
+            const end = start + resultsPerPage;
+
+            rows.forEach((row, index) => {
+                row.style.display = filteredRows.includes(row) && index >= start && index < end ? '' : 'none';
+            });
+
+            paginationInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
+            prevPage.disabled = currentPage === 1;
+            nextPage.disabled = currentPage === totalPages;
+        }
+
+        function filterTable() {
+            const query = searchInput.value.toLowerCase();
+            filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
+            currentPage = 1; // Reset to first page after search
+            updateTable();
+        }
+
+        resultsSelect.addEventListener('change', function () {
+            resultsPerPage = parseInt(this.value);
+            currentPage = 1;
+            updateTable();
+        });
+
+        prevPage.addEventListener('click', function () {
+            if (currentPage > 1) {
+                currentPage--;
+                updateTable();
+            }
+        });
+
+        nextPage.addEventListener('click', function () {
+            const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                updateTable();
+            }
+        });
+
+        searchInput.addEventListener('input', filterTable);
+
+        // Initialize table
+        updateTable();
+    });
+</script>
+{% endblock %}

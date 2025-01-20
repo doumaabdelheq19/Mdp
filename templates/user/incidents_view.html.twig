@@ -1,0 +1,118 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'editer_un_incident'|trans }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container-fluid px-lg-5 m-b-30">
+            <div class="row">
+                <div class="col-12 text-white p-t-40 p-b-90">
+
+                    <h4 class=""> <span class="btn btn-white-translucent">
+                                <i class="mdi mdi-alert"></i></span> {{ 'editer_un_incident'|trans }}
+                    </h4>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid px-lg-5 pull-up">
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-body ">
+                    {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.cnilInformed) }}
+                            {{ form_widget(form.cnilInformed, {'attr': {'class': 'form-control ' ~ ((form_errors(form.cnilInformed) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.cnilInformed) | striptags  }}</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.notice72H) }}
+                            {{ form_widget(form.notice72H, {'attr': {'class': 'form-control ' ~ ((form_errors(form.notice72H) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.notice72H) | striptags  }}</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.date) }}
+                            {{ form_widget(form.date, {'attr': {'class': 'form-control datepicker-js ' ~ ((form_errors(form.date) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.date) | striptags  }}</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.type) }}
+                            {{ form_widget(form.type, {'attr': {'class': 'form-control ' ~ ((form_errors(form.type) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.type) | striptags  }}</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.peopleNumber) }}
+                            {{ form_widget(form.peopleNumber, {'attr': {'class': 'form-control ' ~ ((form_errors(form.peopleNumber) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.peopleNumber) | striptags  }}</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.fileType) }}
+                            {{ form_widget(form.fileType, {'attr': {'class': 'form-control ' ~ ((form_errors(form.fileType) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.fileType) | striptags  }}</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.consequences) }}
+                            {{ form_widget(form.consequences, {'attr': {'class': 'form-control ' ~ ((form_errors(form.consequences) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.consequences) | striptags  }}</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.takenMeasures) }}
+                            {{ form_widget(form.takenMeasures, {'attr': {'class': 'form-control ' ~ ((form_errors(form.takenMeasures) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.takenMeasures) | striptags  }}</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            {{ form_label(form.peopleInformed) }}
+                            {{ form_widget(form.peopleInformed, {'attr': {'class': 'form-control ' ~ ((form_errors(form.peopleInformed) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.peopleInformed) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    {% if incident.group %}
+                        <p class="text-danger">{{ 'cet_incident_touche_le_groupe'|trans }}</p>
+                    {% endif %}
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        // Tables to dataTables
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                $(".datepicker-js").datepicker({
+                    language: 'fr',
+                    format: 'yyyy-mm-dd'
+                });
+            });
+        })(window.jQuery);
+
+    </script>
+{% endblock %}

@@ -1,0 +1,41 @@
+<h4 style="text-align: center">{{ 'soustraitants_groupe'|trans }}</h4>
+<table style="width:100%;font-size: 9px;" border="1" cellpadding="6">
+    <thead>
+    <tr style="background-color: #264465; color: white">
+        <th>{{ 'societe'|trans }}</th>
+        <th>{{ 'typologie'|trans }}</th>
+        <th>{{ 'traitements'|trans }}</th>
+        <th>{{ 'contact'|trans }}</th>
+        <th>{{ 'tl'|trans }}</th>
+        <th>{{ 'mail'|trans }}</th>
+        <th>{{ 'conformit'|trans }}</th>
+        <th>{{ 'doc'|trans }}</th>
+        <th>{{ 'date'|trans }}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for subcontractor in subcontractors %}
+        <tr>
+            <td>{{ subcontractor.name }}</td>
+            <td>{{ subcontractor.type }}</td>
+            <td>
+                {% for treatment in subcontractor.treatments %}
+                    {% if treatment.user.id == app.user.user.id %}
+                        <span>{{ treatment.number|format_treatment_number }}</span><br/>
+                    {% endif %}
+                {% endfor %}
+            </td>
+            <td>{{ subcontractor.contactLastName }} {{ subcontractor.contactFirstName }}</td>
+            <td>{{ subcontractor.contactPhone }}</td>
+            <td>{{ subcontractor.contactEmail }}</td>
+            <td>{{ subcontractor.conformity.libelle }}</td>
+            <td>
+                {% for document in subcontractor.documents %}
+                    <span>{{ document.name }}</span><br/>
+                {% endfor %}
+            </td>
+            <td>{{ subcontractor.editDate|date('d/m/Y') }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

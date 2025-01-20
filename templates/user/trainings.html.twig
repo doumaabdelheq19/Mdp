@@ -1,0 +1,448 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'formation_des_quipes'|trans }}
+{% endblock %}
+
+{% block content %}
+<div class="layer" id="popup-layer">
+    <div class="popup">
+        <div class="popup-header">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 1024 1024">
+                <path fill="currentColor" d="M685.248 104.704a64 64 0 0 1 0 90.496L368.448 512l316.8 316.8a64 64 0 0 1-90.496 90.496L232.704 557.248a64 64 0 0 1 0-90.496l362.048-362.048a64 64 0 0 1 90.496 0"/>
+            </svg>
+            {{ 'diffuser_le_questionnaire'|trans }}
+        </div>
+        <div class="divider">
+            <div class="sub-divider"></div>
+        </div>
+        {{ form_start(form) }}
+
+        <div class="popup-body">
+
+            <!-- Campaign Type Radios -->
+            <div class="campaign-type-section">
+    <label>{{ 'Sélectionnez un type'|trans }}</label>
+    
+    {% for chk in form.campain_type %}
+        <div class="questionnaire-item">
+            {{ form_widget(chk, {'attr': {'class': 'custom-control-input', 'id': chk.vars.id} }) }}
+            {{ form_label(chk, null, {'label_attr': {'for': chk.vars.id}}) }}
+        </div>
+    {% endfor %}
+    
+    <div class="invalid-feedback">{{ form_errors(form.campain_type) | striptags }}</div>
+</div>
+
+
+            <!-- Title Input -->
+            <div class="form-group">
+                {{ form_label(form.title) }}
+                {{ form_widget(form.title, {'attr': {'class': 'form-control ' ~ ((form_errors(form.title) == '') ? '' : 'is-invalid')} }) }}
+                <div class="invalid-feedback">{{ form_errors(form.title) | striptags }}</div>
+            </div>
+
+            <!-- Traineeship Radios -->
+           <div class="questionnaire-section">
+    <label>{{ 'Formation ou sensibilisation réalisée au préalable ?'|trans }}</label>
+    
+    {% for chk in form.traineeship %}
+        <div class="questionnaire-item">
+            {{ form_widget(chk, {'attr': {'class': 'custom-control-input', 'id': chk.vars.id} }) }}
+            {{ form_label(chk, null, {'label_attr': {'for': chk.vars.id}}) }}
+        </div>
+    {% endfor %}
+    
+    <div class="invalid-feedback">{{ form_errors(form.traineeship) | striptags }}</div>
+</div>
+
+
+            <hr/>
+
+            <!-- Former and Date -->
+            <div class="form-group">
+                {{ form_label(form.former) }}
+                {{ form_widget(form.former, {'attr': {'class': 'form-control ' ~ ((form_errors(form.former) == '') ? '' : 'is-invalid')} }) }}
+                <div class="invalid-feedback">{{ form_errors(form.former) | striptags }}</div>
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.traineeshipDate) }}
+                {{ form_widget(form.traineeshipDate, {'attr': {'class': 'form-control ' ~ ((form_errors(form.traineeshipDate) == '') ? '' : 'is-invalid')} }) }}
+                <div class="invalid-feedback">{{ form_errors(form.traineeshipDate) | striptags }}</div>
+            </div>
+
+            <hr/>
+
+            <!-- Teams Select -->
+         <div class="form-group">
+    <label for="teams-search">{{ form_label(form.teams) }}</label>
+
+    <!-- Dropdown and Search -->
+    <div class="dropdownform">
+        <input 
+            type="text" 
+            id="teams-search" 
+            class="form-control" 
+            placeholder="{{ 'Rechercher une équipe'|trans }}" 
+            oninput="filterTeamsDropdown()" />
+
+        <ul class="dropdown-menu" id="teams-dropdown">
+            {% for team in form.teams.vars.choices %}
+                <li data-id="{{ team.value }}">
+                    <a href="javascript:void(0);" onclick="selectTeam('{{ team.value }}', '{{ team.label|e('js') }}')">
+                        {{ team.label }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% do form.teams.setRendered() %}
+    <!-- Hidden Input for Selected Teams -->
+    <input type="hidden" id="selected-teams" name="selected-teams" value="" />
+    
+
+    <!-- Display Selected Teams -->
+    <div id="selected-teams-list" class="selected-items"></div>
+
+    <!-- Validation Feedback -->
+    <div class="invalid-feedback">{{ form_errors(form.teams) | striptags }}</div>
+</div>
+
+
+            <!-- Emails Textarea -->
+             <div class="form-group col-12">
+                        {{ form_label(form.emails) }}
+                        <p class="small text-muted">{{ 'collez_ici_la_liste_des_adresses_mails_ou_saisisse'|trans|raw }}</p>
+                        {{ form_widget(form.emails) }}
+                    </div> 
+
+            <!-- Training Options -->
+            <div class="questionnaire-section">
+    <label>{{ 'questionnaire_diffuser_aux_personnes'|trans }}</label>
+    <div class="questionnaire-grid">
+        {% for chk in form.training %}
+            <div class="questionnaire-item">
+                {{ form_widget(chk, {'attr': {'id': chk.vars.id}}) }}
+                <label for="{{ chk.vars.id }}">
+                    <span class="radio-content">
+                        {{ form_label(chk)|striptags }}
+                    </span>
+                </label>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="invalid-feedback">{{ form_errors(form.training) | striptags }}</div>
+</div>
+
+
+        </div>
+
+        <div class="popup-footer">
+            <button type="submit" class="submit-btn">{{ 'crer'|trans }}</button>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
+
+<div class="page">
+    <!-- Header Section -->
+    <div class="table-container-traitements">
+        <div class="header">
+            <h2>{{ 'formation_des_quipes'|trans }}</h2>
+            <p><a href="https://www.cnil.fr/fr/securite-impliquer-et-former-les-utilisateurs" class="text-primary">{{ 'En savoir plus sur les campagnes et les équipes'|trans }}</a></p>
+        </div>
+
+        <!-- Search and Action Buttons -->
+        <div style="display: flex; justify-content: space-between; width: 100%;">
+            <div class="search-bar">
+                <span class="search-icon">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </span>
+                <input type="text" placeholder="{{ 'Rechercher'|trans }}" />
+            </div>
+            <div class="buttons">
+              
+                 <div class="gerer">
+                    <a href="{{ path('user_trainings_teams') }}" class="btn btn-primary">{{ 'Gérer les équipes'|trans }}</a>
+                </div>
+                <div class="exporter">
+                    <a href="#" class="btn btn-primary" id="openpopup">{{ 'Créer une campagne'|trans }}</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Table -->
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>{{ 'titre'|trans }}</th>
+                    <th>{{ 'formation_ralise'|trans }}</th>
+                    <th>{{ 'personnes_sensibilises'|trans }}</th>
+                    <th>{{ 'questionnaire'|trans }}</th>
+                    <th>{{ 'questionnaires_envoys'|trans }}</th>
+                    <th>{{ 'questionnaires_rpondus'|trans }}</th>
+                    <th>{{ 'taux_de_russite'|trans }}</th>
+                    <th>{{ 'actions'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if campains|length > 0 %}
+                    {% for campain in campains %}
+                    {% set data = get_user_training_request_array(campain) %}
+                    <tr>
+                        <td>{{ campain.title }}
+                            {% if campain.external %}
+                                <br/><span class="badge badge-secondary">{{ 'externe'|trans }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if campain.traineeship %}
+                                <div style="color: #52B489; background-color:rgba(82, 180, 138, 0.14); border-radius: 10px; padding: 2px;">
+                                    {{ 'oui'|trans }}
+                                </div>
+                              
+                            {% else %}
+                                <div style="color: #EF6D6F; background-color: #ef6d6f2a; border-radius: 10px; padding: 2px;">
+                                    {{ 'non'|trans }}
+                                </div>
+                            {% endif %}
+                        </td>
+                        <td>{{ campain.emailsCount }}</td>
+                        <td>{{ campain.training.title|default('-') }}</td>
+                        <td>{% if campain.training %}{{ data.total }}{% endif %}</td>
+                        <td>{% if campain.training %}{{ data.answered }}{% endif %}</td>
+                        <td>
+                            {% if campain.training and data.answered %}
+    {% set dataRateClass = "badge-danger" %}
+    {% if data.rate * 100 > 75 %}
+        {% set dataRateClass = "badge-success" %}
+    {% elseif data.rate * 100 >= 51 %}
+        {% set dataRateClass = "badge-warning" %}
+    {% endif %}
+    <span class="badge {{ dataRateClass }}">
+        {{ (data.rate * 100)|round }}%
+    </span>
+{% else %}
+    <span class="badge badge-danger">
+        0%
+    </span>
+{% endif %}
+
+                        </td>
+                        <td>
+                            <a href="{{ path('user_trainings_requests', {'id': campain.id}) }}" class="questionnaire" style="color: #438492">{{ 'questionnaires_diffuss'|trans }}</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="8" class="text-center">{{ 'Aucune campagne disponible'|trans }}</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+
+        <!-- Pagination -->
+        <div class="pagination-container">
+            <!-- Results per page selector -->
+            <div class="results-per-page">
+                <label for="results">{{ 'Afficher'|trans }}</label>
+                <select id="results" class="results-select">
+                    <option value="12" {% if app.request.query.get('results') == '12' %}selected{% endif %}>12</option>
+                    <option value="24" {% if app.request.query.get('results') == '24' %}selected{% endif %}>24</option>
+                    <option value="48" {% if app.request.query.get('results') == '48' %}selected{% endif %}>48</option>
+                </select>
+                <span>{{ 'résultats par page'|trans }}</span>
+            </div>
+
+            <!-- Pagination Controls -->
+            <div class="pagination-controls">
+                {% set currentPage = app.request.query.get('page')|default('1')|number_format(0, '', '', '') %}
+                {% set totalPages = totalPages|default(1) %}
+                <button class="pagination-button" {% if currentPage == 1 %}disabled{% endif %}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19l-7-7l7-7"/></svg></button>
+                <span class="pagination-info">{{ 'Page'|trans }} {{ currentPage }} {{ 'sur'|trans }} {{ totalPages }}</span>
+                <button class="pagination-button" {% if currentPage == totalPages %}disabled{% endif %}><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5l7 7l-7 7"/></svg></button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('/assets/vendor/tagify/tagify.min.js') }}"></script>
+    <script>
+        (function ($) {
+            'use strict';
+const popupLayer = document.getElementById('popup-layer');
+        const popupp = popupLayer.querySelector('.popup');
+
+        // Hide layer when clicking outside the popup
+        popupLayer.addEventListener('click', function (event) {
+            if (!popupp.contains(event.target)) {
+                popupLayer.style.display="none"; // Hide the layer
+            }
+        });
+
+            const closeIcon = document.querySelector(".popup-header svg");
+    const openButton = document.querySelector("#openpopup");
+    const popup = document.querySelector(".layer");
+    const alertMessage = document.querySelector(".alertt");
+
+    // Ensure elements exist
+    if (closeIcon && openButton && popup) {
+        // Close popup
+        closeIcon.addEventListener("click", () => {
+            popup.style.display = "none"; // Hide popup
+            if (alertMessage) {
+                alertMessage.style.display = "flex"; // Show alert if available
+            }
+        });
+
+        // Open popup
+        openButton.addEventListener("click", () => {
+            popup.style.display = "flex"; // Show popup
+            if (alertMessage) {
+                alertMessage.style.display = "none"; // Hide alert if available
+            }
+        });
+    } else {
+        console.error("Popup elements not found. Check your DOM structure.");
+    }
+
+
+
+
+
+            $(document).ready(function () {
+                {% if app.request.locale == "fr" %}
+                    $('#datatable').DataTable({
+                        "language": {
+                            "search": "Rechercher :",
+                            "lengthMenu": "Afficher _MENU_ résultats par page",
+                            "zeroRecords": "Aucun résultat",
+                            "info": "Page _PAGE_ sur _PAGES_",
+                            "infoEmpty": "Aucune donnée disponible",
+                            "infoFiltered": "(filtré de _MAX_ enregistrements au total)",
+                            "paginate": {
+                                "previous": "Précédent",
+                                "next": "Suivant"
+                            }
+                        }
+                    });
+                {% else %}
+                    $('#datatable').DataTable({
+                        "language": {
+                            "search": "Search:",
+                            "lengthMenu": "Show _MENU_ entries per page",
+                            "zeroRecords": "No matching records found",
+                            "info": "Page _PAGE_ of _PAGES_",
+                            "infoEmpty": "No data available in table",
+                            "infoFiltered": "(filtered from _MAX_ total entries)",
+                            "paginate": {
+                                "previous": "Previous",
+                                "next": "Next"
+                            }
+                        }
+                    });
+                {% endif %}
+
+                // Handle pagination buttons
+                document.querySelectorAll('.pagination-button').forEach(button => {
+                    button.addEventListener('click', function () {
+                        const isDisabled = this.classList.contains('disabled');
+                        if (!isDisabled) {
+                            const direction = this.textContent.trim() === ">" ? 1 : -1;
+                            const urlParams = new URLSearchParams(window.location.search);
+                            const currentPage = parseInt(urlParams.get('page')) || 1;
+                            const nextPage = currentPage + direction;
+                            urlParams.set('page', nextPage);
+                            window.location.search = urlParams.toString();
+                        }
+                    });
+                });
+
+                // Handle results per page change
+                document.getElementById('results').addEventListener('change', function () {
+                    const selectedValue = this.value;
+                    const urlParams = new URLSearchParams(window.location.search);
+                    urlParams.set('results', selectedValue);
+                    urlParams.delete('page'); // Reset to the first page
+                    window.location.search = urlParams.toString();
+                });
+
+                // Tagify for input fields
+                new Tagify(document.querySelector('#form_emails'), {
+                    delimiters: ",| |:|[\\n\\r]"
+                });
+            });
+        })(window.jQuery);
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+    const teamsSearchInput = document.getElementById("teams-search");
+    const teamsDropdownMenu = document.getElementById("teams-dropdown");
+    const selectedTeamsHiddenInput = document.getElementById("selected-teams");
+    const selectedTeamsList = document.getElementById("selected-teams-list");
+    const selectedTeamsSet = new Set();
+
+    // Filter dropdown options based on search input
+    window.filterTeamsDropdown = () => {
+        const filter = teamsSearchInput.value.toLowerCase();
+        const items = teamsDropdownMenu.querySelectorAll("li");
+
+        items.forEach(item => {
+            const text = item.textContent.toLowerCase();
+            item.style.display = text.includes(filter) ? "block" : "none";
+        });
+    };
+
+    // Add a team to the selected list
+    window.selectTeam = (id, name) => {
+        if (!selectedTeamsSet.has(id)) {
+            selectedTeamsSet.add(id);
+
+            // Update hidden input value
+            selectedTeamsHiddenInput.value = Array.from(selectedTeamsSet).join(',');
+
+            // Create selected team element
+            const selectedItem = document.createElement('div');
+            selectedItem.classList.add('selected-item');
+            selectedItem.dataset.id = id;
+
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = name;
+
+            const removeButton = document.createElement('span');
+            removeButton.textContent = '×'; // Unicode for 'X'
+            removeButton.classList.add('remove-button');
+            removeButton.onclick = () => {
+                selectedTeamsSet.delete(id);
+                selectedTeamsHiddenInput.value = Array.from(selectedTeamsSet).join(',');
+                selectedItem.remove();
+            };
+
+            selectedItem.appendChild(nameSpan);
+            selectedItem.appendChild(removeButton);
+
+            selectedTeamsList.appendChild(selectedItem);
+        }
+    };
+
+    // Show dropdown on input focus
+    teamsSearchInput.addEventListener("focus", () => {
+        teamsDropdownMenu.style.display = "block";
+    });
+
+    // Hide dropdown on input blur
+    teamsSearchInput.addEventListener("blur", () => {
+        setTimeout(() => {
+            teamsDropdownMenu.style.display = "none";
+        }, 200); // Allow time for clicks to register
+    });
+});
+
+    </script>
+{% endblock %}

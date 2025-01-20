@@ -1,0 +1,202 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'ajouter_un_soustraitant'|trans }}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+<div class="page">
+    <div class="table-container-traitements">
+        <div class="header headretour">
+            <a href="javascript:history.back()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024"><path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/></svg></a>
+
+            <h2>{{ 'ajouter_un_soustraitant'|trans }}</h2>
+        </div>
+        {{ form_start(form, {"attr": {"class": "sous-traitantform"}}) }}
+        
+       
+
+        <!-- Standard Search Section -->
+    <div class="sectt">
+            <br><br>
+        <div class="form-group">
+            <div class="form-group1">
+                <div class="dropdownform">
+                    <div style="position: relative; display: flex; align-items: center;">
+                    <span style="position: absolute; left: 10px; font-size: 13px;margin-bottom: 12px;color: #92AEDA;">
+                      <i class="fa fa-search"></i> <!-- Use Font Awesome or replace with any icon library -->
+                      </span>
+                        <input style="padding-left:30px" type="text" id="standard-search" placeholder="{{ 'rechercher_un_standard'|trans }}">
+                        <span style="position: absolute; right: 10px; font-size: 16px; pointer-events: none;font-size: 13px;margin-bottom: 12px;color: #92AEDA;">
+                          <i class="fa fa-chevron-down"></i> <!-- Use Font Awesome or replace with any icon library -->
+                        </span>   
+                    </div>
+                        
+                        <ul class="dropdown-menu" id="dropdown-menu">
+                            {% for subcontractorStd in subcontractorsStd %}
+            <li>
+                <a class="dropdown-item"  onclick="selectStd({{subcontractorStd.id }})">
+                    {{ subcontractorStd.name }}
+                </a>
+            </li>
+        
+        {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+         <!-- Type of Subcontractor -->
+         <h3>Type de destinataire</h3>
+          <div class="form-group">
+        <div class="form-group1">
+            {{ form_widget(form.subcontractorType, {'attr': {'class': 'form-control'}}) }}
+            <div class="invalid-feedback">
+                {{ form_errors(form.subcontractorType) }}
+            </div>
+        </div>
+        </div>
+
+        <!-- Company Section -->
+        <div class="sectt">
+            <h3>{{ 'societe'|trans }}</h3>
+            <div class="form-group">
+                <div class="form-group1">
+                    {{ form_label(form.name, 'Nom') }}
+                    {{ form_widget(form.name, {'attr': {'placeholder': 'Nom', 'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group1">
+                    {{ form_label(form.type, 'Typologie') }}
+                    {{ form_widget(form.type, {'attr': {'placeholder': 'Typologie', 'class': 'form-control'}}) }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="sectt">
+            <h3>{{ 'contact'|trans }}</h3>
+            <div class="form-group">
+                <div class="form-group1">
+                    {{ form_label(form.contactLastName, 'Nom') }}
+                    {{ form_widget(form.contactLastName, {'attr': {'placeholder': 'Nom', 'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group1">
+                    {{ form_label(form.contactFirstName, 'Prénom') }}
+                    {{ form_widget(form.contactFirstName, {'attr': {'placeholder': 'Prénom', 'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group1">
+                    {{ form_label(form.contactEmail, 'Email') }}
+                    {{ form_widget(form.contactEmail, {'attr': {'placeholder': 'Email', 'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group1">
+                    {{ form_label(form.contactPhone, 'Téléphone') }}
+                    {{ form_widget(form.contactPhone, {'attr': {'placeholder': 'Téléphone', 'class': 'form-control'}}) }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Conformity Section -->
+        <div class="sectt">
+            <h3>{{ 'conformit_maj'|trans }}</h3>
+            <div class="form-group">
+                <div class="form-group1">
+                    {{ form_label(form.conformity, 'Conformité') }}
+                    {{ form_widget(form.conformity, {'attr': {'class': 'form-control'}}) }}
+                </div>
+                <div class="form-group1">
+                    {{ form_label(form.privacyPolicyLink, 'Lien vers la politique de confidentialité') }}
+                    {{ form_widget(form.privacyPolicyLink, {'attr': {'placeholder': 'https://', 'class': 'form-control'}}) }}
+                </div>
+            </div>
+            <div class="form-group mt-3" style="margin-bottom: 40px;">
+                <button type="button" class="file-button" onclick="document.getElementById('documentFileInput').click();">
+                    <i class="fa fa-file" aria-hidden="true"></i> {{ 'joindre un fichier'|trans }}
+                </button>
+                <input type="file" id="documentFileInput" style="display: none;" onchange="updateFileName(this);">
+            </div>
+        </div>
+
+        <!-- Group Checkbox -->
+        <div class="checkbox-group">
+            {{ form_widget(form.group, {'attr': {'id': 'destinataire-commun'}}) }}
+            {{ form_label(form.group, 'Destinataire commun à l\'ensemble du groupe ?', {'label_attr': {'for': 'destinataire-commun'}}) }}
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="submit-button">{{ 'enregistrer'|trans }}</button>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.getElementById("standard-search").addEventListener("input", function () {
+            const query = this.value.toLowerCase();
+            const options = document.querySelectorAll("#dropdown-menu li");
+            options.forEach(option => {
+                if (option.textContent.toLowerCase().includes(query)) {
+                    option.style.display = "block";
+                } else {
+                    option.style.display = "none";
+                }
+            });
+        });
+       function selectStd(e) {
+            saved = true;
+            window.location.href = "{{ path('user_subcontractors_add') }}?std=" + e;
+        }
+        function updateFileName(input) {
+            const button = document.querySelector('.file-button');
+            if (input.files.length > 0) {
+                button.innerHTML = `<i class="fa fa-file" aria-hidden="true"></i> ${input.files[0].name}`;
+            } else {
+                button.innerHTML = `<i class="fa fa-file" aria-hidden="true"></i> {{ 'joindre_un_fichier'|trans }}`;
+            }
+        }
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+    const searchInput = document.getElementById("standard-search");
+    const dropdownMenu = document.getElementById("dropdown-menu");
+  
+    // Show dropdown menu on focus
+    searchInput.addEventListener("focus", () => {
+      dropdownMenu.style.display = "block";
+    });
+  
+    // Filter dropdown options based on input
+    searchInput.addEventListener("input", () => {
+      const filter = searchInput.value.toLowerCase();
+      const items = dropdownMenu.querySelectorAll("li");
+      items.forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = text.includes(filter) ? "block" : "none";
+      });
+    });
+  
+    // Hide dropdown menu on blur
+    searchInput.addEventListener("blur", () => {
+      setTimeout(() => {
+        dropdownMenu.style.display = "none";
+      }, 200); // Delay to allow option selection
+    });
+  
+    // Add functionality to select a dropdown option
+    dropdownMenu.addEventListener("click", (e) => {
+      if (e.target.tagName === "LI") {
+        searchInput.value = e.target.textContent;
+        dropdownMenu.style.display = "none";
+      }
+    });
+  });
+    </script>
+{% endblock %}

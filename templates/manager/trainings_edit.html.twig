@@ -1,0 +1,385 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Modifier le questionnaire
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container-fluid px-lg-5 m-b-30">
+            <div class="row">
+                <div class="col-12 text-white p-t-40 p-b-90">
+
+                    <h4 class=""> <span class="btn btn-white-translucent">
+                                <i class="mdi mdi-account "></i></span> Modifier le questionnaire
+                    </h4>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid px-lg-5 pull-up">
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-body ">
+                    {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
+
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            {{ form_label(form.title) }}
+                            {{ form_widget(form.title, {'attr': {'class': 'form-control ' ~ ((form_errors(form.title) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.title) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.pictureFile) }}
+                            {{ form_widget(form.pictureFile, {'attr': {'class': 'form-control ' ~ ((form_errors(form.pictureFile) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.pictureFile) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <div class="custom-control custom-checkbox my-4">
+                        {{ form_widget(form.active, {'attr': {'class': 'custom-control-input'}}) }}
+                        {{ form_label(form.active, null, {'label_attr': {'class': 'custom-control-label'}}) }}
+                    </div>
+
+                    <div class="custom-control custom-checkbox my-4">
+                        {{ form_widget(form.availableForAll, {'attr': {'class': 'custom-control-input'}}) }}
+                        {{ form_label(form.availableForAll, null, {'label_attr': {'class': 'custom-control-label'}}) }}
+                    </div>
+
+                    <p>OU</p>
+
+                    <div class="d-flex">
+                        <button type="button" onclick="openUsersModal();" class="btn btn-primary mb-2">Sélectionner des clients</button>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group col-md-12">
+                            <div id="users-selected">{{ usersStr|join(', ') }}</div>
+                            <div class="invalid-feedback">{{ form_errors(form.users) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <div class="modal fade" id="ModalUsers" tabindex="-1" role="dialog"
+                         aria-labelledby="ModalUsers" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalCenterTitle">Clients</h5>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Fermer">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <span onclick="selectAllUsers();" style="cursor: pointer;">Tout sélectionner</span> / <span onclick="unselectAllUsers();" style="cursor: pointer;">Tout désélectionner</span>
+                                    </div>
+                                    <div id="ModalUsersContent">
+                                        {% for chk in form.users %}
+                                            <div class="custom-control custom-checkbox">
+                                                {{ form_widget(chk, {'attr': {'class': 'custom-control-input checkbox-user'} }) }}
+                                                {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label'}}) }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                                        Fermer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row my-3">
+                        <div class="col-12 mb-2">
+                            <h4>Contenu</h4>
+                        </div>
+                        <div class="col-12" id="content_container_1">
+                            {% if training.questions is defined %}
+                                {% for item in training.questions %}
+                                    <div class="w-100 my-4">
+                                        <div class="w-100 question-number-block">
+                                            <p class="h5 question-number">Question {{ loop.index }}</p>
+                                        </div>
+                                        <div class="w-100 d-flex">
+                                            <button class="btn btn-md btn-outline-danger mr-2" type="button" onclick="removeItem(this)"><i class="mdi mdi-trash-can-outline"></i></button>
+                                            <div class="w-100 d-flex flex-column">
+                                                <input class="w-100 form-control mb-2" type="text" placeholder="Intitulé de la question" name="form_e_items[{{ loop.index0 }}][0]" id="form_items_0_{{ loop.index0 }}" value="{{ item.title }}">
+                                                <textarea class="w-100 form-control mb-2" placeholder="Choix (1 par ligne)" rows="12" name="form_e_items[{{ loop.index0 }}][1]" id="form_items_1_{{ loop.index0 }}">{{ item.choices|array_to_textarea }}</textarea>
+                                                <div class="mb-4">
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input class="custom-control-input" type="radio" value="0" name="form_e_items[{{ loop.index0 }}][2]" id="form_items_2_0_{{ loop.index0 }}" {% if not item.multiple %}checked="checked"{% endif %}>
+                                                        <label class="custom-control-label" for="form_items_2_0_{{ loop.index0 }}">Choix unique</label>
+                                                    </div>
+                                                    <div class="custom-control custom-radio custom-control-inline">
+                                                        <input class="custom-control-input" type="radio" value="1" name="form_e_items[{{ loop.index0 }}][2]" id="form_items_2_1_{{ loop.index0 }}" {% if item.multiple %}checked="checked"{% endif %}>
+                                                        <label class="custom-control-label" for="form_items_2_1_{{ loop.index0 }}">Choix multiples</label>
+                                                    </div>
+                                                </div>
+                                                <textarea class="w-100 form-control" placeholder="Liens utiles (1 par ligne)" rows="4" name="form_e_items[{{ loop.index0 }}][3]" id="form_items_3_{{ loop.index0 }}">{{ item.links|array_to_textarea }}</textarea>
+                                                <textarea class="w-100 form-control" placeholder="Explications réponse" rows="4" name="form_e_items[{{ loop.index0 }}][4]" id="form_items_4_{{ loop.index0 }}">{{ item.explanations }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="col-12 d-flex">
+                            <button type="button" class="btn btn-success btn-rounded-circle mr-2 content_add_button" id="content_add_button_1" onclick="addQuestion(this);"><i class="mdi mdi-plus"></i></button><h5 class="pt-2">Ajouter une question</h5>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var trCounts = {% if training.questions is defined %}{{ (training.questions|length)+1 }}{% else %}1{% endif %};
+
+        function addQuestion(e) {
+            const container_div = document.getElementById('content_container_1');
+
+            var blockContainer = document.createElement("div");
+            blockContainer.className = "w-100 my-4";
+
+            var blockQuestionNumberContainer = document.createElement("div");
+            blockQuestionNumberContainer.className = "w-100 question-number-block";
+
+            var questionNumberP = document.createElement("p");
+            questionNumberP.className = "h5 question-number";
+
+            blockQuestionNumberContainer.appendChild(questionNumberP);
+            blockContainer.appendChild(blockQuestionNumberContainer);
+
+            var newContainer = document.createElement("div");
+            newContainer.className = "w-100 d-flex";
+
+            var inputsContainer = document.createElement("div");
+            inputsContainer.className = "w-100 d-flex flex-column";
+
+            var inputs = [];
+
+            inputs[0] = document.createElement("input");
+            inputs[0].className = "w-100 form-control mb-2";
+            inputs[0].setAttribute("type", "text");
+            inputs[0].setAttribute("placeholder", "Intitulé de la question");
+            inputs[0].setAttribute("name", "form_items["+trCounts+"][0]");
+            inputs[0].setAttribute("id", "form_items_0_"+trCounts);
+
+            inputs[1] = document.createElement("textarea");
+            inputs[1].className = "w-100 form-control mb-2";
+            inputs[1].setAttribute("placeholder", "Choix (1 par ligne)");
+            inputs[1].setAttribute("rows", "12");
+            inputs[1].setAttribute("name", "form_items["+trCounts+"][1]");
+            inputs[1].setAttribute("id", "form_items_1_"+trCounts);
+
+            var tmpInput2LabelUnique = document.createElement("label");
+            tmpInput2LabelUnique.className = "custom-control-label";
+            tmpInput2LabelUnique.setAttribute("for", "form_items_2_0_"+trCounts);
+            tmpInput2LabelUnique.innerText = "Choix unique"
+
+            var tmpInput2Unique = document.createElement("input");
+            tmpInput2Unique.className = "custom-control-input";
+            tmpInput2Unique.setAttribute("type", "radio");
+            tmpInput2Unique.setAttribute("value", "0");
+            tmpInput2Unique.setAttribute("name", "form_items["+trCounts+"][2]");
+            tmpInput2Unique.setAttribute("id", "form_items_2_0_"+trCounts);
+            tmpInput2Unique.setAttribute("checked", "checked");
+
+            var tmpInput2DivUnique = document.createElement("div");
+            tmpInput2DivUnique.className = "custom-control custom-radio custom-control-inline";
+
+            tmpInput2DivUnique.appendChild(tmpInput2Unique);
+            tmpInput2DivUnique.appendChild(tmpInput2LabelUnique);
+
+            var tmpInput2LabelMultiple = document.createElement("label");
+            tmpInput2LabelMultiple.className = "custom-control-label";
+            tmpInput2LabelMultiple.setAttribute("for", "form_items_2_1_"+trCounts);
+            tmpInput2LabelMultiple.innerText = "Choix multiples"
+
+            var tmpInput2Multiple = document.createElement("input");
+            tmpInput2Multiple.className = "custom-control-input";
+            tmpInput2Multiple.setAttribute("type", "radio");
+            tmpInput2Multiple.setAttribute("value", "1");
+            tmpInput2Multiple.setAttribute("name", "form_items["+trCounts+"][2]");
+            tmpInput2Multiple.setAttribute("id", "form_items_2_1_"+trCounts);
+
+            var tmpInput2DivMultiple = document.createElement("div");
+            tmpInput2DivMultiple.className = "custom-control custom-radio custom-control-inline";
+
+            tmpInput2DivMultiple.appendChild(tmpInput2Multiple);
+            tmpInput2DivMultiple.appendChild(tmpInput2LabelMultiple);
+
+            inputs[2] = document.createElement("div");
+            inputs[2].className = "mb-4";
+            inputs[2].appendChild(tmpInput2DivUnique);
+            inputs[2].appendChild(tmpInput2DivMultiple);
+
+            inputs[3] = document.createElement("textarea");
+            inputs[3].className = "w-100 form-control mb-2";
+            inputs[3].setAttribute("placeholder", "Liens utiles (1 par ligne)");
+            inputs[3].setAttribute("rows", "4");
+            inputs[3].setAttribute("name", "form_items["+trCounts+"][3]");
+            inputs[3].setAttribute("id", "form_items_3_"+trCounts);
+
+            inputs[4] = document.createElement("textarea");
+            inputs[4].className = "w-100 form-control";
+            inputs[4].setAttribute("placeholder", "Explications réponse");
+            inputs[4].setAttribute("rows", "4");
+            inputs[4].setAttribute("name", "form_items["+trCounts+"][4]");
+            inputs[4].setAttribute("id", "form_items_3_"+trCounts);
+
+            if (inputs.length) {
+                var itemRemoveButton = document.createElement("button");
+                itemRemoveButton.className = "btn btn-md btn-outline-danger mr-2";
+                itemRemoveButton.setAttribute("type", "button");
+                itemRemoveButton.setAttribute("onclick", "removeItem(this)");
+
+                var itemRemoveButtonI = document.createElement("i");
+                itemRemoveButtonI.className = "mdi mdi-trash-can-outline";
+
+                itemRemoveButton.appendChild(itemRemoveButtonI);
+
+                newContainer.appendChild(itemRemoveButton);
+                for (var i = 0; i < inputs.length; i++) {
+                    inputsContainer.appendChild(inputs[i]);
+                }
+
+                newContainer.appendChild(inputsContainer);
+
+                blockContainer.appendChild(newContainer);
+
+                container_div.appendChild(blockContainer);
+            }
+
+            trCounts++;
+
+            updateQuestionNumbers();
+        }
+
+        function updateQuestionNumbers() {
+            var questionNumbers = document.getElementsByClassName('question-number');
+            for (var j = 0; j < questionNumbers.length; j++) {
+                questionNumbers.item(j).innerText = 'Question '+(j+1);
+            }
+        }
+
+        function removeItem(element) {
+            element.parentNode.parentNode.remove();
+            updateQuestionNumbers();
+        }
+
+        var users = {{ users|json_encode|raw }};
+        var usersStr = {{ usersStr|json_encode|raw }};
+
+        function openUsersModal() {
+            usersStrAssoc = {};
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: "{{ path('manager_json_users') }}",
+                data: {},
+                success: function (content) {
+                    var ModalUsersContent = document.getElementById("ModalUsersContent");
+
+                    ModalUsersContent.innerHTML = null;
+
+                    content.map(item => {
+                        usersStrAssoc[item.id] = item.text;
+                        var div = document.createElement("div");
+                        div.className = "custom-control custom-checkbox";
+
+                        var input = document.createElement("input");
+                        input.className = "custom-control-input checkbox-user";
+                        input.setAttribute("type", "checkbox");
+                        input.setAttribute("name", "appbundle_training[users][]");
+                        input.setAttribute("value", item.id);
+                        input.setAttribute("id", "appbundle_training_users_"+item.id);
+                        if (users.includes(item.id)) {
+                            input.setAttribute("checked", "checked");
+                        }
+                        input.addEventListener('change', function() {
+                            if (this.checked) {
+                                if (!users.includes(parseInt(this.value))) {
+                                    users.push(parseInt(this.value));
+                                }
+                            } else {
+                                const index = users.indexOf(parseInt(this.value));
+                                if (index > -1) {
+                                    users.splice(index, 1);
+                                }
+                            }
+                            refreshUsersContent();
+                        });
+
+                        var label = document.createElement("label");
+                        label.className = "custom-control-label";
+                        label.setAttribute("for", "appbundle_training_users_"+item.id);
+                        label.innerText = item.text;
+
+                        div.appendChild(input);
+                        div.appendChild(label);
+
+                        ModalUsersContent.append(div);
+                    });
+
+                    $('#ModalUsers').modal('show');
+                }
+            });
+        }
+
+        function selectAllUsers() {
+            $('.checkbox-user').prop('checked',true);
+            $('.checkbox-user').each(function () {
+                if (!users.includes(parseInt($(this).val()))) {
+                    users.push(parseInt($(this).val()));
+                }
+            })
+            refreshUsersContent();
+        }
+
+        function unselectAllUsers() {
+            $('.checkbox-user').prop('checked', false);
+            $('.checkbox-user').each(function () {
+                const index = users.indexOf(parseInt($(this).val()));
+                if (index > -1) {
+                    users.splice(index, 1);
+                }
+            })
+            refreshUsersContent();
+        }
+
+        function refreshUsersContent() {
+            usersStr = [];
+            users.map(function (subcontractor) {
+                usersStr.push(usersStrAssoc[subcontractor]);
+            })
+            usersStr.sort();
+            document.getElementById("users-selected").innerText = usersStr.join(", ");
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,601 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'Modifier_une_action'|trans }}
+{% endblock %}
+
+{% block content %}
+<div class="page">
+  <div class="table-container-traitements">
+    <div class="header headretour">
+    <a href="javascript:history.back()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024"><path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/></svg></a>
+
+      <h2>{{ 'crer_une_action'|trans }}</h2>
+    </div>
+
+    {{ form_start(form, {"attr": {"class": "sous-traitantform", "enctype": "multipart/form-data"}}) }}
+
+ 
+
+    <!-- Action Name and Budget -->
+    <div class="form-group">
+      <div class="form-group1">
+        {{ form_label(form.name) }}
+        {{ form_widget(form.name, {'attr': {'class': 'form-control ' ~ ((form_errors(form.name) == '') ? '' : 'is-invalid'), 'placeholder': 'Nom de l\'action'}}) }}
+        <div class="invalid-feedback">{{ form_errors(form.name) | striptags }}</div>
+      </div>
+
+      <div class="form-group1">
+        {{ form_label(form.budget) }}
+        {{ form_widget(form.budget, {'attr': {'class': 'form-control ' ~ ((form_errors(form.budget) == '') ? '' : 'is-invalid'), 'placeholder': 'Budget'}}) }}
+        <div class="invalid-feedback">{{ form_errors(form.budget) | striptags }}</div>
+      </div>
+    </div>
+
+    <!-- Responsible Information -->
+    <div class="sectt">
+      <h3>{{ 'responsable_de_laction'|trans }}</h3>
+      <div class="form-group">
+        <div class="form-group1">
+          {{ form_label(form.accountantLastName) }}
+          {{ form_widget(form.accountantLastName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.accountantLastName) == '') ? '' : 'is-invalid'), 'placeholder': 'Nom du responsable'}}) }}
+          <div class="invalid-feedback">{{ form_errors(form.accountantLastName) | striptags }}</div>
+        </div>
+
+        <div class="form-group1">
+          {{ form_label(form.accountantFirstName) }}
+          {{ form_widget(form.accountantFirstName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.accountantFirstName) == '') ? '' : 'is-invalid'), 'placeholder': 'Prénom du responsable'}}) }}
+          <div class="invalid-feedback">{{ form_errors(form.accountantFirstName) | striptags }}</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="form-group1">
+          {{ form_label(form.accountantEmail) }}
+          {{ form_widget(form.accountantEmail, {'attr': {'class': 'form-control ' ~ ((form_errors(form.accountantEmail) == '') ? '' : 'is-invalid'), 'placeholder': 'Email du responsable'}}) }}
+          <div class="invalid-feedback">{{ form_errors(form.accountantEmail) | striptags }}</div>
+        </div>
+
+        <div class="form-group1">
+          {{ form_label(form.accountantPhone) }}
+          {{ form_widget(form.accountantPhone, {'attr': {'class': 'form-control ' ~ ((form_errors(form.accountantPhone) == '') ? '' : 'is-invalid'), 'placeholder': 'Téléphone du responsable'}}) }}
+          <div class="invalid-feedback">{{ form_errors(form.accountantPhone) | striptags }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Information -->
+    <!-- Informations Section -->
+<h3 class="mt-4">{{ 'informations'|trans }}</h3>
+<div class="form-group">
+    <div class="form-group1">
+        {{ form_label(form.goal, 'Objectif') }}
+        {{ form_widget(form.goal, {'attr': {'class': 'form-control ' ~ ((form_errors(form.goal) == '') ? '' : 'is-invalid'), 'placeholder': 'Objectif'}}) }}
+        <div class="invalid-feedback">{{ form_errors(form.goal) | striptags }}</div>
+    </div>
+
+    <div class="form-group1">
+        {{ form_label(form.information, 'Informations') }}
+        {{ form_widget(form.information, {'attr': {'class': 'form-control ' ~ ((form_errors(form.information) == '') ? '' : 'is-invalid'), 'placeholder': 'Informations'}}) }}
+        <div class="invalid-feedback">{{ form_errors(form.information) | striptags }}</div>
+    </div>
+    </div>
+<div class="form-group">
+    <div class="form-group1">
+        {{ form_label(form.usefulLink, 'Lien utile') }}
+        {{ form_widget(form.usefulLink, {'attr': {'class': 'form-control ' ~ ((form_errors(form.usefulLink) == '') ? '' : 'is-invalid'), 'placeholder': 'Lien utile'}}) }}
+        <div class="invalid-feedback">{{ form_errors(form.usefulLink) | striptags }}</div>
+    </div>
+
+    <div class="form-group1">
+        {{ form_label(form.setUpDate, 'Date de mise en place souhaitée') }}
+        {{ form_widget(form.setUpDate, {'attr': {'class': 'form-control datepicker-js ' ~ ((form_errors(form.setUpDate) == '') ? '' : 'is-invalid'), 'placeholder': 'Date de mise en place souhaitée'}}) }}
+        <div class="invalid-feedback">{{ form_errors(form.setUpDate) | striptags }}</div>
+    </div>
+</div>
+
+
+    <!-- Priority -->
+   <div class="form-group-container">
+    <div class="form-group">
+        <div class="form-group1">
+            <label>{{ 'action_ralise'|trans }}</label>
+            <div style="display: flex; margin-top: 20px; width: 100%; justify-content: flex-start; gap:20px; align-items:center" class="radiosbutt">
+                {% for chk in form.terminated %}
+                    <div style="display: flex; gap: 10px; align-items: center; ">
+                        {{ form_widget(chk, {'attr': {'class': 'custom-control-input'}}) }}
+                        {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label'}}) }}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="invalid-feedback">{{ form_errors(form.terminated) | striptags }}</div>
+        </div>
+    </div>
+</div>
+{% do form.sheets.setRendered() %}
+{% do form.treatments.setRendered() %}
+
+<div class="form-group-container">
+    <div class="form-group">
+        <div class="form-group1">
+            <label>{{ 'priorite'|trans }}</label>
+            <div style="display: flex; margin-top: 20px; width: 100%; justify-content: space-between;" class="radiosbutt">
+                {% for chk in form.priority %}
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        {{ form_widget(chk, {'attr': {'class': 'custom-control-input'}}) }}
+                        {% if loop.index == 1 %}
+                            {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label text-danger'}}) }}
+                        {% elseif loop.index == 2 %}
+                            {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label text-warning'}}) }}
+                        {% else %}
+                            {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label text-success'}}) }}
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="invalid-feedback">{{ form_errors(form.priority) | striptags }}</div>
+        </div>
+    </div>
+</div>
+
+
+    <!-- Attach Documents -->
+<div class="form-group1">
+    <label for="treatments-search">{{ 'selectionnez_les_traitements_lies'|trans }}</label>
+    <div class="dropdownform">
+        <!-- Input field for search -->
+        <input 
+            type="text" 
+            id="treatments-search" 
+            class="form-control" 
+            placeholder="{{ 'traitements_lis'|trans }}" 
+            oninput="filterTreatmentsDropdown()">
+
+        <!-- Dropdown menu dynamically populated with treatments -->
+        <ul class="dropdown-menu" id="treatments-dropdown">
+            {% for treatment in form.treatments.vars.choices %}
+                <li data-id="{{ treatment.value }}">
+                    <a href="javascript:void(0);" onclick="selectTreatment('{{ treatment.value }}', '{{ treatment.label }}')">
+                        {{ treatment.label }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<!-- Hidden input to store selected treatments -->
+<input type="hidden" id="selected-treatments" name="selectedTreatments" value="" />
+
+<div class="form-group1">
+
+    <label for="sheets-search">{{ form_label(form.sheets) }}</label>
+    <div class="dropdownform">
+        <!-- Input field for search -->
+        <input 
+            type="text" 
+            id="sheets-search" 
+            class="form-control" 
+            placeholder="{{ 'annexer_des_fiches_pratiques'|trans }}" 
+            oninput="filterSheetsDropdown()">
+
+        <!-- Dropdown menu dynamically populated with documents -->
+        <ul class="dropdown-menu" id="sheets-dropdown">
+            {% for sheet in form.sheets.vars.choices %}
+                <li data-id="{{ sheet.value }}">
+                    <a href="javascript:void(0);" onclick="selectSheet('{{ sheet.value }}', '{{ sheet.label }}')">
+                        {{ sheet.label }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<!-- Hidden input to store selected sheets -->
+<input type="hidden" id="selected-sheets" name="selectedSheets" value="" />
+
+
+<div class=" mt-3" style="margin-bottom: 40px;">
+    <!-- Custom File Button -->
+    <button type="button" class="file-button" id="add_document_button">
+        <i class="fa fa-file" aria-hidden="true"></i> {{ 'joindre_un_document'|trans }}
+    </button>
+{% set fromStd = actionStd is defined and actionStd is not empty %}
+
+    <!-- Existing Documents (Static Display) -->
+    {% if fromStd %}
+        <div id="block_old_documents" class="form-group mt-3">
+            {% for document in actionStd.documents %}
+                <div class="selected-item d-flex align-items-center mb-2">
+                    <span>{{ document.name }}</span>
+                    <a href="/uploads/documents/{{ document.filename }}" class="btn btn-info ml-2" target="_blank">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Dynamic Documents Container -->
+    <div id="block_documents" class="form-group mt-3">
+        <!-- New documents added dynamically will appear here -->
+    </div>
+
+    <!-- Hidden File Input -->
+    <input type="file" id="documentFileInput" style="display: none;" multiple />
+
+    <!-- Hidden Input for Backend -->
+    <input type="hidden" id="uploadedDocuments" name="uploadedDocuments" value="" />
+</div>
+
+
+<div class="form-group">
+    <div class="form-group1">
+        {{ form_label(form.estimationTime, 'Temps Estimé') }}
+        {{ form_widget(form.estimationTime, {
+            'attr': {
+                'class': 'form-control ' ~ ((form_errors(form.estimationTime) == '') ? '' : 'is-invalid'),
+                'placeholder': 'Saisissez le temps estimé'
+            }
+        }) }}
+        <div class="invalid-feedback">{{ form_errors(form.estimationTime) | striptags }}</div>
+    </div>
+    <div class="form-group1">
+        {{ form_label(form.realTime, 'Temps Réel') }}
+        {{ form_widget(form.realTime, {
+            'attr': {
+                'class': 'form-control ' ~ ((form_errors(form.realTime) == '') ? '' : 'is-invalid'),
+                'placeholder': 'Saisissez le temps réel'
+            }
+        }) }}
+        <div class="invalid-feedback">{{ form_errors(form.realTime) | striptags }}</div>
+    </div>
+</div>
+
+
+    <!-- Submit -->
+    <button type="submit" class="submit-button">{{ 'enregistrer'|trans }}</button>
+    {{ form_end(form) }}
+  </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script>
+   
+     var inputTreatmentsSelector;
+// Tables to dataTables
+(function ($) {
+            'use strict';
+            $(document).ready(function () {
+                $(".datepicker-js").datepicker({
+                   dateFormat: "Y-m-d",
+                altInput: true,
+                altFormat: "d/m/Y",
+                locale: "fr",
+                allowInput: true,
+                });
+
+                inputTreatmentsSelector = $('#appbundle_action_treatments');
+                inputTreatmentsSelector.select2({
+                    language: {
+                        searching: function() {
+                            return null;
+                        }
+                    },
+                    dropdownAutoWidth: true,
+                    width: '100%',
+                    height: 'auto',
+                    placeholder: "Rechercher un traitement",
+                    ajax: {
+                        url: '{{ path('user_json_treatments') }}',
+                        type: 'POST',
+                        data: function (params) {
+                            return {
+                                name: params.term,
+                            };
+                        },
+                        processResults: function (data) {
+                            if (data) {
+                                return {
+                                    results: data
+                                };
+                            }
+                            return {
+                                results: []
+                            };
+                        }
+                    }
+                });
+
+                document.getElementById("add_document_button").addEventListener("click", function () {
+                    var div = document.createElement("div");
+                    div.className = "form-group col-md-12 d-flex block_document";
+
+                    var nameInput = document.createElement("input");
+                    nameInput.className = "form-control";
+                    nameInput.setAttribute("type", "text");
+                    nameInput.setAttribute("placeholder", "Titre");
+                    nameInput.setAttribute("name", "appbundle_action_documents_names[]");
+
+                    var fileInput = document.createElement("input");
+                    fileInput.className = "form-control ml-2";
+                    fileInput.setAttribute("type", "file");
+                    fileInput.setAttribute("name", "appbundle_action_documents[]");
+
+                    var fileInputRemoveButton = document.createElement("button");
+                    fileInputRemoveButton.className = "btn btn-danger ml-2 remove_document_button";
+                    fileInputRemoveButton.setAttribute("type", "button");
+                    fileInputRemoveButton.setAttribute("onclick", "removeDocument(this)");
+
+                    var fileInputRemoveButtonI = document.createElement("i");
+                    fileInputRemoveButtonI.className = "mdi mdi-file-remove";
+
+                    fileInputRemoveButton.appendChild(fileInputRemoveButtonI);
+
+                    div.appendChild(nameInput);
+                    div.appendChild(fileInput);
+                    div.appendChild(fileInputRemoveButton);
+
+                    var element = document.getElementById("block_documents");
+                    element.appendChild(div);
+                });
+            });
+        })(window.jQuery);
+
+function removeDocument(element) {
+    element.parentNode.remove();
+}
+
+function selectStd(e) {
+    saved = true;
+    window.location.href = "{{ path('user_actions_add') }}?std=" + e.value;
+}
+document.addEventListener("DOMContentLoaded", () => {
+
+
+      const treatmentSearchInput = document.getElementById("treatments-search"); // Search input
+    const treatmentDropdownMenu = document.getElementById("treatments-dropdown"); // Dropdown menu
+    const treatmentHiddenInput = document.getElementById("selected-treatments"); // Hidden input to store selected IDs
+    const selectedTreatmentSet = new Set(); // Set to manage selected treatments
+
+    // Filter dropdown options based on search input
+    window.filterTreatmentsDropdown = () => {
+        const filter = treatmentSearchInput.value.toLowerCase();
+        const items = treatmentDropdownMenu.querySelectorAll("li");
+
+        items.forEach(item => {
+            const text = item.textContent.toLowerCase();
+            item.style.display = text.includes(filter) ? "block" : "none";
+        });
+    };
+
+    // Select a treatment and add it to the hidden input
+    window.selectTreatment = (id, name) => {
+        if (!selectedTreatmentSet.has(id)) {
+            selectedTreatmentSet.add(id);
+
+            // Update the hidden input value
+            treatmentHiddenInput.value = Array.from(selectedTreatmentSet).join(',');
+
+            // Display selected treatment below the dropdown
+            const selectedItem = document.createElement('div');
+            selectedItem.classList.add('selected-item');
+            selectedItem.dataset.id = id; // Store treatment ID for easy removal
+
+            // Treatment name
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = name;
+
+            // Remove button (X)
+            const removeButton = document.createElement('span');
+            removeButton.textContent = '×'; // Unicode for 'X'
+            removeButton.classList.add('remove-button');
+            removeButton.onclick = () => {
+                selectedTreatmentSet.delete(id); // Remove from the set
+                treatmentHiddenInput.value = Array.from(selectedTreatmentSet).join(','); // Update hidden input
+                selectedItem.remove(); // Remove the element from the DOM
+            };
+
+            selectedItem.appendChild(nameSpan);
+            selectedItem.appendChild(removeButton);
+
+            // Append the selected treatment to the parent
+            treatmentSearchInput.parentNode.appendChild(selectedItem);
+        }
+    };
+
+    // Show dropdown when input is focused
+    treatmentSearchInput.addEventListener("focus", () => {
+        treatmentDropdownMenu.style.display = "block";
+    });
+
+    // Hide dropdown when input loses focus
+    treatmentSearchInput.addEventListener("blur", () => {
+        setTimeout(() => {
+            treatmentDropdownMenu.style.display = "none";
+        }, 200); // Allow time for a click to register
+    });
+
+
+        const sheetsSearchInput = document.getElementById("sheets-search"); // Unique ID for the search input
+    const sheetsDropdownMenu = document.getElementById("sheets-dropdown"); // Unique ID for the dropdown menu
+    const sheetsHiddenInput = document.getElementById("selected-sheets"); // Unique hidden input for selected sheets
+    const selectedSheetsSet = new Set(); // Set to track selected sheets
+
+    // Filter dropdown options based on search input
+    window.filterSheetsDropdown = () => {
+        const filter = sheetsSearchInput.value.toLowerCase();
+        const items = sheetsDropdownMenu.querySelectorAll("li");
+
+        items.forEach(item => {
+            const text = item.textContent.toLowerCase();
+            item.style.display = text.includes(filter) ? "block" : "none";
+        });
+    };
+
+    // Select a sheet and add it to the hidden input
+    window.selectSheet = (id, name) => {
+        if (!selectedSheetsSet.has(id)) {
+            selectedSheetsSet.add(id);
+
+            // Update the hidden input value
+            sheetsHiddenInput.value = Array.from(selectedSheetsSet).join(',');
+
+            // Display selected sheet below the dropdown
+            const selectedItem = document.createElement('div');
+            selectedItem.classList.add('selected-item');
+            selectedItem.dataset.id = id; // Store sheet ID for easy removal
+
+            // Sheet name
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = name;
+
+            // Remove button (X)
+            const removeButton = document.createElement('span');
+            removeButton.textContent = '×'; // Unicode for 'X'
+            removeButton.classList.add('remove-button');
+            removeButton.onclick = () => {
+                selectedSheetsSet.delete(id); // Remove from the set
+                sheetsHiddenInput.value = Array.from(selectedSheetsSet).join(','); // Update hidden input
+                selectedItem.remove(); // Remove the element from the DOM
+            };
+
+            selectedItem.appendChild(nameSpan);
+            selectedItem.appendChild(removeButton);
+
+            // Append the selected sheet to the parent
+            sheetsSearchInput.parentNode.appendChild(selectedItem);
+        }
+    };
+
+    // Show dropdown when input is focused
+    sheetsSearchInput.addEventListener("focus", () => {
+        sheetsDropdownMenu.style.display = "block";
+    });
+
+    // Hide dropdown when input loses focus
+    sheetsSearchInput.addEventListener("blur", () => {
+        setTimeout(() => {
+            sheetsDropdownMenu.style.display = "none";
+        }, 200); // Allow time for a click to register
+    });
+
+  
+    const searchInput = document.getElementById("standard-search");
+   
+    const dropdownMenu = document.getElementById("dropdown-menu");
+
+
+
+    // Filter dropdown options based on search input
+    window.filterDropdown = () => {
+        const filter = searchInput.value.toLowerCase();
+        const items = dropdownMenu.querySelectorAll("li:not(.dropdown-header)");
+
+        items.forEach(item => {
+            const text = item.textContent.toLowerCase();
+            item.style.display = text.includes(filter) ? "block" : "none";
+        });
+    };
+
+    // Select a dropdown item and handle actions
+    window.selectStandard = (id, name) => {
+        searchInput.value = name; // Set the selected name
+        alert(`Selected ID: ${id}, Name: ${name}`); // Example action
+    };
+   
+
+    // Show dropdown when input is focused
+    searchInput.addEventListener("focus", () => {
+        dropdownMenu.style.display = "block";
+    }); 
+
+    // Hide dropdown when input loses focus
+    searchInput.addEventListener("blur", () => {
+        setTimeout(() => {
+            dropdownMenu.style.display = "none";
+        }, 200); // Allow time for a click to register
+    });
+
+
+
+    // Handle dynamic document addition
+       const addDocumentButton = document.getElementById("add_document_button");
+    const documentFileInput = document.getElementById("documentFileInput");
+    const blockDocuments = document.getElementById("block_documents");
+    const uploadedDocumentsInput = document.getElementById("uploadedDocuments");
+
+    let uploadedDocuments = []; // Array to hold selected file data
+
+    // Handle file selection
+    const handleFileSelection = (files) => {
+        for (const file of files) {
+            // Check if the file is already uploaded
+            if (uploadedDocuments.some(doc => doc.name === file.name)) {
+                alert(`File "${file.name}" is already added.`);
+                continue;
+            }
+
+            // Add the file to the array
+            uploadedDocuments.push(file);
+
+            // Create a new document block
+            const documentBlock = document.createElement("div");
+            documentBlock.classList.add("selected-item", "d-flex", "align-items-center", "mb-2");
+
+            // File name
+            const fileNameSpan = document.createElement("span");
+            fileNameSpan.textContent = file.name;
+            documentBlock.appendChild(fileNameSpan);
+
+            // Remove button
+            const removeButton = document.createElement("button");
+            removeButton.type = "button";
+            removeButton.classList.add("btn", "btn-danger", "ml-2");
+            removeButton.innerHTML = '<i class="fa fa-trash"></i>';
+            removeButton.onclick = () => {
+                // Remove file from the array
+                uploadedDocuments = uploadedDocuments.filter(doc => doc.name !== file.name);
+                // Update the hidden input
+                updateHiddenInput();
+                // Remove the element from the DOM
+                documentBlock.remove();
+            };
+
+            documentBlock.appendChild(removeButton);
+
+            // Append to the documents block
+            blockDocuments.appendChild(documentBlock);
+        }
+
+        // Update the hidden input
+        updateHiddenInput();
+    };
+
+    // Update hidden input with file names
+    const updateHiddenInput = () => {
+        const fileNames = uploadedDocuments.map(doc => doc.name);
+        uploadedDocumentsInput.value = fileNames.join(',');
+    };
+
+    // Handle button click to trigger file input
+    addDocumentButton.addEventListener("click", () => {
+        documentFileInput.click();
+    });
+
+    // Handle file input change
+    documentFileInput.addEventListener("change", (event) => {
+        handleFileSelection(event.target.files);
+    });
+});
+
+      
+    </script>
+{% endblock %}

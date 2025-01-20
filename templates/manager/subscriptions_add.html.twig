@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - Ajouter un abonnement
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+{% endblock %}
+
+{% block content %}
+    <div class="bg-dark">
+        <div class="container-fluid px-lg-5 m-b-30">
+            <div class="row">
+                <div class="col-12 text-white p-t-40 p-b-90">
+
+                    <h4 class=""> <span class="btn btn-white-translucent">
+                                <i class="mdi mdi-account "></i></span> Ajouter un abonnement
+                    </h4>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid px-lg-5 pull-up">
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-body ">
+                    {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
+
+                    <div class="form-row">
+                        <div class="form-group col-12">
+                            {{ form_label(form.user) }}
+                            {{ form_widget(form.user, {'attr': {'class': 'form-control js-select2 ' ~ ((form_errors(form.user) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.user) | striptags  }}</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.beginDate) }}
+                            {{ form_widget(form.beginDate, {'attr': {'class': 'form-control datepicker-js ' ~ ((form_errors(form.beginDate) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.beginDate) | striptags  }}</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.billingType) }}
+                            {{ form_widget(form.billingType, {'attr': {'class': 'form-control ' ~ ((form_errors(form.billingType) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.billingType) | striptags  }}</div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.offer) }}
+                            {{ form_widget(form.offer, {'attr': {'class': 'form-control ' ~ ((form_errors(form.offer) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.offer) | striptags  }}</div>
+                        </div>
+                        <div class="form-group col-md-6">
+                            {{ form_label(form.billing) }}
+                            {{ form_widget(form.billing, {'attr': {'class': 'form-control ' ~ ((form_errors(form.billing) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.billing) | striptags  }}</div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var inputTreatmentsSelector;
+        // Tables to dataTables
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                $(".datepicker-js").datepicker({
+                    language: 'fr',
+                    format: 'yyyy-mm-dd'
+                });
+            });
+        })(window.jQuery);
+
+        function removeDocument(element) {
+            element.parentNode.remove();
+        }
+
+    </script>
+{% endblock %}

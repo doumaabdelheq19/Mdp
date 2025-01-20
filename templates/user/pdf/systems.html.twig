@@ -1,0 +1,70 @@
+<h4 style="text-align: center">{{ 'cartographie_du_si'|trans }}{% if group is defined and group == true %} - Groupe{% endif %}</h4>
+<h5 style="text-align: center">Le {{ "now"|date('d/m/Y') }}</h5>
+<table style="width:100%;font-size: 9px;" border="1" cellpadding="6">
+    <tbody>
+    <tr>
+        <td rowspan="6" style="text-align: left; background-color: #396798; color: white; width: 12%;">{{ 'informatique'|trans }}</td>
+        <td style="background-color: #578bc0; color: white; width: 13%;">{{ 'rseau'|trans }}</td>
+        <td style="width: 75%;">{% for item in systems.computing.network %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #578bc0; color: white; width: 13%;">{{ 'scurit'|trans }}</td>
+        <td style="width: 75%;">{% for item in systems.computing.security %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #578bc0; color: white; width: 13%;">{{ 'administration'|trans }}</td>
+        <td style="width: 75%;">{% for item in systems.computing.administration %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #578bc0; color: white; width: 13%;">{{ 'priphrique'|trans }}</td>
+        <td style="width: 75%;">{% for item in systems.computing.device %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #578bc0; color: white; width: 13%;">{{ 'logiciel'|trans }}</td>
+        <td style="width: 75%;">{% for item in systems.computing.software %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #578bc0; color: white; width: 13%;">{{ 'serveur'|trans }}</td>
+        <td style="width: 75%;">{% for item in systems.computing.server %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td rowspan="2" style="text-align: left; background-color: #396798; color: white; width: 12%;">{{ 'physique'|trans }}</td>
+        <td style="background-color: #578bc0; color: white; width: 13%;">{{ 'cloisonnement'|trans }}</td>
+        <td style="width: 75%;">{% for item in systems.physical.partitioning %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #578bc0; color: white; width: 13%;">{{ 'information'|trans }}</td>
+        <td style="width: 75%;">{% for item in systems.physical.information %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td rowspan="6" style="text-align: left; background-color: #396798; color: white; width: 12%;">{{ 'action'|trans }}</td>
+        <td style="background-color: #578bc0; color: white; width: 13%;">{{ 'minimisation'|trans }}</td>
+        <td style="width: 75%;">{% for item in systems.action.minimization %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #578bc0; color: white; width: 13%;">{{ 'anonymisation'|trans }}</td>
+        <td style="width: 75%;">{% for item in systems.action.anonymization %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #578bc0; color: white; width: 13%;">{{ 'pseudonymisation'|trans }}</td>
+        <td style="width: 75%;">{% for item in systems.action.pseudonymization %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #578bc0; color: white; width: 13%;">{{ 'sensibilisation'|trans }}</td>
+        <td style="width: 75%;">{% for item in systems.action.sensitization %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #578bc0; color: white; width: 13%;">{{ 'contrle'|trans }}</td>
+        <td style="width: 75%;">{% for item in systems.action.supervision %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="background-color: #578bc0; color: white; width: 13%;">{{ 'destruction_et_suppression'|trans }}</td>
+        <td style="width: 75%;">{% for item in systems.action.destruction %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    <tr>
+        <td style="text-align: left; background-color: #396798; color: white; width: 12%;">{{ 'fournisseur'|trans }}</td>
+        <td style="background-color: #578bc0; color: white; width: 13%;">{{ 'fournisseur'|trans }}</td>
+        <td style="width: 75%;">{% for item in systems.supplier.supplier %}<p><span><b>{{ item.name }}</b></span><br/>{% for spec in item.data %}<span style="font-size: 9px; color: #707070">• {{ spec.title }}: {{ spec.value }}</span><br/>{% endfor %}</p>{% endfor %}</td>
+    </tr>
+    </tbody>
+</table>

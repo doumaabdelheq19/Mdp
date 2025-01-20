@@ -1,0 +1,278 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    {{ parent() }} - {{ 'registre_des_soustraitants'|trans }}
+{% endblock %}
+
+{% block content %}
+<div class="page">
+    <div class="flex">
+        <!-- Header Section -->
+        <div class="four">
+            <div class="gap">
+                <h4>{{ 'registre_des_soustraitants'|trans }}</h4>
+                <p>{{ 'lensemble_de_vos_soustraitants'|trans }}</p>
+                <p class="text-underline">
+                    <a data-toggle="modal" data-target="#RGPDModal" href="#">(Article 28 - Sous-traitant)</a>
+                </p>
+                <div style="display: flex; gap: 20px;">
+                    <div class="imprimer" style="width: 50%;">
+                         <a href="{{ path('user_subcontractors_export_xlsx') }}">
+                            <p>{{ 'Exporter au format Excel'|trans }}</p>
+                        </a>
+                       
+                    </div>
+                    <div class="exporter" style="width: 50%;">
+                      <a href="{{ path('user_subcontractors_export') }}">
+                            <p>{{ 'Exporter au format PDF'|trans }}</p>
+                        </a>
+                   
+                       
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Section -->
+        <div class="four">
+            <div class="gap">
+                <h4 style="font-size: 16px;">
+                    {{ 'nombre_total_de_soustraitants'|trans({'%total%': subcontractorsStats.total}) }}
+                </h4>
+                <div class="checkbox">
+                    <div style="display: flex; gap: 5px;">
+                        <input type="checkbox" {% if filter == 'invalid' %}checked{% endif %}
+                            onclick="window.location.href='{{ path('user_subcontractors', {type: type, filter: 'invalid'}) }}'">
+                        <p>{{ 'non_conformes_with_progress'|trans({'%invalid%': subcontractorsStats.invalid}) }}</p>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {% if subcontractorsStats.total > 0 %}{{ (subcontractorsStats.invalid / subcontractorsStats.total) * 100 }}{% else %}0{% endif %}%"></div>
+                    </div>
+                </div>
+                <div class="checkbox">
+                    <div style="display: flex; gap: 5px;">
+                        <input type="checkbox" {% if filter == 'inprogress' %}checked{% endif %}
+                            onclick="window.location.href='{{ path('user_subcontractors', {type: type, filter: 'inprogress'}) }}'">
+                        <p>{{ 'en_cours_with_progress'|trans({'%inProgress%': subcontractorsStats.inProgress}) }}</p>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {% if subcontractorsStats.total > 0 %}{{ (subcontractorsStats.inProgress / subcontractorsStats.total) * 100 }}{% else %}0{% endif %}%"></div>
+                    </div>
+                </div>
+                <div class="checkbox">
+                    <div style="display: flex; gap: 5px;">
+                        <input type="checkbox" {% if filter == 'valid' %}checked{% endif %}
+                            onclick="window.location.href='{{ path('user_subcontractors', {type: type, filter: 'valid'}) }}'">
+                        <p>{{ 'conformes_with_progress'|trans({'%valid%': subcontractorsStats.valid}) }}</p>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress" style="width: {% if subcontractorsStats.total > 0 %}{{ (subcontractorsStats.valid / subcontractorsStats.total) * 100 }}{% else %}0{% endif %}%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="table-container-traitements">
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab {% if type == 1 %}active{% endif %}" onclick="window.location.href='{{ path('user_subcontractors', {type: 1}) }}'">
+                {{ 'type_sous_traitants'|trans }}
+            </button>
+            <button class="tab {% if type == 2 %}active{% endif %}" onclick="window.location.href='{{ path('user_subcontractors', {type: 2}) }}'">
+                {{ 'type_cotraitant'|trans }}
+            </button>
+            <button class="tab {% if type == 3 %}active{% endif %}" onclick="window.location.href='{{ path('user_subcontractors', {type: 3}) }}'">
+                {{ 'type_responsable_de_traitement'|trans }}
+            </button>
+        </div>
+
+        <!-- Search and Action Buttons -->
+        <div style="display: flex; justify-content: space-between; width: 100%;">
+        <div class="search-bar" >
+            
+                <span class="search-icon">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </span>
+                <input type="text" placeholder="{{ 'Rechercher'|trans }}" id="search-input">
+            
+
+            
+        </div>
+        <div class="buttons">
+                
+
+                  <div class="gerer" style="width:250px">
+                    <a href="{{ path('user_subcontractors_grp') }}" class="btn btn-primary">{{ 'Les sous traitants de mon group'|trans }}</a>
+                </div>
+                 
+
+                <div class="exporter">
+                    <a href="{{ path('user_subcontractors_add') }}">
+                        {{ 'Ajouter une entité'|trans }}
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Styled Table -->
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>{{ 'societe'|trans }}</th>
+                    <th>{{ 'typologie'|trans }}</th>
+                    <th>{{ 'traitements'|trans }}</th>
+                    <th>{{ 'contact'|trans }}</th>
+                    <th>{{ 'tl'|trans }}</th>
+                    <th>{{ 'mail'|trans }}</th>
+                    <th>{{ 'conformit'|trans }}</th>
+                    <th>{{ 'doc'|trans }}</th>
+                    <th>{{ 'actions'|trans }}</th>
+                </tr>
+            </thead>
+           <tbody id="table-body">
+    {% if subcontractors|length > 0 %}
+        {% for subcontractor in subcontractors %}
+            <tr>
+                <td>{{ subcontractor.name }}</td>
+                <td>{{ subcontractor.type }}</td>
+                <td>
+                    {% for treatment in subcontractor.treatments %}
+                        <span class="badge">{{ treatment.number }}</span>
+                    {% endfor %}
+                </td>
+                <td>{{ subcontractor.contactLastName }} {{ subcontractor.contactFirstName }}</td>
+                <td>{{ subcontractor.contactPhone }}</td>
+                <td>{{ subcontractor.contactEmail }}</td>
+                <td>{{ subcontractor.conformity.libelle }}</td>
+                <td>
+                    {% for document in subcontractor.documents %}
+                        <a href="{{ path('user_read_user_documents', {'id': document.id}) }}" target="_blank" class="badge">{{ document.name }}</a>
+                    {% endfor %}
+                </td>
+                <td>
+                    <div class="options">
+                        <a href="{{ path('user_subcontractors_edit', {'id': subcontractor.id}) }}">
+                            <button class="edit"><i class="fa fa-edit" aria-hidden="true"></i></button>
+                        </a>
+                        <a href="{{ path('user_subcontractors_delete', {'id': subcontractor.id}) }}" onclick="return confirm('{{ 'confirmer_la_suppression'|trans }}');">
+                            <button class="delete">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
+                            </button>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+        <tr>
+            <td colspan="9" class="text-center">{{ 'Aucun sous-traitant disponible'|trans }}</td>
+        </tr>
+    {% endif %}
+</tbody>
+
+        </table>
+
+        <!-- Pagination Controls -->
+        <div class="pagination-container">
+            <div class="results-per-page">
+                <label for="resultsSelect">{{ 'Afficher'|trans }}</label>
+                <select id="resultsSelect" class="results-select">
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                </select>
+                <span>{{ 'résultats par page'|trans }}</span>
+            </div>
+            <div class="pagination-controls">
+                <button id="prevPage" class="pagination-button" disabled><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19l-7-7l7-7"/></svg></button>
+                <span id="paginationInfo">{{ 'page'|trans }} 1 {{ 'sur'|trans }} 1</span>
+                <button id="nextPage" class="pagination-button" disabled><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5l7 7l-7 7"/></svg></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="RGPDModal" tabindex="-1" role="dialog" aria-labelledby="RGPDModal" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'article_28_soustraitant'|trans }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'fermer'|trans }}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    {{ 'RGPD_modal_content'|trans }} <a href="https://www.cnil.fr/fr/reglement-europeen-protection-donnees/chapitre4" target="_blank">CNIL</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const rows = Array.from(document.querySelectorAll('#table-body tr'));
+            const resultsSelect = document.getElementById('resultsSelect');
+            const paginationInfo = document.getElementById('paginationInfo');
+            const prevPage = document.getElementById('prevPage');
+            const nextPage = document.getElementById('nextPage');
+            const searchInput = document.getElementById('search-input');
+
+            let currentPage = 1;
+            let resultsPerPage = parseInt(resultsSelect.value);
+            let filteredRows = rows;
+
+            function updateTable() {
+                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+                const start = (currentPage - 1) * resultsPerPage;
+                const end = start + resultsPerPage;
+
+                rows.forEach((row, index) => {
+                    row.style.display = filteredRows.includes(row) && index >= start && index < end ? '' : 'none';
+                });
+
+                paginationInfo.textContent = `Page ${currentPage} {{ 'sur'|trans }} ${totalPages}`;
+                prevPage.disabled = currentPage === 1;
+                nextPage.disabled = currentPage === totalPages;
+            }
+
+            resultsSelect.addEventListener('change', () => {
+                resultsPerPage = parseInt(resultsSelect.value);
+                currentPage = 1;
+                updateTable();
+            });
+
+            prevPage.addEventListener('click', () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updateTable();
+                }
+            });
+
+            nextPage.addEventListener('click', () => {
+                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    updateTable();
+                }
+            });
+
+            searchInput.addEventListener('input', function () {
+                const query = this.value.toLowerCase();
+                filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
+                currentPage = 1; // Reset to the first page
+                updateTable();
+            });
+
+            // Initialize the table on load
+            updateTable();
+        });
+    </script>
+{% endblock %}
