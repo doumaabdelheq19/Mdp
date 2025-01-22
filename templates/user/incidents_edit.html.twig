@@ -46,7 +46,8 @@
             </div>
             <div class="form-group1">
                 {{ form_label(form.type, 'Nature') }}
-                {{ form_widget(form.type, {'attr': {'class': 'form-control ' ~ ((form_errors(form.type) == '') ? '' : 'is-invalid')} }) }}
+                {{ form_widget(form.type, {'attr': {'class': 'form-control ' ~ ((form_errors(form.type) == '') ? '' : 'is-invalid'),
+        'required': form.vars.required ? 'required' : ''} }) }}
                 <div class="invalid-feedback">{{ form_errors(form.type) | striptags }}</div>
             </div>
         </div>

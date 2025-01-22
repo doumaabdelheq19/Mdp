@@ -6,6 +6,8 @@
 
 {% block stylesheets %}
     <style>
+     :root {
+        --main-color: {{ get_config('main_color')|default('#3498db') }};}
          #map {
           min-height:600px;
             height: auto;
@@ -304,7 +306,7 @@ jmnode[nodeid="996"] .border {
                 <p>{{ 'lensemble des elements de votre systeme dinformation'|trans }}</p>
                 <div style="display: flex; gap: 20px;">
                     <div class="imprimer" style="width: 50%;">
-                        <p><a href="{{ path('user_systems_export_excel', {type: 'computing'}) }}">{{ 'Exporter au format Excel'|trans }}</a></p>
+                        <p><a href="{{ path('user_systems_export_excel', {'type': 'computing'}) }}">{{ 'Exporter au format Excel'|trans }}</a></p>
                     </div>
                     <div class="exporter" style="width: 50%;">
                         <p><a href="{{ path('user_systems_export') }}" target="_blanc">{{ 'Exporter au format PDF'|trans }}</a></p>
@@ -317,7 +319,12 @@ jmnode[nodeid="996"] .border {
                 <div style="width: 100%; display: flex; justify-content: space-between;">
                     <h4 style="font-size: 16px;">{{ 'Mode d’affichage'|trans }}</h4>
                     <div class="dropdownn">
-                        <button class="dropdown-button">{{ 'Mon systeme d’information'|trans }} <i class="fa fa-angle-down" aria-hidden="true"></i></button>
+<button 
+    class="dropdown-button" 
+    onclick="window.location.href='{{path('user_systems_group') }}'">
+    {{ 'Cartographie du SI groupe'|trans }}
+</button>
+
                         <ul class="dropdown-menu">
                             <li>{{ 'Option 1'|trans }}</li>
                             <li>{{ 'Option 2'|trans }}</li>

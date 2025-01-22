@@ -46,7 +46,8 @@
             </div>
             <div class="form-group1">
                 {{ form_label(form.type, 'Nature') }}
-                {{ form_widget(form.type, {'attr': {'class': 'form-control ' ~ ((form_errors(form.type) == '') ? '' : 'is-invalid')} }) }}
+                {{ form_widget(form.type, {'attr': {'class': 'form-control ' ~ ((form_errors(form.type) == '') ? '' : 'is-invalid'),
+        'required': form.vars.required ? 'required' : ''} }) }}
                 <div class="invalid-feedback">{{ form_errors(form.type) | striptags }}</div>
             </div>
         </div>
@@ -139,15 +140,17 @@
 
     <script>
         // Initialize Flatpickr
-        document.addEventListener('DOMContentLoaded', function () {
-            flatpickr(".datepicker-js", {
-                dateFormat: "Y-m-d",  // Internal format (sent to backend)
-                altInput: true,      // Display a prettier input box
-                altFormat: "d/m/Y",  // Display format for users
-                locale: "fr",        // French localization
-                allowInput: true,    // Allow manual input
-            });
-        });
+       document.addEventListener('DOMContentLoaded', function () {
+    flatpickr(".datepicker-js", {
+        dateFormat: "Y-m-d",     // Internal format (sent to backend)
+        altInput: true,          // Display a prettier input box
+        altFormat: "d/m/Y",      // Display format for users
+        locale: "fr",            // French localization
+        allowInput: true,        // Allow manual input
+        maxDate: "today",        // Restrict the date to today or earlier
+    });
+});
+
 
           function updateFileName(input) {
         const button = document.querySelector('.file-button');

@@ -24,7 +24,6 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsmind@latest/style/jsmind.css">
-<script src="https://cdn.jsdelivr.net/npm/jsmind/js/jsmind.js"></script>
 
 
 
@@ -42,7 +41,7 @@
     {% block stylesheets %}
     <style>
       :root {
-        --main-color: {{ config.main_color|default('#3498db') }};
+        --main-color: {{ get_config('main_color')|default('#3498db') }};
     }
     </style>
     

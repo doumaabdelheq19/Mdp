@@ -1,5 +1,5 @@
 <?php
 return [
-    'main_color' => '#3498db', // Default main color
-    'logo_image' => 'assets/img/LOGODATASOLUTION.png', // logo image path
+    'main_color' => '#EF6D6F', // Default main color
+    'logo_image' => 'assets/img/Modèle LOGO.png', // logo image path
 ];

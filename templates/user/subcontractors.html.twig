@@ -10,8 +10,8 @@
         <!-- Header Section -->
         <div class="four">
             <div class="gap">
-                <h4>{{ 'registre_des_soustraitants'|trans }}</h4>
-                <p>{{ 'lensemble_de_vos_soustraitants'|trans }}</p>
+                <h4>{{ 'Registres des destinataires de données'|trans }}</h4>
+                <p>{{ "l'ensemble de vos destinataires"|trans }}</p>
                 <p class="text-underline">
                     <a data-toggle="modal" data-target="#RGPDModal" href="#">(Article 28 - Sous-traitant)</a>
                 </p>
@@ -23,7 +23,7 @@
                        
                     </div>
                     <div class="exporter" style="width: 50%;">
-                      <a href="{{ path('user_subcontractors_export') }}">
+                      <a href="{{ path('user_subcontractors_export') }}" target="_blanc">
                             <p>{{ 'Exporter au format PDF'|trans }}</p>
                         </a>
                    
@@ -144,7 +144,7 @@
                 </td>
                 <td>{{ subcontractor.contactLastName }} {{ subcontractor.contactFirstName }}</td>
                 <td>{{ subcontractor.contactPhone }}</td>
-                <td>{{ subcontractor.contactEmail }}</td>
+                <td style="color:#EF6D6F">{{ subcontractor.contactEmail }}</td>
                 <td>{{ subcontractor.conformity.libelle }}</td>
                 <td>
                     {% for document in subcontractor.documents %}

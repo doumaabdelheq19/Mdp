@@ -97,10 +97,10 @@
                             <h4>{{ expertHours|default(0) }} {{ 'heures'|trans }}</h4>
                         </div>
                     </div>
-
-                    <div class="poser">
+                    <div class="poser"  onclick="location.href='mailto:{{app.user.user.manager.email}}'">
                         <p>{{ 'Contactez votre expert DPO'|trans }}</p>
                     </div>
+                 
                 </div>
             </div>
         </div>
@@ -303,7 +303,7 @@
 
         <div class="flex">
             <div class="tablee-container">
-                <h3>{{ 'Infos myDigitplace'|trans }}</h3>
+                <h3>{{ 'Actualités'|trans }}</h3>
                 {% for info in infos %}
                     <div class="item">
                         <div style="display: flex; gap: 15px; align-items: center;">
@@ -314,7 +314,12 @@
                             </div>
                         </div>
 
-                        <button class="edit"><i class="fa fa-external-link" aria-hidden="true"></i></button>
+<button class="edit" 
+        style="cursor: pointer;" 
+        data-info="{{ info.id }}" 
+        onclick="handleButtonClick(this, '{{ info.link | default('') }}')">
+    <i class="fa fa-external-link" aria-hidden="true"></i>
+</button>
                     </div>
                 {% else %}
                     <p>{{ 'Aucune information disponible'|trans }}</p>
@@ -367,7 +372,27 @@
     </div>
 
   
+  <div class="modal fade" id="informationModal" tabindex="-1" role="dialog" aria-labelledby="informationModalTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="informationModalTitle"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'fermer'|trans }}">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="informationModalContent">
 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="imprimer btn btn-light-secondary" data-dismiss="modal">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">{{ 'fermer'|trans }}</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 
@@ -470,6 +495,36 @@
         });
         
     });
+
+function handleButtonClick(button, link) {
+    if (link) {
+        // Open the link in a new tab if it exists
+        window.open(link, '_blank');
+    } else {
+        // Call the `readInformation` function with the button if no link
+        readInformation(button);
+    }
+}
+
+     function readInformation(element) {
+            $.ajax({
+                type: "GET",
+                async: true,
+                url: "{{ path('user_json_info') }}",
+                data: {id: element.dataset.info},
+                success: function (content) {
+                    document.getElementById('informationModalTitle').innerText = content.title;
+                    document.getElementById('informationModalContent').innerHTML = content.content;
+
+                    if (element.classList.contains("text-warning")) {
+                        element.classList.remove("text-warning");
+                        element.classList.add("text-success");
+                    }
+
+                    $('#informationModal').modal('show');
+                }
+            });
+        }
 </script>
 
 {% endblock %}

@@ -26,7 +26,6 @@
             <br>
 <div class="form-group">
     <div class="form-group1">
-        <label for="standard-search">{{ 'rechercher_un_traitement_standard'|trans }}</label>
        <div class="dropdownform" style="position: relative; display: inline-block;">
     <!-- Wrapper for input and icons -->
     <div style="position: relative; display: flex; align-items: center;">
@@ -47,7 +46,7 @@
             style="padding-left: 35px; padding-right: 35px; width: 100%;">
         
         <!-- Arrow-down icon (right) -->
-        <span style="position: absolute; right: 10px; font-size: 16px; pointer-events: none;font-size: 13px;
+        <span style="position: absolute; right: 10px; font-size: 12px; pointer-events: none;font-size: 11px;
     margin-bottom: 12px;
     color: #92AEDA;">
             <i class="fa fa-chevron-down"></i> <!-- Use Font Awesome or replace with any icon library -->
@@ -60,7 +59,7 @@
             <li class="dropdown-header">{{ treatmentStdGroups.category.libelle }}</li>
             {% for treatmentStd in treatmentStdGroups.treatmentsStd %}
                 <li data-id="{{ treatmentStd.id }}">
-                    <a href="javascript:void(0);" onclick="selectStandard({{ treatmentStd.id }}, '{{ treatmentStd.name }}')">
+                    <a href="javascript:void(0);" onclick="selectStandard({{ treatmentStd.id }}, &quot;{{ treatmentStd.name }}&quot;)">
                         {{ treatmentStd.name }}
                     </a>
                 </li>
@@ -233,7 +232,7 @@
                 <div id="ModalSubcontractorsContent"></div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light-secondary" data-dismiss="modal">{{ 'fermer'|trans }}</button>
+                <button type="button" class="imprimer btn btn-light-secondary" data-dismiss="modal">{{ 'fermer'|trans }}</button>
             </div>
         </div>
     </div>
@@ -279,7 +278,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                <button type="button" class="imprimer btn btn-light-secondary" data-dismiss="modal">
                     {{ 'fermer'|trans }}
                 </button>
             </div>
@@ -358,6 +357,9 @@
         <div class="form-group1">
             <label for="societe-nom">
                 {{ 'veuillez_cocher_les_critres_qui_concernent_votre_t'|trans }}.<br/>
+                <a style="font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 11px; color: #586E90;" href="https://www.cnil.fr/sites/default/files/atoms/files/liste-traitements-aipd-non-requise.pdf" target="_blank">{{ "Une liste d'exonération de PIA est toutefois disponible ici."|trans }}</a>
                
             </label>
 
@@ -526,10 +528,7 @@
             saved = true;
         }
 
-        window.onbeforeunload = function (e) {
-            if(saved !== true)
-                return 'Êtes-vous sûr de vouloir quitter cette page?';
-        };
+      
 document.addEventListener("DOMContentLoaded", () => {
     const searchInput = document.getElementById("standard-search");
     const dropdownMenu = document.getElementById("dropdown-menu");
@@ -546,7 +545,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     // Select a dropdown item and handle redirection
-    window.selectStandard = (id, name) => {
+    window.selectStandard = (id,name) => {
         // Set the selected item's name in the search input
         searchInput.value = name;
 

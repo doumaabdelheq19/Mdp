@@ -2707,7 +2707,7 @@ class UserController extends AbstractController
                         Le client ".$this->getUser()->getUser()->getCompanyName()." a modifié le traitement ".$treatment->getName()."<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
             $sendEmailService->send(
                 "Traitement client modifié",
@@ -2791,8 +2791,7 @@ class UserController extends AbstractController
 
         $newTreatment = clone $treatment;
         $newTreatment->setId(null);
-        $newTreatment->getSubcontractors()->clear();
-        $newTreatment->getSystems()->clear();
+      
 
         $user = $this->getUser()->getUser();
 
@@ -2954,6 +2953,7 @@ class UserController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+        
             $treatmentsQuery = $this->getDoctrine()->getRepository(Treatment::class)->findBy(["user" => $this->getUser()->getUser()], ['number' => "DESC"], 1);
 
             $em = $this->getDoctrine()->getManager();
@@ -5258,9 +5258,10 @@ class UserController extends AbstractController
         if (!$this->getUser()->getUser()->isMainGroupAgency()) {
             throw new NotFoundHttpException();
         }
-
-        $systemsQuery = $this->getDoctrine()->getRepository(System::class)->findBy(["user" => $this->getUser()->getUser(), "group" => true]);
-
+    
+        $systemsQuery = $this->getDoctrine()->getRepository(System::class)
+            ->findBy(["user" => $this->getUser()->getUser(), "group" => true]);
+    
         $systems = [
             "computing" => [
                 "network" => [],
@@ -5286,209 +5287,127 @@ class UserController extends AbstractController
                 "supplier" => []
             ]
         ];
-
+    
         $systemsJs = [];
-
-        $encoders = [new JsonEncoder()];
-        $normalizer = new ObjectNormalizer();
-        // $normalizer->setCircularReferenceLimit(1);
-        // $normalizer->setCircularReferenceHandler(function ($object) {
-        //     return $object->getId();
-        // });
-        $normalizers = [$normalizer];
-        $serializer = new Serializer($normalizers, $encoders);
-
+        $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
+    
         foreach ($systemsQuery as $system) {
             $systems[$system->getType()][$system->getSubtype()][] = $system;
-            $systemsJs[$system->getId()] = json_decode($serializer->serialize($system, 'json', ["attributes" => ['id', 'name', 'data', 'type', 'subtype'], "circular_reference_handler" => function ($object) {return $object->getId();}]), true);
+            $systemsJs[$system->getId()] = json_decode($serializer->serialize($system, 'json', [
+                "attributes" => ['id', 'name', 'data', 'type', 'subtype'],
+                "circular_reference_handler" => fn($object) => $object->getId()
+            ]), true);
         }
-
+    
         $systemsStdQuery = $this->getDoctrine()->getRepository(SystemStd::class)->findAll();
-
         $systemsStd = [
             "computing" => [
-                "network" => [
-                    "label" => "Réseau",
-                    "items" => [],
-                    "icon" => "fa-network-wired" // Correct network icon
-                ],
-                "security" => [
-                    "label" => "Sécurité",
-                    "items" => [],
-                    "icon" => "fa-shield-alt" // Security icon
-                ],
-                "administration" => [
-                    "label" => "Administration",
-                    "items" => [],
-                    "icon" => "fa-users-cog" // Administration icon
-                ],
-                "device" => [
-                    "label" => "Périphérique",
-                    "items" => [],
-                    "icon" => "fa-tablet-alt" // Device icon
-                ],
-                "software" => [
-                    "label" => "Logiciel",
-                    "items" => [],
-                    "icon" => "fa-code" // Software icon
-                ],
-                "server" => [
-                    "label" => "Serveur",
-                    "items" => [],
-                    "icon" => "fa-server" // Server icon
-                ],
+                "network" => ["label" => "Réseau", "items" => [], "icon" => "fa-print"],
+                "security" => ["label" => "Sécurité", "items" => [], "icon" => "fa-shield"],
+                "administration" => ["label" => "Administration", "items" => [], "icon" => "fa-users"],
+                "device" => ["label" => "Périphérique", "items" => [], "icon" => "fa-desktop"],
+                "software" => ["label" => "Logiciel", "items" => [], "icon" => "fa-window-maximize"],
+                "server" => ["label" => "Serveur", "items" => [], "icon" => "fa-server"],
             ],
             "physical" => [
-                "partitioning" => [
-                    "label" => "Cloisonnement",
-                    "items" => [],
-                    "icon" => "fa-border-all" // Partitioning icon
-                ],
-                "information" => [
-                    "label" => "Information",
-                    "items" => [],
-                    "icon" => "fa-info-circle" // Information icon
-                ],
+                "partitioning" => ["label" => "Cloisonnement", "items" => [], "icon" => "fa-calendar-check-o"],
+                "information" => ["label" => "Information", "items" => [], "icon" => "fa-lightbulb-o"],
             ],
             "action" => [
-                "minimization" => [
-                    "label" => "Minimisation",
-                    "items" => [],
-                    "icon" => "fa-compress-alt" // Minimization icon
-                ],
-                "anonymization" => [
-                    "label" => "Anonymisation",
-                    "items" => [],
-                    "icon" => "fa-user-secret" // Anonymization icon
-                ],
-                "pseudonymization" => [
-                    "label" => "Pseudonymisation",
-                    "items" => [],
-                    "icon" => "fa-user-lock" // Pseudonymization icon
-                ],
-                "sensitization" => [
-                    "label" => "Sensibilisation et formation",
-                    "items" => [],
-                    "icon" => "fa-chalkboard-teacher" // Sensitization icon
-                ],
-                "supervision" => [
-                    "label" => "Contrôle",
-                    "items" => [],
-                    "icon" => "fa-eye" // Supervision icon
-                ],
-                "destruction" => [
-                    "label" => "Destruction et suppression",
-                    "items" => [],
-                    "icon" => "fa-trash" // Destruction icon
-                ],
+                "minimization" => ["label" => "Minimisation", "items" => [], "icon" => "fa-user"],
+                "anonymization" => ["label" => "Anonymisation", "items" => [], "icon" => "fa-user-secret"],
+                "pseudonymization" => ["label" => "Pseudonymisation", "items" => [], "icon" => "fa-question-circle-o"],
+                "sensitization" => ["label" => "Sensibilisation", "items" => [], "icon" => "fa-exclamation-triangle"],
+                "supervision" => ["label" => "Contrôle", "items" => [], "icon" => "fa-search"],
+                "destruction" => ["label" => "Destruction", "items" => [], "icon" => "fa-trash-o"],
             ],
             "supplier" => [
-                "supplier" => [
-                    "label" => "Prestataires du SI",
-                    "items" => [],
-                    "icon" => "fa-handshake" // Supplier icon
-                ],
+                "supplier" => ["label" => "Prestataires", "items" => [], "icon" => "fa-calendar-check-o"],
             ]
         ];
-        
+    
         foreach ($systemsStdQuery as $system) {
             $systemsStd[$system->getType()][$system->getSubtype()]['items'][] = $system;
         }
-
+    
         $mindMapHeight = 0;
-
         $mindMap = [
-
             "meta" => [
-        "name" => "Cartographie SI",
-        "author" => "myDigitplace",
-        "version" => "1.0"
-          ], "format" => "node_tree",
-
+                "name" => "Cartographie SI",
+                "author" => "myDigitplace",
+                "version" => "1.0"
+            ],
+            "format" => "node_tree",
+            "data" => [
             "id" => "root",
-            "topic" => "<div class='node-level-0'><div class='jmnode-icon'><i class='fa fa-sitemap fa-36px'></i></div><i>Système d'information</i><span class='node-0-actions'><a href=\"".$this->generateUrl("user_systems_group_export")."\" target='_blank' class=\"btn btn-sm btn-rounded-circle btn-primary\"><i class=\"fa fa-printer\"></i></a></span></div>",
-           "children" => [
-    [
-        "id" => "computing",
-        "topic" => "<div class='node-level-1'><div class='jmnode-icon'><i class='fa fa-network-wired fa-36px'></i></div><i>Informatique</i><span class='node-1-actions'><a href=\"".$this->generateUrl("user_systems_group_export_excel", ["type" => "computing"])."\" target='_blank' class=\"btn btn-sm btn-rounded-circle btn-primary\"><i class=\"fa fa-print\"></i></a></span></div>",
-        "direction" => "right",
-        "expanded" => (isset($_GET["addedType"]) && $_GET["addedType"] == "computing"),
-        "attr" => [
-            "class" => "jmnode-level-1",
-        ],
-        "children" => []
-    ],
-    [
-        "id" => "physical",
-        "topic" => "<div class='node-level-1'><div class='jmnode-icon'><i class='fa fa-box fa-36px'></i></div><i>Physique</i><span class='node-1-actions'><a href=\"".$this->generateUrl("user_systems_group_export_excel", ["type" => "physical"])."\" target='_blank' class=\"btn btn-sm btn-rounded-circle btn-primary\"><i class=\"fa fa-download\"></i></a></span></div>",
-        "direction" => "right",
-        "expanded" => (isset($_GET["addedType"]) && $_GET["addedType"] == "physical"),
-        "attr" => [
-            "class" => "jmnode-level-1",
-        ],
-        "children" => []
-    ],
-    [
-        "id" => "action",
-        "topic" => "<div class='node-level-1'><div class='jmnode-icon'><i class='fa fa-tasks fa-36px'></i></div><i>Action</i><span class='node-1-actions'><a href=\"".$this->generateUrl("user_systems_group_export_excel", ["type" => "action"])."\" target='_blank' class=\"btn btn-sm btn-rounded-circle btn-primary\"><i class=\"fa fa-download\"></i></a></span></div>",
-        "direction" => "right",
-        "expanded" => (isset($_GET["addedType"]) && $_GET["addedType"] == "action"),
-        "attr" => [
-            "class" => "jmnode-level-1",
-        ],
-        "children" => []
-    ],
-    [
-        "id" => "supplier",
-        "topic" => "<div class='node-level-1'><div class='jmnode-icon'><i class='fa fa-handshake fa-36px'></i></div><i>Prestataires du SI</i><span class='node-1-actions'><a href=\"".$this->generateUrl("user_systems_group_export_excel", ["type" => "supplier"])."\" target='_blank' class=\"btn btn-sm btn-rounded-circle btn-primary\"><i class=\"fa fa-download\"></i></a></span></div>",
-        "direction" => "right",
-        "expanded" => (isset($_GET["addedType"]) && $_GET["addedType"] == "supplier"),
-        "attr" => [
-            "class" => "jmnode-level-1",
-        ],
-        "children" => []
-    ],
-]
-
+            "topic" => " <div class='border border1'><div class='circle'></div></div>
+                <div class='border border2'><div class='circle'></div></div>
+                <div class='border border3'><div class='circle'></div></div>
+                <div class='border border4'><div class='circle'></div></div>
+                <div class='node-content'>
+                    <svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 16 16'>
+                        <path fill='currentColor' fill-rule='evenodd' d='M6.146 2.153a.5.5 0 0 1 .354-.146h3a.5.5 0 0 1 .5.5V4.51a.5.5 0 0 1-.5.5H8.497V7h4.5a.5.5 0 0 1 .5.5V10H14.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h.997V8h-4v2H9.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h.997V8h-4v2H4.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h.997V7.5a.5.5 0 0 1 .5-.5h4.5V5.01H6.5a.5.5 0 0 1-.5-.5V2.508a.5.5 0 0 1 .146-.354' clip-rule='evenodd'/>
+                    </svg>
+                    <div class='text-wrapper'>Système d'information</div>
+                </div>",
+            "expanded" => true,
+            "children" => []
+            ]
         ];
-
+    
         $key1 = 0;
-        foreach ($systemsStd as $systemStd) {
-            foreach ($systemStd as $key2 => $value2) {
-                $data = [
-                    "id" => $mindMap["children"][$key1]["id"]."_".$key2,
-                    "topic" => "<div class='node-level-2'><div class='jmnode-icon'><i class='fa ".$value2["icon"]." fa-36px'></i></div><i>".$value2["label"]."</i><span class='node-2-actions'><a href=\"".$this->generateUrl("user_systems_add")."?type=".$mindMap["children"][$key1]["id"]."&subtype=".$key2."&group=1\" class=\"btn btn-sm btn-rounded-circle btn-primary\"><i class=\"    fa fa-plus\"></i></a></span></div>",
-                    "direction" => "right",
-                    "expanded" => (isset($_GET["addedSubtype"]) && $_GET["addedSubtype"] == $key2),
-                    "attr" => [
-                        "class" => "jmnode-level-2",
-                    ],
+        foreach ($systemsStd as $type => $categories) {
+            $node = [
+                "id" => $type,
+                "topic" => " <div class='border border1'><div class='circle'></div></div>
+                <div class='border border2'><div class='circle'></div></div>
+                <div class='border border3'><div class='circle'></div></div>
+                <div class='border border4'><div class='circle'></div></div>
+                <div class='node-content'>
+                    <i class='fa " . $categories[array_key_first($categories)]['icon'] . "'></i>
+                    <div class='text-wrapper'>" . ($customNames[$type] ?? ucfirst($type)) . "</div>
+                </div>",
+                "direction" => "right",
+                "expanded" => false,
+                "children" => []
+            ];
+    
+            foreach ($categories as $subtype => $details) {
+                $subNode = [
+                    "id" => $type . "_" . $subtype,
+                    "topic" => " <div class='border border1'><div class='circle'></div></div>
+                    <div class='border border2'><div class='circle'></div></div>
+                    <div class='border border3'><div class='circle'></div></div>
+                    <div class='border border4'><div class='circle'></div></div>
+                    <div class='node-content'>
+                        <i class='fa " . $details["icon"] . "'></i>
+                        <div class='text-wrapper'>" . $details["label"] . "</div>
+                    </div>",
                     "children" => []
                 ];
-
-                $itemsLenght = count($systems[$mindMap["children"][$key1]["id"]][$key2]);
-                if ($itemsLenght > 2) {
-                    $mindMapHeight += $itemsLenght;
-                } else {
-                    $mindMapHeight += 2;
-                }
-
-                foreach ($systems[$mindMap["children"][$key1]["id"]][$key2] as $item) {
-                    $data["children"][] = [
-                        "id" => $item->getId(),
-                        "topic" => "<div class='node-level-3'><span class='node-topic' onclick='openModalInfo(".$item->getId().")'>".$item->getName()."</span><span class='node-3-actions'><a href=\"".$this->generateUrl("user_systems_edit", ["id" => $item->getId()])."\" class=\"btn btn-light my-1 mr-1\"><i class=\"fa fa-circle-edit-outline\"></i></a><a href=\"".$this->generateUrl("user_systems_delete", ["id" => $item->getId()])."\" class=\"btn btn-danger my-1\"  onclick=\"return confirm('Confirmer la suppression de cet élément ?');\"><i class=\"fa fa-close\"></i></a></span></div>",
-                        "attr" => [
-                            "class" => "jmnode-level-3",
-                            "onclick" => "openModalInfo(".$item->getId().")",
-                        ]
+    
+                foreach ($systems[$type][$subtype] as $system) {
+                    $subNode["children"][] = [
+                        "id" => $system->getId(),
+                        "topic" => " 
+                        <div class='border border1'><div class='circle'></div></div>
+                        <div class='border border2'><div class='circle'></div></div>
+                        <div class='border border3'><div class='circle'></div></div>
+                        <div class='border border4'><div class='circle'></div></div>
+                        <div class='node-content'>
+                            <i class='fa " . $details["icon"] . "'></i>
+                            <div class='text-wrapper'>" . $system->getName() . "</div>
+                        </div>"
                     ];
                 }
-
-                $mindMap["children"][$key1]["children"][] = $data;
+    
+                $node["children"][] = $subNode;
             }
+    
+            $mindMap["data"]["children"][] = $node;
             $key1++;
         }
-
+    
         return $this->render('user/systemsgroup.html.twig', [
             "systems" => $systems,
             "systemsStd" => $systemsStd,
@@ -5497,7 +5416,7 @@ class UserController extends AbstractController
             "systemsJs" => $systemsJs,
         ]);
     }
-
+    
     /**
      * @Route("/systemsgroup/export", name="systems_group_export")
      */

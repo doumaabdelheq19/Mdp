@@ -49,7 +49,19 @@
                 {% for exercisingclaim in exercisingclaims %}
                     <tr>
                         <td style="color: #EF6D6F;">{{ exercisingclaim.requestDate|date('d/m/Y') }}</td>
-                        <td>{{ exercisingclaim.rights }}</td>
+                        <td> {% if exercisingclaim.rights == "acces" %}
+                                                {{ 'accs'|trans }}
+                                            {% elseif exercisingclaim.rights == "rectification" %}
+                                                {{ 'rectification'|trans }}
+                                            {% elseif exercisingclaim.rights == "effacement" %}
+                                                {{ 'effacement'|trans }}
+                                            {% elseif exercisingclaim.rights == "limitation" %}
+                                                {{ 'limitation'|trans }}
+                                            {% elseif exercisingclaim.rights == "portabilite" %}
+                                                {{ 'portabilit'|trans }}
+                                            {% elseif exercisingclaim.rights == "opposition" %}
+                                                {{ 'opposition'|trans }}
+                                            {% endif %}</td>
                         <td>{{ exercisingclaim.customer }}</td>
                         <td>
                             <div style="  {% if exercisingclaim.answerDate %}

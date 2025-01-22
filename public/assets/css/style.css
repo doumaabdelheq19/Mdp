@@ -95,7 +95,7 @@ box-shadow: 10px 10px 31px -1px rgba(205,47,47,0.13);
 .right .blockcenter button {
   width: 100%;
   text-align: center;
-  background-color: #EF6D6F;
+  background-color: var(--main-color);
   padding: 10px 0px;
   color: white;
   border: 0px;
@@ -206,7 +206,7 @@ color: #586E90;
 
        }
        .submitt{
-          background-color: #EF6D6F;
+          background-color: var(--main-color);
           padding: 15px 10px;
           border: 0px;
           border-radius: 7px;
@@ -216,7 +216,7 @@ color: #586E90;
        }
        .inputlogin a {
 
-          color:#EF6D6F ;
+          color:var(--main-color) ;
           text-decoration: none;
           margin: 10px 0px;
        }
@@ -259,7 +259,7 @@ box-shadow: 0px 4px 32px -1px rgba(205,47,47,0.13);
          }
          .sidebar a{
           font-size: 10px;
-          color: #EF6D6F;
+          color: var(--main-color);
           font-weight: bold;
           text-decoration: none;
           align-items: center;
@@ -294,12 +294,12 @@ box-shadow: 0px 4px 32px -1px rgba(205,47,47,0.13);
          .menu-item .active{
           font-size: 13px;
           display: flex;
-          color: #EF6D6F;
+          color: var(--main-color);
          }
          .menu-item .active a{
           font-size: 13px;
          
-          color: #EF6D6F;
+          color: var(--main-color);
          }
 
        .side-menu{
@@ -380,7 +380,7 @@ box-shadow: 0px 4px 32px -1px rgba(205,47,47,0.13);
       }
 
       .submittt{
-          background-color: #EF6D6F;
+          background-color: var(--main-color);
           padding: 8px 10px;
           border: 0px;
           border-radius: 7px;
@@ -405,7 +405,7 @@ box-shadow: 0px 4px 32px -1px rgba(205,47,47,0.13);
 }
 
 .sidebar::-webkit-scrollbar-thumb {
-  background-color: #EF6D6F; /* Scrollbar thumb color */
+  background-color: var(--main-color); /* Scrollbar thumb color */
   border-radius: 10px; /* Rounded scrollbar */
 }
 
@@ -432,7 +432,7 @@ box-shadow: 0px 4px 32px -1px rgba(205,47,47,0.13);
 }
 
 .sub-menu li a:hover {
-  color: #EF6D6F; /* Highlight submenu links on hover */
+  color: var(--main-color); /* Highlight submenu links on hover */
 }
 
 /* Show submenu when active class is added */
@@ -442,23 +442,23 @@ box-shadow: 0px 4px 32px -1px rgba(205,47,47,0.13);
 
 /* Highlight active menu item */
 .menu-item.active {
-  color: #EF6D6F;
+  color: var(--main-color);
 }
 
 .menu-item.active a {
-  color: #EF6D6F;
+  color: var(--main-color);
 }
 
 /* Highlight active submenu item */
 .sub-menu li.active a {
-  color: #EF6D6F;
+  color: var(--main-color);
   font-weight: bold;
 }
 .menu-toggle {
   position: fixed;
   top: 15px;
   right: 15px;
-  background-color: #EF6D6F;
+  background-color: var(--main-color);
   color: white;
   padding: 10px;
   border-radius: 5px;
@@ -1224,7 +1224,7 @@ box-shadow: 0px 4px 32px -1px rgba(205,47,47,0.13);
 
 
     .checkbox input{
-      color: #EF6D6F;
+      color: var(--main-color);
     }
     .checkbox{
       display: flex;
@@ -2248,14 +2248,14 @@ label {
   margin: 0;
   font-size: 18px;
   font-weight: bold;
-  color: #224261;
+  color: #438492;
 }
 
 .modal-header .close {
   font-size: 1.5rem;
   width: auto;
   font-weight: bold;
-  color: #333;
+  color: #438492;
   border: none;
   background: none;
   cursor: pointer;
@@ -2266,9 +2266,13 @@ label {
 }
 
 .modal-footer {
-  padding: 10px 20px;
-  text-align: right;
-  border-top: 1px solid #dee2e6;
+  
+    padding: 10px 20px;
+    text-align: right;
+    border-top: 1px solid #dee2e6;
+    display: flex;
+    justify-content: end;
+
 }
 
 .modal-footer .btn {
@@ -3031,4 +3035,17 @@ jmnodes.theme-primary jmnode:hover {
 
 #treatments-search, #sheets-search {
   width: 92% !important;
+}
+.text-center{
+  text-align: center;
+}
+
+.poser {
+  cursor: pointer;
+}
+
+#informationModal.modal-body {
+  overflow: auto; /* Allow content to scroll if needed */
+  word-wrap: break-word; /* Break long text gracefully */
+  white-space: pre-wrap;
 }

@@ -138,7 +138,7 @@
         <div class="sectt">
             <h3>{{ 'sous_traitants'|trans }}</h3>
             <div class="form-group">
-                <div style="display: flex; gap: 10px; width: auto; align-items: center;">
+                <div style="display:  flex; gap: 10px; width: auto; align-items: center;">
                     <button type="button" onclick="openSubcontractorsModal();" class="btn btn-primary exporter" style="width: auto; padding: 0px 10px;">
                         {{ 'Sélectionner des sous-traitants pour ce traitement'|trans }}
                     </button>
@@ -147,9 +147,45 @@
                     </a>
                 </div>
             </div>
-            <div id="subcontractors-selected">{{ subcontractorsStr|join(', ') }}</div>
-            {% do form.subcontractors.setRendered() %}
+                            <div id="subcontractors-selected">{{ subcontractorsStr|join(', ') }}</div>
+           
         </div>
+
+
+        <div class="modal fade" id="ModalSubcontractors" tabindex="-1" role="dialog" aria-labelledby="ModalSubcontractors" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{{ 'sous_traitants'|trans }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'fermer'|trans }}">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <span onclick="selectAllSubcontractors();" style="cursor: pointer;">Tout sélectionner</span>
+                    /
+                    <span onclick="unselectAllSubcontractors();" style="cursor: pointer;">Tout désélectionner</span>
+                </div>
+                <div id="ModalSubcontractorsContent">
+                {% set currentSt = null %}
+                                        {% for chk in form.subcontractors %}
+                                            {% if currentSt != chk.vars.attr["data-st"] %}
+                                                {% set currentSt = chk.vars.attr["data-st"] %}
+                                                <p class="mt-3 h6">{{ subcontractorsTypes[currentSt] }}</p>
+                                            {% endif %}
+                                            <div class="custom-control custom-checkbox">
+                                                {{ form_widget(chk, {'attr': {'class': 'custom-control-input checkbox-subcontractor'} }) }}
+                                                {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label'}}) }}
+                                            </div>
+                                        {% endfor %}</div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="imprimer btn btn-light-secondary" data-dismiss="modal">{{ 'fermer'|trans }}</button>
+            </div>
+        </div>
+    </div>
+</div>
 
         <!-- Systems Section -->
         <div class="sectt">
@@ -191,7 +227,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                <button type="button" class="imprimer btn btn-light-secondary" data-dismiss="modal">
                     {{ 'fermer'|trans }}
                 </button>
             </div>
@@ -406,35 +442,200 @@
     <script>
         var subcontractors = {{ subcontractors|json_encode|raw }};
         var systems = {{ systems|json_encode|raw }};
+        var subcontractorsStr = {{ subcontractorsStr|json_encode|raw }};
+        var systemsStr = {{ systemsStr|json_encode|raw }};
+        var subcontractorsTypes = {{ subcontractorsTypes|json_encode|raw }};
+
         var subcontractorsStrAssoc = {};
         var systemsStrAssoc = {};
 
-        function openSubcontractorsModal() {
+        var inputSubcontractorsSelector;
+        var inputSystemSelector;
+
+        
+function openSubcontractorsModal() {
+    subcontractorsStrAssoc = {};
+    $.ajax({
+        type: "POST",
+        async: true,
+        url: "{{ path('user_json_subcontractors') }}",
+        data: {},
+        success: function (content) {
+            var ModalSubcontractorsContent = document.getElementById("ModalSubcontractorsContent");
+
+            ModalSubcontractorsContent.innerHTML = null;
+
+            var currentSt = null;
+
+            content.map(item => {
+                if (currentSt !== item.st) {
+                    currentSt = item.st;
+                    var pTitle = document.createElement("p");
+                    pTitle.className = "mt-3 h6";
+                    pTitle.innerText = subcontractorsTypes[currentSt];
+
+                    ModalSubcontractorsContent.appendChild(pTitle);
+                }
+
+                subcontractorsStrAssoc[item.id] = item.text;
+
+                var div = document.createElement("div");
+                div.className = "custom-control custom-checkbox";
+
+                var input = document.createElement("input");
+                input.className = "custom-control-input checkbox-subcontractor";
+                input.setAttribute("data-st", item.st);
+                input.setAttribute("type", "checkbox");
+                input.setAttribute("name", "appbundle_treatment[subcontractors][]");
+                input.setAttribute("value", item.id);
+                input.setAttribute("id", "appbundle_treatment_subcontractors_" + item.id);
+                if (subcontractors.includes(item.id)) {
+                    input.setAttribute("checked", "checked");
+                }
+                input.addEventListener("change", function () {
+                    if (this.checked) {
+                        if (!subcontractors.includes(parseInt(this.value))) {
+                            subcontractors.push(parseInt(this.value));
+                        }
+                    } else {
+                        const index = subcontractors.indexOf(parseInt(this.value));
+                        if (index > -1) {
+                            subcontractors.splice(index, 1);
+                        }
+                    }
+                    refreshSubcontractorsContent();
+                });
+
+                var label = document.createElement("label");
+                label.className = "custom-control-label";
+                label.setAttribute("for", "appbundle_treatment_subcontractors_" + item.id);
+                label.innerText = item.text;
+
+                div.appendChild(input);
+                div.appendChild(label);
+
+                ModalSubcontractorsContent.append(div);
+            });
+
+            $("#ModalSubcontractors").modal("show");
+        },
+    });
+}
+
+function selectAllSubcontractors() {
+    $(".checkbox-subcontractor").prop("checked", true);
+    $(".checkbox-subcontractor").each(function () {
+        if (!subcontractors.includes(parseInt($(this).val()))) {
+            subcontractors.push(parseInt($(this).val()));
+        }
+    });
+    refreshSubcontractorsContent();
+}
+
+function unselectAllSubcontractors() {
+    $(".checkbox-subcontractor").prop("checked", false);
+    $(".checkbox-subcontractor").each(function () {
+        const index = subcontractors.indexOf(parseInt($(this).val()));
+        if (index > -1) {
+            subcontractors.splice(index, 1);
+        }
+    });
+    refreshSubcontractorsContent();
+}
+
+function refreshSubcontractorsContent() {
+    subcontractorsStr = [];
+    subcontractors.map(function (subcontractor) {
+        subcontractorsStr.push(subcontractorsStrAssoc[subcontractor]);
+    });
+    subcontractorsStr.sort();
+    document.getElementById("subcontractors-selected").innerText =
+        subcontractorsStr.join(", ");
+}
+ function openSystemsModal() {
+            systemsStrAssoc = {};
             $.ajax({
                 type: "POST",
-                url: "{{ path('user_json_subcontractors') }}",
+                async: true,
+                url: "{{ path('user_json_systems') }}",
+                data: {},
                 success: function (content) {
-                    var ModalSubcontractorsContent = document.getElementById("ModalSubcontractorsContent");
-                    ModalSubcontractorsContent.innerHTML = null;
+                    var ModalSystemsContent = document.getElementById("ModalSystemsContent");
+
+                    ModalSystemsContent.innerHTML = null;
+
                     content.map(item => {
-                        subcontractorsStrAssoc[item.id] = item.text;
+                        systemsStrAssoc[item.id] = item.text;
                         var div = document.createElement("div");
                         div.className = "custom-control custom-checkbox";
+
                         var input = document.createElement("input");
-                        input.type = "checkbox";
-                        input.className = "custom-control-input";
-                        input.value = item.id;
-                        input.id = `sub_${item.id}`;
-                        div.appendChild(input);
+                        input.className = "custom-control-input checkbox-system";
+                        input.setAttribute("type", "checkbox");
+                        input.setAttribute("name", "appbundle_treatment[systems][]");
+                        input.setAttribute("value", item.id);
+                        input.setAttribute("id", "appbundle_treatment_systems_"+item.id);
+                        if (systems.includes(item.id)) {
+                            input.setAttribute("checked", "checked");
+                        }
+                        input.addEventListener('change', function() {
+                            if (this.checked) {
+                                if (!systems.includes(parseInt(this.value))) {
+                                    systems.push(parseInt(this.value));
+                                }
+                            } else {
+                                const index = systems.indexOf(parseInt(this.value));
+                                if (index > -1) {
+                                    systems.splice(index, 1);
+                                }
+                            }
+                            refreshSystemsContent();
+                        });
+
                         var label = document.createElement("label");
                         label.className = "custom-control-label";
-                        label.setAttribute("for", `sub_${item.id}`);
+                        label.setAttribute("for", "appbundle_treatment_systems_"+item.id);
                         label.innerText = item.text;
+
+                        div.appendChild(input);
                         div.appendChild(label);
-                        ModalSubcontractorsContent.appendChild(div);
+
+                        ModalSystemsContent.append(div);
                     });
+
+                    $('#ModalSystems').modal('show');
                 }
             });
+        }
+
+        function selectAllSystems() {
+            $('.checkbox-system').prop('checked',true);
+            $('.checkbox-system').each(function () {
+                if (!systems.includes(parseInt($(this).val()))) {
+                    systems.push(parseInt($(this).val()));
+                }
+            })
+            refreshSystemsContent();
+        }
+
+        function unselectAllSystems() {
+            $('.checkbox-system').prop('checked', false);
+            $('.checkbox-system').each(function () {
+                const index = systems.indexOf(parseInt($(this).val()));
+                if (index > -1) {
+                    systems.splice(index, 1);
+                }
+            })
+            refreshSystemsContent();
+        }
+
+        function refreshSystemsContent() {
+            systemsStr = [];
+            systems.map(function (subcontractor) {
+                systemsStr.push(systemsStrAssoc[subcontractor]);
+            })
+            systemsStr.sort();
+            document.getElementById("systems-selected").innerText = systemsStr.join(", ");
         }
 
         function updateFileName(input) {
@@ -446,9 +647,7 @@
             }
         }
 
-        window.onbeforeunload = function () {
-            return 'Êtes-vous sûr de vouloir quitter cette page?';
-        };
+       
     </script>
 {% endblock %}
 {% endblock %}
