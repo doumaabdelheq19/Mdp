@@ -37,7 +37,13 @@
         <div class="four">
             <div class="gap">
                 <h4 style="font-size: 16px;">
+                {% if type == 1 %}
                     {{ 'nombre_total_de_soustraitants'|trans({'%total%': subcontractorsStats.total}) }}
+                    {% elseif type == 2 %}
+                                        {{ 'nombre_total_de_cotritants'|trans({'%total%': subcontractorsStats.total}) }}
+{%elseif type == 3%}
+                                        {{ 'nombre_total_de_responsable'|trans({'%total%': subcontractorsStats.total}) }}
+{%endif%}
                 </h4>
                 <div class="checkbox">
                     <div style="display: flex; gap: 5px;">
@@ -103,8 +109,26 @@
         <div class="buttons">
                 
 
-                  <div class="gerer" style="width:250px">
-                    <a href="{{ path('user_subcontractors_grp') }}" class="btn btn-primary">{{ 'Les sous traitants de mon group'|trans }}</a>
+                  <div class="gerer" {% if type ==3 %} style="width:350px" {% else %} style="width:250px" {% endif %}>
+               {% if type == 1 %}
+                                                           <a  href="#" id="traitmentsent" style="display:none;" class="btn btn-primary">{{ 'Les sous-traitants de mon entité'|trans }}</a>
+
+                                                           <a  href="#"  id="traitmentsgrp" class="btn btn-primary">{{ 'Les sous traitants de mon group'|trans }}</a>
+
+                                    {% elseif type == 2 %}
+                                                           <a  href="#" style="display:none;" id="traitmentsent" class="btn btn-primary">{{ 'Les cotraitants de mon entité'|trans }}</a>
+
+                                                           <a  href="#" id="traitmentsgrp" class="btn btn-primary">{{ 'Les cotraitants de mon groupe'|trans }}</a>
+
+                                    {% elseif type == 3 %}
+                                                           <a  href="#" style="display:none;" id="traitmentsent" class="btn btn-primary">{{ 'Les responsables de traitements de mon entité'|trans }}</a>
+
+                                                            <a  href="#" id="traitmentsgrp" class="btn btn-primary">{{ 'Les responsables de traitements de mon groupe'|trans }}</a>
+
+                                    {% endif %}
+               
+               
+               
                 </div>
                  
 
@@ -156,6 +180,11 @@
                         <a href="{{ path('user_subcontractors_edit', {'id': subcontractor.id}) }}">
                             <button class="edit"><i class="fa fa-edit" aria-hidden="true"></i></button>
                         </a>
+                          <a href="{{ path('user_subcontractors_copy', {'id': subcontractor.id}) }}">
+                                <button class="edit">
+                                    <i class="fa fa-clone" aria-hidden="true"></i>
+                                </button>
+                                </a>
                         <a href="{{ path('user_subcontractors_delete', {'id': subcontractor.id}) }}" onclick="return confirm('{{ 'confirmer_la_suppression'|trans }}');">
                             <button class="delete">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
@@ -173,26 +202,35 @@
 </tbody>
 
         </table>
-
-        <!-- Pagination Controls -->
-        <div class="pagination-container">
+ <div class="pagination-container">
+            <!-- Results per page selector -->
             <div class="results-per-page">
-                <label for="resultsSelect">{{ 'Afficher'|trans }}</label>
-                <select id="resultsSelect" class="results-select">
-                    <option value="5">5</option>
-                    <option value="10" selected>10</option>
-                    <option value="20">20</option>
+                <label for="results">{{ 'Afficher'|trans }}</label>
+                <select id="results" class="results-select">
+                    <option value="12" {% if app.request.query.get('results') == '12' %}selected{% endif %}>12</option>
+                    <option value="24" {% if app.request.query.get('results') == '24' %}selected{% endif %}>24</option>
+                    <option value="48" {% if app.request.query.get('results') == '48' %}selected{% endif %}>48</option>
                 </select>
                 <span>{{ 'résultats par page'|trans }}</span>
             </div>
+
+            <!-- Pagination Controls -->
             <div class="pagination-controls">
-                <button id="prevPage" class="pagination-button" disabled><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19l-7-7l7-7"/></svg></button>
-                <span id="paginationInfo">{{ 'page'|trans }} 1 {{ 'sur'|trans }} 1</span>
-                <button id="nextPage" class="pagination-button" disabled><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5l7 7l-7 7"/></svg></button>
+                {% set currentPage = app.request.query.get('page')|default('1')|number_format(0, '', '', '') %}
+                {% set totalPages = totalPages|default(1) %}
+                <button class="pagination-button" {% if currentPage == 1 %}disabled{% endif %}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19l-7-7l7-7"/>
+                    </svg>
+                </button>
+                <span class="pagination-info">{{ 'Page'|trans }} {{ currentPage }} {{ 'sur'|trans }} {{ totalPages }}</span>
+                <button class="pagination-button" {% if currentPage == totalPages %}disabled{% endif %}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5l7 7l-7 7"/>
+                    </svg>
+                </button>
             </div>
         </div>
-    </div>
-</div>
 
 <!-- Modal -->
 <div class="modal fade" id="RGPDModal" tabindex="-1" role="dialog" aria-labelledby="RGPDModal" aria-hidden="true">
@@ -217,62 +255,186 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const rows = Array.from(document.querySelectorAll('#table-body tr'));
-            const resultsSelect = document.getElementById('resultsSelect');
-            const paginationInfo = document.getElementById('paginationInfo');
-            const prevPage = document.getElementById('prevPage');
-            const nextPage = document.getElementById('nextPage');
-            const searchInput = document.getElementById('search-input');
 
-            let currentPage = 1;
-            let resultsPerPage = parseInt(resultsSelect.value);
-            let filteredRows = rows;
-
-            function updateTable() {
-                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
-                const start = (currentPage - 1) * resultsPerPage;
-                const end = start + resultsPerPage;
-
-                rows.forEach((row, index) => {
-                    row.style.display = filteredRows.includes(row) && index >= start && index < end ? '' : 'none';
-                });
-
-                paginationInfo.textContent = `Page ${currentPage} {{ 'sur'|trans }} ${totalPages}`;
-                prevPage.disabled = currentPage === 1;
-                nextPage.disabled = currentPage === totalPages;
+document.addEventListener('DOMContentLoaded', function () {
+    // Handle pagination button clicks
+    document.querySelectorAll('.pagination-button').forEach(button => {
+        button.addEventListener('click', function () {
+            const isDisabled = this.classList.contains('disabled');
+            if (!isDisabled) {
+                const direction = this.textContent.trim() === ">" ? 1 : -1;
+                const urlParams = new URLSearchParams(window.location.search);
+                const currentPage = parseInt(urlParams.get('page')) || 1;
+                const nextPage = currentPage + direction;
+                urlParams.set('page', nextPage);
+                window.location.search = urlParams.toString();
             }
-
-            resultsSelect.addEventListener('change', () => {
-                resultsPerPage = parseInt(resultsSelect.value);
-                currentPage = 1;
-                updateTable();
-            });
-
-            prevPage.addEventListener('click', () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    updateTable();
-                }
-            });
-
-            nextPage.addEventListener('click', () => {
-                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    updateTable();
-                }
-            });
-
-            searchInput.addEventListener('input', function () {
-                const query = this.value.toLowerCase();
-                filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
-                currentPage = 1; // Reset to the first page
-                updateTable();
-            });
-
-            // Initialize the table on load
-            updateTable();
         });
+    });
+
+    // Handle results per page dropdown change
+    document.getElementById('results').addEventListener('change', function () {
+        const selectedValue = this.value;
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('results', selectedValue);
+        urlParams.delete('page'); // Reset to the first page
+        window.location.search = urlParams.toString();
+    });
+
+    // Handle table update on "traitmentsgrp" button click
+    document.getElementById('traitmentsgrp').addEventListener('click', function (e) {
+        e.preventDefault();
+        document.getElementById('traitmentsent').style.display="block";
+        document.getElementById('traitmentsgrp').style.display="none"
+        const urlParams = new URLSearchParams(window.location.search);
+      const tableBody = document.getElementById("table-body")
+         tableBody.innerHTML = `
+         {% if subcontractorsGrp|length > 0 %}
+            {% for subcontractor in subcontractorsGrp %}
+                <tr>
+                    <td>{{ subcontractor.name }}</td>
+                    <td>{{ subcontractor.type }}</td>
+                    <td>
+                        {% for treatment in subcontractor.treatments %}
+                            <span class="badge">{{ treatment.number }}</span>
+                        {% endfor %}
+                    </td>
+                    <td>{{ subcontractor.contactLastName }} {{ subcontractor.contactFirstName }}</td>
+                    <td>{{ subcontractor.contactPhone }}</td>
+                    <td>{{ subcontractor.contactEmail }}</td>
+                    <td>{{ subcontractor.conformity }}</td>
+                    <td>
+                        {% for document in subcontractor.documents %}
+                            <a href="{{ path('user_read_user_documents', {'id': document.id}) }}" target="_blank" class="badge">{{ document.name }}</a>
+                        {% endfor %}
+                    </td>
+                    <td>
+                        <div class="options">
+                            <a href="{{ path('user_subcontractors_edit', {'id': subcontractor.id}) }}">
+                                <button class="edit"><i class="fa fa-edit" aria-hidden="true"></i></button>
+                            </a>
+                              <a href="{{ path('user_subcontractors_copy', {'id': subcontractor.id}) }}">
+                                <button class="edit">
+                                    <i class="fa fa-clone" aria-hidden="true"></i>
+                                </button>
+                                </a>
+                            <a href="{{ path('user_subcontractors_delete', {'id': subcontractor.id}) }}" onclick="return confirm('{{ 'confirmer_la_suppression'|trans }}');">
+                                <button class="delete">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
+                                </button>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+              {% else %}
+        <tr>
+            <td colspan="9" class="text-center">{{ 'Aucun sous-traitant disponible'|trans }}</td>
+        </tr>
+    {% endif %}
+        `;
+
+        document.querySelectorAll('.pagination-button').forEach(button => {
+        button.addEventListener('click', function () {
+            const isDisabled = this.classList.contains('disabled');
+            if (!isDisabled) {
+                const direction = this.textContent.trim() === ">" ? 1 : -1;
+                const urlParams = new URLSearchParams(window.location.search);
+                const currentPage = parseInt(urlParams.get('page')) || 1;
+                const nextPage = currentPage + direction;
+                urlParams.set('page', nextPage);
+                window.location.search = urlParams.toString();
+            }
+        });
+    });
+
+    // Handle results per page dropdown change
+    document.getElementById('results').addEventListener('change', function () {
+        const selectedValue = this.value;
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('results', selectedValue);
+        urlParams.delete('page'); // Reset to the first page
+        window.location.search = urlParams.toString();
+    });
+    });
+
+    document.getElementById('traitmentsent').addEventListener('click', function (e) {
+        e.preventDefault();
+        document.getElementById('traitmentsgrp').style.display="block";
+        document.getElementById('traitmentsent').style.display="none"
+        const urlParams = new URLSearchParams(window.location.search);
+      const tableBody = document.getElementById("table-body")
+         tableBody.innerHTML = `
+            {% if subcontractors|length > 0 %}
+        {% for subcontractor in subcontractors %}
+            <tr>
+                <td>{{ subcontractor.name }}</td>
+                <td>{{ subcontractor.type }}</td>
+                <td>
+                    {% for treatment in subcontractor.treatments %}
+                        <span class="badge">{{ treatment.number }}</span>
+                    {% endfor %}
+                </td>
+                <td>{{ subcontractor.contactLastName }} {{ subcontractor.contactFirstName }}</td>
+                <td>{{ subcontractor.contactPhone }}</td>
+                <td style="color:#EF6D6F">{{ subcontractor.contactEmail }}</td>
+                <td>{{ subcontractor.conformity.libelle }}</td>
+                <td>
+                    {% for document in subcontractor.documents %}
+                        <a href="{{ path('user_read_user_documents', {'id': document.id}) }}" target="_blank" class="badge">{{ document.name }}</a>
+                    {% endfor %}
+                </td>
+                <td>
+                    <div class="options">
+                        <a href="{{ path('user_subcontractors_edit', {'id': subcontractor.id}) }}">
+                            <button class="edit"><i class="fa fa-edit" aria-hidden="true"></i></button>
+                        </a>
+                          <a href="{{ path('user_subcontractors_copy', {'id': subcontractor.id}) }}">
+                                <button class="edit">
+                                    <i class="fa fa-clone" aria-hidden="true"></i>
+                                </button>
+                                </a>
+                        <a href="{{ path('user_subcontractors_delete', {'id': subcontractor.id}) }}" onclick="return confirm('{{ 'confirmer_la_suppression'|trans }}');">
+                            <button class="delete">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
+                            </button>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+    {% else %}
+    <tr>
+            <td colspan="9" class="text-center">{{ 'Aucun sous-traitant disponible'|trans }}</td>
+        </tr>
+    {% endif %}
+        `;
+
+       document.querySelectorAll('.pagination-button').forEach(button => {
+        button.addEventListener('click', function () {
+            const isDisabled = this.classList.contains('disabled');
+            if (!isDisabled) {
+                const direction = this.textContent.trim() === ">" ? 1 : -1;
+                const urlParams = new URLSearchParams(window.location.search);
+                const currentPage = parseInt(urlParams.get('page')) || 1;
+                const nextPage = currentPage + direction;
+                urlParams.set('page', nextPage);
+                window.location.search = urlParams.toString();
+            }
+        });
+    });
+
+    // Handle results per page dropdown change
+    document.getElementById('results').addEventListener('change', function () {
+        const selectedValue = this.value;
+        const urlParams = new URLSearchParams(window.location.search);
+        urlParams.set('results', selectedValue);
+        urlParams.delete('page'); // Reset to the first page
+        window.location.search = urlParams.toString();
+    });
+    });
+});
+
+
     </script>
 {% endblock %}

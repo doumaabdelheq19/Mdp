@@ -3049,3 +3049,13 @@ jmnodes.theme-primary jmnode:hover {
   word-wrap: break-word; /* Break long text gracefully */
   white-space: pre-wrap;
 }
+
+.form-group tags{
+  padding: 1px 15px;
+  border: 1px solid #D4E5FF;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #586E90;
+  outline: none;
+  width: 100%;
+}

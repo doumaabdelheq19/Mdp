@@ -88,7 +88,7 @@
 
         <!-- Document Management Section -->
         <div class="sectt">
-            <h3>{{ 'documents'|trans }}</h3>
+            <h3>{{ 'Documents'|trans }}</h3>
             <div id="block_old_documents" class="form-group">
                 {% for document in subcontractor.documents %}
                     <div class="form-group1 d-flex block_document">
@@ -104,7 +104,12 @@
             </div>
             <div id="block_documents" class="form-group">
             </div>
-            
+            <div class="form-group mt-3" style="margin-bottom: 40px;">
+                <button type="button" class="file-button" onclick="document.getElementById('documentFileInput').click();">
+                    <i class="fa fa-file" aria-hidden="true"></i> {{ 'joindre un fichier'|trans }}
+                </button>
+                <input type="file" id="documentFileInput" style="display: none;" onchange="updateFileName(this);">
+            </div>
         </div>
 
         <!-- Group Checkbox -->

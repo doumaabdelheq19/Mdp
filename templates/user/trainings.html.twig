@@ -79,24 +79,32 @@
     <label for="teams-search">{{ form_label(form.teams) }}</label>
 
     <!-- Dropdown and Search -->
-    <div class="dropdownform">
-        <input 
-            type="text" 
-            id="teams-search" 
-            class="form-control" 
-            placeholder="{{ 'Rechercher une équipe'|trans }}" 
-            oninput="filterTeamsDropdown()" />
+   <div class="dropdownform">
+    <input 
+        type="text" 
+        id="teams-search" 
+        class="form-control" 
+        placeholder="{{ 'Rechercher une équipe'|trans }}" 
+        oninput="filterTeamsDropdown()" 
+        readonly
+        required /> <!-- Add required attribute -->
+    <input 
+        type="hidden" 
+        id="selected-team-id" 
+        name="selectedTeam" 
+        required /> <!-- Hidden field to store the selected team value -->
+    
+    <ul class="dropdown-menu" id="teams-dropdown">
+        {% for team in form.teams.vars.choices %}
+            <li data-id="{{ team.value }}">
+                <a href="javascript:void(0);" onclick="selectTeam('{{ team.value }}', '{{ team.label|e('js') }}')">
+                    {{ team.label }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>
 
-        <ul class="dropdown-menu" id="teams-dropdown">
-            {% for team in form.teams.vars.choices %}
-                <li data-id="{{ team.value }}">
-                    <a href="javascript:void(0);" onclick="selectTeam('{{ team.value }}', '{{ team.label|e('js') }}')">
-                        {{ team.label }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
 {% do form.teams.setRendered() %}
     <!-- Hidden Input for Selected Teams -->
     <input type="hidden" id="selected-teams" name="selected-teams" value="" />
@@ -111,11 +119,13 @@
 
 
             <!-- Emails Textarea -->
-             <div class="form-group col-12">
-                        {{ form_label(form.emails) }}
-                        <p class="small text-muted">{{ 'collez_ici_la_liste_des_adresses_mails_ou_saisisse'|trans|raw }}</p>
-                        {{ form_widget(form.emails) }}
-                    </div> 
+           <div class="form-group col-12">
+    {{ form_label(form.emails) }}
+    <p class="small text-muted">{{ 'collez_ici_la_liste_des_adresses_mails_ou_saisisse'|trans|raw }}</p>
+    {{ form_widget(form.emails, {'attr': {'required': 'required', 'class': 'form-control'}}) }}
+   
+</div>
+
 
             <!-- Training Options -->
             <div class="questionnaire-section">
@@ -272,7 +282,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="{{ asset('/assets/vendor/tagify/tagify.min.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
     <script>
         (function ($) {
             'use strict';

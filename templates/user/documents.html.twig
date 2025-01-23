@@ -150,7 +150,7 @@ const popupLayer = document.getElementById('popup-layer');
                     } else {
                         if (item.url !== undefined && item.url !== null) {
                             if (item.deleteUrl !== undefined && item.deleteUrl !== null) {
-                                htmlChild = '<div class="d-flex justify-content-between py-3" style=" display: flex; justify-content: space-between;"><a href="'+item.url+'" target="_blank">'+item.label+'</a><a href="'+item.deleteUrl+'" target="_blank" class="text-danger" onclick="return confirm(\'Confirmer la suppression de ce fichier ?\');"><i class="mdi mdi-trash-can"></i></a></div>';
+                                htmlChild = '<div class="d-flex justify-content-between py-3" style=" display: flex; justify-content: space-between;"><a href="'+item.url+'" target="_blank">'+item.label+'</a><a href="'+item.deleteUrl+'" style="color:#E57373" class="text-danger" onclick="return confirm(\'Confirmer la suppression de ce fichier ?\');"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg></a></div>';
                             } else {
                                 htmlChild = '<a href="'+item.url+'" target="_blank" class="mon-item2 d-flex justify-content-between py-3" style=" display: flex; justify-content: space-between;"> <p class="mb-0">'+item.label+'</p> <p class="mb-0"></p> </a>';
                             }
