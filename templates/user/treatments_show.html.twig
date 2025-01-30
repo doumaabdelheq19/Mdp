@@ -50,9 +50,44 @@
                         <strong>{{ 'description_du_traitement'|trans }}:</strong> {{ treatment.description }}
                     </div>
                 </div>
+                 <div class="form-group">
+                    <div class="form-group1">
+                        <strong>{{ 'responsable_de_traitement'|trans }}:</strong> {{treatment.treatmentAccountant }}
+                    </div>
+                     <div class="form-group1">
+                            <strong> {{ 'dpo'|trans }}:</strong>  {{ treatment.dpo }}
+                        </div>
+                </div>
+                 <div class="form-group">
+                    <div class="form-group1">
+                      <strong>  {{ 'responsable_du_service_concern'|trans }}:</strong>  {{ treatment.serviceAccountant }}
+                    </div>
+                    <div class="form-group1">
+                            <strong> {{ 'rdacteur_de_la_fiche'|trans }}:</strong>  {{ treatment.editor }}
+                        </div>
+                </div>
+                 
             </div>
         </div>
 
+                    <h5 class="mt-2">{{ 'catgories_de_donnes_personnelles_concernes'|trans }}</h5>
+
+                    <div class="table-responsive p-t-10">
+                      
+                            {% for personalData in treatment.personalData %}
+                                
+                                    <div class="form-group" style="align-items:center;"><div class="form-group1"><div style="height: 100%; margin-bottom:0px; border: 1px solid {% if personalData.level == 1 %}#D4E5FF{% elseif personalData.level == 2 %}#FFC375{% else %}#E26262{% endif %}; 
+                                border-left:4px solid {% if personalData.level == 1 %}#D4E5FF{% elseif personalData.level == 2 %}#FFC375{% else %}#E26262{% endif %}; 
+                                display: flex; align-items: center; padding: 10px; ">
+                        {{ personalData.title }}
+                    </div> </div>
+                                    <div class="form-group1" style="flex-direction:column">{{ personalData.text }}
+                                    {% if personalData.duration is defined %}{{ personalData.duration }}{% endif %}
+                              </div>  </div>
+                            {% endfor %}
+                           
+                        
+                    </div>
         <!-- Subcontractors Section -->
         <div class="sectt">
             <h3>{{ 'sous_traitants'|trans }}</h3>
@@ -63,7 +98,7 @@
                             <span>{{ subcontractor.name }}</span><br>
                         {% endfor %}
                     {% else %}
-                        <p>{{ 'aucun_sous_traitant_selectionné'|trans }}</p>
+                        <p>{{ 'Aucun sous traitant selectionné'|trans }}</p>
                     {% endif %}
                 </div>
             </div>
@@ -79,7 +114,7 @@
                             <span>{{ system.name }}</span><br>
                         {% endfor %}
                     {% else %}
-                        <p>{{ 'aucune_mesure_technique_selectionnée'|trans }}</p>
+                        <p>{{ 'Aucune mesure technique selectionnée'|trans }}</p>
                     {% endif %}
                 </div>
             </div>

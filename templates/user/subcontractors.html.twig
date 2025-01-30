@@ -11,7 +11,7 @@
         <div class="four">
             <div class="gap">
                 <h4>{{ 'Registres des destinataires de données'|trans }}</h4>
-                <p>{{ "l'ensemble de vos destinataires"|trans }}</p>
+                <p>{{ "L'ensemble de vos destinataires"|trans }}</p>
                 <p class="text-underline">
                     <a data-toggle="modal" data-target="#RGPDModal" href="#">(Article 28 - Sous-traitant)</a>
                 </p>
@@ -113,7 +113,7 @@
                {% if type == 1 %}
                                                            <a  href="#" id="traitmentsent" style="display:none;" class="btn btn-primary">{{ 'Les sous-traitants de mon entité'|trans }}</a>
 
-                                                           <a  href="#"  id="traitmentsgrp" class="btn btn-primary">{{ 'Les sous traitants de mon group'|trans }}</a>
+                                                           <a  href="#"  id="traitmentsgrp" class="btn btn-primary">{{ 'Les sous traitants de mon groupe'|trans }}</a>
 
                                     {% elseif type == 2 %}
                                                            <a  href="#" style="display:none;" id="traitmentsent" class="btn btn-primary">{{ 'Les cotraitants de mon entité'|trans }}</a>
@@ -159,7 +159,15 @@
     {% if subcontractors|length > 0 %}
         {% for subcontractor in subcontractors %}
             <tr>
-                <td>{{ subcontractor.name }}</td>
+                    {% if subcontractor.user.id == app.user.user.id %}
+                                                    {% if subcontractor.group %}
+                                                        <td><a href="{{ path('user_subcontractors_edit', {'id': subcontractor.id}) }}">{{ subcontractor.name }}</a></td>
+                                                    {% else %}
+                                                        <td><a href="{{ path('user_subcontractors_edit', {'id': subcontractor.id}) }}">{{ subcontractor.name }}</a></td>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <td>{{ subcontractor.name }}</td>
+                                                {% endif %}
                 <td>{{ subcontractor.type }}</td>
                 <td>
                     {% for treatment in subcontractor.treatments %}
@@ -177,9 +185,7 @@
                 </td>
                 <td>
                     <div class="options">
-                        <a href="{{ path('user_subcontractors_edit', {'id': subcontractor.id}) }}">
-                            <button class="edit"><i class="fa fa-edit" aria-hidden="true"></i></button>
-                        </a>
+                       
                           <a href="{{ path('user_subcontractors_copy', {'id': subcontractor.id}) }}">
                                 <button class="edit">
                                     <i class="fa fa-clone" aria-hidden="true"></i>
@@ -196,7 +202,12 @@
         {% endfor %}
     {% else %}
         <tr>
-            <td colspan="9" class="text-center">{{ 'Aucun sous-traitant disponible'|trans }}</td>
+          {% if type == 1 %}  <td colspan="9" class="text-center">{{ 'Aucun sous-traitant disponible'|trans }}</td>
+        {% elseif type == 2 %}
+        <td colspan="9" class="text-center">{{ 'Aucun cotraitants disponible'|trans }}</td>
+        {% elseif type == 3 %}
+        <td colspan="9" class="text-center">{{ 'Aucun responsables de traitements disponible'|trans }}</td>
+        {% endif %}
         </tr>
     {% endif %}
 </tbody>
@@ -292,7 +303,15 @@ document.addEventListener('DOMContentLoaded', function () {
          {% if subcontractorsGrp|length > 0 %}
             {% for subcontractor in subcontractorsGrp %}
                 <tr>
-                    <td>{{ subcontractor.name }}</td>
+                       {% if subcontractor.user.id == app.user.user.id %}
+                                                    {% if subcontractor.group %}
+                                                        <td><a href="{{ path('user_subcontractors_edit', {'id': subcontractor.id}) }}">{{ subcontractor.name }}</a></td>
+                                                    {% else %}
+                                                        <td><a href="{{ path('user_subcontractors_edit', {'id': subcontractor.id}) }}">{{ subcontractor.name }}</a></td>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <td>{{ subcontractor.name }}</td>
+                                                {% endif %}
                     <td>{{ subcontractor.type }}</td>
                     <td>
                         {% for treatment in subcontractor.treatments %}
@@ -386,9 +405,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 </td>
                 <td>
                     <div class="options">
-                        <a href="{{ path('user_subcontractors_edit', {'id': subcontractor.id}) }}">
-                            <button class="edit"><i class="fa fa-edit" aria-hidden="true"></i></button>
-                        </a>
+                       
                           <a href="{{ path('user_subcontractors_copy', {'id': subcontractor.id}) }}">
                                 <button class="edit">
                                     <i class="fa fa-clone" aria-hidden="true"></i>

@@ -18,7 +18,11 @@
     <!-- Header Section -->
     <div class="table-container-traitements">
         <div class="header">
+        <div class="headretour" style="display:flex; align-items:center">
+                    <a href="javascript:history.back()" style="margin-top:4px"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024"><path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/></svg></a>
+
             <h2>{{ 'formation_des_quipes'|trans }}</h2>
+            </div>
             <p><a href="https://www.cnil.fr/fr/securite-impliquer-et-former-les-utilisateurs" target="_blac" class="text-primary">{{ 'En savoir plus sur la sensibilisation des personnes'|trans }}</a></p>
         </div>
 
@@ -35,7 +39,7 @@
                     <a onclick="showStats()" href="#" class="btn btn-primary">{{ 'Voir les statistiques'|trans }}</a>
                 </div>
                 <div class="exporter">
-                    <a href="{{ path('user_trainings_requests_revive_all', {"trainingCampain": trainingCampain.id}) }}" onclick="return confirm('{% if app.request.locale == "fr" %}Vous allez relancer l\'ensemble des personnes n\'ayant pas répondu à ce questionnaire.{% else %}You are going to send a reminder to all the people who didn\'t answer this questionnaire.{% endif %}');" class="btn btn-primary" id="openpopup">{{ 'Tou relancer'|trans }}</a>
+                    <a href="{{ path('user_trainings_requests_revive_all', {"trainingCampain": trainingCampain.id}) }}" onclick="return confirm('{% if app.request.locale == "fr" %}Vous allez relancer l\'ensemble des personnes n\'ayant pas répondu à ce questionnaire.{% else %}You are going to send a reminder to all the people who didn\'t answer this questionnaire.{% endif %}');" class="btn btn-primary" id="openpopup">{{ 'Tout relancer'|trans }}</a>
                 </div>
             </div>
         </div>
@@ -61,17 +65,18 @@
                                         <td>{{ trainingRequest.position }}</td>
                                         <td>{{ trainingRequest.email }}</td>
                                         <td>
-                                            {% if trainingRequest.answerDate %}
-                                                {% set dataRateClass = "badge-danger" %}
-                                                {% if trainingRequest.result == 1 %}
-                                                    {% set dataRateClass = "badge-success" %}
-                                                {% elseif trainingRequest.result >= 0.5 %}
-                                                    {% set dataRateClass = "badge-warning" %}
-                                                {% endif %}
-                                                <span class="badge {{ dataRateClass }}" style="cursor: pointer;" onclick="showAnswers({{ trainingRequest.id }})">
-                                                    {{ trainingRequest.result * 100|round(2) }}%
-                                                </span>
-                                            {% endif %}
+                                           {% if trainingRequest.answerDate %}
+    {% set dataRateClass = "badge-danger" %}
+    {% if trainingRequest.result == 1 %}
+        {% set dataRateClass = "badge-success" %}
+    {% elseif trainingRequest.result >= 0.5 %}
+        {% set dataRateClass = "badge-warning" %}
+    {% endif %}
+    <span class="badge {{ dataRateClass }}" style="cursor: pointer;" onclick="showAnswers({{ trainingRequest.id }})">
+        {{ trainingRequest.result * 100|round(0) }}%
+    </span>
+{% endif %}
+
                                         </td>
                                         <td>
                                         <div class="options">

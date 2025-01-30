@@ -124,7 +124,7 @@
 </div>
 {% do form.sheets.setRendered() %}
 {% do form.treatments.setRendered() %}
-
+<br>
 <div class="form-group-container">
     <div class="form-group" style="margin-top:20px">
         <div class="form-group1">
@@ -150,18 +150,10 @@
 
 
     <!-- Attach Documents -->
-<div class="form-group1">
-    <label for="treatments-search">{{ 'Traitements liés'|trans }}</label>
-      <a href="{{ path('user_treatments_add') }}" class="imprimer" style="margin:20px 0px;">
-    <div class="imprimer">
+<div class="form-group1" style="margin-top:30px">
+    <label for="treatments-search" style="margin-bottom:10px">{{ 'Traitements liés'|trans }}</label>
       
-        <p>+ Ajouter un treatment</p>
-    </div>
-</a>
-<p style="    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-size: 11px; color: #586E90;">Selectionnez les traitements liés</p>
+
     <div class="dropdownform">
         <!-- Input field for search -->
         <input 
@@ -174,8 +166,8 @@
         <!-- Dropdown menu dynamically populated with treatments -->
         <ul class="dropdown-menu" id="treatments-dropdown">
             {% for treatment in form.treatments.vars.choices %}
-                <li data-id="{{ treatment.value }}">
-                    <a href="javascript:void(0);" onclick="selectTreatment('{{ treatment.value }}', '{{ treatment.label }}')">
+                <li data-id="{{ treatment.value }}" onclick="selectTreatment('{{ treatment.value }}', '{{ treatment.label }}')">
+                    <a href="javascript:void(0);" >
                         {{ treatment.label }}
                     </a>
                 </li>
@@ -189,11 +181,8 @@
 
 <div class="form-group1">
 
-    <label for="sheets-search">{{ form_label(form.sheets) }}</label>
-    <p style="    display: block;
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-size: 11px; color: #586E90;">Annexer des fiches pratiques</p>
+    <label for="sheets-search" style="margin-bottom:10px">{{ form_label(form.sheets) }}</label>
+
     <div class="dropdownform">
         <!-- Input field for search -->
         <input 
@@ -206,8 +195,8 @@
         <!-- Dropdown menu dynamically populated with documents -->
         <ul class="dropdown-menu" id="sheets-dropdown">
             {% for sheet in form.sheets.vars.choices %}
-                <li data-id="{{ sheet.value }}">
-                    <a href="javascript:void(0);" onclick="selectSheet('{{ sheet.value }}', '{{ sheet.label }}')">
+                <li data-id="{{ sheet.value }}" onclick="selectSheet('{{ sheet.value }}', '{{ sheet.label }}')">
+                    <a href="javascript:void(0);" >
                         {{ sheet.label }}
                     </a>
                 </li>
@@ -220,7 +209,7 @@
 <input type="hidden" id="selected-sheets" name="selectedSheets" value="" />
 
 
-<div class=" mt-3" style="margin-bottom: 40px;">
+<div class=" mt-3" style="margin: 40px 0px;">
     <!-- Custom File Button -->
     <button type="button" class="file-button" id="add_document_button">
         <i class="fa fa-file" aria-hidden="true"></i> {{ 'joindre_un_document'|trans }}

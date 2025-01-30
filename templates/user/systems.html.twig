@@ -627,7 +627,7 @@ jmnode[nodeid="996"] .border {
         container: 'map', // ID of the container
         editable: false,
         theme: 'primary',
-        zoom: 0.8,
+        zoom: 0.6,
         support_html: true,
         view: {
           engine: "canvas", 
@@ -666,7 +666,7 @@ jmnode[nodeid="996"] .border {
     const mindData = {{ mindMap|json_encode|raw }}; // Replace with your server-rendered mind map data
     const jm = new jsMind(options);
     jm.show(mindData);
-    const initialZoom = 0.8; // Example: 80%
+    const initialZoom = 0.6; // Example: 80%
 jm.view.setZoom(initialZoom);
 
     // Dynamically adjust the container height

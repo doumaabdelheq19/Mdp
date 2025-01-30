@@ -1689,7 +1689,7 @@ color: #438492;
 .dropdown-menu {
   display: none;
   position: absolute;
-  top: 100%;
+  bottom: 100%;
   left: 0;
   background-color: white;
   border: 1px solid #ddd;
@@ -3025,9 +3025,12 @@ jmnodes.theme-primary jmnode:hover {
 
 .badge-danger{
   color: #EF6D6F;
+  background-color: #ef6d6f1b;
 }
 .badge-success{
-  color: #438492;
+  background-color: #52b48a1e;
+
+  color: #52B489;
 }
 .badge-warning{
   color: #FFC375;
@@ -3059,3 +3062,86 @@ jmnodes.theme-primary jmnode:hover {
   outline: none;
   width: 100%;
 }
+
+
+.badge{
+ 
+  padding: 3px 13px;
+  border-radius: 10px;
+}
+
+.badge-secondary{
+  background-color: #f3a25219;
+  color: #F3A352;
+}
+
+.badge-primary{
+  background-color: #7097d12d;
+  color: #7096D1;
+}
+
+.avatar-input {
+  display: flex;
+    justify-content: center;
+}
+.avatar-input i {
+font-size: 100px;
+cursor: pointer;
+}
+.avatar img{
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  
+}
+
+.form-group.block_document{
+  display: flex;
+}
+
+.p-t-20 i {
+  color:#EF6D6F;
+  margin-right: 3px;
+
+}
+.h4{
+  font-weight: 600;
+}
+
+
+.node-3-actions{
+  position: absolute;
+  left: 110%;
+  top: 30%;
+}
+
+.node-2-actions{
+display: none;
+  position: absolute;
+    top: -10%;
+    right: -10%;
+    background-color: #7096D1;
+    border-radius: 50%;
+    padding: 5px 0px;
+    color: white;
+}
+
+jmnode:hover .node-2-actions{
+  display: block;}
+.node-2-actions a{
+
+
+    
+    color: white;
+}
+
+.node-2-actions i {
+  margin: 7px !important;
+
+font-size: 16px !important;
+}
+jmexpander{
+  background-color: white !important;
+  z-index: 100 !important;
+}
+

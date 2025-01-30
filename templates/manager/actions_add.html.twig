@@ -1,156 +1,219 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - Créer une action standard
-{% endblock %}
-
-{% block stylesheets %}
-    {{ parent() }}
-{% endblock %}
-
-{% block body %}
-    {{ parent() }}
+    {{ parent() }} - {{ 'Créer une action standard'|trans }}
 {% endblock %}
 
 {% block content %}
-    <div class="bg-dark">
-        <div class="container-fluid px-lg-5 m-b-30">
-            <div class="row">
-                <div class="col-12 text-white p-t-40 p-b-90">
+<div class="page">
+    <div class="table-container-traitements">
+        <div class="header headretour">
+            <a href="javascript:history.back()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024">
+                    <path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
+                </svg>
+            </a>
+            <h2>{{ 'Créer une action standard'|trans }}</h2>
+        </div>
 
-                    <h4 class=""> <span class="btn btn-white-translucent">
-                                <i class="mdi mdi-account "></i></span> Créer une action standard
-                    </h4>
+        {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
 
+        <!-- Action Section -->
+        <div class="sectt">
+            <h3>{{ 'Action'|trans }}</h3>
+            <div class="form-group">
+                <div class="form-group1">
+                    {{ form_label(form.name) }}
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control ' ~ ((form_errors(form.name) == '') ? '' : 'is-invalid')} }) }}
+                    <div class="invalid-feedback">{{ form_errors(form.name) | striptags }}</div>
+                </div>
+                <div class="form-group1">
+                    {{ form_label(form.budget) }}
+                    {{ form_widget(form.budget, {'attr': {'class': 'form-control ' ~ ((form_errors(form.budget) == '') ? '' : 'is-invalid')} }) }}
+                    <div class="invalid-feedback">{{ form_errors(form.budget) | striptags }}</div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="container-fluid px-lg-5 pull-up">
-
-        <div class="card">
-            <div class="card-header">
-                <div class="card-body ">
-                    {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
-
-                    <h5>Action</h5>
-
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.name) }}
-                            {{ form_widget(form.name, {'attr': {'class': 'form-control ' ~ ((form_errors(form.name) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.name) | striptags  }}</div>
-                        </div>
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.budget) }}
-                            {{ form_widget(form.budget, {'attr': {'class': 'form-control ' ~ ((form_errors(form.budget) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.budget) | striptags  }}</div>
-                        </div>
-                    </div>
-
-                    <h5 class="mt-2">Informations</h5>
-
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            {{ form_label(form.goal) }}
-                            {{ form_widget(form.goal, {'attr': {'class': 'form-control ' ~ ((form_errors(form.goal) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.goal) | striptags  }}</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            {{ form_label(form.information) }}
-                            {{ form_widget(form.information, {'attr': {'class': 'form-control ' ~ ((form_errors(form.information) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.information) | striptags  }}</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            {{ form_label(form.usefulLink) }}
-                            {{ form_widget(form.usefulLink, {'attr': {'class': 'form-control ' ~ ((form_errors(form.usefulLink) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.usefulLink) | striptags  }}</div>
-                        </div>
-                    </div>
-
-                    <h5 class="mt-2">Annexer des fiches pratiques</h5>
-
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-12">
-                            {{ form_label(form.sheets) }}
-                            {{ form_widget(form.sheets, {'attr': {'class': 'form-control js-select2 ' ~ ((form_errors(form.sheets) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.sheets) | striptags  }}</div>
-                        </div>
-                    </div>
-
-                    <div class="form-row mb-5 mt-3">
-                        <div class="col-12 mb-2">
-                            <button type="button" class="btn btn-success mb-2" id="add_document_button"><i class="mdi mdi-file-plus"></i> Fichiers</button>
-                        </div>
-                        <div id="block_documents" class="row col-12">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Enregistrer</button>
-                    </div>
-                    {{ form_end(form) }}
+        <!-- Information Section -->
+        <div class="sectt">
+            <h3>{{ 'Informations'|trans }}</h3>
+            <div class="form-group">
+                <div class="form-group1" style="width: 100%;">
+                    {{ form_label(form.goal) }}
+                    {{ form_widget(form.goal, {'attr': {'class': 'form-control ' ~ ((form_errors(form.goal) == '') ? '' : 'is-invalid')} }) }}
+                    <div class="invalid-feedback">{{ form_errors(form.goal) | striptags }}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group1" style="width: 100%;">
+                    {{ form_label(form.information) }}
+                    {{ form_widget(form.information, {'attr': {'class': 'form-control ' ~ ((form_errors(form.information) == '') ? '' : 'is-invalid')} }) }}
+                    <div class="invalid-feedback">{{ form_errors(form.information) | striptags }}</div>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="form-group1" style="width: 100%;">
+                    {{ form_label(form.usefulLink) }}
+                    {{ form_widget(form.usefulLink, {'attr': {'class': 'form-control ' ~ ((form_errors(form.usefulLink) == '') ? '' : 'is-invalid')} }) }}
+                    <div class="invalid-feedback">{{ form_errors(form.usefulLink) | striptags }}</div>
                 </div>
             </div>
         </div>
+
+        <!-- Attach Practical Sheets Section -->
+        <div class="form-group1">
+    <label for="sheets-search">{{ form_label(form.sheets) }}</label>
+    <p style="display: block; font-weight: bold; margin-bottom: 5px; font-size: 11px; color: #586E90;">
+        {{ 'Annexer des fiches pratiques'|trans }}
+    </p>
+    <div class="dropdownform">
+        <!-- Input field for search -->
+        <input 
+            type="text" 
+            id="sheets-search" 
+            class="form-control" 
+            placeholder="{{ 'Rechercher des fiches pratiques'|trans }}" 
+            oninput="filterSheetsDropdown()">
+
+        <!-- Dropdown menu dynamically populated with sheets -->
+        <ul class="dropdown-menu" id="sheets-dropdown">
+            {% for sheet in form.sheets.vars.choices %}
+                <li data-id="{{ sheet.value }}">
+                    <a href="javascript:void(0);" onclick="selectSheet('{{ sheet.value }}', '{{ sheet.label }}')">
+                        {{ sheet.label }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
+
+    <!-- Hidden input to store selected sheets -->
+   <input type="hidden" id="selected-sheets" name="selectedSheets" value="" />
+</div>
+
+
+        <!-- File Upload Section -->
+        <div class="sectt" style="margin-bottom: 20px;">
+            <h3>{{ 'Joindre des fichiers'|trans }}</h3>
+            <div class="form-group" style="flex-direction: column;">
+                <button type="button" class="file-button" id="add_document_button">
+                    <i class="fa fa-file" aria-hidden="true"></i> {{ 'Ajouter un fichier'|trans }}
+                </button>
+                <div id="block_documents" style="display: flex; flex-wrap: wrap; gap: 10px;"></div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="sectt" style="padding-top: 20px;">
+            <button type="submit" class="submit-button">{{ 'Enregistrer'|trans }}</button>
+        </div>
+
+        {{ form_end(form) }}
+    </div>
+</div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script>
-        // Tables to dataTables
-        (function ($) {
-            'use strict';
-            $(document).ready(function () {
-                $(".datepicker-js").datepicker({
-                    language: 'fr',
-                    format: 'yyyy-mm-dd'
-                });
+        document.getElementById("add_document_button").addEventListener("click", function () {
+            const div = document.createElement("div");
+            div.className = "form-group block_document";
 
-                document.getElementById("add_document_button").addEventListener("click", function () {
-                    var div = document.createElement("div");
-                    div.className = "form-group col-md-12 d-flex block_document";
+            const nameInput = document.createElement("input");
+            nameInput.className = "form-control";
+            nameInput.type = "text";
+            nameInput.placeholder = "{{ 'Titre'|trans }}";
+            nameInput.name = "appbundle_action_documents_names[]";
 
-                    var nameInput = document.createElement("input");
-                    nameInput.className = "form-control";
-                    nameInput.setAttribute("type", "text");
-                    nameInput.setAttribute("placeholder", "Titre");
-                    nameInput.setAttribute("name", "appbundle_action_documents_names[]");
+            const fileInput = document.createElement("input");
+            fileInput.className = "form-control";
+            fileInput.type = "file";
+            fileInput.name = "appbundle_action_documents[]";
 
-                    var fileInput = document.createElement("input");
-                    fileInput.className = "form-control ml-2";
-                    fileInput.setAttribute("type", "file");
-                    fileInput.setAttribute("name", "appbundle_action_documents[]");
-
-                    var fileInputRemoveButton = document.createElement("button");
-                    fileInputRemoveButton.className = "btn btn-danger ml-2 remove_document_button";
-                    fileInputRemoveButton.setAttribute("type", "button");
-                    fileInputRemoveButton.setAttribute("onclick", "removeDocument(this)");
-
-                    var fileInputRemoveButtonI = document.createElement("i");
-                    fileInputRemoveButtonI.className = "mdi mdi-file-remove";
-
-                    fileInputRemoveButton.appendChild(fileInputRemoveButtonI);
-
-                    div.appendChild(nameInput);
-                    div.appendChild(fileInput);
-                    div.appendChild(fileInputRemoveButton);
-
-                    var element = document.getElementById("block_documents");
-                    element.appendChild(div);
-                });
+            const removeButton = document.createElement("button");
+            removeButton.className = "btn btn-danger remove_document_button";
+            removeButton.type = "button";
+            removeButton.innerHTML = `<i class="mdi mdi-file-remove"></i>`;
+            removeButton.addEventListener("click", function () {
+                div.remove();
             });
-        })(window.jQuery);
 
-        function removeDocument(element) {
-            element.parentNode.remove();
+            div.appendChild(nameInput);
+            div.appendChild(fileInput);
+            div.appendChild(removeButton);
+
+            document.getElementById("block_documents").appendChild(div);
+        });
+        document.addEventListener("DOMContentLoaded", () => {
+    const sheetsSearchInput = document.getElementById("sheets-search"); // Search input
+    const sheetsDropdownMenu = document.getElementById("sheets-dropdown"); // Dropdown menu
+    const sheetsHiddenInput = document.getElementById("selected-sheets"); // Hidden input to store selected sheet IDs
+    const selectedSheetsSet = new Set(); // Set to track selected sheets
+
+    // Filter dropdown options based on search input
+    window.filterSheetsDropdown = () => {
+        const filter = sheetsSearchInput.value.toLowerCase();
+        const items = sheetsDropdownMenu.querySelectorAll("li");
+
+        items.forEach(item => {
+            const text = item.textContent.toLowerCase();
+            item.style.display = text.includes(filter) ? "block" : "none";
+        });
+    };
+
+    // Select a sheet and add it to the hidden input
+    window.selectSheet = (id, name) => {
+        if (!selectedSheetsSet.has(id)) {
+            selectedSheetsSet.add(id);
+
+            // Update the hidden input value
+            sheetsHiddenInput.value = Array.from(selectedSheetsSet).join(',');
+
+            // Display selected sheet below the dropdown
+            const selectedItem = document.createElement('div');
+            selectedItem.classList.add('selected-item', 'd-flex', 'align-items-center', 'mb-2');
+            selectedItem.dataset.id = id; // Store sheet ID for easy removal
+
+            // Sheet name
+            const nameSpan = document.createElement('span');
+            nameSpan.textContent = name;
+
+            // Remove button (X)
+            const removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.classList.add('btn', 'btn-danger', 'ml-2');
+            removeButton.innerHTML = '<i class="fa fa-trash"></i>';
+            removeButton.onclick = () => {
+                // Remove from the set
+                selectedSheetsSet.delete(id);
+                // Update the hidden input
+                sheetsHiddenInput.value = Array.from(selectedSheetsSet).join(',');
+                // Remove the element from the DOM
+                selectedItem.remove();
+            };
+
+            selectedItem.appendChild(nameSpan);
+            selectedItem.appendChild(removeButton);
+
+            // Append to the parent element
+            sheetsSearchInput.parentNode.appendChild(selectedItem);
         }
+    };
+
+    // Show dropdown when input is focused
+    sheetsSearchInput.addEventListener("focus", () => {
+        sheetsDropdownMenu.style.display = "block";
+    });
+
+    // Hide dropdown when input loses focus
+    sheetsSearchInput.addEventListener("blur", () => {
+        setTimeout(() => {
+            sheetsDropdownMenu.style.display = "none";
+        }, 200); // Allow time for a click to register
+    });
+});
 
     </script>
 {% endblock %}

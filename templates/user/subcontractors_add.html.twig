@@ -63,7 +63,7 @@
         </div>
 
         <!-- Company Section -->
-        <div class="sectt">
+        <div class="sectt" style="margin-top:10px">
             <h3>{{ 'societe'|trans }}</h3>
             <div class="form-group">
                 <div class="form-group1">
@@ -124,10 +124,12 @@
         </div>
 
         <!-- Group Checkbox -->
+        {% if app.user.user.mainGroupAgency %}
         <div class="checkbox-group">
             {{ form_widget(form.group, {'attr': {'id': 'destinataire-commun'}}) }}
             {{ form_label(form.group, 'Destinataire commun à l\'ensemble du groupe ?', {'label_attr': {'for': 'destinataire-commun'}}) }}
         </div>
+           {% endif %}
 
         <!-- Submit Button -->
         <button type="submit" class="submit-button">{{ 'enregistrer'|trans }}</button>

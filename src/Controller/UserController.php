@@ -4174,7 +4174,7 @@ class UserController extends AbstractController
                     "server" => ["label" => "Serveur", "items" => [], "icon" => "fa-server"],
                 ],
                 "physical" => [
-                    "partitioning" => ["label" => "Cloisonnement", "items" => [], "icon" => "fa-calendar-check-o"],
+                    "partitioning" => ["label" => "Cloisonnement", "items" => [], "icon" => "fa-home"],
                     "information" => ["label" => "Information", "items" => [], "icon" => "fa-lightbulb-o"],
                 ],
                 "action" => [
@@ -4237,7 +4237,7 @@ class UserController extends AbstractController
                         <div class='node-content'>
                             <i class='fa " . $categories[array_key_first($categories)]['icon'] . "'></i>
                             <div class='text-wrapper'>" . ($customNames[$type] ?? ucfirst($type)) . "</div>
-                        </div>",
+                        </div> ",
                     "direction" => "right",
                     "expanded" => false,
                     "children" => []
@@ -4254,7 +4254,7 @@ class UserController extends AbstractController
                             <div class='node-content'>
                                 <i class='fa " . $details["icon"] . "'></i>
                                 <div class='text-wrapper'>" . $details["label"] . "</div>
-                            </div>",
+                            </div> <span class='node-2-actions'><a href=\"".$this->generateUrl("user_systems_add")."?type=".$type."&subtype=".$subtype."\" class=\"btn btn-sm btn-rounded-circle btn-primary\"><i class=\"mdi mdi-plus\"></i></a></span>",
                         "expanded" => false,
                         "children" => []
                     ];
@@ -4268,9 +4268,9 @@ class UserController extends AbstractController
                                 <div class='border border3'><div class='circle'></div></div>
                                 <div class='border border4'><div class='circle'></div></div>
                                 <div class='node-content'>
-                                    <i class='fa " . $details["icon"] . "'></i>
+                                   
                                     <div class='text-wrapper'>" . $item->getName() . "</div>
-                                </div>",
+                                </div> <span class='node-3-actions options'><a href=\"".$this->generateUrl("user_systems_edit", ["id" => $item->getId()])."\" class=\"btn edit my-1 mr-1\"><i class=\"mdi mdi-circle-edit-outline\"></i></a><a href=\"".$this->generateUrl("user_systems_delete", ["id" => $item->getId()])."\" class=\"btn delete my-1\"  onclick=\"return confirm('Confirmer la suppression de cet élément ?');\"><i class=\"mdi mdi-close\"></i></a></span>",
                         ];
                     }
         
@@ -5967,16 +5967,19 @@ class UserController extends AbstractController
      */
     public function actionsAction(Request $request)
     {
-        $actions = $this->getDoctrine()->getRepository(Action::class)->findForUserWithGroup($this->getUser()->getUser());
+        $user = $this->getUser()->getUser();
     
+        // Get all actions (realized and non-realized)
+        $actions = $this->getDoctrine()->getRepository(Action::class)->findForUserWithGroup($user);
+    
+        // Stats calculation
         $actionsStats = [
-            "total" => 0,
+            "total" => count($actions),
             "invalid" => 0,
             "valid" => 0,
         ];
     
         foreach ($actions as $action) {
-            $actionsStats["total"]++;
             if ($action->isTerminated()) {
                 $actionsStats["valid"]++;
             } else {
@@ -5984,17 +5987,53 @@ class UserController extends AbstractController
             }
         }
     
-        $filteredActions = $this->getDoctrine()->getRepository(Action::class)->findForUserWithGroupNotTerminated($this->getUser()->getUser());
-        $groupActions = $this->getDoctrine()->getRepository(Action::class)->findGroupsForUser($this->getUser()->getUser());
+        $groupActions = $this->getDoctrine()->getRepository(Action::class)->findGroupsForUser($user);
+    
+        // Sorting all actions (realized & non-realized)
+        usort($actions, function ($a, $b) {
+            // Urgency levels mapped from priority
+            $urgencyOrder = [
+                1 => 1, // Urgent
+                2 => 2, // Modéré
+                3 => 3, // Faible
+            ];
+    
+            $urgencyA = $urgencyOrder[$a->getPriority()] ?? 4; // Default to lowest priority
+            $urgencyB = $urgencyOrder[$b->getPriority()] ?? 4;
+    
+            if ($urgencyA !== $urgencyB) {
+                return $urgencyA - $urgencyB; // Sort by urgency
+            }
+    
+            // Step 2: Sort by realization date (earliest future date OR most recent past date first)
+            $dateA = $a->getSetUpDate(); // Using the existing method
+            $dateB = $b->getSetUpDate();
+            $now = new \DateTime();
+    
+            if ($dateA && $dateB) {
+                $isPastA = $dateA < $now;
+                $isPastB = $dateB < $now;
+    
+                if ($isPastA !== $isPastB) {
+                    return $isPastA ? -1 : 1; // Past dates first
+                }
+                return $dateA <=> $dateB; // Future dates in ascending order
+            }
+    
+            return 0;
+        });
     
         return $this->render('user/actions.html.twig', [
-            "actions" => $actions, // All actions (realized and non-realized)
-            "filteredActions" => $filteredActions, // Non-realized actions only
+            "actions" => $actions, // All actions (sorted)
             "groupActions" => $groupActions,
             "actionsStats" => $actionsStats,
             "filter" => null,
         ]);
     }
+    
+    
+    
+    
     
 
     /**

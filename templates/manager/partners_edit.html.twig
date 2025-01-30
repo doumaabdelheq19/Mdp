@@ -4,109 +4,95 @@
     {{ parent() }} - Modifier le partenaire
 {% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-{% endblock %}
-
-{% block body %}
-    {{ parent() }}
-{% endblock %}
-
 {% block content %}
-    <div class="bg-dark">
-        <div class="container-fluid px-lg-5 m-b-30">
-            <div class="row">
-                <div class="col-12 text-white p-t-40 p-b-90">
+<div class="page">
+    <div class="table-container-traitements">
+        <div class="header headretour">
+            <h2>
+                <a href="javascript:history.back()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024">
+                        <path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
+                    </svg>
+                </a>
+                Modifier le partenaire
+            </h2>
+        </div>
 
-                    <h4 class=""> <span class="btn btn-white-translucent">
-                                <i class="mdi mdi-account "></i></span> Modifier le partenaire
-                    </h4>
+        {{ form_start(form, {"attr": {"class": "sous-traitantform", "enctype": "multipart/form-data"}}) }}
 
-                </div>
+        <div class="form-row justify-content-center mt-5 mb-5">
+            <label class="avatar-input" style="overflow: visible">
+                <span class="avatar avatar-xxl">
+                    {{ get_partner_avatar(partner)|raw }}
+                    <span class="avatar-input-icon rounded-circle">
+                        <i class="mdi mdi-upload mdi-24px"></i>
+                    </span>
+                </span>
+                {{ form_widget(form.pictureFile, {'attr': {'class': 'avatar-file-picker'} }) }}
+            </label>
+            <div class="invalid-feedback">{{ form_errors(form.pictureFile) | striptags }}</div>
+        </div>
+
+        <h3 class="mt-4">Détails du partenaire</h3>
+        <div class="form-group">
+            <div class="form-group1" style="width:100%">
+                {{ form_label(form.name) }}
+                {{ form_widget(form.name, {'attr': {'class': 'form-control ' ~ ((form_errors(form.name) == '') ? '' : 'is-invalid'), 'style': 'width: 97%;'} }) }}
+                <div class="invalid-feedback">{{ form_errors(form.name) | striptags }}</div>
             </div>
         </div>
-    </div>
 
-    <div class="container-fluid px-lg-5 pull-up">
-
-        <div class="card">
-            <div class="card-header">
-                <div class="card-body ">
-                    {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
-
-                    <div class="form-row justify-content-center mt-5 mb-5">
-                        <label class="avatar-input" style="overflow: visible">
-                            <span class="avatar avatar-xxl">
-                                {{ get_partner_avatar(partner)|raw }}
-                                <span class="avatar-input-icon rounded-circle">
-                                    <i class="mdi mdi-upload mdi-24px"></i>
-                                </span>
-                            </span>
-                            {{ form_widget(form.pictureFile, {'attr': {'class': 'avatar-file-picker'} }) }}
-                        </label>
-                        <div class="invalid-feedback">{{ form_errors(form.pictureFile) | striptags  }}</div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-12">
-                            {{ form_label(form.name) }}
-                            {{ form_widget(form.name, {'attr': {'class': 'form-control ' ~ ((form_errors(form.name) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.name) | striptags  }}</div>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-12">
-                            {{ form_label(form.description) }}
-                            {{ form_widget(form.description, {'attr': {'class': 'form-control ' ~ ((form_errors(form.description) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.description) | striptags  }}</div>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-12">
-                            {{ form_label(form.discount) }}
-                            {{ form_widget(form.discount, {'attr': {'class': 'form-control ' ~ ((form_errors(form.discount) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.discount) | striptags  }}</div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Enregistrer</button>
-                    </div>
-                    {{ form_end(form) }}
-                </div>
+        <div class="form-group">
+            <div class="form-group1" style="width:100%">
+                {{ form_label(form.description) }}
+                {{ form_widget(form.description, {'attr': {'class': 'form-control ' ~ ((form_errors(form.description) == '') ? '' : 'is-invalid'), 'style': 'width: 98%; height:200px;'} }) }}
+                <div class="invalid-feedback">{{ form_errors(form.description) | striptags }}</div>
             </div>
         </div>
+
+        <div class="form-group">
+            <div class="form-group1" style="width:100%">
+                {{ form_label(form.discount) }}
+                {{ form_widget(form.discount, {'attr': {'class': 'form-control ' ~ ((form_errors(form.discount) == '') ? '' : 'is-invalid'), 'style': 'width: 97%; margin-bottom:40px;'} }) }}
+                <div class="invalid-feedback">{{ form_errors(form.discount) | striptags }}</div>
+            </div>
+        </div>
+
+        <button type="submit" class="submit-button">
+            Enregistrer
+        </button>
+
+        {{ form_end(form) }}
     </div>
-{% endblock %}
+</div>
 
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        // Tables to dataTables
-        (function ($) {
-            function readFile(input) {
-                if (input.files && input.files[0]) {
-                    var reader = new FileReader();
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        function readFile(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
 
-                    reader.onload = function (e) {
-                        var avatarImg = $(input).parents('.avatar-input').find('.avatar-img');
-                        if (avatarImg && avatarImg.length > 0) {
-                            avatarImg.attr('src', e.target.result);
-                        } else {
-                            $(input).parents('.avatar-input').find('.avatar-title').remove();
-                            $(input).parents('.avatar-input').find('.avatar').prepend('<img src="'+e.target.result+'" class="avatar-img rounded-circle">');
-                        }
-                    };
+                reader.onload = function (e) {
+                    var avatarImg = input.closest('.avatar-input').querySelector('.avatar-img');
+                    if (avatarImg) {
+                        avatarImg.src = e.target.result;
+                    } else {
+                        var avatarInput = input.closest('.avatar-input');
+                        avatarInput.querySelector('.avatar-title').remove();
+                        avatarInput.querySelector('.avatar').insertAdjacentHTML('afterbegin', `<img src="${e.target.result}" class="avatar-img rounded-circle">`);
+                    }
+                    avatarInput.querySelector('.avatar-input-icon').style.display = "none";
+                };
 
-                    reader.readAsDataURL(input.files[0]);
-                }
+                reader.readAsDataURL(input.files[0]);
             }
+        }
 
-            $('.avatar-file-picker').on('change', function () {
+        document.querySelectorAll('.avatar-file-picker').forEach(function (picker) {
+            picker.addEventListener('change', function () {
                 readFile(this);
             });
-        })(window.jQuery);
-    </script>
+        });
+    });
+</script>
 {% endblock %}

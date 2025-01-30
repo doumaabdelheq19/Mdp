@@ -97,7 +97,7 @@
                             <h4>{{ expertHours|default(0) }} {{ 'heures'|trans }}</h4>
                         </div>
                     </div>
-                    <div class="poser"  onclick="location.href='mailto:{{app.user.user.manager.email}}'">
+                    <div class="poser"  onclick="openMailInNewTab('{{ app.user.user.manager.email }}')">
                         <p>{{ 'Contactez votre expert DPO'|trans }}</p>
                     </div>
                  
@@ -283,19 +283,19 @@
                 <div class="column">
                     <div class="item">
                         <h3>{{ 'Personnes sensibilisées'|trans }}</h3>
-                        <h3>{{ trainingStats.sensitized|default(0) }}</h3>
+                        <h3>{{ trainingsSensibilized|default(0) }}</h3>
                     </div>
                     <div class="item">
                         <h3>{{ 'Questionnaires envoyés'|trans }}</h3>
-                        <h3>{{ trainingStats.sent|default(0) }}</h3>
+                        <h3>{{ trainingsTotal|default(0) }}</h3>
                     </div>
                     <div class="item">
                         <h3>{{ 'Réponses au questionnaire'|trans }}</h3>
-                        <h3>{{ trainingStats.responses|default(0) }}</h3>
+                        <h3>{{ trainingsAnswered|default(0) }}</h3>
                     </div>
                     <div class="item">
                         <h3>{{ 'Note moyenne (questionnaires)'|trans }}</h3>
-                        <h3>{{ trainingStats.averageScore|default('0.00%') }}</h3>
+                        <h3>{{ (trainingsAvgNote * 100)|number_format(2) }}%</h3>
                     </div>
                 </div>
             </div>
@@ -495,6 +495,11 @@
         });
         
     });
+
+      function openMailInNewTab(email) {
+    const mailtoLink = `mailto:${email}`;
+    window.open(mailtoLink, '_blank');
+  }
 
 function handleButtonClick(button, link) {
     if (link) {

@@ -113,8 +113,8 @@
                         </td>
                         <td>
                             <div class="switch">
-                                <input type="checkbox" disabled id="togglee-{{ action.id }}" {% if action.terminated %}checked{% endif %} />
-                                <label for="togglee-{{ action.id }}"></label>
+                                <input type="checkbox" id="action_r_input_{{ action.id }}" {% if action.terminated %}checked="checked"{% endif %} onchange="toggleRSwitch(this, {{ action.id }});">
+                                <label for="action_r_input_{{ action.id }}"></label>
                             </div>
                         </td>
                         <td >
@@ -159,73 +159,135 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const rows = Array.from(document.querySelectorAll('#table-body tr'));
-            const resultsSelect = document.getElementById('resultsSelect');
-            const paginationInfo = document.getElementById('paginationInfo');
-            const prevPage = document.getElementById('prevPage');
-            const nextPage = document.getElementById('nextPage');
-            const searchInput = document.getElementById('search-input');
-            const nonRealiseFilter = document.getElementById('filter-non-realise');
-            const realiseFilter = document.getElementById('filter-realise');
+       document.addEventListener('DOMContentLoaded', function () {
+    const rows = Array.from(document.querySelectorAll('#table-body tr'));
+    const resultsSelect = document.getElementById('resultsSelect');
+    const paginationInfo = document.getElementById('paginationInfo');
+    const prevPage = document.getElementById('prevPage');
+    const nextPage = document.getElementById('nextPage');
+    const searchInput = document.getElementById('search-input');
+    const nonRealiseFilter = document.getElementById('filter-non-realise');
+    const realiseFilter = document.getElementById('filter-realise');
 
-            let currentPage = 1;
-            let resultsPerPage = parseInt(resultsSelect.value);
-            let filteredRows = rows;
+    let currentPage = 1;
+    let resultsPerPage = parseInt(resultsSelect.value);
+    let filteredRows = rows;
 
-            function updateTable() {
-                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
-                const start = (currentPage - 1) * resultsPerPage;
-                const end = start + resultsPerPage;
+    const urgencyOrder = { 'Urgent': 1, 'Modéré': 2, 'Faible': 3 };
 
-                rows.forEach((row, index) => {
-                    row.style.display = filteredRows.includes(row) && index >= start && index < end ? '' : 'none';
-                });
+    function parseDate(dateStr) {
+        return dateStr ? new Date(dateStr.split('/').reverse().join('-')) : null;
+    }
 
-                paginationInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
-                prevPage.disabled = currentPage === 1;
-                nextPage.disabled = currentPage === totalPages;
+    function sortRows() {
+        filteredRows.sort((rowA, rowB) => {
+            const urgencyA = urgencyOrder[rowA.dataset.urgency] || 4;
+            const urgencyB = urgencyOrder[rowB.dataset.urgency] || 4;
+
+            if (urgencyA !== urgencyB) {
+                return urgencyA - urgencyB; // Sort by urgency first
             }
 
-            function filterRows() {
-                filteredRows = rows.filter(row => {
-                    const isRealise = row.dataset.realise === 'true';
-                    const matchesRealise = realiseFilter.checked ? isRealise : false;
-                    const matchesNonRealise = nonRealiseFilter.checked ? !isRealise : false;
-                    const matchesSearch = row.innerText.toLowerCase().includes(searchInput.value.toLowerCase());
-                    return (matchesRealise || matchesNonRealise) && matchesSearch;
-                });
-                currentPage = 1; // Reset to the first page
-                updateTable();
+            const dateA = parseDate(rowA.dataset.date);
+            const dateB = parseDate(rowB.dataset.date);
+            const now = new Date();
+
+            if (dateA && dateB) {
+                const isPastA = dateA < now;
+                const isPastB = dateB < now;
+
+                if (isPastA !== isPastB) {
+                    return isPastA ? -1 : 1; // Past dates come first
+                }
+                return dateA - dateB; // Future dates in ascending order
             }
-
-            resultsSelect.addEventListener('change', () => {
-                resultsPerPage = parseInt(resultsSelect.value);
-                currentPage = 1;
-                updateTable();
-            });
-
-            prevPage.addEventListener('click', () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    updateTable();
-                }
-            });
-
-            nextPage.addEventListener('click', () => {
-                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    updateTable();
-                }
-            });
-
-            searchInput.addEventListener('input', filterRows);
-            nonRealiseFilter.addEventListener('change', filterRows);
-            realiseFilter.addEventListener('change', filterRows);
-
-            // Initialize table on page load
-            filterRows();
+            return 0;
         });
+    }
+
+    function updateTable() {
+        sortRows();
+
+        const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+        const start = (currentPage - 1) * resultsPerPage;
+        const end = start + resultsPerPage;
+
+        rows.forEach(row => row.style.display = 'none'); // Hide all rows
+        filteredRows.slice(start, end).forEach(row => row.style.display = ''); // Show only filtered ones
+
+        paginationInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
+        prevPage.disabled = currentPage === 1;
+        nextPage.disabled = currentPage === totalPages;
+    }
+
+    function filterRows() {
+        filteredRows = rows.filter(row => {
+            const isRealise = row.dataset.realise === 'true';
+            const matchesRealise = realiseFilter.checked ? isRealise : false;
+            const matchesNonRealise = nonRealiseFilter.checked ? !isRealise : false;
+            const matchesSearch = row.innerText.toLowerCase().includes(searchInput.value.toLowerCase());
+            return (matchesRealise || matchesNonRealise) && matchesSearch;
+        });
+
+        currentPage = 1;
+        updateTable();
+    }
+
+    resultsSelect.addEventListener('change', () => {
+        resultsPerPage = parseInt(resultsSelect.value);
+        currentPage = 1;
+        updateTable();
+    });
+
+    prevPage.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            updateTable();
+        }
+    });
+
+    nextPage.addEventListener('click', () => {
+        const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            updateTable();
+        }
+    });
+
+    searchInput.addEventListener('input', filterRows);
+    nonRealiseFilter.addEventListener('change', filterRows);
+    realiseFilter.addEventListener('change', filterRows);
+
+    filterRows();
+});
+
+
+          function toggleRSwitch(element, id) {
+            element.disabled = true;
+
+            const initialState = !element.checked;
+
+            $.ajax({
+                type: "POST",
+                async: true,
+                url: "{{ path('user_json_toggle_action') }}",
+                data: {id: id},
+                success: function (content) {
+                    console.log(content);
+                    if (content.success) {
+                        element.checked = content.state;
+                    } else {
+                        element.checked = initialState;
+                    }
+                    if(element.checked === false) {
+                        $("#action_r_label_"+id).text("Non");
+                    }
+                    else {
+                        $("#action_r_label_"+id).text("Oui");
+                    }
+                    element.disabled = false;
+                }
+            });
+        }
     </script>
 {% endblock %}

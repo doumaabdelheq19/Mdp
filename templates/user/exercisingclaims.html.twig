@@ -48,7 +48,7 @@
              {% if exercisingclaims|length > 0 %}
                 {% for exercisingclaim in exercisingclaims %}
                     <tr>
-                        <td style="color: #EF6D6F;">{{ exercisingclaim.requestDate|date('d/m/Y') }}</td>
+                        <td style="color: #EF6D6F;">{{ exercisingclaim.requestDate ? exercisingclaim.requestDate|date('d/m/Y') : '' }}</td>
                         <td> {% if exercisingclaim.rights == "acces" %}
                                                 {{ 'accs'|trans }}
                                             {% elseif exercisingclaim.rights == "rectification" %}
@@ -76,7 +76,8 @@
                                 {% endif %}
                             </div>
                         </td>
-                        <td style="color: #438492;">{{ exercisingclaim.answerDate|date('d/m/Y') }}</td>
+                        <td style="color: #438492;">{{ exercisingclaim.answerDate ? exercisingclaim.answerDate|date('d/m/Y') : '' }}
+</td>
                         <td>{{ exercisingclaim.accountantName }}</td>
                         <td >
                         <div class="options">

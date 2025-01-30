@@ -1,240 +1,235 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - Ajouter un traitement standard
+    {{ parent() }} - {{ 'ajouter_un_traitement'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
 {% endblock %}
 
-{% block body %}
-    {{ parent() }}
-{% endblock %}
-
 {% block content %}
-    <div class="bg-dark">
-        <div class="container-fluid px-lg-5 m-b-30">
-            <div class="row">
-                <div class="col-12 text-white p-t-40 p-b-90">
+<div class="page">
+    <div class="table-container-traitements">
+        <div class="header headretour">
+            <a href="javascript:history.back()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024">
+                    <path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
+                </svg>
+            </a>
+            <h2>{{ 'ajouter_un_traitement'|trans }}</h2>
+        </div>
 
-                    <h4 class=""> <span class="btn btn-white-translucent">
-                                <i class="mdi mdi-account "></i></span> Ajouter un traitement standard
-                    </h4>
+        {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
 
+        <!-- Information Section -->
+        <div class="sectt">
+            <h3>{{ 'informations'|trans }}</h3>
+            <div class="form-group-container">
+                {% for field in ['name', 'mainPurpose', 'purpose1', 'purpose2', 'purpose3', 'purpose4', 'purpose5', 'othersPurpose', 'description', 'category'] %}
+                    {% if loop.index0 % 2 == 0 %}
+                        <div class="form-group">
+                    {% endif %}
+
+                    <div class="form-group1" style="{{ field in ['description', 'category'] ? 'width: 100%;' : 'width: 48%; display: inline-block;' }}">
+                        {{ form_label(attribute(form, field)) }}
+                        {{ form_widget(attribute(form, field), { 'attr': { 'class': 'form-control ' ~ ((form_errors(attribute(form, field)) == '') ? '' : 'is-invalid')} }) }}
+                        <div class="invalid-feedback">{{ form_errors(attribute(form, field)) | striptags }}</div>
+                    </div>
+
+                    {% if loop.index0 % 2 == 1 or loop.last %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Personal Data Categories Section -->
+        <div class="sectt">
+            <h3>{{ 'catgories_de_donnes_personnelles_concernes'|trans }}</h3>
+            <div class="form-group-container">
+                {% for personalDataField in personalDataFields %}
+                    <div class="form-group" style="align-items:center;">
+                        <div class="form-group1">
+                            <div style="height: 100%; margin-bottom:0px; border: 1px solid {% if personalDataField.level == 1 %}#D4E5FF{% elseif personalDataField.level == 2 %}#FFC375{% else %}#E26262{% endif %}; 
+                                        border-left:4px solid {% if personalDataField.level == 1 %}#D4E5FF{% elseif personalDataField.level == 2 %}#FFC375{% else %}#E26262{% endif %}; 
+                                        display: flex; align-items: center; padding: 10px;">
+                                {{ personalDataField.title }}
+                            </div>
+                        </div>
+                        <div class="form-group1">
+                            {{ form_widget(form['field_text_' ~ loop.index0], { 'attr': { 'class': 'form-control', 'style': 'margin-bottom:0px;' } }) }}
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="form-group">
+                    <div class="form-group1" style="width:100%">
+                        {{ form_label(form.dataRetentionPeriod) }}
+                        {{ form_widget(form.dataRetentionPeriod, { 'attr': { 'class': 'form-control ' ~ ((form_errors(form.dataRetentionPeriod) == '') ? '' : 'is-invalid')} }) }}
+                        <div class="invalid-feedback">{{ form_errors(form.dataRetentionPeriod) | striptags }}</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-group1" style="width:100%">
+                        {{ form_label(form.dataSource) }}
+                        {{ form_widget(form.dataSource, { 'attr': { 'class': 'form-control ' ~ ((form_errors(form.dataSource) == '') ? '' : 'is-invalid')} }) }}
+                        <div class="invalid-feedback">{{ form_errors(form.dataSource) | striptags }}</div>
+                    </div>
                 </div>
             </div>
         </div>
+<div class="sectt">
+    <h3>{{ 'catgories_des_personnes_concernes'|trans }}</h3>
+    <div class="form-group">
+        <div class="form-group1" style="width:100%">
+            {{ form_label(form.peopleData) }}
+            {{ form_widget(form.peopleData, {
+                'attr': {
+                    'class': 'form-control ' ~ ((form_errors(form.peopleData) == '') ? '' : 'is-invalid'),
+                    'placeholder': 'Exemple: Clients, employés...'
+                }
+            }) }}
+            <div class="invalid-feedback">
+                {{ form_errors(form.peopleData) | striptags }}
+            </div>
+        </div>
     </div>
+</div>
 
-    <div class="container-fluid px-lg-5 pull-up">
+<div class="sectt">
+    <h3>{{ 'transfert_hors_ue'|trans }}</h3>
+    <div class="form-group">
+        <div class="form-group1" style="width:100%">
+            {{ form_label(form.transferOutsideUeCountries) }}
+            {{ form_widget(form.transferOutsideUeCountries, {
+                'attr': {
+                    'class': 'form-control ' ~ ((form_errors(form.transferOutsideUeCountries) == '') ? '' : 'is-invalid'),
+                    'placeholder': 'Indiquer les pays concernés'
+                }
+            }) }}
+            <div class="invalid-feedback">
+                {{ form_errors(form.transferOutsideUeCountries) | striptags }}
+            </div>
+        </div>
+    </div>
+</div>
 
-        <div class="card">
-            <div class="card-header">
-                <div class="card-body ">
-                    {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
-
-                    <h5>Informations</h5>
-
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.name) }}
-                            {{ form_widget(form.name, {'attr': {'class': 'form-control ' ~ ((form_errors(form.name) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.name) | striptags  }}</div>
-                        </div>
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.mainPurpose) }}
-                            {{ form_widget(form.mainPurpose, {'attr': {'class': 'form-control ' ~ ((form_errors(form.mainPurpose) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.mainPurpose) | striptags  }}</div>
-                        </div>
+        <!-- Consent Section -->
+        <div class="sectt">
+            <h3>{{ 'consentement'|trans }}</h3>
+            <div class="form-group">
+                <div class="form-group1">
+                    <label>{{ 'le_consentement_estil_demand'|trans }}</label>
+                    <div style="display: flex; gap: 30px;">
+                        {% for chk in form.consentAsked %}
+                            <div style="display:flex;gap:10px; align-items:center;margin-top:10px">
+                                {{ form_widget(chk, { 'attr': { 'class': 'custom-control-input' } }) }}
+                                {{ form_label(chk, null, { 'label_attr': { 'class': 'custom-control-label' } }) }}
+                            </div>
+                        {% endfor %}
                     </div>
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.purpose1) }}
-                            {{ form_widget(form.purpose1, {'attr': {'class': 'form-control ' ~ ((form_errors(form.purpose1) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.purpose1) | striptags  }}</div>
-                        </div>
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.purpose2) }}
-                            {{ form_widget(form.purpose2, {'attr': {'class': 'form-control ' ~ ((form_errors(form.purpose2) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.purpose2) | striptags  }}</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.purpose3) }}
-                            {{ form_widget(form.purpose3, {'attr': {'class': 'form-control ' ~ ((form_errors(form.purpose3) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.purpose3) | striptags  }}</div>
-                        </div>
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.purpose4) }}
-                            {{ form_widget(form.purpose4, {'attr': {'class': 'form-control ' ~ ((form_errors(form.purpose4) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.purpose4) | striptags  }}</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.purpose5) }}
-                            {{ form_widget(form.purpose5, {'attr': {'class': 'form-control ' ~ ((form_errors(form.purpose5) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.purpose5) | striptags  }}</div>
-                        </div>
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.othersPurpose) }}
-                            {{ form_widget(form.othersPurpose, {'attr': {'class': 'form-control ' ~ ((form_errors(form.othersPurpose) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.othersPurpose) | striptags  }}</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group floating-label col-12">
-                            {{ form_label(form.description) }}
-                            {{ form_widget(form.description, {'attr': {'class': 'form-control ' ~ ((form_errors(form.description) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.description) | striptags  }}</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group floating-label col-12">
-                            {{ form_label(form.category) }}
-                            {{ form_widget(form.category, {'attr': {'class': 'form-control ' ~ ((form_errors(form.category) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.category) | striptags  }}</div>
-                        </div>
-                    </div>
-
-                    <h5 class="mt-2">Catégories de données personnelles concernées</h5>
-
-                    <div class="table-responsive p-t-10">
-                        <table class="table" style="width:100%">
-                            <tbody>
-                            {% for personalDataField in personalDataFields %}
-                                <tr>
-                                    <td style="width: 50%;" class="{% if personalDataField.level == 1 %}bg-soft-info{% elseif personalDataField.level == 2 %}bg-soft-warning{% else %}bg-soft-danger{% endif %}">{{ personalDataField.title }}</td>
-                                    <td style="width: 50%;">{{ form_widget(form["field_text_"~loop.index0], {'attr': {'class': 'form-control w-100'} }) }}</td>
-                                    {# <td style="width: 15%;">{{ form_widget(form["field_duration_"~loop.index0], {'attr': {'class': 'form-control w-100'} }) }}</td> #}
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="form-row mt-2">
-                        <div class="form-group col-md-12">
-                            {{ form_label(form.dataRetentionPeriod) }}
-                            {{ form_widget(form.dataRetentionPeriod, {'attr': {'class': 'form-control ' ~ ((form_errors(form.dataRetentionPeriod) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.dataRetentionPeriod) | striptags  }}</div>
-                        </div>
-                    </div>
-
-                    <div class="form-row mt-2">
-                        <div class="form-group col-md-12">
-                            {{ form_label(form.dataSource) }}
-                            {{ form_widget(form.dataSource, {'attr': {'class': 'form-control ' ~ ((form_errors(form.dataSource) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.dataSource) | striptags  }}</div>
-                        </div>
-                    </div>
-
-                    <h5 class="mt-2">Catégories des personnes concernées</h5>
-
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-12">
-                            {{ form_label(form.peopleData) }}
-                            {{ form_widget(form.peopleData, {'attr': {'class': 'form-control ' ~ ((form_errors(form.peopleData) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.peopleData) | striptags  }}</div>
-                        </div>
-                    </div>
-
-                    <h5 class="mt-2">Transfert Hors UE</h5>
-
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-12">
-                            {{ form_label(form.transferOutsideUeCountries) }}
-                            {{ form_widget(form.transferOutsideUeCountries, {'attr': {'class': 'form-control ' ~ ((form_errors(form.transferOutsideUeCountries) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.transferOutsideUeCountries) | striptags  }}</div>
-                        </div>
-                    </div>
-
-                    <h5 class="mt-2">Consentement</h5>
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <p>Le consentement est-il demandé ?</p>
-                            {% for chk in form.consentAsked %}
-                                <div class="custom-control custom-radio custom-control-inline">
-                                    {{ form_widget(chk, {'attr': {'class': 'custom-control-input'} }) }}
-                                    {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label'}}) }}
-                                </div>
-                            {% endfor %}
-                            <div class="invalid-feedback">{{ form_errors(form.consentAsked) | striptags  }}</div>
-                        </div>
-                        <div class="form-group col-md-6">
-                            {{ form_label(form.legalBasis) }}
-                            {{ form_widget(form.legalBasis, {'attr': {'class': 'form-control ' ~ ((form_errors(form.legalBasis) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.legalBasis) | striptags  }}</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-12">
+                </div>
+                <div class="form-group1">
+                    {{ form_label(form.legalBasis, 'Finalité principale*') }}
+                    {{ form_widget(form.legalBasis, { 'attr': { 'class': 'form-control ' ~ ((form_errors(form.legalBasis) == '') ? '' : 'is-invalid')} }) }}
+                    <div class="invalid-feedback">{{ form_errors(form.legalBasis) | striptags }}</div>
+                </div>
+                 
+            </div>
+             <div class="form-group">
+                        <div class="form-group1 ">
                             {{ form_label(form.consentHow) }}
                             {{ form_widget(form.consentHow, {'attr': {'class': 'form-control ' ~ ((form_errors(form.consentHow) == '') ? '' : 'is-invalid')} }) }}
                             <div class="invalid-feedback">{{ form_errors(form.consentHow) | striptags  }}</div>
                         </div>
                     </div>
+        </div>
 
-                    <h5 class="mt-2">PIA (Analyse d'impact)</h5>
+        <!-- PIA Section -->
+        <div class="sectt">
+            <h3>{{ 'pia_analyse_dimpact'|trans }}</h3>
+           <div class="form-group" style="flex-direction: column; margin-bottom:0px;" >
+        <div class="form-group1">
+            <label for="societe-nom">
+                {{ 'veuillez_cocher_les_critres_qui_concernent_votre_t'|trans }}.<br/>
+                <a style="font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 11px; color: #586E90;" href="https://www.cnil.fr/sites/default/files/atoms/files/liste-traitements-aipd-non-requise.pdf" target="_blank">{{ "Une liste d'exonération de PIA est toutefois disponible ici."|trans }}</a>
+               
+            </label>
 
-                    <p>Veuillez cocher les critères qui concernent votre traitement de données. Si 2 critères sur 9 sont cochés, un PIA sera obligatoire.<br/>
-                        <a href="https://www.cnil.fr/sites/default/files/atoms/files/liste-traitements-aipd-non-requise.pdf" target="_blank">Une liste d'exonération de PIA est toutefois disponible ici</a>.</p>
-
-                    {% set chkI = 1 %}
-                    {% for chk in form.piaCriteria %}
-                        <div class="custom-control custom-checkbox my-2">
-                            {{ form_widget(chk, {'attr': {'class': 'custom-control-input'}}) }}
-                            {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label'}}) }}
-                            {% if chkI == 1 %}
-                                <span data-toggle="tooltip" data-placement="right" data-original-title="santé, géolocalisation..."><i class="mdi mdi-help-circle"></i></span>
-                            {% elseif chkI == 2 %}
-                                <span data-toggle="tooltip" data-placement="right" data-original-title="enfants, salarié, handicap, lien de subordination fort..."><i class="mdi mdi-help-circle"></i></span>
-                            {% elseif chkI == 8 %}
-                                <span data-toggle="tooltip" data-placement="right" data-original-title="utilisation d'une nouvelle technologie ex: drones, intélligence artificielle..."><i class="mdi mdi-help-circle"></i></span>
-                            {% endif %}
-                        </div>
-                        {% set chkI = chkI+1 %}
-                    {% endfor %}
-
-                    <div class="my-3">
-                        <label class="cstm-switch">
-                            {{ form_widget(form.piaExoneration, {'attr': {'class': 'cstm-switch-input'} }) }}
-                            <span class="cstm-switch-indicator bg-success"></span>
-                            <span class="cstm-switch-description">Cas d'éxonération de réalisation de PIA ? <a href="https://www.cnil.fr/sites/default/files/atoms/files/liste-traitements-aipd-non-requise.pdf" target="_blank"><i class="mdi mdi-help-circle"></i></a></span>
-                        </label>
+            <div style="display: flex; flex-wrap  wrap; flex-direction:column; gap: 10px; margin-top: 10px; ">
+                {% set chkI = 1 %}
+                {% for chk in form.piaCriteria %}
+                    <div style="display: flex; gap: 10px; align-items: center; font-size: 14px; flex: 1 1 calc(50% - 20px);">
+                        {{ form_widget(chk, {'attr': {'style': 'width: 15px; margin:0;'}}) }}
+                        {{ form_label(chk, null, {'label_attr': {'style': 'margin:0;'}}) }}
+                        
+                        {% if chkI in [1, 2, 8] %}
+                            <div class="tooltip-container">
+                                <span style="font-size: 15px; color: #438492;"><svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24"><g fill="none"><path d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"/><path fill="currentColor" d="M12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12S6.477 2 12 2m0 14a1 1 0 1 0 0 2a1 1 0 0 0 0-2m0-9.5a3.625 3.625 0 0 0-3.625 3.625a1 1 0 1 0 2 0a1.625 1.625 0 1 1 2.23 1.51c-.676.27-1.605.962-1.605 2.115V14a1 1 0 1 0 2 0c0-.244.05-.366.261-.47l.087-.04A3.626 3.626 0 0 0 12 6.5"/></g></svg></span>
+                                <div class="tooltip-content">
+                                    {% if chkI == 1 %}
+                                        {{ 'santé, géolocalisation...'|trans }}
+                                    {% elseif chkI == 2 %}
+                                        {{ 'enfants, salarié, handicap, lien de subordination fort...'|trans }}
+                                    {% elseif chkI == 8 %}
+                                        {{ 'utilisation d\'une nouvelle technologie ex: drones, IA...'|trans }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
-                    <div class="my-3">
-                        <label class="cstm-switch">
-                            {{ form_widget(form.insufficientCriteria, {'attr': {'class': 'cstm-switch-input'} }) }}
-                            <span class="cstm-switch-indicator bg-success"></span>
-                            <span class="cstm-switch-description">Absence de critère suffisant</span>
-                        </label>
-                    </div>
-
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary" onclick="save();">Enregistrer</button>
-                    </div>
-                    {{ form_end(form) }}
-                </div>
+                    {% set chkI = chkI + 1 %}
+                {% endfor %}
             </div>
         </div>
     </div>
-{% endblock %}
 
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        var saved = false;
 
-        function save() {
-            saved = true;
-        }
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 0px;">
+      <div style="display: flex; width: 100%; gap: 30px; margin-top: 10px;">
+    <div style="display: flex; gap: 10px; align-items: center; font-size: 11px; color: #586E90;font-weight:bold;">
+        <div class="switch">
+            {{ form_widget(form.piaExoneration, {'attr': {'id': 'togglee', 'class': 'cstm-switch-input'}}) }}
+            <label for="togglee"></label>
+        </div>
+        {{ 'cas_dxonration_de_ralisation_de_pia'|trans }}
+        <a href="https://www.cnil.fr/sites/default/files/atoms/files/liste-traitements-aipd-non-requise.pdf" target="_blank">
+            <i class="mdi mdi-help-circle"></i>
+        </a>
+    </div>
+     </div>
+      </div>
+    
 
-        window.onbeforeunload = function (e) {
-            if(saved !== true)
-                return 'Êtes-vous sûr de vouloir quitter cette page?';
-        };
-    </script>
+    
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 0px;">
+      <div style="display: flex; width: 100%; gap: 30px; margin-top: 10px;">
+       <div style="display: flex; gap: 10px; align-items: center; font-size: 11px; color: #586E90;font-weight:bold;">
+        <div class="switch">
+             {{ form_widget(form.insufficientCriteria, {
+                    'attr': { 'id': 'insufficientCriteriaSwitch', 'class': 'cstm-switch-input' }
+                }) }}
+            <label for="togglee"></label>
+        </div>
+       {{ 'abscence_de_critere_suffisant'|trans }}
+        <a href="https://www.cnil.fr/sites/default/files/atoms/files/liste-traitements-aipd-non-requise.pdf" target="_blank">
+            <i class="mdi mdi-help-circle"></i>
+        </a>
+    </div>
+     </div>
+     </div>
+    
+
+ 
+        </div>
+       <br>
+       <br>
+
+        <!-- Final Submit Button -->
+        <button type="submit" class="submit-button">{{ 'enregistrer'|trans }}</button>
+        {{ form_end(form) }}
+    </div>
+</div>
 {% endblock %}

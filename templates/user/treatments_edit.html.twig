@@ -20,7 +20,7 @@
         {{ form_start(form, { "attr": { "class": "sous-traitantform", "enctype": "multipart/form-data" } }) }}
 
         <!-- Standard Information Section -->
-        <div class="sectt">
+        <div class="sectt"  style="border-top:0px">
             <h3>{{ 'informations'|trans }}</h3>
             <div class="form-group-container">
                {% for field in ['name', 'mainPurpose', 'purpose1', 'purpose2', 'purpose3', 'purpose4', 'purpose5', 'othersPurpose', 'description'] %}
@@ -142,12 +142,13 @@
             <h3>{{ 'sous_traitants'|trans }}</h3>
             <div class="form-group">
                 <div style="display: flex; gap: 10px; width: auto; align-items: center;">
-                    <button type="button" onclick="openSubcontractorsModal();" class="btn btn-primary exporter" style="width: auto; padding: 0px 10px;">
-                        {{ 'Sélectionner des sous-traitants pour ce traitement'|trans }}
-                    </button>
-                    <a href="{{ path('user_subcontractors_add') }}" target="_blank" class="btn btn-secondary" style="margin-bottom: 10px; color: #438492;">
-                        {{ 'plus_ajouter_un_soustraitant'|trans }}
-                    </a>
+                     <button type="button" onclick="openSubcontractorsModal();" class="btn btn-primary exporter" style="width: 400px;
+                         padding: 0px 10px;">
+                    {{ 'Sélectionner des sous-traitants pour ce traitement'|trans }}
+                </button>
+                     <a href="{{ path('user_subcontractors_add') }}" class="imprimer" target="_blank" class="btn btn-secondary" style=" color:#438492;">
+                    {{ 'plus_ajouter_un_soustraitant'|trans }}
+                </a>
                 </div>
             </div>
             <div id="subcontractors-selected">{{ subcontractorsStr|join(', ') }}</div>
@@ -183,12 +184,13 @@
             <h3>{{ 'mesures_techniques'|trans }}</h3>
             <div class="form-group">
                 <div style="display: flex; gap: 10px; width: auto; align-items: center;">
-                    <button type="button" onclick="openSystemsModal();" class="btn btn-primary exporter" style="width: auto; padding: 0px 10px;">
-                        {{ 'Sélectionner des mesures techniques pour ce traitement'|trans }}
-                    </button>
-                    <a href="{{ path('user_systems') }}" target="_blank" class="btn btn-secondary" style="margin-bottom: 10px; color: #438492;">
-                        {{ 'plus_ajouter_une_mesure_technique'|trans }}
-                    </a>
+                    <button type="button" onclick="openSystemsModal();"  class="btn btn-primary exporter" style="width: auto ;
+                         padding: 0px 10px;">
+                    {{ 'Sélectionner des mesures techniques pour ce traitement'|trans }}
+                </button>
+                   <a href="{{ path('user_systems') }}" class="imprimer" target="_blank" class="btn btn-secondary" style=" color:#438492;">
+                    {{ 'plus_ajouter_une_mesure_technique'|trans }}
+                </a>
                 </div>
             </div>
             <div id="systems-selected">{{ systemsStr|join(', ') }}</div>
@@ -229,11 +231,12 @@
         
         <div class="sectt">
     <h3>{{ 'transfert_hors_ue'|trans }}</h3>
-    <div class="form-group">
-        <div class="form-group1">
+     <div class="form-group">
+        <div class="form-group1" style="width:100%">
             {{ form_label(form.transferOutsideUeCountries, 'Pays') }}
             {{ form_widget(form.transferOutsideUeCountries, {
                 'attr': {
+                    'style': 'width:98.5%' ,
                     'class': 'form-control ' ~ ((form_errors(form.transferOutsideUeCountries) == '') ? '' : 'is-invalid'),
                     'id': 'payd',
                     'placeholder': 'Pays'
@@ -262,7 +265,7 @@
                     </div>
                 </div>
                 <div class="form-group1">
-    {{ form_label(form.legalBasis, 'Finalité principale*') }}
+    {{ form_label(form.legalBasis, 'Base(s) légale(s)*') }}
     {{ form_widget(form.legalBasis, {
         'attr': {
             'class': 'form-control ' ~ ((form_errors(form.legalBasis) == '') ? '' : 'is-invalid'),
@@ -278,9 +281,9 @@
 
 <div class="form-group">
 
-                <div class="form-group1">
+                <div class="form-group1" style="width:100%;">
                     {{ form_label(form.consentHow) }}
-                    {{ form_widget(form.consentHow, { 'attr': { 'class': 'form-control ' ~ ((form_errors(form.consentHow) == '') ? '' : 'is-invalid')} }) }}
+                    {{ form_widget(form.consentHow, { 'attr': { 'style': 'width:98.5%' ,'class': 'form-control ' ~ ((form_errors(form.consentHow) == '') ? '' : 'is-invalid')} }) }}
                     <div class="invalid-feedback">{{ form_errors(form.consentHow) | striptags }}</div>
                 </div>
             </div>
@@ -295,9 +298,10 @@
         <div class="form-group1">
             <label for="societe-nom">
                 {{ 'veuillez_cocher_les_critres_qui_concernent_votre_t'|trans }}.<br/>
-                <a href="https://www.cnil.fr/sites/default/files/atoms/files/liste-traitements-aipd-non-requise.pdf" target="_blank">
-                    {{ 'une_liste_dexonration_de_pia_est_toutefois_disponi'|trans }}
-                </a>.
+                <a style="font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 11px; color: #586E90;" href="https://www.cnil.fr/sites/default/files/atoms/files/liste-traitements-aipd-non-requise.pdf" target="_blank">{{ "Une liste d'exonération de PIA est toutefois disponible ici."|trans }}</a>
+               
             </label>
 
             <div style="display: flex; flex-wrap  wrap; flex-direction:column; gap: 10px; margin-top: 10px; ">

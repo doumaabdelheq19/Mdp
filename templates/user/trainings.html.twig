@@ -25,10 +25,11 @@
     <label>{{ 'Sélectionnez un type'|trans }}</label>
     
     {% for chk in form.campain_type %}
-        <div class="questionnaire-item">
-            {{ form_widget(chk, {'attr': {'class': 'custom-control-input', 'id': chk.vars.id} }) }}
-            {{ form_label(chk, null, {'label_attr': {'for': chk.vars.id}}) }}
-        </div>
+       <label class="questionnaire-item custom-control" for="{{ chk.vars.id }}">
+    {{ form_widget(chk, {'attr': {'class': 'custom-control-input', 'id': chk.vars.id} }) }}
+    {{ form_label(chk, null, {'label_attr': {'for': chk.vars.id}}) }}
+</label>
+
     {% endfor %}
     
     <div class="invalid-feedback">{{ form_errors(form.campain_type) | striptags }}</div>
@@ -47,10 +48,11 @@
     <label>{{ 'Formation ou sensibilisation réalisée au préalable ?'|trans }}</label>
     
     {% for chk in form.traineeship %}
-        <div class="questionnaire-item">
-            {{ form_widget(chk, {'attr': {'class': 'custom-control-input', 'id': chk.vars.id} }) }}
-            {{ form_label(chk, null, {'label_attr': {'for': chk.vars.id}}) }}
-        </div>
+        <label class="questionnaire-item custom-control">
+    {{ form_widget(chk, {'attr': {'class': 'custom-control-input', 'id': chk.vars.id} }) }}
+    {{ form_label(chk, null, {'label_attr': {'for': chk.vars.id}}) }}
+</label>
+
     {% endfor %}
     
     <div class="invalid-feedback">{{ form_errors(form.traineeship) | striptags }}</div>
@@ -96,8 +98,8 @@
     
     <ul class="dropdown-menu" id="teams-dropdown">
         {% for team in form.teams.vars.choices %}
-            <li data-id="{{ team.value }}">
-                <a href="javascript:void(0);" onclick="selectTeam('{{ team.value }}', '{{ team.label|e('js') }}')">
+            <li data-id="{{ team.value }}" onclick="selectTeam('{{ team.value }}', '{{ team.label|e('js') }}')">
+                <a href="javascript:void(0);" >
                     {{ team.label }}
                 </a>
             </li>
@@ -132,14 +134,13 @@
     <label>{{ 'questionnaire_diffuser_aux_personnes'|trans }}</label>
     <div class="questionnaire-grid">
         {% for chk in form.training %}
-            <div class="questionnaire-item">
-                {{ form_widget(chk, {'attr': {'id': chk.vars.id}}) }}
-                <label for="{{ chk.vars.id }}">
-                    <span class="radio-content">
-                        {{ form_label(chk)|striptags }}
-                    </span>
-                </label>
-            </div>
+           <label class="questionnaire-item">
+    {{ form_widget(chk, {'attr': {'id': chk.vars.id}}) }}
+    <span class="radio-content">
+        {{ form_label(chk)|striptags }}
+    </span>
+</label>
+
         {% endfor %}
     </div>
     <div class="invalid-feedback">{{ form_errors(form.training) | striptags }}</div>

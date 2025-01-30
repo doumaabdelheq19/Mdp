@@ -42,7 +42,12 @@
         <div class="form-group">
             <div class="form-group1">
                 {{ form_label(form.requestDate, 'Date de Demande') }}
-                {{ form_widget(form.requestDate, {'attr': {'class': 'form-control datepicker-js ' ~ ((form_errors(form.requestDate) == '') ? '' : 'is-invalid')} }) }}
+{{ form_widget(form.requestDate, {
+    'attr': {
+        'class': 'form-control datepicker-jsfutur ' ~ ((form_errors(form.requestDate) == '') ? '' : 'is-invalid'),
+        maxDate: "today", 
+    }
+}) }}
                 <div class="invalid-feedback">{{ form_errors(form.requestDate) | striptags }}</div>
             </div>
             <div class="form-group1">
@@ -119,11 +124,21 @@
         // Initialize Flatpickr
         document.addEventListener('DOMContentLoaded', function () {
             flatpickr(".datepicker-js", {
-                dateFormat: "Y-m-d",
+                dateFormat: "d-m-Y",
                 altInput: true,
                 altFormat: "d/m/Y",
                 locale: "fr",
                 allowInput: true,
+            });
+
+
+              flatpickr(".datepicker-jsfutur", {
+                dateFormat: "d-m-Y",
+                altInput: true,
+                altFormat: "d/m/Y",
+                locale: "fr",
+                allowInput: true,
+                 maxDate: "today", 
             });
         });
 

@@ -14,7 +14,7 @@
             <div class="header-con">
                 <div class="header" style="width:100%; justify-content:space-between">
                     <h2>{{ 'La galaxie'|trans }}</h2>
-                    <p>{{ 'Cliquez sur le partenaire pour effectuer un demande acces remise'|trans }}</p>
+                    <a style="cursor:pointer;" onclick="openMailInNewTab('{{ app.user.user.manager.email }}')"><p>{{ 'Contacter mon DPO pour être mis en relation'|trans }}</p></a>
                 </div>
             </div>
             
@@ -120,5 +120,9 @@
             // Initialize table
             updateTable();
         });
+         function openMailInNewTab(email) {
+    const mailtoLink = `mailto:${email}`;
+    window.open(mailtoLink, '_blank');
+  }
     </script>
 {% endblock %}

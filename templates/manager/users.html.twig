@@ -1,187 +1,163 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - Sociétés
-{% endblock %}
-
-{% block body %}
-    {{ parent() }}
+    {{ parent() }} - {{ 'Sociétés'|trans }}
 {% endblock %}
 
 {% block content %}
-    <div class="bg-dark">
-        <div class="container">
-            <div class="row align-items-center p-b-100 p-t-60">
+<div class="page">
+    <div class="table-container-traitements">
+        <div class="header">
+            <h2>{{ 'Sociétés'|trans }}</h2>
+        </div>
 
-                <div class="col-md-6 text-white p-b-30">
-                    <div class="media">
-                        <div class="avatar avatar mr-3">
-                            <div class="avatar-title rounded-circle mdi mdi-account-multiple  ">
-
-                            </div>
-                        </div>
-                        <div class="media-body">
-                            <h1>Sociétés</h1>
-                        </div>
-                    </div>
-                </div>
+        <!-- Action Buttons -->
+        <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 20px;">
+            <div class="search-bar">
+                <span class="search-icon">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </span>
+                <input type="text" id="searchInput" placeholder="{{ 'Rechercher'|trans }}" />
+            </div>
+            <div class="buttons">
                 {% if is_granted('ROLE_DPO') %}
-                    <div class="col-12 col-sm-4 col-lg-3">
-                        <a href="{{ path('manager_users_add') }}" class="card m-b-30">
-                            <div class="card-body">
-                                <div class="media">
-                                    <div class="avatar mr-3">
-                                        <div class="avatar-title rounded-circle bg-primary"><i class="mdi mdi-shape-circle-plus"></i></div>
-                                    </div>
-                                    <div class="media-body p-t-5">
-                                        <h5 class="m-b-0">Ajouter</h5>
-                                        <p class="m-0">un nouveau client</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                    <a href="{{ path('manager_users_add') }}" class="btn btn-primary">{{ 'Ajouter un nouveau client'|trans }}</a>
                 {% endif %}
                 {% if is_granted('ROLE_ADMIN') %}
-                    <div class="col-12 col-sm-4 col-lg-3">
-                        <a href="{{ path('manager_subscriptions_export') }}" class="card m-b-30">
-                            <div class="card-body">
-                                <div class="media">
-                                    <div class="avatar mr-3">
-                                        <div class="avatar-title rounded-circle bg-primary"><i class="mdi mdi-shape-circle-plus"></i></div>
-                                    </div>
-                                    <div class="media-body p-t-5">
-                                        <h5 class="m-b-0">Exporter</h5>
-                                        <p class="m-0">les abonnements</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                    <a href="{{ path('manager_subscriptions_export') }}" class="btn btn-primary">{{ 'Exporter les abonnements'|trans }}</a>
                 {% endif %}
             </div>
         </div>
-    </div>
-    <div class="container-fluid pull-up">
-        <div class="row justify-content-md-end">
 
-        </div>
-        <div class="row">
+        <!-- Data Table -->
+        <table class="styled-table" id="datatable">
+            <thead>
+                <tr>
+                    <th>{{ 'Société'|trans }}</th>
+                    <th>{{ 'Email'|trans }}</th>
+                    <th>{{ 'Téléphone'|trans }}</th>
+                    <th>{{ 'Adresse'|trans }}</th>
+                    <th>{{ 'Contact'|trans }}</th>
+                    <th>{{ 'Délégué'|trans }}</th>
+                  
+                    <th>{{ 'Crédits'|trans }}</th>
+                   
+                    <th>{{ 'Actions'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in users %}
+                    <tr>
+                        <td>{{ user.companyName }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.phone }}</td>
+                        <td>
+                            {{ user.address }}
+                            {% if user.address2 %}, {{ user.address2 }}{% endif %}
+                            <br/>{{ user.zipCode }}, {{ user.city }}
+                        </td>
+                        <td>{{ user.contactFirstName }} {{ user.contactLastName }}</td>
+                        <td>{% if user.manager %}{{ user.manager.firstName }} {{ user.manager.lastName }}{% endif %}</td>
+                     
+                        <td>
+                            <a href="{{ path('manager_credits_user', {'id': user.id}) }}" class="badge badge-primary">
+                                {{ user.credit|format_credit_number }}
+                            </a>
+                        </td>
+                      
+                        <td>
+                            <div class="options">
+                             
+                               
+                               
+                                <a href="{{ path('manager_user_switch', {'id': user.id}) }}" class="btn btn-outline-primary">
+                                    <button class="switch"><i class="fa fa-user-plus" aria-hidden="true"></i> {{ 'Se connecter'|trans }}</button>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive p-t-10">
-                            <table id="datatable" class="table" style="width:100%">
-                                <thead>
-                                <tr>
-                                    <th>Société</th>
-                                    <th>Email</th>
-                                    <th>Téléphone</th>
-                                    <th>Adresse</th>
-                                    <th>Contact</th>
-                                    <th>Délégué</th>
-                                    <th>Création</th>
-                                    <th>Abonnement</th>
-                                    <th>Crédits</th>
-                                    <th>Actif</th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for user in users %}
-                                    <tr>
-                                        <td>
-                                            {{ user.companyName }}
-                                        </td>
-                                        <td>{{ user.email }}</td>
-                                        <td>{{ user.phone }}</td>
-                                        <td>
-                                            {{ user.companyName }}<br/>
-                                            {{ user.address }}{% if user.address2 %}, {{ user.address2 }}{% endif %}<br/>
-                                            {{ user.zipCode }}, {{ user.city }}<br/>
-                                        </td>
-                                        <td>{{ user.contactFirstName }} {{ user.contactLastName }}</td>
-                                        <td>{% if user.manager %}{{ user.manager.firstName }} {{ user.manager.lastName }}{% endif %}</td>
-                                        <td>{{ user.account.registrationDate|date('d/m/Y') }}</td>
-                                        <td>
-                                            {% if is_granted('ROLE_ADMIN') %}
-                                                <a href="{{ path('manager_subscriptions_user', {'id': user.id}) }}">
-                                            {% endif %}
-                                                {% if user.currentSubscription and user.currentSubscription.active %}
-                                                    <span class="badge badge-success" data-toggle="tooltip" data-placement="top" data-original-title="{{ user.currentSubscription.type.libelle }}">{{ user.currentSubscription.type.code }}</span>
-                                                {% else %}
-                                                    <span class="badge badge-danger">Aucun</span>
-                                                {% endif %}
-                                            {% if is_granted('ROLE_ADMIN') %}
-                                                </a>
-                                            {% endif %}
-                                        </td>
-                                        <td>
-                                            {% if is_granted('ROLE_MANAGER') %}
-                                                <a href="{{ path('manager_credits_user', {'id': user.id}) }}">
-                                                    {% endif %}
-                                                    <span class="badge badge-primary">{{ user.credit|format_credit_number }}</span>
-                                                    {% if is_granted('ROLE_MANAGER') %}
-                                                </a>
-                                            {% endif %}
-                                        </td>
-                                        <td>{% if user.account.enabled %}<span class="badge badge-success">OUI</span>{% else %}<span class="badge badge-danger">NON</span>{% endif %}</td>
-                                        <td>
-                                            <a href="{{ path('manager_users_edit', {'id': user.id}) }}" class="btn btn-sm ml-1 mr-1 btn-secondary">
-                                                <i class="mdi mdi-circle-edit-outline"></i> Modifier
-                                            </a>
-                                            <a href="{{ path('manager_users_print', {'id': user.id}) }}" target="_blank" class="btn btn-sm ml-1 mr-1 btn-primary">
-                                                <i class="mdi mdi-printer"></i> Imprimer
-                                            </a>
-                                            {% if is_granted('ROLE_DPO') %}
-                                            <a href="{{ path('manager_users_delete', {'id': user.id}) }}" class="btn btn-sm ml-1 mr-1 btn-danger" onclick="return confirm('Confirmer la suppression de ce client ?\nToutes les données qui lui sont associées seront effacées. Cette action est irréversible.');">
-                                                <i class="mdi mdi-close"></i>
-                                            </a>
-                                            {% endif %}
-                                            <a href="{{ path('manager_login_logs', {'user': user.id}) }}" class="btn btn-sm ml-1 mr-1 btn-secondary">
-                                                <i class="mdi mdi-account-details"></i>
-                                            </a>
-                                            <a href="{{ path('manager_user_switch', {'id': user.id}) }}" class="btn btn-sm ml-1 mr-1 btn-outline-primary">
-                                                <i class="mdi mdi-account-convert"></i> Se connecter
-                                            </a>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
+        <!-- Pagination -->
+        <div class="pagination-container">
+            <div class="results-per-page">
+                <label for="resultsSelect">{{ 'Afficher'|trans }}</label>
+                <select id="resultsSelect" class="results-select">
+                    <option value="5">5</option>
+                    <option value="10" selected>10</option>
+                    <option value="20">20</option>
+                </select>
+                <span>{{ 'résultats par page'|trans }}</span>
+            </div>
+            <div class="pagination-controls">
+                <button class="pagination-button" id="prevPage" disabled>&lt;</button>
+                <span class="pagination-info" id="paginationInfo">{{ 'Page 1 sur 1'|trans }}</span>
+                <button class="pagination-button" id="nextPage" disabled>&gt;</button>
             </div>
         </div>
     </div>
-{% endblock %}
+</div>
 
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        (function ($) {
-            'use strict';
-            $(document).ready(function () {
-                $('#datatable').DataTable({
-                    "language": {
-                        "search": "Rechercher :",
-                        "lengthMenu": "Afficher _MENU_ résultats par page",
-                        "zeroRecords": "Aucun résultat",
-                        "info": "Page _PAGE_ sur _PAGES_",
-                        "infoEmpty": "Aucune données sur ce tableau",
-                        "infoFiltered": "(filtered from _MAX_ total records)",
-                        "paginate": {
-                            "previous": "Précédent",
-                            "next": "Suivant",
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const rows = Array.from(document.querySelectorAll('#datatable tbody tr'));
+        const resultsSelect = document.getElementById('resultsSelect');
+        const paginationInfo = document.getElementById('paginationInfo');
+        const prevPage = document.getElementById('prevPage');
+        const nextPage = document.getElementById('nextPage');
+        const searchInput = document.getElementById('searchInput');
 
-                        }
-                    }
-                });
+        let currentPage = 1;
+        let resultsPerPage = parseInt(resultsSelect.value);
+        let filteredRows = rows;
 
+        function updateTable() {
+            const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+            const start = (currentPage - 1) * resultsPerPage;
+            const end = start + resultsPerPage;
+
+            rows.forEach((row, index) => {
+                row.style.display = filteredRows.includes(row) && index >= start && index < end ? '' : 'none';
             });
 
-        })(window.jQuery);
-    </script>
+            paginationInfo.textContent = `{{ 'Page'|trans }} ${currentPage} {{ 'sur'|trans }} ${totalPages}`;
+            prevPage.disabled = currentPage === 1;
+            nextPage.disabled = currentPage === totalPages;
+        }
+
+        function filterTable() {
+            const query = searchInput.value.toLowerCase();
+            filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
+            currentPage = 1;
+            updateTable();
+        }
+
+        resultsSelect.addEventListener('change', function () {
+            resultsPerPage = parseInt(this.value);
+            currentPage = 1;
+            updateTable();
+        });
+
+        prevPage.addEventListener('click', function () {
+            if (currentPage > 1) {
+                currentPage--;
+                updateTable();
+            }
+        });
+
+        nextPage.addEventListener('click', function () {
+            const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                updateTable();
+            }
+        });
+
+        searchInput.addEventListener('input', filterTable);
+
+        updateTable();
+    });
+</script>
 {% endblock %}
