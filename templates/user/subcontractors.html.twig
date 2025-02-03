@@ -202,12 +202,8 @@
         {% endfor %}
     {% else %}
         <tr>
-          {% if type == 1 %}  <td colspan="9" class="text-center">{{ 'Aucun sous-traitant disponible'|trans }}</td>
-        {% elseif type == 2 %}
-        <td colspan="9" class="text-center">{{ 'Aucun cotraitants disponible'|trans }}</td>
-        {% elseif type == 3 %}
-        <td colspan="9" class="text-center">{{ 'Aucun responsables de traitements disponible'|trans }}</td>
-        {% endif %}
+          <td colspan="9" class="text-center">{{ 'Aucun destinataire renseigné dans cette section'|trans }}</td>
+        
         </tr>
     {% endif %}
 </tbody>

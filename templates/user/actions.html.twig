@@ -159,7 +159,7 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-       document.addEventListener('DOMContentLoaded', function () {
+   document.addEventListener('DOMContentLoaded', function () {
     const rows = Array.from(document.querySelectorAll('#table-body tr'));
     const resultsSelect = document.getElementById('resultsSelect');
     const paginationInfo = document.getElementById('paginationInfo');
@@ -171,7 +171,7 @@
 
     let currentPage = 1;
     let resultsPerPage = parseInt(resultsSelect.value);
-    let filteredRows = rows;
+    let filteredRows = [...rows];  // Ensure all rows are considered
 
     const urgencyOrder = { 'Urgent': 1, 'Modéré': 2, 'Faible': 3 };
 
@@ -179,41 +179,19 @@
         return dateStr ? new Date(dateStr.split('/').reverse().join('-')) : null;
     }
 
-    function sortRows() {
-        filteredRows.sort((rowA, rowB) => {
-            const urgencyA = urgencyOrder[rowA.dataset.urgency] || 4;
-            const urgencyB = urgencyOrder[rowB.dataset.urgency] || 4;
-
-            if (urgencyA !== urgencyB) {
-                return urgencyA - urgencyB; // Sort by urgency first
-            }
-
-            const dateA = parseDate(rowA.dataset.date);
-            const dateB = parseDate(rowB.dataset.date);
-            const now = new Date();
-
-            if (dateA && dateB) {
-                const isPastA = dateA < now;
-                const isPastB = dateB < now;
-
-                if (isPastA !== isPastB) {
-                    return isPastA ? -1 : 1; // Past dates come first
-                }
-                return dateA - dateB; // Future dates in ascending order
-            }
-            return 0;
-        });
+    function sortRows(allRows) {
+       
     }
 
     function updateTable() {
-        sortRows();
+        sortRows(filteredRows); // Apply sorting globally
 
         const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
         const start = (currentPage - 1) * resultsPerPage;
         const end = start + resultsPerPage;
 
         rows.forEach(row => row.style.display = 'none'); // Hide all rows
-        filteredRows.slice(start, end).forEach(row => row.style.display = ''); // Show only filtered ones
+        filteredRows.slice(start, end).forEach(row => row.style.display = ''); // Show only paginated ones
 
         paginationInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
         prevPage.disabled = currentPage === 1;
@@ -258,36 +236,8 @@
     nonRealiseFilter.addEventListener('change', filterRows);
     realiseFilter.addEventListener('change', filterRows);
 
-    filterRows();
+    filterRows(); // Initialize sorting & filtering
 });
 
-
-          function toggleRSwitch(element, id) {
-            element.disabled = true;
-
-            const initialState = !element.checked;
-
-            $.ajax({
-                type: "POST",
-                async: true,
-                url: "{{ path('user_json_toggle_action') }}",
-                data: {id: id},
-                success: function (content) {
-                    console.log(content);
-                    if (content.success) {
-                        element.checked = content.state;
-                    } else {
-                        element.checked = initialState;
-                    }
-                    if(element.checked === false) {
-                        $("#action_r_label_"+id).text("Non");
-                    }
-                    else {
-                        $("#action_r_label_"+id).text("Oui");
-                    }
-                    element.disabled = false;
-                }
-            });
-        }
     </script>
 {% endblock %}

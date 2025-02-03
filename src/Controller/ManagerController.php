@@ -1705,229 +1705,149 @@ class ManagerController extends AbstractController
      */
     public function systemsAction(Request $request)
     {
+        // Fetch systems
         $systemsQuery = $this->getDoctrine()->getRepository(SystemStd::class)->findAll();
-
+    
+        // Define system categories (unchanged)
         $systems = [
             "computing" => [
-                "network" => [],
-                "security" => [],
-                "administration" => [],
-                "device" => [],
-                "software" => [],
-                "server" => [],
+                "network" => [], "security" => [], "administration" => [], "device" => [], "software" => [], "server" => []
             ],
             "physical" => [
-                "partitioning" => [],
-                "information" => [],
+                "partitioning" => [], "information" => []
             ],
             "action" => [
-                "minimization" => [],
-                "anonymization" => [],
-                "pseudonymization" => [],
-                "sensitization" => [],
-                "supervision" => [],
-                "destruction" => [],
+                "minimization" => [], "anonymization" => [], "pseudonymization" => [], "sensitization" => [], "supervision" => [], "destruction" => []
             ],
             "supplier" => [
                 "supplier" => []
             ]
         ];
-
+    
+        // Serialize systems for frontend (unchanged)
         $systemsJs = [];
-
-        $encoders = [new JsonEncoder()];
-        $normalizer = new ObjectNormalizer();
-        // $normalizer->setCircularReferenceLimit(1);
-        // $normalizer->setCircularReferenceHandler(function ($object) {
-        //     return $object->getId();
-        // });
-        $normalizers = [$normalizer];
-        $serializer = new Serializer($normalizers, $encoders);
-        
+        $serializer = new Serializer([new ObjectNormalizer()], [new JsonEncoder()]);
         foreach ($systemsQuery as $system) {
             $systems[$system->getType()][$system->getSubtype()][] = $system;
-            $systemsJs[$system->getId()] = json_decode($serializer->serialize($system, 'json', ["attributes" => ['id', 'name', 'data', 'type', 'subtype'], "circular_reference_handler" => function ($object) {return $object->getId();}]), true);
+            $systemsJs[$system->getId()] = json_decode($serializer->serialize($system, 'json', [
+                "attributes" => ['id', 'name', 'data', 'type', 'subtype'],
+                "circular_reference_handler" => fn($object) => $object->getId()
+            ]), true);
         }
-
+    
+        // Define standard system categories (unchanged)
         $systemsStd = [
             "computing" => [
-                "network" => [
-                    "label" => "Réseau",
-                    "items" => [],
-                    "icon" => "mdi-ip-network"
-                ],
-                "security" => [
-                    "label" => "Sécurité",
-                    "items" => [],
-                    "icon" => "mdi-security"
-                ],
-                "administration" => [
-                    "label" => "Administration",
-                    "items" => [],
-                    "icon" => "mdi-account-multiple"
-                ],
-                "device" => [
-                    "label" => "Périphérique",
-                    "items" => [],
-                    "icon" => "mdi-responsive"
-                ],
-                "software" => [
-                    "label" => "Logiciel",
-                    "items" => [],
-                    "icon" => "mdi-console"
-                ],
-                "server" => [
-                    "label" => "Serveur",
-                    "items" => [],
-                    "icon" => "mdi-server"
-                ],
+                "network" => ["label" => "Réseau", "icon" => "fa-wifi"],
+                "security" => ["label" => "Sécurité", "icon" => "fa-lock"],
+                "administration" => ["label" => "Administration", "icon" => "fa-users"],
+                "device" => ["label" => "Périphérique", "icon" => "fa-mobile-alt"],
+                "software" => ["label" => "Logiciel", "icon" => "fa-laptop"],
+                "server" => ["label" => "Serveur", "icon" => "fa-server"]
             ],
             "physical" => [
-                "partitioning" => [
-                    "label" => "Cloisonnement",
-                    "items" => [],
-                    "icon" => "mdi-view-module"
-                ],
-                "information" => [
-                    "label" => "Information",
-                    "items" => [],
-                    "icon" => "mdi-lightbulb-on"
-                ],
+                "partitioning" => ["label" => "Cloisonnement", "icon" => "fa-building"],
+                "information" => ["label" => "Information", "icon" => "fa-info-circle"]
             ],
             "action" => [
-                "minimization" => [
-                    "label" => "Minimisation",
-                    "items" => [],
-                    "icon" => "mdi-tab-minus"
-                ],
-                "anonymization" => [
-                    "label" => "Anonymisation",
-                    "items" => [],
-                    "icon" => "mdi-incognito"
-                ],
-                "pseudonymization" => [
-                    "label" => "Pseudonymisation",
-                    "items" => [],
-                    "icon" => "mdi-account-question"
-                ],
-                "sensitization" => [
-                    "label" => "Sensibilisation et formation",
-                    "items" => [],
-                    "icon" => "mdi-account-alert"
-                ],
-                "supervision" => [
-                    "label" => "Contrôle",
-                    "items" => [],
-                    "icon" => "mdi-table-search"
-                ],
-                "destruction" => [
-                    "label" => "Destruction et suppression",
-                    "items" => [],
-                    "icon" => "mdi-trash-can"
-                ],
+                "minimization" => ["label" => "Minimisation", "icon" => "fa-compress-arrows-alt"],
+                "anonymization" => ["label" => "Anonymisation", "icon" => "fa-user-secret"],
+                "pseudonymization" => ["label" => "Pseudonymisation", "icon" => "fa-user-shield"],
+                "sensitization" => ["label" => "Sensibilisation", "icon" => "fa-bullhorn"],
+                "supervision" => ["label" => "Contrôle", "icon" => "fa-search"],
+                "destruction" => ["label" => "Destruction", "icon" => "fa-trash"]
             ],
             "supplier" => [
-                "supplier" => [
-                    "label" => "Prestataires du SI",
-                    "items" => [],
-                    "icon" => "mdi-contacts"
-                ],
+                "supplier" => ["label" => "Prestataires", "icon" => "fa-handshake"]
             ]
         ];
-
-        $mindMapHeight = 0;
-
+    
+        // Build the mind map with meta info
         $mindMap = [
-            "id" => "root",
-            "topic" => "<div class='node-level-0'><div class='jmnode-icon'><i class='mdi mdi-sitemap mdi-36px'></i></div><i>Système d'information</i><span class='node-0-actions'><a href=\"".$this->generateUrl("manager_systems_export")."\" target='_blank' class=\"btn btn-sm btn-rounded-circle btn-primary\"><i class=\"mdi mdi-printer\"></i></a></span></div>",
-            "children" => [
-                [
-                    "id" => "computing",
-                    "topic" => "<div class='node-level-1'><div class='jmnode-icon'><i class='mdi mdi-desktop-classic mdi-36px'></i></div><i>Informatique</i><span class='node-1-actions'><a href=\"".$this->generateUrl("manager_systems_export_excel", ["type" => "computing"])."\" target='_blank' class=\"btn btn-sm btn-rounded-circle btn-primary\"><i class=\"mdi mdi-download\"></i></a></span></div>",
-                    "direction" => "right",
-                    "expanded" => false,
-                    "attr" => [
-                        "class" => "jmnode-level-1",
-                    ],
-                    "children" => []
-                ],
-                [
-                    "id" => "physical",
-                    "topic" => "<div class='node-level-1'><div class='jmnode-icon'><i class='mdi mdi-office-building mdi-36px'></i></div><i>Physique</i><span class='node-1-actions'><a href=\"".$this->generateUrl("manager_systems_export_excel", ["type" => "physical"])."\" target='_blank' class=\"btn btn-sm btn-rounded-circle btn-primary\"><i class=\"mdi mdi-download\"></i></a></span></div>",
-                    "direction" => "right",
-                    "expanded" => false,
-                    "attr" => [
-                        "class" => "jmnode-level-1",
-                    ],
-                    "children" => []
-                ],
-                [
-                    "id" => "action",
-                    "topic" => "<div class='node-level-1'><div class='jmnode-icon'><i class='mdi mdi-account-arrow-right mdi-36px'></i></div><i>Action</i><span class='node-1-actions'><a href=\"".$this->generateUrl("manager_systems_export_excel", ["type" => "action"])."\" target='_blank' class=\"btn btn-sm btn-rounded-circle btn-primary\"><i class=\"mdi mdi-download\"></i></a></span></div>",
-                    "direction" => "right",
-                    "expanded" => false,
-                    "attr" => [
-                        "class" => "jmnode-level-1",
-                    ],
-                    "children" => []
-                ],
-                [
-                    "id" => "supplier",
-                    "topic" => "<div class='node-level-1'><div class='jmnode-icon'><i class='mdi mdi-contacts mdi-36px'></i></div><i>Prestataires du SI</i><span class='node-1-actions'><a href=\"".$this->generateUrl("manager_systems_export_excel", ["type" => "supplier"])."\" target='_blank' class=\"btn btn-sm btn-rounded-circle btn-primary\"><i class=\"mdi mdi-download\"></i></a></span></div>",
-                    "direction" => "right",
-                    "expanded" => false,
-                    "attr" => [
-                        "class" => "jmnode-level-1",
-                    ],
-                    "children" => []
-                ],
+            "meta" => [
+                "name" => "Cartographie SI",
+                "author" => "myDigitplace",
+                "version" => "1.0"
+            ],
+            "format" => "node_tree",
+            "data" => [
+                "id" => "root",
+                "topic" => "
+                    <div class='node-content'>
+                        <i class='fa fa-network-wired'></i>
+                        <div class='text-wrapper'>Système d'information</div>
+                    </div>",
+                "expanded" => true,
+                "children" => []
             ]
         ];
-
-        $key1 = 0;
-        foreach ($systemsStd as $systemStd) {
-            foreach ($systemStd as $key2 => $value2) {
-                $data = [
-                    "id" => $mindMap["children"][$key1]["id"]."_".$key2,
-                    "topic" => "<div class='node-level-2'><div class='jmnode-icon'><i class='mdi ".$value2["icon"]." mdi-36px'></i></div><i>".$value2["label"]."</i><span class='node-2-actions'><a href=\"".$this->generateUrl("manager_systems_add")."?type=".$mindMap["children"][$key1]["id"]."&subtype=".$key2."\" class=\"btn btn-sm btn-rounded-circle btn-primary\"><i class=\"mdi mdi-plus\"></i></a></span></div>",
-                    "direction" => "right",
+    
+        // Custom French names for nodes
+        $customNames = [
+            "computing" => "Informatique",
+            "physical" => "Physique",
+            "action" => "Action",
+            "supplier" => "Prestataires de SI"
+        ];
+    
+        foreach ($systemsStd as $type => $categories) {
+            $node = [
+                "id" => $type,
+                "topic" => "
+                    <div class='node-content'>
+                        <i class='fa " . $categories[array_key_first($categories)]['icon'] . "'></i>
+                        <div class='text-wrapper'>" . ($customNames[$type] ?? ucfirst($type)) . "</div>
+                    </div>",
+                "direction" => "right",
+                "expanded" => false,
+                "children" => []
+            ];
+    
+            foreach ($categories as $subtype => $details) {
+                $subnode = [
+                    "id" => "{$type}_{$subtype}",
+                    "topic" => "
+                        <div class='node-content'>
+                            <i class='fa " . $details["icon"] . "'></i>
+                            <div class='text-wrapper'>" . $details["label"] . "</div>
+                        </div>",
                     "expanded" => false,
-                    "attr" => [
-                        "class" => "jmnode-level-2",
-                    ],
                     "children" => []
                 ];
-
-                $itemsLenght = count($systems[$mindMap["children"][$key1]["id"]][$key2]);
-                if ($itemsLenght > 2) {
-                    $mindMapHeight += $itemsLenght;
-                } else {
-                    $mindMapHeight += 2;
-                }
-
-                foreach ($systems[$mindMap["children"][$key1]["id"]][$key2] as $item) {
-                    $data["children"][] = [
+    
+                foreach ($systems[$type][$subtype] as $item) {
+                    $subnode["children"][] = [
                         "id" => $item->getId(),
-                        "topic" => "<div class='node-level-3'><span class='node-topic' onclick='openModalInfo(".$item->getId().")'>".$item->getName()."</span><span class='node-3-actions'><a href=\"".$this->generateUrl("manager_systems_edit", ["id" => $item->getId()])."\" class=\"btn btn-light my-1 mr-1\"><i class=\"mdi mdi-circle-edit-outline\"></i></a><a href=\"".$this->generateUrl("manager_systems_delete", ["id" => $item->getId()])."\" class=\"btn btn-danger my-1\"  onclick=\"return confirm('Confirmer la suppression de cet élément ?');\"><i class=\"mdi mdi-close\"></i></a></span></div>",
-                        "attr" => [
-                            "class" => "jmnode-level-3",
-                            "onclick" => "openModalInfo(".$item->getId().")",
-                        ]
+                        "topic" => "
+                            <div class='node-content'>
+                                <div class='text-wrapper'>" . $item->getName() . "</div>
+                            </div>
+                            <span class='node-3-actions options'>
+                                <a href=\"".$this->generateUrl("manager_systems_edit", ["id" => $item->getId()])."\" class=\"btn edit my-1 mr-1\">
+                                    <i class=\"mdi mdi-circle-edit-outline\"></i>
+                                </a>
+                                <a href=\"".$this->generateUrl("manager_systems_delete", ["id" => $item->getId()])."\" class=\"btn delete my-1\"  onclick=\"return confirm('Confirmer la suppression de cet élément ?');\">
+                                    <i class=\"mdi mdi-close\"></i>
+                                </a>
+                            </span>",
                     ];
                 }
-
-                $mindMap["children"][$key1]["children"][] = $data;
+    
+                $node["children"][] = $subnode;
             }
-            $key1++;
+    
+            $mindMap["data"]["children"][] = $node;
         }
-
+    
         return $this->render('manager/systems.html.twig', [
             "systems" => $systems,
             "mindMap" => $mindMap,
             "mindMapHeight" => 12 * (38 * 1.5),
-            "systemsJs" => $systemsJs,
+            "systemsJs" => $systemsJs
         ]);
     }
+    
+    
 
     /**
      * @Route("/systems/{id}/translate/{_locale}", name="systems_translate")

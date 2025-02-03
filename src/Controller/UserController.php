@@ -4115,7 +4115,6 @@ class UserController extends AbstractController
 
         public function systemsAction(Request $request)
         {
-            // Query systems for the current user
             if ($this->getUser()->getUser()->getParentUser()) {
                 $systemsQuery = $this->getDoctrine()->getRepository(System::class)
                     ->findForUserWithGroup($this->getUser()->getUser(), $this->getUser()->getUser()->getParentUser());
@@ -4126,29 +4125,10 @@ class UserController extends AbstractController
         
             // Initialize system categories
             $systems = [
-                "computing" => [
-                    "network" => [],
-                    "security" => [],
-                    "administration" => [],
-                    "device" => [],
-                    "software" => [],
-                    "server" => [],
-                ],
-                "physical" => [
-                    "partitioning" => [],
-                    "information" => [],
-                ],
-                "action" => [
-                    "minimization" => [],
-                    "anonymization" => [],
-                    "pseudonymization" => [],
-                    "sensitization" => [],
-                    "supervision" => [],
-                    "destruction" => [],
-                ],
-                "supplier" => [
-                    "supplier" => []
-                ]
+                "computing" => ["network" => [], "security" => [], "administration" => [], "device" => [], "software" => [], "server" => []],
+                "physical" => ["partitioning" => [], "information" => []],
+                "action" => ["minimization" => [], "anonymization" => [], "pseudonymization" => [], "sensitization" => [], "supervision" => [], "destruction" => []],
+                "supplier" => ["supplier" => []]
             ];
         
             // Serialize systems for frontend
@@ -4193,8 +4173,11 @@ class UserController extends AbstractController
                 $systemsStd[$system->getType()][$system->getSubtype()]['items'][] = $system;
             }
         
+            // Get the last added type and subtype from URL
+            $addedType = $request->query->get('addedType');
+            $addedSubtype = $request->query->get('addedSubtype');
+        
             // Build the mind map
-            $mindMapHeight = 0;
             $mindMap = [
                 "meta" => [
                     "name" => "Cartographie SI",
@@ -4204,77 +4187,42 @@ class UserController extends AbstractController
                 "format" => "node_tree",
                 "data" => [
                     "id" => "root",
-                    "topic" => "
-                        <div class='border border1'><div class='circle'></div></div>
-                        <div class='border border2'><div class='circle'></div></div>
-                        <div class='border border3'><div class='circle'></div></div>
-                        <div class='border border4'><div class='circle'></div></div>
-                        <div class='node-content'>
-                            <svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 16 16'><path fill='currentColor' fill-rule='evenodd' d='M6.146 2.153a.5.5 0 0 1 .354-.146h3a.5.5 0 0 1 .5.5V4.51a.5.5 0 0 1-.5.5H8.497V7h4.5a.5.5 0 0 1 .5.5V10H14.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h.997V8h-4v2H9.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h.997V8h-4v2H4.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h.997V7.5a.5.5 0 0 1 .5-.5h4.5V5.01H6.5a.5.5 0 0 1-.5-.5V2.508a.5.5 0 0 1 .146-.354' clip-rule='evenodd'/></svg>
-                            <div class='text-wrapper'>Système d'information</div>
-                        </div>",
+                    "topic" => "<div class='node-content'><i class='fa fa-sitemap'></i><div class='text-wrapper'>Système d'information</div></div>",
                     "expanded" => true,
                     "children" => []
                 ]
             ];
         
-            // Add custom French names for specific nodes
-            $customNames = [
-                "computing" => "Informatique",
-                "physical" => "Physique",
-                "action" => "Action",
-                "supplier" => "Prestataires de SI"
-            ];
-        
             foreach ($systemsStd as $type => $categories) {
                 $node = [
                     "id" => $type,
-                    "topic" => "
-                        <div class='border border1'><div class='circle'></div></div>
-                        <div class='border border2'><div class='circle'></div></div>
-                        <div class='border border3'><div class='circle'></div></div>
-                        <div class='border border4'><div class='circle'></div></div>
-                        <div class='node-content'>
-                            <i class='fa " . $categories[array_key_first($categories)]['icon'] . "'></i>
-                            <div class='text-wrapper'>" . ($customNames[$type] ?? ucfirst($type)) . "</div>
-                        </div> ",
+                    "topic" => "<div class='node-content'><i class='fa " . $categories[array_key_first($categories)]['icon'] . "'></i><div class='text-wrapper'>" . ucfirst($type) . "</div></div>",
                     "direction" => "right",
-                    "expanded" => false,
+                    "expanded" => ($type === $addedType), // Keep type expanded if it was last added
                     "children" => []
                 ];
         
                 foreach ($categories as $subtype => $details) {
-                    $subnode = [
+                    $subNode = [
                         "id" => "{$type}_{$subtype}",
-                        "topic" => "
-                            <div class='border border1'><div class='circle'></div></div>
-                            <div class='border border2'><div class='circle'></div></div>
-                            <div class='border border3'><div class='circle'></div></div>
-                            <div class='border border4'><div class='circle'></div></div>
-                            <div class='node-content'>
-                                <i class='fa " . $details["icon"] . "'></i>
-                                <div class='text-wrapper'>" . $details["label"] . "</div>
-                            </div> <span class='node-2-actions'><a href=\"".$this->generateUrl("user_systems_add")."?type=".$type."&subtype=".$subtype."\" class=\"btn btn-sm btn-rounded-circle btn-primary\"><i class=\"mdi mdi-plus\"></i></a></span>",
-                        "expanded" => false,
+                        "topic" => "<div class='node-content'><i class='fa " . $details["icon"] . "'></i><div class='text-wrapper'>" . $details["label"] . "</div></div>
+                        <span class='node-2-actions'><a href=\"" . $this->generateUrl("user_systems_add") . "?type=" . $type . "&subtype=" . $subtype . "\" class=\"btn btn-sm btn-rounded-circle btn-primary\"><i class=\"mdi mdi-plus\"></i></a></span>",
+                        "expanded" => ($type === $addedType && $subtype === $addedSubtype), // Keep subtype expanded if it was last added
                         "children" => []
                     ];
         
                     foreach ($systems[$type][$subtype] as $item) {
-                        $subnode["children"][] = [
+                        $subNode["children"][] = [
                             "id" => $item->getId(),
-                            "topic" => "
-                                <div class='border border1'><div class='circle'></div></div>
-                                <div class='border border2'><div class='circle'></div></div>
-                                <div class='border border3'><div class='circle'></div></div>
-                                <div class='border border4'><div class='circle'></div></div>
-                                <div class='node-content'>
-                                   
-                                    <div class='text-wrapper'>" . $item->getName() . "</div>
-                                </div> <span class='node-3-actions options'><a href=\"".$this->generateUrl("user_systems_edit", ["id" => $item->getId()])."\" class=\"btn edit my-1 mr-1\"><i class=\"mdi mdi-circle-edit-outline\"></i></a><a href=\"".$this->generateUrl("user_systems_delete", ["id" => $item->getId()])."\" class=\"btn delete my-1\"  onclick=\"return confirm('Confirmer la suppression de cet élément ?');\"><i class=\"mdi mdi-close\"></i></a></span>",
+                            "topic" => "<div class='node-content'><i class='fa " . $details["icon"] . "'></i><div class='text-wrapper'>" . $item->getName() . "</div></div>
+                            <span class='node-3-actions options'>
+                                <a href=\"" . $this->generateUrl("user_systems_edit", ["id" => $item->getId()]) . "\" class=\"btn edit my-1 mr-1\"><i class=\"mdi mdi-circle-edit-outline\"></i></a>
+                                <a href=\"" . $this->generateUrl("user_systems_delete", ["id" => $item->getId()]) . "\" class=\"btn delete my-1\" onclick=\"return confirm('Confirmer la suppression de cet élément ?');\"><i class=\"mdi mdi-close\"></i></a>
+                            </span>"
                         ];
                     }
         
-                    $node["children"][] = $subnode;
+                    $node["children"][] = $subNode;
                 }
         
                 $mindMap["data"]["children"][] = $node;
@@ -4284,10 +4232,11 @@ class UserController extends AbstractController
                 "systems" => $systems,
                 "systemsStd" => $systemsStd,
                 "mindMap" => $mindMap,
-                "mindMapHeight" => max(400, $mindMapHeight * 50),
+                "mindMapHeight" => 12 * (38 * 1.5),
                 "systemsJs" => $systemsJs,
             ]);
         }
+        
         
         
     
@@ -5382,7 +5331,7 @@ class UserController extends AbstractController
                     <div class='node-content'>
                         <i class='fa " . $details["icon"] . "'></i>
                         <div class='text-wrapper'>" . $details["label"] . "</div>
-                    </div>",
+                    </div> <span class='node-2-actions'><a href=\"".$this->generateUrl("user_systems_add")."?type=".$type."&subtype=".$subtype."\" class=\"btn btn-sm btn-rounded-circle btn-primary\"><i class=\"mdi mdi-plus\"></i></a></span>",
                     "children" => []
                 ];
     
@@ -5989,24 +5938,25 @@ class UserController extends AbstractController
     
         $groupActions = $this->getDoctrine()->getRepository(Action::class)->findGroupsForUser($user);
     
-        // Sorting all actions (realized & non-realized)
-        usort($actions, function ($a, $b) {
-            // Urgency levels mapped from priority
-            $urgencyOrder = [
-                1 => 1, // Urgent
-                2 => 2, // Modéré
-                3 => 3, // Faible
-            ];
+        // Define urgency order
+        $urgencyOrder = [
+            1 => 1, // Urgent
+            2 => 2, // Modéré
+            3 => 3, // Faible
+        ];
     
-            $urgencyA = $urgencyOrder[$a->getPriority()] ?? 4; // Default to lowest priority
+        // Step 1: **Sort All Actions Globally**
+        usort($actions, function ($a, $b) use ($urgencyOrder) {
+            $urgencyA = $urgencyOrder[$a->getPriority()] ?? 4;
             $urgencyB = $urgencyOrder[$b->getPriority()] ?? 4;
     
+            // Step 1: Sort by urgency first (Urgent > Modéré > Faible)
             if ($urgencyA !== $urgencyB) {
-                return $urgencyA - $urgencyB; // Sort by urgency
+                return $urgencyA - $urgencyB;
             }
     
-            // Step 2: Sort by realization date (earliest future date OR most recent past date first)
-            $dateA = $a->getSetUpDate(); // Using the existing method
+            // Step 2: Sort by due date (Past dates first, then future in ascending order)
+            $dateA = $a->getSetUpDate();
             $dateB = $b->getSetUpDate();
             $now = new \DateTime();
     
@@ -6014,22 +5964,29 @@ class UserController extends AbstractController
                 $isPastA = $dateA < $now;
                 $isPastB = $dateB < $now;
     
+                // Ensure past dates come first
                 if ($isPastA !== $isPastB) {
-                    return $isPastA ? -1 : 1; // Past dates first
+                    return $isPastA ? -1 : 1;
                 }
-                return $dateA <=> $dateB; // Future dates in ascending order
+    
+                // If both are past or both are future, sort by date ascending (earliest first)
+                return $dateA <=> $dateB;
             }
     
-            return 0;
+            // Handle cases where one date is null (non-null dates come first)
+            return $dateA ? -1 : ($dateB ? 1 : 0);
         });
     
         return $this->render('user/actions.html.twig', [
-            "actions" => $actions, // All actions (sorted)
+            "actions" => $actions, // **Now sorted globally**
             "groupActions" => $groupActions,
             "actionsStats" => $actionsStats,
             "filter" => null,
         ]);
     }
+    
+    
+    
     
     
     
@@ -7584,19 +7541,16 @@ class UserController extends AbstractController
 
             $exercisingclaim->setUser($this->getUser()->getUser());
 
-            $requestDate = \DateTime::createFromFormat("d/m/Y H:i:s", $form['requestDate']->getData()." 00:00:00");
-            if ($requestDate) {
-                $exercisingclaim->setRequestDate($requestDate);
-            } else {
-                $exercisingclaim->setRequestDate(null);
+            $requestDateStr = $form['requestDate']->getData();
+            if (!empty($requestDateStr)) {
+                $requestDate = \DateTime::createFromFormat("d/m/Y H:i:s", $requestDateStr." 00:00:00");
+                $exercisingclaim->setRequestDate($requestDate ?: $exercisingclaim->getRequestDate());
             }
-
-            $answerDate = \DateTime::createFromFormat("d/m/Y", $form['answerDate']->getData());
-            if ($answerDate) {
-                $exercisingclaim->setAnswerDate($answerDate);
-            } else {
-                $exercisingclaim->setAnswerDate(null);
-            }
+           $answerDateStr = $form['answerDate']->getData();
+if (!empty($answerDateStr)) {
+    $answerDate = \DateTime::createFromFormat("d/m/Y", $answerDateStr);
+    $exercisingclaim->setAnswerDate($answerDate ?: $exercisingclaim->getAnswerDate());
+}
 
             $em->persist($exercisingclaim);
             $em->flush();

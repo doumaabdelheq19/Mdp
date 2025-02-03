@@ -73,7 +73,7 @@
         {% set dataRateClass = "badge-warning" %}
     {% endif %}
     <span class="badge {{ dataRateClass }}" style="cursor: pointer;" onclick="showAnswers({{ trainingRequest.id }})">
-        {{ trainingRequest.result * 100|round(0) }}%
+        {{ (trainingRequest.result * 100)|round }}%
     </span>
 {% endif %}
 

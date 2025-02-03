@@ -58,7 +58,7 @@
         {% endif %}
         
         <div class="form-group1">
-            {{ form_label(form["field"~i], 'Champ ' ~ i) }}
+             {{ form_label(form["field"~i]) }}
             {{ form_widget(form["field"~i], {'attr': {'class': 'form-control ' ~ ((form_errors(form["field"~i]) == '') ? '' : 'is-invalid')} }) }}
             <div class="invalid-feedback">{{ form_errors(form["field"~i]) | striptags }}</div>
         </div>

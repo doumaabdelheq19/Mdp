@@ -4,6 +4,11 @@
     {{ parent() }} - {{ 'crer_une_action'|trans }}
 {% endblock %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
 {% block content %}
 <div class="page">
   <div class="table-container-traitements">
@@ -287,13 +292,7 @@
 (function ($) {
             'use strict';
             $(document).ready(function () {
-                $(".datepicker-js").datepicker({
-                   dateFormat: "Y-m-d",
-                altInput: true,
-                altFormat: "d/m/Y",
-                locale: "fr",
-                allowInput: true,
-                });
+               
 
                 inputTreatmentsSelector = $('#appbundle_action_treatments');
                 inputTreatmentsSelector.select2({
@@ -371,6 +370,13 @@ function selectStd(e) {
     window.location.href = "{{ path('user_actions_add') }}?std=" + e.value;
 }
 document.addEventListener("DOMContentLoaded", () => {
+      flatpickr(".datepicker-js", {
+                dateFormat: "Y-m-d",
+                altInput: true,
+                altFormat: "d/m/Y",
+                locale: "fr",
+                allowInput: true,
+            });
 
 
       const treatmentSearchInput = document.getElementById("treatments-search"); // Search input

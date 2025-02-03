@@ -1,270 +1,192 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - Nouveau client
-{% endblock %}
-
-{% block stylesheets %}
-    {{ parent() }}
-{% endblock %}
-
-{% block body %}
-    {{ parent() }}
+    {{ parent() }} - Nouveau Client
 {% endblock %}
 
 {% block content %}
-    <div class="bg-dark">
-        <div class="container-fluid px-lg-5 m-b-30">
-            <div class="row">
-                <div class="col-12 text-white p-t-40 p-b-90">
+<div class="page">
+    <div class="table-container-traitements">
+        <div class="header-con">
+            <div class="header">
+                <h2><img src="./imgs/iconamoon_arrow-up-2-light.svg" alt=""> Nouveau Client</h2>
+            </div>
+        </div>
 
-                    <h4 class=""> <span class="btn btn-white-translucent">
-                                <i class="mdi mdi-account "></i></span> Nouveau client
-                    </h4>
+        {{ form_start(form, {'attr': {'class': 'sous-traitantform'}}) }}
 
+        <!-- Avatar Upload -->
+        <div class="form-row justify-content-center avatar-upload-container">
+            <label class="avatar-input-label">
+                <div class="avatar-container">
+                    <span class="avatar avatar-xxl">
+                        <span class="avatar-title rounded-circle bg-dark">
+                            <i class="mdi mdi-account-box-outline"></i>
+                        </span>
+                        <span class="avatar-upload-icon">
+                            <i class="mdi mdi-upload mdi-24px"></i>
+                        </span>
+                    </span>
+                    {{ form_widget(form.pictureFile, {'attr': {'class': 'avatar-file-picker'} }) }}
+                </div>
+            </label>
+            <div class="form-feedback">
+                {{ form_errors(form.pictureFile) | striptags }}
+            </div>
+        </div>
+
+        <!-- Société Section -->
+        <div class="sectt no_boder">
+            <h3>Société</h3>
+            <div class="form-group">
+                <div class="form-group1">
+                    {{ form_label(form.companyName) }}
+                    {{ form_widget(form.companyName, {'attr': {'placeholder': 'Nom de l\'entreprise'}}) }}
+                </div>
+                <div class="form-group1">
+                    {{ form_label(form.siret) }}
+                    {{ form_widget(form.siret, {'attr': {'placeholder': 'SIRET'}}) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-group1">
+                    {{ form_label(form.address) }}
+                    {{ form_widget(form.address, {'attr': {'placeholder': 'Adresse'}}) }}
+                </div>
+                <div class="form-group1">
+                    {{ form_label(form.address2) }}
+                    {{ form_widget(form.address2, {'attr': {'placeholder': 'Complément'}}) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-group1">
+                    {{ form_label(form.zipCode) }}
+                    {{ form_widget(form.zipCode, {'attr': {'placeholder': 'Code postal'}}) }}
+                </div>
+                <div class="form-group1">
+                    {{ form_label(form.city) }}
+                    {{ form_widget(form.city, {'attr': {'placeholder': 'Ville'}}) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-group1">
+                    {{ form_label(form.companyPhone) }}
+                    {{ form_widget(form.companyPhone, {'attr': {'placeholder': 'Téléphone'}}) }}
+                </div>
+                <div class="form-group1">
+                    {{ form_label(form.employeesNumber) }}
+                    {{ form_widget(form.employeesNumber, {'attr': {'placeholder': 'Nombre d\'employés'}}) }}
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="container-fluid px-lg-5 pull-up">
-
-        <div class="card">
-            <div class="card-header">
-                <div class="card-body ">
-                    {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
-
-                    <div class="form-row justify-content-center mt-5 mb-5">
-                        <label class="avatar-input" style="overflow: visible">
-                            <span class="avatar avatar-xxl">
-                                <span class="avatar-title rounded-circle bg-dark"><i class="mdi mdi-account-box-outline"></i></span>
-                                <span class="avatar-input-icon rounded-circle">
-                                    <i class="mdi mdi-upload mdi-24px"></i>
-                                </span>
-                            </span>
-                            {{ form_widget(form.pictureFile, {'attr': {'class': 'avatar-file-picker'} }) }}
-                        </label>
-                        <div class="invalid-feedback">{{ form_errors(form.pictureFile) | striptags  }}</div>
-                    </div>
-
-                    <h5>Société</h5>
-
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.companyName) }}
-                            {{ form_widget(form.companyName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.companyName) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.companyName) | striptags  }}</div>
-                        </div>
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.siret) }}
-                            {{ form_widget(form.siret, {'attr': {'class': 'form-control ' ~ ((form_errors(form.siret) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.siret) | striptags  }}</div>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.address) }}
-                            {{ form_widget(form.address, {'attr': {'class': 'form-control ' ~ ((form_errors(form.address) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.address) | striptags  }}</div>
-                        </div>
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.address2) }}
-                            {{ form_widget(form.address2, {'attr': {'class': 'form-control ' ~ ((form_errors(form.address2) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.address2) | striptags  }}</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.zipCode) }}
-                            {{ form_widget(form.zipCode, {'attr': {'class': 'form-control ' ~ ((form_errors(form.zipCode) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.zipCode) | striptags  }}</div>
-                        </div>
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.city) }}
-                            {{ form_widget(form.city, {'attr': {'class': 'form-control ' ~ ((form_errors(form.city) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.city) | striptags  }}</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.companyPhone) }}
-                            {{ form_widget(form.companyPhone, {'attr': {'class': 'form-control ' ~ ((form_errors(form.companyPhone) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.companyPhone) | striptags  }}</div>
-                        </div>
-                        <div class="form-group col-md-6">
-                            {{ form_label(form.employeesNumber) }}
-                            {{ form_widget(form.employeesNumber, {'attr': {'class': 'form-control ' ~ ((form_errors(form.employeesNumber) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.employeesNumber) | striptags  }}</div>
-                        </div>
-                    </div>
-
-                    <h5 class="mt-2">Utilisateur</h5>
-
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.phone) }}
-                            {{ form_widget(form.phone, {'attr': {'class': 'form-control ' ~ ((form_errors(form.phone) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.phone) | striptags  }}</div>
-                        </div>
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.email) }}
-                            {{ form_widget(form.email, {'attr': {'class': 'form-control ' ~ ((form_errors(form.email) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.email) | striptags  }}</div>
-                        </div>
-                    </div>
-
-                    <h5 class="mt-2">Relai principal</h5>
-
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.contactLastName) }}
-                            {{ form_widget(form.contactLastName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.contactLastName) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.contactLastName) | striptags  }}</div>
-                        </div>
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.contactFirstName) }}
-                            {{ form_widget(form.contactFirstName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.contactFirstName) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.contactFirstName) | striptags  }}</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.contactEmail) }}
-                            {{ form_widget(form.contactEmail, {'attr': {'class': 'form-control ' ~ ((form_errors(form.contactEmail) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.contactEmail) | striptags  }}</div>
-                        </div>
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.contactPhone) }}
-                            {{ form_widget(form.contactPhone, {'attr': {'class': 'form-control ' ~ ((form_errors(form.contactPhone) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.contactPhone) | striptags  }}</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-12">
-                            {{ form_label(form.contactJob) }}
-                            {{ form_widget(form.contactJob, {'attr': {'class': 'form-control ' ~ ((form_errors(form.contactJob) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.contactJob) | striptags  }}</div>
-                        </div>
-                    </div>
-
-                    <h5 class="mt-2">Responsable de traitement</h5>
-
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.accountantLastName) }}
-                            {{ form_widget(form.accountantLastName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.accountantLastName) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.accountantLastName) | striptags  }}</div>
-                        </div>
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.accountantFirstName) }}
-                            {{ form_widget(form.accountantFirstName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.accountantFirstName) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.accountantFirstName) | striptags  }}</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.accountantEmail) }}
-                            {{ form_widget(form.accountantEmail, {'attr': {'class': 'form-control ' ~ ((form_errors(form.accountantEmail) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.accountantEmail) | striptags  }}</div>
-                        </div>
-                        <div class="form-group floating-label col-md-6">
-                            {{ form_label(form.accountantPhone) }}
-                            {{ form_widget(form.accountantPhone, {'attr': {'class': 'form-control ' ~ ((form_errors(form.accountantPhone) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.accountantPhone) | striptags  }}</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-12">
-                            {{ form_label(form.accountantJob) }}
-                            {{ form_widget(form.accountantJob, {'attr': {'class': 'form-control ' ~ ((form_errors(form.accountantJob) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.accountantJob) | striptags  }}</div>
-                        </div>
-                    </div>
-
-                    {% if is_granted('ROLE_DPO') %}
-                    <h5 class="mt-2">Consultant</h5>
-
-                    <div class="form-row">
-                        <div class="form-group floating-label col-md-12">
-                            {{ form_label(form.manager) }}
-                            {{ form_widget(form.manager, {'attr': {'class': 'form-control ' ~ ((form_errors(form.manager) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.manager) | striptags  }}</div>
-                        </div>
-                    </div>
-                    {% endif %}
-                    <div class="custom-control custom-checkbox mb-4">
-                        {{ form_widget(form.managerDpo, {'attr': {'class': 'custom-control-input'}}) }}
-                        {{ form_label(form.managerDpo, null, {'label_attr': {'class': 'custom-control-label'}}) }}
-                    </div>
-
-                    {% if is_granted('ROLE_DPO') %}
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                {{ form_label(form.lawyer) }}
-                                {{ form_widget(form.lawyer, {'attr': {'class': 'form-control ' ~ ((form_errors(form.lawyer) == '') ? '' : 'is-invalid')} }) }}
-                                <div class="invalid-feedback">{{ form_errors(form.lawyer) | striptags  }}</div>
-                            </div>
-                        </div>
-                    {% endif %}
-
-                    <h5 class="mt-2">Compte client</h5>
-
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            {{ form_label(form.parentUser) }}
-                            {{ form_widget(form.parentUser, {'attr': {'class': 'form-control ' ~ ((form_errors(form.parentUser) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.parentUser) | striptags  }}</div>
-                        </div>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-md-12">
-                            {{ form_label(form.childrenUsers) }}
-                            {{ form_widget(form.childrenUsers, {'attr': {'class': 'form-control js-select2 ' ~ ((form_errors(form.childrenUsers) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.childrenUsers) | striptags  }}</div>
-                        </div>
-                    </div>
-
-                    <div class="custom-control custom-checkbox mb-4">
-                        {{ form_widget(form.demo, {'attr': {'class': 'custom-control-input'}}) }}
-                        {{ form_label(form.demo, null, {'label_attr': {'class': 'custom-control-label'}}) }}
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-12">
-                            {{ form_label(form.language) }}
-                            {{ form_widget(form.language, {'attr': {'class': 'form-control ' ~ ((form_errors(form.language) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.language) | striptags  }}</div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Enregistrer</button>
-                    </div>
-                    {{ form_end(form) }}
+        <!-- Utilisateur Section -->
+        <div class="sectt">
+            <h3>Utilisateur</h3>
+            <div class="form-group">
+                <div class="form-group1">
+                    {{ form_label(form.phone) }}
+                    {{ form_widget(form.phone, {'attr': {'placeholder': 'Téléphone'}}) }}
+                </div>
+                <div class="form-group1">
+                    {{ form_label(form.email) }}
+                    {{ form_widget(form.email, {'attr': {'placeholder': 'Email'}}) }}
                 </div>
             </div>
         </div>
+
+        <!-- Relai Principal -->
+        <div class="sectt">
+            <h3>Relai Principal</h3>
+            <div class="form-group">
+                <div class="form-group1">
+                    {{ form_label(form.contactLastName) }}
+                    {{ form_widget(form.contactLastName, {'attr': {'placeholder': 'Nom'}}) }}
+                </div>
+                <div class="form-group1">
+                    {{ form_label(form.contactFirstName) }}
+                    {{ form_widget(form.contactFirstName, {'attr': {'placeholder': 'Prénom'}}) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-group1">
+                    {{ form_label(form.contactEmail) }}
+                    {{ form_widget(form.contactEmail, {'attr': {'placeholder': 'Email'}}) }}
+                </div>
+                <div class="form-group1">
+                    {{ form_label(form.contactPhone) }}
+                    {{ form_widget(form.contactPhone, {'attr': {'placeholder': 'Téléphone'}}) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-group1 Fonction">
+                    {{ form_label(form.contactJob) }}
+                    {{ form_widget(form.contactJob, {'attr': {'placeholder': 'Fonction'}}) }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Responsable de Traitement -->
+        <div class="sectt">
+            <h3>Responsable de Traitement</h3>
+            <div class="form-group">
+                <div class="form-group1">
+                    {{ form_label(form.accountantLastName) }}
+                    {{ form_widget(form.accountantLastName, {'attr': {'placeholder': 'Nom'}}) }}
+                </div>
+                <div class="form-group1">
+                    {{ form_label(form.accountantFirstName) }}
+                    {{ form_widget(form.accountantFirstName, {'attr': {'placeholder': 'Prénom'}}) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-group1">
+                    {{ form_label(form.accountantEmail) }}
+                    {{ form_widget(form.accountantEmail, {'attr': {'placeholder': 'Email'}}) }}
+                </div>
+                <div class="form-group1">
+                    {{ form_label(form.accountantPhone) }}
+                    {{ form_widget(form.accountantPhone, {'attr': {'placeholder': 'Téléphone'}}) }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="form-group1 Fonction">
+                    {{ form_label(form.accountantJob) }}
+                    {{ form_widget(form.accountantJob, {'attr': {'placeholder': 'Fonction'}}) }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="appbundle_user_save" class="submit-button">Enregistrer</button>
+
+        {{ form_end(form) }}
     </div>
+</div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script>
-        // Tables to dataTables
-        (function ($) {
+        document.addEventListener("DOMContentLoaded", function () {
             function readFile(input) {
                 if (input.files && input.files[0]) {
                     var reader = new FileReader();
 
                     reader.onload = function (e) {
-                        var avatarImg = $(input).parents('.avatar-input').find('.avatar-img');
-                        if (avatarImg && avatarImg.length > 0) {
-                            avatarImg.attr('src', e.target.result);
+                        var avatarImg = document.querySelector('.avatar-container img');
+                        if (avatarImg) {
+                            avatarImg.src = e.target.result;
                         } else {
-                            $(input).parents('.avatar-input').find('.avatar-title').remove();
-                            $(input).parents('.avatar-input').find('.avatar').prepend('<img src="'+e.target.result+'" class="avatar-img rounded-circle">');
+                            let avatarContainer = document.querySelector('.avatar-container');
+                            avatarContainer.innerHTML = '<img src="'+e.target.result+'" class="avatar-img rounded-circle">';
                         }
                     };
 
@@ -272,9 +194,9 @@
                 }
             }
 
-            $('.avatar-file-picker').on('change', function () {
+            document.querySelector('.avatar-file-picker').addEventListener('change', function () {
                 readFile(this);
             });
-        })(window.jQuery);
+        });
     </script>
 {% endblock %}

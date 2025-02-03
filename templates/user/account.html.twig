@@ -29,7 +29,7 @@
         </div>
      
 
-        {{ form_start(form, {'attr': {'class': 'sous-traitantform'}}) }}
+        {{ form_start(form, {'attr': {'class': 'sous-traitantform' , 'enctype': 'multipart/form-data'}}) }}
    
       <div class="form-row justify-content-center avatar-upload-container">
     <label class="avatar-input-label">
@@ -178,9 +178,10 @@
                 </div>
             </div>
         </div>
+        {{ form_widget(form.save, {'attr': {'class': 'submit-button'} }) }}
 
-        <button type="submit" id="appbundle_user_save" class="submit-button">{{ 'enregistrer'|trans }}</button>
-        {{ form_end(form, {'render_rest': false}) }}
+       
+        {{ form_end(form) }}
 
         <div class="tect">
             <h3>{{ 'Mon consultant'|trans }}</h3>
@@ -215,9 +216,10 @@
       <p>12 caractères de types différents (majuscules, minuscules, chiffres, caractères spéciaux) n’ayant aucun lien avec vous (nom, date de naissance…) et ne figurant pas dans le dictionnaire.</p>
     </div>
     <div class="form-group">
-      <button type="submit" id="form_save" class="submit-button">Enregistrer</button>
+                            {{ form_widget(form2.save, {'attr': {'class': 'submit-button'} }) }}
+
     </div>
-    {{ form_end(form2,{'render_rest': false}) }}
+    {{ form_end(form2) }}
   </div>
 
   <div class="table-container-traitements">
@@ -240,9 +242,10 @@
       {% endfor %}
     </div>
     <div class="form-group">
-      <button type="submit" id="form_save" name="form[save]" class="submit-button">Enregistrer</button>
+                                {{ form_widget(form3.save, {'attr': {'class': 'submit-button'} }) }}
+
     </div>
-    {{ form_end(form3, {'render_rest': false}) }}
+    {{ form_end(form3) }}
   </div>
 
   <div class="table-container-traitements">

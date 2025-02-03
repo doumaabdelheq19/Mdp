@@ -318,6 +318,7 @@ jmnode[nodeid="996"] .border {
             <div class="gap">
                 <div style="width: 100%; display: flex; justify-content: space-between;">
                     <h4 style="font-size: 16px;">{{ 'Mode d’affichage'|trans }}</h4>
+                     {% if app.user.user.mainGroupAgency %}
                     <div class="dropdownn">
 <button 
     class="dropdown-button" 
@@ -331,6 +332,7 @@ jmnode[nodeid="996"] .border {
                             <li>{{ 'Option 3'|trans }}</li>
                         </ul>
                     </div>
+                     {% endif %}
                 </div>
                 <p>{{ 'Choisissez entre vue mindmap, tableur et vue client'|trans }}</p>
                 <div style="display: flex; gap: 10px;">

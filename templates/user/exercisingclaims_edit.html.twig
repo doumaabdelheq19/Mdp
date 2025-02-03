@@ -120,15 +120,19 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
     <script>
         // Initialize Flatpickr
-        document.addEventListener('DOMContentLoaded', function () {
-            flatpickr(".datepicker-js", {
-                dateFormat: "Y-m-d",
-                altInput: true,
-                altFormat: "d/m/Y",
-                locale: "fr",
-                allowInput: true,
-            });
+       document.querySelectorAll(".datepicker-js").forEach(function (input) {
+        let existingDate = input.getAttribute("value"); 
+        flatpickr(input, {
+            dateFormat: "d-m-Y",
+            altInput: true,
+            altFormat: "d/m/Y",
+            locale: "fr",
+            allowInput: true,
+            defaultDate: existingDate || "", 
         });
+    });
+
+    
 
         // Update File Name Function
         function updateFileName(input) {

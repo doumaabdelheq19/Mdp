@@ -77,40 +77,34 @@
             <hr/>
 
             <!-- Teams Select -->
-         <div class="form-group">
+<div class="form-group">
     <label for="teams-search">{{ form_label(form.teams) }}</label>
 
-    <!-- Dropdown and Search -->
-   <div class="dropdownform">
-    <input 
-        type="text" 
-        id="teams-search" 
-        class="form-control" 
-        placeholder="{{ 'Rechercher une équipe'|trans }}" 
-        oninput="filterTeamsDropdown()" 
-        readonly
-        required /> <!-- Add required attribute -->
-    <input 
-        type="hidden" 
-        id="selected-team-id" 
-        name="selectedTeam" 
-        required /> <!-- Hidden field to store the selected team value -->
-    
-    <ul class="dropdown-menu" id="teams-dropdown">
-        {% for team in form.teams.vars.choices %}
-            <li data-id="{{ team.value }}" onclick="selectTeam('{{ team.value }}', '{{ team.label|e('js') }}')">
-                <a href="javascript:void(0);" >
-                    {{ team.label }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
-</div>
+    <div class="dropdownform">
+        <input 
+            type="text" 
+            id="teams-search" 
+            class="form-control" 
+            placeholder="{{ 'Rechercher une équipe'|trans }}" 
+            onfocus="showTeamsDropdown()" 
+            readonly
+            required /> <!-- Keep required for validation -->
 
-{% do form.teams.setRendered() %}
-    <!-- Hidden Input for Selected Teams -->
-    <input type="hidden" id="selected-teams" name="selected-teams" value="" />
-    
+        <ul class="dropdown-menu" id="teams-dropdown">
+            {% for team in form.teams.vars.choices %}
+                <li data-id="{{ team.value }}" onclick="selectTeam('{{ team.value }}', '{{ team.label|e('js') }}')">
+                    <a href="javascript:void(0);">
+                        {{ team.label }}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- Hidden Input to store selected team IDs -->
+    <input type="hidden" id="selected-teams" name="selected-teams" value="" required />
+    {{ form_widget(form.teams, {'attr': {'id': 'form_teams', 'class': 'd-none'}}) }}
+
 
     <!-- Display Selected Teams -->
     <div id="selected-teams-list" class="selected-items"></div>
@@ -124,7 +118,7 @@
            <div class="form-group col-12">
     {{ form_label(form.emails) }}
     <p class="small text-muted">{{ 'collez_ici_la_liste_des_adresses_mails_ou_saisisse'|trans|raw }}</p>
-    {{ form_widget(form.emails, {'attr': {'required': 'required', 'class': 'form-control'}}) }}
+    {{ form_widget(form.emails, {'attr': { 'class': 'form-control'}}) }}
    
 </div>
 
@@ -395,27 +389,15 @@ const popupLayer = document.getElementById('popup-layer');
         document.addEventListener("DOMContentLoaded", () => {
     const teamsSearchInput = document.getElementById("teams-search");
     const teamsDropdownMenu = document.getElementById("teams-dropdown");
-    const selectedTeamsHiddenInput = document.getElementById("selected-teams");
+    const selectedTeamsHiddenInput = document.getElementById("form_teams"); // Link to Symfony field
     const selectedTeamsList = document.getElementById("selected-teams-list");
     const selectedTeamsSet = new Set();
 
-    // Filter dropdown options based on search input
-    window.filterTeamsDropdown = () => {
-        const filter = teamsSearchInput.value.toLowerCase();
-        const items = teamsDropdownMenu.querySelectorAll("li");
-
-        items.forEach(item => {
-            const text = item.textContent.toLowerCase();
-            item.style.display = text.includes(filter) ? "block" : "none";
-        });
-    };
-
-    // Add a team to the selected list
     window.selectTeam = (id, name) => {
         if (!selectedTeamsSet.has(id)) {
             selectedTeamsSet.add(id);
 
-            // Update hidden input value
+            // Update Symfony form hidden input
             selectedTeamsHiddenInput.value = Array.from(selectedTeamsSet).join(',');
 
             // Create selected team element
@@ -427,7 +409,7 @@ const popupLayer = document.getElementById('popup-layer');
             nameSpan.textContent = name;
 
             const removeButton = document.createElement('span');
-            removeButton.textContent = '×'; // Unicode for 'X'
+            removeButton.textContent = '×'; 
             removeButton.classList.add('remove-button');
             removeButton.onclick = () => {
                 selectedTeamsSet.delete(id);
@@ -437,21 +419,18 @@ const popupLayer = document.getElementById('popup-layer');
 
             selectedItem.appendChild(nameSpan);
             selectedItem.appendChild(removeButton);
-
             selectedTeamsList.appendChild(selectedItem);
         }
     };
 
-    // Show dropdown on input focus
     teamsSearchInput.addEventListener("focus", () => {
         teamsDropdownMenu.style.display = "block";
     });
 
-    // Hide dropdown on input blur
     teamsSearchInput.addEventListener("blur", () => {
         setTimeout(() => {
             teamsDropdownMenu.style.display = "none";
-        }, 200); // Allow time for clicks to register
+        }, 200);
     });
 });
 

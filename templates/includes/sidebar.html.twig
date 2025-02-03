@@ -4,9 +4,14 @@
     </div>
     {% if not is_granted('ROLE_MANAGER') %}
     <h2 class="mobile">Service DPO - {{app.user.user.companyName}}</h2>
-    {% endif %}
+   
     <a href="{{ path('user_account') }}" class="mobile">Voir mon compte</a>
-
+ {% endif %}
+  {% if is_granted('ROLE_MANAGER') %}
+    
+   
+    <a href="{{ path('manager_account') }}" class="mobile">Voir mon compte</a>
+ {% endif %}
     <ul class="side-menu mobile">
         {% if is_granted('ROLE_MANAGER') %}
             {% if is_granted('ROLE_DPO') %}
@@ -163,7 +168,9 @@ Registre des incidents
                 <a class="dropdown-item" href="{{ path('default_logout') }}">Déconnexion</a>
             </div>
         </div>
-   
+    {% if not is_granted('ROLE_MANAGER') %}
+    
+
     <div style="display: flex; justify-content: center; gap: 10px; margin-top: 10px;">
         <!-- MON MDP Dropdown -->
         <div class="dropdown">
@@ -182,6 +189,7 @@ Registre des incidents
             
         </div>
     </div>
+     {% endif %}
 </div>
 
 <div class="menu-toggle" id="menu-toggle">
