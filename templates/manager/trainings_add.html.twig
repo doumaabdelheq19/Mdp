@@ -19,10 +19,10 @@
         {{ form_start(form, { "attr": { "class": "sous-traitantform", "enctype": "multipart/form-data" } }) }}
 
         <!-- Questionnaire Information -->
-        <div class="sectt">
+        <div class="sectt" style="border-top:none">
             <h3>Informations</h3>
             <div class="form-group">
-                <div class="form-group1">
+                <div class="form-group1" style="width:100%">
                     {{ form_label(form.title) }}
                     {{ form_widget(form.title, {'attr': {'class': 'form-control'}}) }}
                 </div>
@@ -30,28 +30,37 @@
 
             <!-- File Upload -->
             <div class="form-group mt-3">
-                <label>Image du questionnaire</label>
-                <button type="button" class="file-button" onclick="document.getElementById('fileInput').click();">
+             <div class="form-group1 mt-3">
+                <label>Image d'entête du questionnaire</label>
+                <button type="button" class="file-button" onclick="document.getElementById('appbundle_training_pictureFile').click();">
                     <i class="fa fa-file"></i> Joindre une image
                 </button>
                 {{ form_widget(form.pictureFile, {'attr': {'id': 'fileInput', 'class': 'd-none', 'onchange': 'updateFileName(this)'}}) }}
                 <div class="invalid-feedback">{{ form_errors(form.pictureFile) | striptags }}</div>
             </div>
+            </div>
         </div>
 
         <!-- Selection of Users -->
         <div class="sectt">
-            <h3>Disponibilité</h3>
-            <div class="custom-control custom-checkbox my-2">
+         
+            <div class="custom-control checkbox-group my-2">
+               {{ form_widget(form.active, {'attr': {'class': 'custom-control-input'}}) }}
+                        {{ form_label(form.active, null, {'label_attr': {'class': 'custom-control-label'}}) }}
+            </div>
+       
+            <div class="custom-control checkbox-group my-2">
                 {{ form_widget(form.availableForAll, {'attr': {'class': 'custom-control-input'}}) }}
                 {{ form_label(form.availableForAll, null, {'label_attr': {'class': 'custom-control-label'}}) }}
             </div>
 
             <p>OU</p>
-
-            <button type="button" onclick="openUsersModal();" class="btn btn-primary">Sélectionner des utilisateurs</button>
+<br>
+            <button type="button" onclick="openUsersModal();" class="imprimer">Sélectionner des clients</button>
             <div id="users-selected">{{ usersStr|join(', ') }}</div>
             {% do form.users.setRendered() %}
+            <input type="hidden" id="selected_users" name="selected_users" value="{{ users|join(',') }}">
+
         </div>
 
         <!-- Ajouter un Contenu Section -->
@@ -61,18 +70,52 @@
                 <!-- Dynamically added questions will appear here -->
             </div>
             <div class="col-12 d-flex">
-                <button type="button" class="btn btn-success btn-rounded-circle mr-2 content_add_button" onclick="addQuestion();">
-                    <i class="mdi mdi-plus"></i>
-                </button>
-                <h5 class="pt-2">Ajouter une question</h5>
+                <a onclick="addQuestion();" class="ajoutercilent">
+                    <i class="mdi mdi-plus"></i>   <h5 class="pt-2">Ajouter une question</h5>
+                </a>
+             
             </div>
         </div>
+        <br>
+        <br>
 
         <!-- Submit Button -->
         <button type="submit" class="submit-button">Enregistrer</button>
 
         {{ form_end(form) }}
     </div>
+    <div class="modal fade" id="ModalUsers" tabindex="-1" role="dialog"
+                         aria-labelledby="ModalUsers" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalCenterTitle">Clients</h5>
+                                    <button type="button" class="close" data-dismiss="modal"
+                                            aria-label="Fermer">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <span onclick="selectAllUsers();" style="cursor: pointer;">Tout sélectionner</span> / <span onclick="unselectAllUsers();" style="cursor: pointer;">Tout désélectionner</span>
+                                    </div>
+                                    <div id="ModalUsersContent">
+                                        {% for chk in form.users %}
+                                            <div class="custom-control custom-checkbox">
+                                                {{ form_widget(chk, {'attr': {'class': 'custom-control-input checkbox-user'} }) }}
+                                                {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label'}}) }}
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-light-secondary" data-dismiss="modal">
+                                        Fermer
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 </div>
 
 {% endblock %}
@@ -80,65 +123,149 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        var questionCount = 1;
+      var questionCount = 1;
+var selectedUsers = {{ users|json_encode|raw }}; 
 
-        // File Upload Button Update
-        function updateFileName(input) {
-            const button = document.querySelector('.file-button');
-            if (input.files.length > 0) {
-                button.innerHTML = `<i class="fa fa-file"></i> ${input.files[0].name}`;
-            } else {
-                button.innerHTML = `<i class="fa fa-file"></i> Joindre une image`;
-            }
+// File Upload Button Update
+function updateFileName(input) {
+    const button = document.querySelector('.file-button');
+    if (input.files.length > 0) {
+        button.innerHTML = `<i class="fa fa-file"></i> ${input.files[0].name}`;
+    } else {
+        button.innerHTML = `<i class="fa fa-file"></i> Joindre une image`;
+    }
+}
+
+// Function to add new questions dynamically
+function addQuestion() {
+    const container = document.getElementById('content_container');
+
+    var questionBlock = document.createElement("div");
+    questionBlock.className = "form-group1";
+
+    var questionHeader = document.createElement("h5");
+    questionHeader.innerText = "Question " + questionCount;
+    questionBlock.appendChild(questionHeader);
+
+    var questionInput = document.createElement("input");
+    questionInput.className = "w-100 form-control mb-2";
+    questionInput.setAttribute("type", "text");
+    questionInput.setAttribute("name", "form_items[" + questionCount + "][0]");
+    questionInput.setAttribute("placeholder", "Intitulé de la question");
+
+    var answerType = document.createElement("select");
+    answerType.className = "w-100 form-control mb-2";
+    answerType.setAttribute("name", "form_items[" + questionCount + "][2]");
+    answerType.innerHTML = `
+        <option value="single">Choix unique</option>
+        <option value="multiple">Choix multiple</option>
+        <option value="text">Réponse texte</option>`;
+
+    var choicesInput = document.createElement("textarea");
+    choicesInput.className = "w-100 form-control mb-2";
+    choicesInput.setAttribute("name", "form_items[" + questionCount + "][1]");
+    choicesInput.setAttribute("placeholder", "Ajoutez les choix (1 par ligne)");
+
+    var removeBtn = document.createElement("button");
+    removeBtn.className = "btn btn-dangerr btn-sm";
+    removeBtn.innerText = "Supprimer";
+    removeBtn.onclick = function () {
+        questionBlock.remove();
+        questionCount--;
+    };
+
+    questionBlock.appendChild(questionInput);
+    questionBlock.appendChild(answerType);
+    questionBlock.appendChild(choicesInput);
+    questionBlock.appendChild(removeBtn);
+    container.appendChild(questionBlock);
+
+    questionCount++;
+}
+
+// Function to update hidden input field with selected users
+function updateSelectedUsers() {
+    document.getElementById("selected_users").value = selectedUsers.join(",");
+}
+
+// Open Users Modal
+function openUsersModal() {
+    $.ajax({
+        type: "POST",
+        async: true,
+        url: "{{ path('manager_json_users') }}",
+        data: {},
+        success: function (content) {
+            var ModalUsersContent = document.getElementById("ModalUsersContent");
+            ModalUsersContent.innerHTML = "";
+
+            content.forEach(item => {
+                var div = document.createElement("div");
+                div.className = "custom-control custom-checkbox";
+
+                var input = document.createElement("input");
+                input.className = "custom-control-input checkbox-user";
+                input.type = "checkbox";
+                input.name = "appbundle_training[users][]";
+                input.value = item.id;
+                input.id = "appbundle_training_users_" + item.id;
+
+                if (selectedUsers.includes(item.id)) {
+                    input.checked = true;
+                }
+
+                input.addEventListener('change', function() {
+                    if (this.checked) {
+                        if (!selectedUsers.includes(parseInt(this.value))) {
+                            selectedUsers.push(parseInt(this.value));
+                        }
+                    } else {
+                        selectedUsers = selectedUsers.filter(id => id !== parseInt(this.value));
+                    }
+                    refreshUsersContent();
+                    updateSelectedUsers();
+                });
+
+                var label = document.createElement("label");
+                label.className = "custom-control-label";
+                label.setAttribute("for", input.id);
+                label.innerText = item.text;
+
+                div.appendChild(input);
+                div.appendChild(label);
+                ModalUsersContent.appendChild(div);
+            });
+
+            $('#ModalUsers').modal('show');
         }
+    });
+}
 
-        // Function to add new questions dynamically
-        function addQuestion() {
-            const container = document.getElementById('content_container');
-
-            var questionBlock = document.createElement("div");
-            questionBlock.className = "w-100 my-4";
-
-            var questionHeader = document.createElement("h5");
-            questionHeader.innerText = "Question " + questionCount;
-            questionBlock.appendChild(questionHeader);
-
-            var questionInput = document.createElement("input");
-            questionInput.className = "w-100 form-control mb-2";
-            questionInput.setAttribute("type", "text");
-            questionInput.setAttribute("name", "form[questions][" + questionCount + "][title]");
-            questionInput.setAttribute("placeholder", "Intitulé de la question");
-
-            var answerType = document.createElement("select");
-            answerType.className = "w-100 form-control mb-2";
-            answerType.setAttribute("name", "form[questions][" + questionCount + "][type]");
-            answerType.innerHTML = `
-                <option value="single">Choix unique</option>
-                <option value="multiple">Choix multiple</option>
-                <option value="text">Réponse texte</option>
-            `;
-
-            var choicesInput = document.createElement("textarea");
-            choicesInput.className = "w-100 form-control mb-2";
-            choicesInput.setAttribute("name", "form[questions][" + questionCount + "][choices]");
-            choicesInput.setAttribute("placeholder", "Ajoutez les choix (1 par ligne)");
-
-            var removeBtn = document.createElement("button");
-            removeBtn.className = "btn btn-danger btn-sm";
-            removeBtn.innerText = "Supprimer";
-            removeBtn.onclick = function () {
-                questionBlock.remove();
-                questionCount--;
-            };
-
-            questionBlock.appendChild(questionInput);
-            questionBlock.appendChild(answerType);
-            questionBlock.appendChild(choicesInput);
-            questionBlock.appendChild(removeBtn);
-
-            container.appendChild(questionBlock);
-
-            questionCount++;
+// Select/Deselect All Users
+function selectAllUsers() {
+    $('.checkbox-user').prop('checked', true);
+    $('.checkbox-user').each(function () {
+        if (!selectedUsers.includes(parseInt($(this).val()))) {
+            selectedUsers.push(parseInt($(this).val()));
         }
+    });
+    refreshUsersContent();
+    updateSelectedUsers();
+}
+
+function unselectAllUsers() {
+    $('.checkbox-user').prop('checked', false);
+    selectedUsers = [];
+    refreshUsersContent();
+    updateSelectedUsers();
+}
+
+// Refresh User List Display
+function refreshUsersContent() {
+    document.getElementById("users-selected").innerText = selectedUsers.join(", ");
+}
+
+
     </script>
 {% endblock %}
+

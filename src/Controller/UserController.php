@@ -4115,6 +4115,7 @@ class UserController extends AbstractController
 
         public function systemsAction(Request $request)
         {
+            // Query systems for the current user
             if ($this->getUser()->getUser()->getParentUser()) {
                 $systemsQuery = $this->getDoctrine()->getRepository(System::class)
                     ->findForUserWithGroup($this->getUser()->getUser(), $this->getUser()->getUser()->getParentUser());
@@ -4125,10 +4126,29 @@ class UserController extends AbstractController
         
             // Initialize system categories
             $systems = [
-                "computing" => ["network" => [], "security" => [], "administration" => [], "device" => [], "software" => [], "server" => []],
-                "physical" => ["partitioning" => [], "information" => []],
-                "action" => ["minimization" => [], "anonymization" => [], "pseudonymization" => [], "sensitization" => [], "supervision" => [], "destruction" => []],
-                "supplier" => ["supplier" => []]
+                "computing" => [
+                    "network" => [],
+                    "security" => [],
+                    "administration" => [],
+                    "device" => [],
+                    "software" => [],
+                    "server" => [],
+                ],
+                "physical" => [
+                    "partitioning" => [],
+                    "information" => [],
+                ],
+                "action" => [
+                    "minimization" => [],
+                    "anonymization" => [],
+                    "pseudonymization" => [],
+                    "sensitization" => [],
+                    "supervision" => [],
+                    "destruction" => [],
+                ],
+                "supplier" => [
+                    "supplier" => []
+                ]
             ];
         
             // Serialize systems for frontend
@@ -4173,11 +4193,10 @@ class UserController extends AbstractController
                 $systemsStd[$system->getType()][$system->getSubtype()]['items'][] = $system;
             }
         
-            // Get the last added type and subtype from URL
+            // Build the mind map
+            $mindMapHeight = 0;
             $addedType = $request->query->get('addedType');
             $addedSubtype = $request->query->get('addedSubtype');
-        
-            // Build the mind map
             $mindMap = [
                 "meta" => [
                     "name" => "Cartographie SI",
@@ -4187,42 +4206,77 @@ class UserController extends AbstractController
                 "format" => "node_tree",
                 "data" => [
                     "id" => "root",
-                    "topic" => "<div class='node-content'><i class='fa fa-sitemap'></i><div class='text-wrapper'>Système d'information</div></div>",
+                    "topic" => "
+                        <div class='border border1'><div class='circle'></div></div>
+                        <div class='border border2'><div class='circle'></div></div>
+                        <div class='border border3'><div class='circle'></div></div>
+                        <div class='border border4'><div class='circle'></div></div>
+                        <div class='node-content'>
+                            <svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 16 16'><path fill='currentColor' fill-rule='evenodd' d='M6.146 2.153a.5.5 0 0 1 .354-.146h3a.5.5 0 0 1 .5.5V4.51a.5.5 0 0 1-.5.5H8.497V7h4.5a.5.5 0 0 1 .5.5V10H14.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h.997V8h-4v2H9.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h.997V8h-4v2H4.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h.997V7.5a.5.5 0 0 1 .5-.5h4.5V5.01H6.5a.5.5 0 0 1-.5-.5V2.508a.5.5 0 0 1 .146-.354' clip-rule='evenodd'/></svg>
+                            <div class='text-wrapper'>Système d'information</div>
+                        </div>",
                     "expanded" => true,
                     "children" => []
                 ]
             ];
         
+            // Add custom French names for specific nodes
+            $customNames = [
+                "computing" => "Informatique",
+                "physical" => "Physique",
+                "action" => "Action",
+                "supplier" => "Prestataires de SI"
+            ];
+        
             foreach ($systemsStd as $type => $categories) {
                 $node = [
                     "id" => $type,
-                    "topic" => "<div class='node-content'><i class='fa " . $categories[array_key_first($categories)]['icon'] . "'></i><div class='text-wrapper'>" . ucfirst($type) . "</div></div>",
+                    "topic" => "
+                        <div class='border border1'><div class='circle'></div></div>
+                        <div class='border border2'><div class='circle'></div></div>
+                        <div class='border border3'><div class='circle'></div></div>
+                        <div class='border border4'><div class='circle'></div></div>
+                        <div class='node-content'>
+                            <i class='fa " . $categories[array_key_first($categories)]['icon'] . "'></i>
+                            <div class='text-wrapper'>" . ($customNames[$type] ?? ucfirst($type)) . "</div>
+                        </div> ",
                     "direction" => "right",
-                    "expanded" => ($type === $addedType), // Keep type expanded if it was last added
+                    "expanded" => ($type === $addedType),
                     "children" => []
                 ];
         
                 foreach ($categories as $subtype => $details) {
-                    $subNode = [
+                    $subnode = [
                         "id" => "{$type}_{$subtype}",
-                        "topic" => "<div class='node-content'><i class='fa " . $details["icon"] . "'></i><div class='text-wrapper'>" . $details["label"] . "</div></div>
-                        <span class='node-2-actions'><a href=\"" . $this->generateUrl("user_systems_add") . "?type=" . $type . "&subtype=" . $subtype . "\" class=\"btn btn-sm btn-rounded-circle btn-primary\"><i class=\"mdi mdi-plus\"></i></a></span>",
-                        "expanded" => ($type === $addedType && $subtype === $addedSubtype), // Keep subtype expanded if it was last added
+                        "topic" => "
+                            <div class='border border1'><div class='circle'></div></div>
+                            <div class='border border2'><div class='circle'></div></div>
+                            <div class='border border3'><div class='circle'></div></div>
+                            <div class='border border4'><div class='circle'></div></div>
+                            <div class='node-content'>
+                                <i class='fa " . $details["icon"] . "'></i>
+                                <div class='text-wrapper'>" . $details["label"] . "</div>
+                            </div> <span class='node-2-actions'><a href=\"".$this->generateUrl("user_systems_add")."?type=".$type."&subtype=".$subtype."\" class=\"btn btn-sm btn-rounded-circle btn-primary\"><i class=\"mdi mdi-plus\"></i></a></span>",
+                        "expanded" => ($type === $addedType && $subtype === $addedSubtype),
                         "children" => []
                     ];
         
                     foreach ($systems[$type][$subtype] as $item) {
-                        $subNode["children"][] = [
+                        $subnode["children"][] = [
                             "id" => $item->getId(),
-                            "topic" => "<div class='node-content'><i class='fa " . $details["icon"] . "'></i><div class='text-wrapper'>" . $item->getName() . "</div></div>
-                            <span class='node-3-actions options'>
-                                <a href=\"" . $this->generateUrl("user_systems_edit", ["id" => $item->getId()]) . "\" class=\"btn edit my-1 mr-1\"><i class=\"mdi mdi-circle-edit-outline\"></i></a>
-                                <a href=\"" . $this->generateUrl("user_systems_delete", ["id" => $item->getId()]) . "\" class=\"btn delete my-1\" onclick=\"return confirm('Confirmer la suppression de cet élément ?');\"><i class=\"mdi mdi-close\"></i></a>
-                            </span>"
+                            "topic" => "
+                                <div class='border border1'><div class='circle'></div></div>
+                                <div class='border border2'><div class='circle'></div></div>
+                                <div class='border border3'><div class='circle'></div></div>
+                                <div class='border border4'><div class='circle'></div></div>
+                                <div class='node-content'>
+                                   
+                                    <div class='text-wrapper'>" . $item->getName() . "</div>
+                                </div> <span class='node-3-actions options'><a href=\"".$this->generateUrl("user_systems_edit", ["id" => $item->getId()])."\" class=\"btn edit my-1 mr-1\"><i class=\"mdi mdi-circle-edit-outline\"></i></a><a href=\"".$this->generateUrl("user_systems_delete", ["id" => $item->getId()])."\" class=\"btn delete my-1\"  onclick=\"return confirm('Confirmer la suppression de cet élément ?');\"><i class=\"mdi mdi-close\"></i></a></span>",
                         ];
                     }
         
-                    $node["children"][] = $subNode;
+                    $node["children"][] = $subnode;
                 }
         
                 $mindMap["data"]["children"][] = $node;
@@ -4232,10 +4286,12 @@ class UserController extends AbstractController
                 "systems" => $systems,
                 "systemsStd" => $systemsStd,
                 "mindMap" => $mindMap,
-                "mindMapHeight" => 12 * (38 * 1.5),
+                "mindMapHeight" => max(400, $mindMapHeight * 50),
                 "systemsJs" => $systemsJs,
             ]);
         }
+        
+        
         
         
         
@@ -5280,6 +5336,8 @@ class UserController extends AbstractController
         }
     
         $mindMapHeight = 0;
+        $addedType = $request->query->get('addedType');
+        $addedSubtype = $request->query->get('addedSubtype');
         $mindMap = [
             "meta" => [
                 "name" => "Cartographie SI",
@@ -5303,7 +5361,12 @@ class UserController extends AbstractController
             "children" => []
             ]
         ];
-    
+        $customNames = [
+            "computing" => "Informatique",
+            "physical" => "Physique",
+            "action" => "Action",
+            "supplier" => "Prestataires de SI"
+        ];
         $key1 = 0;
         foreach ($systemsStd as $type => $categories) {
             $node = [
@@ -5317,7 +5380,7 @@ class UserController extends AbstractController
                     <div class='text-wrapper'>" . ($customNames[$type] ?? ucfirst($type)) . "</div>
                 </div>",
                 "direction" => "right",
-                "expanded" => false,
+                "expanded" => ($type === $addedType),
                 "children" => []
             ];
     

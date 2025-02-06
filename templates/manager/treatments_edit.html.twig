@@ -28,7 +28,7 @@
             <div class="form-group-container">
                 {% for field in ['name', 'mainPurpose', 'purpose1', 'purpose2', 'purpose3', 'purpose4', 'purpose5', 'othersPurpose', 'description', 'category'] %}
                     {% if loop.index0 % 2 == 0 %}
-                        <div class="form-group">
+                           <div class="form-group" style="{{ field in ['description'] ? 'flex-direction:column' }}">
                     {% endif %}
 
                     <div class="form-group1" style="{{ field in ['description', 'category'] ? 'width: 100%;' : 'width: 48%; display: inline-block;' }}">

@@ -299,41 +299,11 @@ jmnode[nodeid="996"] .border {
 
 {% block content %}
 <div class="page">
-    <div class="flex">
-        <div class="four">
-            <div class="gap">
-                <h4>{{ 'cartographie_du_si'|trans }}</h4>
-                <p>{{ 'lensemble des elements de votre systeme dinformation'|trans }}</p>
-                <div style="display: flex; gap: 20px;">
-                    <div class="imprimer" style="width: 50%;">
-                        <p><a href="{{ path('user_systems_export_excel', {'type': 'computing'}) }}">{{ 'Exporter au format Excel'|trans }}</a></p>
-                    </div>
-                    <div class="exporter" style="width: 50%;">
-                        <p><a href="{{ path('user_systems_export') }}" target="_blanc">{{ 'Exporter au format PDF'|trans }}</a></p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="four">
-            <div class="gap">
-                <div style="width: 100%; display: flex; justify-content: space-between;">
-                    <h4 style="font-size: 16px;">{{ 'Mode d’affichage'|trans }}</h4>
-                    <div class="dropdownn">
-<button 
-    class="dropdown-button" 
-    onclick="window.location.href='{{path('user_systems_group') }}'">
-    {{ 'Cartographie du SI groupe'|trans }}
-</button>
-
-                        <ul class="dropdown-menu">
-                            <li>{{ 'Option 1'|trans }}</li>
-                            <li>{{ 'Option 2'|trans }}</li>
-                            <li>{{ 'Option 3'|trans }}</li>
-                        </ul>
-                    </div>
-                </div>
-                <p>{{ 'Choisissez entre vue mindmap, tableur et vue client'|trans }}</p>
-                <div style="display: flex; gap: 10px;">
+   
+ <div class="table-container-traitements">
+        <div class="header">
+            <h2>{{ 'cartographie_du_si'|trans }}</h2>
+           <div style="display: flex; gap: 10px;">
                     <p style="color: #438492;">{{ 'Vue mindmap'|trans }}</p>
                     <div class="switch">
                         <input type="checkbox" id="togglee" />
@@ -341,10 +311,8 @@ jmnode[nodeid="996"] .border {
                     </div>
                     <p>{{ 'Vue tableur'|trans }}</p>
                 </div>
-            </div>
         </div>
-    </div>
-
+        </div>
     <!-- Mindmap Section -->
     <div class="table-container-traitements mindmap">
         <div id="map"></div>
@@ -358,7 +326,7 @@ jmnode[nodeid="996"] .border {
 
     <div class="flex tableur" >
   <!-- Informatique Section -->
-  <div class="table-container-traitements catogro" style="width:48%">
+  <div class="table-container-traitements catogro" style="width:45%">
     <div class="header">
       <h2>{{ 'informatique'|trans }}</h2>
       <a href="{{ path('user_systems_export_excel', {'type': 'computing'}) }}" class="btn btn-primary">{{ 'export_excel'|trans }}</a>
@@ -377,6 +345,7 @@ jmnode[nodeid="996"] .border {
         <h4>{{ title }}</h4>
         <a href="{{ path('manager_systems_add') }}?type=computing&subtype={{ category }}">+ Ajouter un element</a>
       </div>
+      <div class="table-responsive">
       <table class="styled-table">
         <thead>
           <tr>
@@ -414,12 +383,13 @@ jmnode[nodeid="996"] .border {
           {% endfor %}
         </tbody>
       </table>
+      </div>
     </div>
     {% endfor %}
   </div>
 
   <!-- Physical Section -->
-  <div class="table-container-traitements catogro" style="width:100%">
+  <div class="table-container-traitements catogro" style="width:45%">
     <div class="header">
       <h2>{{ 'physique'|trans }}</h2>
       <a href="{{ path('user_systems_export_excel', {'type': 'physical'}) }}" class="btn btn-primary">{{ 'export_excel'|trans }}</a>
@@ -437,6 +407,7 @@ jmnode[nodeid="996"] .border {
         <h4>{{ title }}</h4>
         <a href="{{ path('manager_systems_add') }}?type=physical&subtype={{ category }}">+ Ajouter un element</a>
       </div>
+      <div class="table-responsive">
       <table class="styled-table">
         <thead>
           <tr>
@@ -463,10 +434,13 @@ jmnode[nodeid="996"] .border {
             <td >
             <div class="options">
               <button class="edit">
-                <a href="{{ path('user_systems_edit', {'id': item.id}) }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="m7 17.013l4.413-.015l9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583zM18.045 4.458l1.589 1.583l-1.597 1.582l-1.586-1.585zM9 13.417l6.03-5.973l1.586 1.586l-6.029 5.971L9 15.006z"/><path fill="currentColor" d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2"/></svg></a>
+                <a href="{{ path('manager_systems_edit', {'id': item.id}) }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="m7 17.013l4.413-.015l9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583zM18.045 4.458l1.589 1.583l-1.597 1.582l-1.586-1.585zM9 13.417l6.03-5.973l1.586 1.586l-6.029 5.971L9 15.006z"/><path fill="currentColor" d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2"/></svg></a>
               </button>
+              <a href="{{ path('manager_systems_translate', {'id': item.id, '_locale': 'en'}) }}" class="btn btn-secondary">
+                                    <button class="edit">EN</button>
+                                </a>
               <button class="delete">
-                <a href="{{ path('user_systems_delete', {'id': item.id}) }}" onclick="return confirm('Confirmer la suppression de cet élément ?');"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg></a>
+                <a href="{{ path('manager_systems_delete', {'id': item.id}) }}" onclick="return confirm('Confirmer la suppression de cet élément ?');"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg></a>
               </button>
               </div>
             </td>
@@ -474,13 +448,14 @@ jmnode[nodeid="996"] .border {
           {% endfor %}
         </tbody>
       </table>
+      </div>
     </div>
     {% endfor %}
   </div>
   </div>
    <div class="flex tableur" >
   <!-- Action section --> 
-  <div class="table-container-traitements catogro" style="width:48%">
+  <div class="table-container-traitements catogro" style="width:45%">
 
     <div class="header">
         <h2>{{ 'action'|trans }}</h2>
@@ -506,6 +481,7 @@ jmnode[nodeid="996"] .border {
             <h4>{{ title }}</h4>
             <a href="{{ path('manager_systems_add') }}?type=action&subtype={{ category }}">+ Ajouter un element</a>
         </div>
+        <div class="table-responsive">
         <table class="styled-table">
             <thead>
                 <tr>
@@ -552,11 +528,13 @@ jmnode[nodeid="996"] .border {
                 {% endfor %}
             </tbody>
         </table>
+        </div>
     </div>
+
     {% endfor %}
 </div>
 <!-- Suppler section -->
-<div class="table-container-traitements catogro" style="width:100%">
+<div class="table-container-traitements catogro" style="width:45%">
     <div class="header">
       <h2>{{ 'fournisseur'|trans }}</h2>
       <a href="{{ path('manager_systems_export_excel', {'type': 'supplier'}) }}" class="btn btn-primary">{{ 'export_excel'|trans }}</a>
@@ -573,6 +551,7 @@ jmnode[nodeid="996"] .border {
         <h4>{{ 'Prestataires du SI'|trans }}</h4>
         <a href="{{ path('manager_systems_add') }}?type=supplier&subtype=supplier">+ Ajouter un element</a>
       </div>
+      <div class="table-responsive">
       <table class="styled-table">
         <thead>
           <tr>
@@ -606,6 +585,7 @@ jmnode[nodeid="996"] .border {
           {% endfor %}
         </tbody>
       </table>
+      </div>
     </div>
   </div>
 

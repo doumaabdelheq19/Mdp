@@ -42,14 +42,14 @@
                     <tr>
                         <td>{{ training.title }}</td>
                         <td>{{ training.questions|length }}</td>
-                        <td>
+                        <td style="width:60px">
                             {% if training.answered %}
                                 <span class="badge badge-success">OUI</span>
                             {% else %}
                                 <span class="badge badge-danger">NON</span>
                             {% endif %}
                         </td>
-                        <td>
+                        <td style="width:60px">
                             {% if training.active %}
                                 <span class="badge badge-success">OUI</span>
                             {% else %}
@@ -61,11 +61,11 @@
                                 <a href="{{ path('manager_trainings_edit', {'id': training.id}) }}" class="btn btn-secondary">
                                     <button class="edit"><i class="fa fa-pencil-square-o"></i></button>
                                 </a>
-                                <a href="{{ path('manager_trainings_answer', {'id': training.id}) }}" class="btn btn-primary">
-                                    <button class="edit">Définir les réponses</button>
+                                <a style="width:100%" href="{{ path('manager_trainings_answer', {'id': training.id}) }}" class="btn btn-primary">
+                                    <button class="editer2">Définir les réponses</button>
                                 </a>
-                                <button type="button" class="btn btn-primary" onclick="showStats({{ training.id }})">
-                                    <i class="fa fa-bar-chart"></i> Voir les stats
+                                <button type="button" class="edit" onclick="showStats({{ training.id }})">
+                                    Voir les statistiques
                                 </button>
                                 <a href="{{ path('manager_trainings_delete', {'id': training.id}) }}" class="btn btn-danger" onclick="return confirm('Confirmer la suppression de ce questionnaire ?');">
                                     <button class="delete">
@@ -73,7 +73,7 @@
                                     </button>
                                 </a>
                                 <a href="{{ path('manager_trainings_translate', {'id': training.id, '_locale': 'en'}) }}" class="btn btn-primary">
-                                    EN
+                                       <button class="edit">EN</button>
                                 </a>
                             </div>
                         </td>

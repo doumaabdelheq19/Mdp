@@ -14,11 +14,11 @@
                 <p>{{ 'lensemble_de_vos_actions'|trans }}</p>
                 <div style="display: flex; gap: 20px;">
                    <a href="{{ path('user_actions_export') }}" style="text-decoration: none; color: inherit;" target="_blanc">
-    <div class="imprimer" style="width: 100%; cursor: pointer;">
-        <i class="fa fa-print" aria-hidden="true"></i>
-        <p>{{ 'imprimer_mon_plan_dactions'|trans }}</p>
-    </div>
-</a>
+                 <div class="imprimer" style="width: 100%; cursor: pointer;">
+                <i class="fa fa-print" aria-hidden="true"></i>
+               <p>{{ 'imprimer_mon_plan_dactions'|trans }}</p>
+                   </div>
+             </a>
 
                 </div>
             </div>
@@ -100,8 +100,11 @@
                         </td>
                         <td>{% if action.forDpo %}{{ 'mydigitplace'|trans }}{% else %}{{ 'client'|trans }}{% endif %}</td>
                         <td>{{ action.accountantLastName }} {{ action.accountantFirstName }}</td>
-                        <td>{{ action.date|date('d/m/Y') }}</td>
-                        <td style="color: #EF6D6F;">{{ action.setUpDate|date('d/m/Y') }}</td>
+                       <td>{{ action.date ? action.date|date('d/m/Y') : '' }}</td>
+<td style="color: #EF6D6F;">
+    {{ action.setUpDate ? action.setUpDate|date('d/m/Y') : '' }}
+</td>
+
                         <td>
                             {% if action.priority == 1 %}
                                 <span class="badge badge-danger" style="color: #EF6D6F; background-color: #ef6d6f2a; border-radius: 10px; padding: 7px 11px; width: auto;">{{ 'urgente'|trans }}</span>

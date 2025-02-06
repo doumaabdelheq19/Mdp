@@ -1737,31 +1737,32 @@ class ManagerController extends AbstractController
     
         // Define standard system categories (unchanged)
         $systemsStd = [
-            "computing" => [
-                "network" => ["label" => "Réseau", "icon" => "fa-wifi"],
-                "security" => ["label" => "Sécurité", "icon" => "fa-lock"],
-                "administration" => ["label" => "Administration", "icon" => "fa-users"],
-                "device" => ["label" => "Périphérique", "icon" => "fa-mobile-alt"],
-                "software" => ["label" => "Logiciel", "icon" => "fa-laptop"],
-                "server" => ["label" => "Serveur", "icon" => "fa-server"]
+            "computing" =>  [
+                "network" => ["label" => "Réseau", "items" => [], "icon" => "fa-print"],
+                "security" => ["label" => "Sécurité", "items" => [], "icon" => "fa-shield"],
+                "administration" => ["label" => "Administration", "items" => [], "icon" => "fa-users"],
+                "device" => ["label" => "Périphérique", "items" => [], "icon" => "fa-desktop"],
+                "software" => ["label" => "Logiciel", "items" => [], "icon" => "fa-window-maximize"],
+                "server" => ["label" => "Serveur", "items" => [], "icon" => "fa-server"],
             ],
             "physical" => [
-                "partitioning" => ["label" => "Cloisonnement", "icon" => "fa-building"],
-                "information" => ["label" => "Information", "icon" => "fa-info-circle"]
+                "partitioning" => ["label" => "Cloisonnement", "items" => [], "icon" => "fa-home"],
+                "information" => ["label" => "Information", "items" => [], "icon" => "fa-lightbulb-o"],
             ],
             "action" => [
-                "minimization" => ["label" => "Minimisation", "icon" => "fa-compress-arrows-alt"],
-                "anonymization" => ["label" => "Anonymisation", "icon" => "fa-user-secret"],
-                "pseudonymization" => ["label" => "Pseudonymisation", "icon" => "fa-user-shield"],
-                "sensitization" => ["label" => "Sensibilisation", "icon" => "fa-bullhorn"],
-                "supervision" => ["label" => "Contrôle", "icon" => "fa-search"],
-                "destruction" => ["label" => "Destruction", "icon" => "fa-trash"]
+                "minimization" => ["label" => "Minimisation", "items" => [], "icon" => "fa-user"],
+                "anonymization" => ["label" => "Anonymisation", "items" => [], "icon" => "fa-user-secret"],
+                "pseudonymization" => ["label" => "Pseudonymisation", "items" => [], "icon" => "fa-question-circle-o"],
+                "sensitization" => ["label" => "Sensibilisation", "items" => [], "icon" => "fa-exclamation-triangle"],
+                "supervision" => ["label" => "Contrôle", "items" => [], "icon" => "fa-search"],
+                "destruction" => ["label" => "Destruction", "items" => [], "icon" => "fa-trash-o"],
             ],
             "supplier" => [
-                "supplier" => ["label" => "Prestataires", "icon" => "fa-handshake"]
+                "supplier" => ["label" => "Prestataires", "items" => [], "icon" => "fa-calendar-check-o"],
             ]
         ];
-    
+        $addedType = $request->query->get('addedType');
+        $addedSubtype = $request->query->get('addedSubtype');
         // Build the mind map with meta info
         $mindMap = [
             "meta" => [
@@ -1772,11 +1773,15 @@ class ManagerController extends AbstractController
             "format" => "node_tree",
             "data" => [
                 "id" => "root",
-                "topic" => "
-                    <div class='node-content'>
-                        <i class='fa fa-network-wired'></i>
-                        <div class='text-wrapper'>Système d'information</div>
-                    </div>",
+                "topic" =>"
+                        <div class='border border1'><div class='circle'></div></div>
+                        <div class='border border2'><div class='circle'></div></div>
+                        <div class='border border3'><div class='circle'></div></div>
+                        <div class='border border4'><div class='circle'></div></div>
+                        <div class='node-content'>
+                            <svg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 16 16'><path fill='currentColor' fill-rule='evenodd' d='M6.146 2.153a.5.5 0 0 1 .354-.146h3a.5.5 0 0 1 .5.5V4.51a.5.5 0 0 1-.5.5H8.497V7h4.5a.5.5 0 0 1 .5.5V10H14.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h.997V8h-4v2H9.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h.997V8h-4v2H4.5a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 1 .5-.5h.997V7.5a.5.5 0 0 1 .5-.5h4.5V5.01H6.5a.5.5 0 0 1-.5-.5V2.508a.5.5 0 0 1 .146-.354' clip-rule='evenodd'/></svg>
+                            <div class='text-wrapper'>Système d'information</div>
+                        </div>",
                 "expanded" => true,
                 "children" => []
             ]
@@ -1794,24 +1799,31 @@ class ManagerController extends AbstractController
             $node = [
                 "id" => $type,
                 "topic" => "
-                    <div class='node-content'>
-                        <i class='fa " . $categories[array_key_first($categories)]['icon'] . "'></i>
-                        <div class='text-wrapper'>" . ($customNames[$type] ?? ucfirst($type)) . "</div>
-                    </div>",
-                "direction" => "right",
-                "expanded" => false,
+                <div class='border border1'><div class='circle'></div></div>
+                <div class='border border2'><div class='circle'></div></div>
+                <div class='border border3'><div class='circle'></div></div>
+                <div class='border border4'><div class='circle'></div></div>
+                <div class='node-content'>
+                    <i class='fa " . $categories[array_key_first($categories)]['icon'] . "'></i>
+                    <div class='text-wrapper'>" . ($customNames[$type] ?? ucfirst($type)) . "</div>
+                </div> ",
+                "expanded" => ($type === $addedType),
                 "children" => []
             ];
     
             foreach ($categories as $subtype => $details) {
                 $subnode = [
                     "id" => "{$type}_{$subtype}",
-                    "topic" => "
-                        <div class='node-content'>
-                            <i class='fa " . $details["icon"] . "'></i>
-                            <div class='text-wrapper'>" . $details["label"] . "</div>
-                        </div>",
-                    "expanded" => false,
+                    "topic" =>"
+                            <div class='border border1'><div class='circle'></div></div>
+                            <div class='border border2'><div class='circle'></div></div>
+                            <div class='border border3'><div class='circle'></div></div>
+                            <div class='border border4'><div class='circle'></div></div>
+                            <div class='node-content'>
+                                <i class='fa " . $details["icon"] . "'></i>
+                                <div class='text-wrapper'>" . $details["label"] . "</div>
+                            </div> <span class='node-2-actions'><a href=\"".$this->generateUrl("manager_systems_add")."?type=".$type."&subtype=".$subtype."\" class=\"btn btn-sm btn-rounded-circle btn-primary\"><i class=\"mdi mdi-plus\"></i></a></span>",
+                    "expanded" => ($type === $addedType && $subtype === $addedSubtype),
                     "children" => []
                 ];
     
@@ -1819,8 +1831,13 @@ class ManagerController extends AbstractController
                     $subnode["children"][] = [
                         "id" => $item->getId(),
                         "topic" => "
-                            <div class='node-content'>
-                                <div class='text-wrapper'>" . $item->getName() . "</div>
+                              <div class='border border1'><div class='circle'></div></div>
+                                <div class='border border2'><div class='circle'></div></div>
+                                <div class='border border3'><div class='circle'></div></div>
+                                <div class='border border4'><div class='circle'></div></div>
+                                <div class='node-content'>
+                                   
+                                    <div class='text-wrapper'>" . $item->getName() . "</div>
                             </div>
                             <span class='node-3-actions options'>
                                 <a href=\"".$this->generateUrl("manager_systems_edit", ["id" => $item->getId()])."\" class=\"btn edit my-1 mr-1\">
@@ -4518,7 +4535,8 @@ class ManagerController extends AbstractController
                     $content[] = [
                         'title' => $question[0]??null,
                         'choices' => explode("\n", str_replace("\r", "", $question[1]??null)),
-                        'multiple' => $question[2]==1?true:false,
+                     'multiple' => isset($question[2]) && $question[2] == 1 ? true : false,
+
                         'links' => explode("\n", str_replace("\r", "", $question[3]??null)),
                         'explanations' => $question[4]??null,
                     ];

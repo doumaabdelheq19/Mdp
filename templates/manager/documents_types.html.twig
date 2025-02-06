@@ -1,115 +1,84 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - Accueil
-{% endblock %}
-
-{% block body %}
-    {{ parent() }}
+    {{ parent() }} - Catégories de documents
 {% endblock %}
 
 {% block content %}
-    <div class="bg-dark">
-        <div class="container">
-            <div class="row align-items-center p-b-100 p-t-60">
+<div class="page">
+    <div class="table-container-traitements">
+        <div class="header headretour">
+            <a href="javascript:history.back()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024">
+                    <path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
+                </svg>
+            </a>
+            <h2>Catégories de documents</h2>
+        </div>
+         
 
-                <div class="col-md-6 text-white p-b-30">
-                    <div class="media">
-                        <div class="avatar avatar mr-3">
-                            <div class="avatar-title rounded-circle mdi mdi-sitemap  ">
-
-                            </div>
-                        </div>
-                        <div class="media-body">
-                            <h1>Base documentaire - Catégories</h1>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-12 col-sm-4 col-lg-3">
-                    <a href="{{ path('manager_documents_types_add') }}" class="card m-b-30">
-                        <div class="card-body">
-                            <div class="media">
-                                <div class="avatar mr-3">
-                                    <div class="avatar-title rounded-circle bg-primary"><i class="mdi mdi-shape-circle-plus"></i></div>
-                                </div>
-                                <div class="media-body p-t-5">
-                                    <h5 class="m-b-0">Créer</h5>
-                                    <p class="m-0">une sous-catégorie</p>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+    
+        <!-- Categories Table -->
+        <div class="sectt" style="border-top:none">
+            <h3>Liste des catégories</h3>
+<div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 20px;">
+            <div class="search-bar">
+                <span class="search-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
+                <input type="text" id="searchInput" placeholder="Rechercher une catégorie..." />
             </div>
+ <button class="exporter" style="width:auto">
+                <a href="{{ path('manager_documents_types_add') }}">
+                     Ajouter une sous-catégorie
+                </a>
+            </button>
+            </div>
+            <table class="styled-table" id="categoriesTable">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Catégorie principale</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for type in documentsTypes %}
+                        <tr>
+                            <td><a href="{{ path('manager_documents_types_edit', {'id': type.id}) }}">{{ type.libelle }}</a></td>
+                            <td>{% if type.parent %}{{ type.parent.libelle }}{% endif %}</td>
+                            <td>
+                            <div class="options">
+                                {% if type.parent %}
+                                    <button class="delete" style="margin-bottom:0px">
+                                        <a href="{{ path('manager_documents_types_delete', {'id': type.id}) }}" onclick="return confirm('Confirmer la suppression de cette sous-catégorie ?');">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+                                                <path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/>
+                                            </svg>
+                                        </a>
+                                    </button>
+                                {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
-    <div class="container pull-up">
-        <div class="row justify-content-md-end">
-
-        </div>
-        <div class="row">
-
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="table-responsive p-t-10">
-                            <table id="datatable" class="table" style="width:100%">
-                                <thead>
-                                <tr>
-                                    <th>Nom</th>
-                                    <th>Catégorie principale</th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for type in documentsTypes %}
-                                    <tr>
-                                        <td><a href="{{ path('manager_documents_types_edit', {'id': type.id}) }}">{{ type.libelle }}</a></td>
-                                        <td>{% if type.parent %}{{ type.parent.libelle }}{% endif %}</td>
-                                        <td>
-                                            {% if type.parent %}
-                                                <a href="{{ path('manager_documents_types_delete', {'id': type.id}) }}" class="btn btn-sm ml-1 mr-1 btn-danger" onclick="return confirm('Confirmer la suppression de cette sous-catégorie ?');">
-                                                    <i class="mdi mdi-close"></i>
-                                                </a>
-                                            {% endif %}
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+</div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script>
-        (function ($) {
-            'use strict';
-            $(document).ready(function () {
-                $('#datatable').DataTable({
-                    "language": {
-                        "search": "Rechercher :",
-                        "lengthMenu": "Afficher _MENU_ résultats par page",
-                        "zeroRecords": "Aucun résultat",
-                        "info": "Page _PAGE_ sur _PAGES_",
-                        "infoEmpty": "Aucune données sur ce tableau",
-                        "infoFiltered": "(filtered from _MAX_ total records)",
-                        "paginate": {
-                            "previous": "Précédent",
-                            "next": "Suivant",
+        // Search Filter Functionality
+        document.getElementById("searchInput").addEventListener("keyup", function () {
+            let filter = this.value.toLowerCase();
+            let rows = document.querySelectorAll("#categoriesTable tbody tr");
 
-                        }
-                    }
-                });
-
+            rows.forEach(row => {
+                let text = row.textContent.toLowerCase();
+                row.style.display = text.includes(filter) ? "" : "none";
             });
-
-        })(window.jQuery);
+        });
     </script>
 {% endblock %}

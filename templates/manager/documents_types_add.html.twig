@@ -1,100 +1,58 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - Accueil
-{% endblock %}
-
-{% block body %}
-    {{ parent() }}
+    {{ parent() }} - Catégories de documents
 {% endblock %}
 
 {% block content %}
-    <div class="bg-dark">
-        <div class="container">
-            <div class="row align-items-center p-b-100 p-t-60">
+<div class="page">
+    <div class="table-container-traitements">
+        <div class="header headretour">
+            <a href="javascript:history.back()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024">
+                    <path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
+                </svg>
+            </a>
+            <h2>Gérer les catégories de documents</h2>
+        </div>
 
-                <div class="col-md-6 text-white p-b-30">
-                    <div class="media">
-                        <div class="avatar avatar mr-3">
-                            <div class="avatar-title rounded-circle mdi mdi-sitemap  ">
+        {{ form_start(form, { "attr": { "class": "sous-traitantform" } }) }}
 
-                            </div>
-                        </div>
-                        <div class="media-body">
-                            <h1>Base documentaire - Catégories</h1>
-                        </div>
-                    </div>
-                </div>
+        <!-- Category Information -->
+        <div class="sectt">
+            <h3>Informations</h3>
+<div class="form-group">
+            <div class="form-group1" style="width:100%">
+                {{ form_label(form.libelle) }}
+                {{ form_widget(form.libelle, {'attr': {'class': 'form-control'}}) }}
             </div>
-        </div>
-    </div>
-    <div class="container pull-up">
-        <div class="row justify-content-md-end">
+             </div>
 
-        </div>
-        <div class="row">
-
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
-
-                        <div class="form-row">
-                            <div class="form-group floating-label col-md-6">
-                                {{ form_label(form.libelle) }}
-                                {{ form_widget(form.libelle, {'attr': {'class': 'form-control ' ~ ((form_errors(form.libelle) == '') ? '' : 'is-invalid')} }) }}
-                                <div class="invalid-feedback">{{ form_errors(form.libelle) | striptags  }}</div>
-                            </div>
-                            <div class="form-group floating-label col-md-6">
-                                {{ form_label(form.libelle_en) }}
-                                {{ form_widget(form.libelle_en, {'attr': {'class': 'form-control ' ~ ((form_errors(form.libelle_en) == '') ? '' : 'is-invalid')} }) }}
-                                <div class="invalid-feedback">{{ form_errors(form.libelle_en) | striptags  }}</div>
-                            </div>
-                        </div>
-
-                        <div class="form-row">
-                            <div class="form-group col-md-12">
-                                {{ form_label(form.parent) }}
-                                {{ form_widget(form.parent, {'attr': {'class': 'form-control ' ~ ((form_errors(form.parent) == '') ? '' : 'is-invalid')} }) }}
-                                <div class="invalid-feedback">{{ form_errors(form.parent) | striptags  }}</div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Enregistrer</button>
-                        </div>
-                        {{ form_end(form) }}
-                    </div>
-                </div>
+            <div class="form-group">
+            <div class="form-group1" style="width:100%">
+                {{ form_label(form.libelle_en) }}
+                {{ form_widget(form.libelle_en, {'attr': {'class': 'form-control'}}) }}
             </div>
+             </div>
+
+            <div class="form-group">
+            <div class="form-group1" style="width:97%">
+                {{ form_label(form.parent) }}
+                {{ form_widget(form.parent, {'attr': {'class': 'form-control'}}) }}
+            </div>
+             </div>
         </div>
+
+        <!-- Submit Button -->
+     <br>
+            <button type="submit" class="submit-button">Enregistrer</button>
+     
+
+        {{ form_end(form) }}
     </div>
+</div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    <script>
-        (function ($) {
-            'use strict';
-            $(document).ready(function () {
-                $('#datatable').DataTable({
-                    "language": {
-                        "search": "Rechercher :",
-                        "lengthMenu": "Afficher _MENU_ résultats par page",
-                        "zeroRecords": "Aucun résultat",
-                        "info": "Page _PAGE_ sur _PAGES_",
-                        "infoEmpty": "Aucune données sur ce tableau",
-                        "infoFiltered": "(filtered from _MAX_ total records)",
-                        "paginate": {
-                            "previous": "Précédent",
-                            "next": "Suivant",
-
-                        }
-                    }
-                });
-
-            });
-
-        })(window.jQuery);
-    </script>
 {% endblock %}

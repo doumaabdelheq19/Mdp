@@ -42,7 +42,7 @@
             <tbody>
                 {% for treatment in treatments %}
                     <tr>
-                        <td>{{ treatment.name }}</td>
+                        <td><a href="{{ path('manager_treatments_edit', {'id': treatment.id}) }}">{{ treatment.name }}</a></td>
                         <td style="color:#EF6D6F">{{ treatment.creationDate|date('d/m/Y') }}</td>
                         <td style="color:#EF6D6F">{{ treatment.editDate|date('d/m/Y') }}</td>
                         <td>{{ treatment.mainPurpose }}</td>

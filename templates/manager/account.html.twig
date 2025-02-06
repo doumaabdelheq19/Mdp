@@ -20,12 +20,7 @@
             <div class="header">
                 <h2><img src="/imgs/iconamoon_arrow-up-2-light.svg" alt=""> {{ 'mon_compte'|trans }}</h2>
             </div>
-            <a href="{{ path('user_account_print') }}" class="imprimer" target="_blank">
-                <div class="imprimer">
-                    <i class="fa fa-print" aria-hidden="true"></i>
-                    <p>Imprimer mes infos</p>
-                </div>
-            </a>
+          
         </div>
 
         {{ form_start(form, {'attr': {'class': 'sous-traitantform'}}) }}
@@ -96,7 +91,7 @@
         {{ form_end(form) }}
 
         <!-- Change Password -->
-        <div class="table-container-traitements">
+       
             {{ form_start(form2, {"attr": {"class": "sous-traitantform"}}) }}
             <div class="sectt no_boder">
                 <h3>Modifier mon mot de passe</h3>
@@ -117,7 +112,7 @@
             </div>
             <button type="submit" class="submit-button">Enregistrer</button>
             {{ form_end(form2) }}
-        </div>
+        
 
     </div>
 </div>

@@ -1,113 +1,111 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - Accueil
-{% endblock %}
-
-{% block body %}
-    {{ parent() }}
+    {{ parent() }} - Modifier le document
 {% endblock %}
 
 {% block content %}
-    <div class="bg-dark">
-        <div class="container">
-            <div class="row align-items-center p-b-100 p-t-60">
+<div class="page">
+    <div class="table-container-traitements">
+        <div class="header headretour">
+            <a href="javascript:history.back()">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024">
+                    <path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
+                </svg>
+            </a>
+            <h2>Modifier un document</h2>
+        </div>
 
-                <div class="col-md-6 text-white p-b-30">
-                    <div class="media">
-                        <div class="avatar avatar mr-3">
-                            <div class="avatar-title rounded-circle mdi mdi-sitemap  ">
+        {{ form_start(form, { "attr": { "class": "sous-traitantform", "enctype": "multipart/form-data" } }) }}
 
-                            </div>
-                        </div>
-                        <div class="media-body">
-                            <h1>Base documentaire - Modifier</h1>
-                        </div>
-                    </div>
+        <!-- Informations Section -->
+        <div class="sectt" style="border-top:none">
+            <h3>Informations</h3>
+
+            <div class="form-group">
+                <div class="form-group1" style="width:97%">
+                    {{ form_label(form.type) }}
+                    {{ form_widget(form.type, {'attr': {'class': 'form-control'}}) }}
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="container pull-up">
-        <div class="row justify-content-md-end">
 
-        </div>
-        <div class="row">
-
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
-
-                        <div class="form-row">
-                            <div class="form-group floating-label col-12">
-                                {{ form_label(form.type) }}
-                                {{ form_widget(form.type, {'attr': {'class': 'form-control ' ~ ((form_errors(form.type) == '') ? '' : 'is-invalid')} }) }}
-                                <div class="invalid-feedback">{{ form_errors(form.type) | striptags  }}</div>
-                            </div>
-                        </div>
-                        <div class="form-row">
-                            <div class="form-group floating-label col-md-6">
-                                {{ form_label(form.name) }}
-                                {{ form_widget(form.name, {'attr': {'class': 'form-control ' ~ ((form_errors(form.name) == '') ? '' : 'is-invalid')} }) }}
-                                <div class="invalid-feedback">{{ form_errors(form.name) | striptags  }}</div>
-                                <div class="my-2"></div>
-                                <a href="/uploads/documents/{{ filename }}" target="_blank" class="btn btn-light mb-0">Voir le document</a>
-                                <div class="my-2"></div>
-                                {{ form_label(form.file) }}
-                                {{ form_widget(form.file, {'attr': {'class': 'form-control ' ~ ((form_errors(form.file) == '') ? '' : 'is-invalid')} }) }}
-                                <div class="invalid-feedback">{{ form_errors(form.file) | striptags  }}</div>
-                            </div>
-                            {% if document.translatedEn %}
-                                <div class="form-group floating-label col-md-6">
-                                    {{ form_label(form.name_en) }}
-                                    {{ form_widget(form.name_en, {'attr': {'class': 'form-control ' ~ ((form_errors(form.name_en) == '') ? '' : 'is-invalid')} }) }}
-                                    <div class="invalid-feedback">{{ form_errors(form.name_en) | striptags  }}</div>
-                                    <div class="my-2"></div>
-                                    <a href="/uploads/documents/{{ filename_en }}" target="_blank" class="btn btn-light mb-0">Voir le document (EN)</a>
-                                    <div class="my-2"></div>
-                                    {{ form_label(form.file_en) }}
-                                    {{ form_widget(form.file_en, {'attr': {'class': 'form-control ' ~ ((form_errors(form.file_en) == '') ? '' : 'is-invalid')} }) }}
-                                    <div class="invalid-feedback">{{ form_errors(form.file_en) | striptags  }}</div>
-                                </div>
-                            {% endif %}
-                        </div>
-
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Enregistrer</button>
-                        </div>
-                        {{ form_end(form) }}
-                    </div>
+            <div class="form-group">
+                <div class="form-group1" style="width:100%">
+                    {{ form_label(form.name) }}
+                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
                 </div>
             </div>
+ <div class="form-group">
+            <div class="form-group1">
+                <label>Fichier actuel</label>
+                <a href="/uploads/documents/{{ filename }}" target="_blank" class="btn btn-light">
+                    <i class="mdi mdi-eye"></i> Voir le document
+                </a>
+            </div>
+            </div>
+
+            <!-- File Upload -->
+              <div class="form-group">
+            <div class="form-group1">
+                <label>Remplacer le fichier</label>
+                <button type="button" class="file-button" onclick="document.getElementById('form_file').click();">
+                    <i class="fa fa-file"></i> Joindre un fichier
+                </button>
+                {{ form_widget(form.file, {'attr': {'id': 'fileInput', 'class': 'd-none', 'onchange': 'updateFileName(this)'}}) }}
+                <div class="invalid-feedback">{{ form_errors(form.file) | striptags }}</div>
+            </div>
+            </div>
         </div>
+
+        {% if document.translatedEn %}
+        <!-- English Document Section -->
+        <div class="sectt">
+            <h3>Version Anglaise</h3>
+
+            <div class="form-group">
+                <div class="form-group1">
+                    {{ form_label(form.name_en) }}
+                    {{ form_widget(form.name_en, {'attr': {'class': 'form-control'}}) }}
+                </div>
+            </div>
+
+            <div class="form-group1">
+                <label>Fichier actuel (EN)</label>
+                <a href="/uploads/documents/{{ filename_en }}" target="_blank" class="btn btn-light">
+                    <i class="mdi mdi-eye"></i> Voir le document (EN)
+                </a>
+            </div>
+
+            <div class="form-group1">
+                <label>Remplacer le fichier (EN)</label>
+                <button type="button" class="file-button" onclick="document.getElementById('form_file').click();">
+                    <i class="fa fa-file"></i> Joindre un fichier
+                </button>
+                {{ form_widget(form.file_en, {'attr': {'id': 'fileInputEn', 'class': 'd-none', 'onchange': 'updateFileName(this)'}}) }}
+                <div class="invalid-feedback">{{ form_errors(form.file_en) | striptags }}</div>
+            </div>
+        </div>
+        {% endif %}
+<br>
+        <!-- Submit Button -->
+        <button type="submit" class="submit-button">Enregistrer</button>
+
+        {{ form_end(form) }}
     </div>
+</div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script>
-        (function ($) {
-            'use strict';
-            $(document).ready(function () {
-                $('#datatable').DataTable({
-                    "language": {
-                        "search": "Rechercher :",
-                        "lengthMenu": "Afficher _MENU_ résultats par page",
-                        "zeroRecords": "Aucun résultat",
-                        "info": "Page _PAGE_ sur _PAGES_",
-                        "infoEmpty": "Aucune données sur ce tableau",
-                        "infoFiltered": "(filtered from _MAX_ total records)",
-                        "paginate": {
-                            "previous": "Précédent",
-                            "next": "Suivant",
-
-                        }
-                    }
-                });
-
-            });
-
-        })(window.jQuery);
+        // Update button text when a file is selected
+        function updateFileName(input) {
+            const button = input.id === 'fileInput' ? document.querySelector('.file-button') : document.querySelector('.file-button-en');
+            if (input.files.length > 0) {
+                button.innerHTML = `<i class="fa fa-file"></i> ${input.files[0].name}`;
+            } else {
+                button.innerHTML = `<i class="fa fa-file"></i> Joindre un fichier`;
+            }
+        }
     </script>
 {% endblock %}

@@ -285,11 +285,11 @@ const popupLayer = document.getElementById('popup-layer');
         const popupp = popupLayer.querySelector('.popup');
 
         // Hide layer when clicking outside the popup
-        popupLayer.addEventListener('click', function (event) {
-            if (!popupp.contains(event.target)) {
-                popupLayer.style.display="none"; // Hide the layer
-            }
-        });
+      popupLayer.addEventListener('click', function (event) {
+    if (event.target === popupLayer) {
+        popupLayer.style.display = "none"; // Hide the layer
+    }
+});
 
             const closeIcon = document.querySelector(".popup-header svg");
     const openButton = document.querySelector("#openpopup");

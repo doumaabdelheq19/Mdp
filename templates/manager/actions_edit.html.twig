@@ -84,7 +84,7 @@
     <!-- Existing Files -->
     <div id="block_old_documents" class="form-group1">
         {% for document in action.documents %}
-            <div class="selected-item d-flex align-items-center mb-2">
+            <div class="selected-item d-flexx align-items-center mb-2">
                 <input class="form-control" type="text" name="appbundle_action_documents_{{ document.id }}" value="{{ document.name }}">
                 <a href="{{ path('manager_actions_deletedoc', {'action': action.id, 'document': document.id}) }}" class="btn btn-danger ml-2" onclick="return confirm('Confirmer la suppression de ce fichier ?\nCette action actualisera la page, toute autre modification sera perdue.');">
                     <i class="mdi mdi-file-remove"></i>

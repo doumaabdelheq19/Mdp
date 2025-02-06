@@ -13,7 +13,7 @@
                     <path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
                 </svg>
             </a>
-            <h2>{{ 'traduire_un_soustraitant_standard'|trans }}</h2>
+            <h2>{{ 'Traduire un soustraitant standard'|trans }}</h2>
         </div>
 
         {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
@@ -32,10 +32,10 @@
 
         <!-- Add Documents Section -->
         <div class="sectt">
-            <h3>{{ 'ajouter_des_documents'|trans }}</h3>
+            <h3>{{ 'Ajouter des documents'|trans }}</h3>
             <div id="block_documents" class="form-group-container"></div>
-            <button id="add_document_button" type="button" class="btn btn-secondary" style="margin-top: 10px;">
-                {{ 'ajouter_un_document'|trans }}
+            <button id="add_document_button" type="button" class="imprimer" style="margin-top: 10px;">
+                {{ '+ Ajouter un document'|trans }}
             </button>
         </div>
 
@@ -78,8 +78,7 @@
                 });
 
                 const removeIcon = document.createElement("i");
-                removeIcon.className = "mdi mdi-file-remove";
-                removeButton.appendChild(removeIcon);
+              
 
                 div.appendChild(nameInput);
                 div.appendChild(fileInput);
