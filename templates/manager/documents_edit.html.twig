@@ -35,25 +35,28 @@
                     {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
                 </div>
             </div>
- <div class="form-group">
-            <div class="form-group1">
-                <label>Fichier actuel</label>
-                <a href="/uploads/documents/{{ filename }}" target="_blank" class="btn btn-light">
-                    <i class="mdi mdi-eye"></i> Voir le document
-                </a>
-            </div>
+
+            <!-- Current File -->
+            <div class="form-group">
+                <div class="form-group1">
+                    <label>Fichier actuel</label>
+                    <a href="/uploads/documents/{{ filename }}" target="_blank" class="btn btn-light">
+                        <i class="mdi mdi-eye"></i> Voir le document
+                    </a>
+                </div>
             </div>
 
             <!-- File Upload -->
-              <div class="form-group">
-            <div class="form-group1">
-                <label>Remplacer le fichier</label>
-                <button type="button" class="file-button" onclick="document.getElementById('form_file').click();">
-                    <i class="fa fa-file"></i> Joindre un fichier
-                </button>
-                {{ form_widget(form.file, {'attr': {'id': 'fileInput', 'class': 'd-none', 'onchange': 'updateFileName(this)'}}) }}
-                <div class="invalid-feedback">{{ form_errors(form.file) | striptags }}</div>
-            </div>
+            <div class="form-group">
+                <div class="form-group1">
+                    <label>Remplacer le fichier</label>
+                    <button type="button" class="file-button" onclick="document.getElementById('form_file').click();">
+                        <i class="fa fa-file"></i> Joindre un fichier
+                    </button>
+                    {{ form_widget(form.file, {'attr': {'id': 'fileInput', 'class': 'd-none', 'onchange': 'updateFileName(this)'}}) }}
+                    <span id="file-name" class="selected-file"></span>
+                    <div class="invalid-feedback">{{ form_errors(form.file) | striptags }}</div>
+                </div>
             </div>
         </div>
 
@@ -63,30 +66,38 @@
             <h3>Version Anglaise</h3>
 
             <div class="form-group">
-                <div class="form-group1">
+                <div class="form-group1" style="width:100%">
                     {{ form_label(form.name_en) }}
                     {{ form_widget(form.name_en, {'attr': {'class': 'form-control'}}) }}
                 </div>
             </div>
 
-            <div class="form-group1">
-                <label>Fichier actuel (EN)</label>
-                <a href="/uploads/documents/{{ filename_en }}" target="_blank" class="btn btn-light">
-                    <i class="mdi mdi-eye"></i> Voir le document (EN)
-                </a>
+            <!-- Current File (EN) -->
+            <div class="form-group">
+                <div class="form-group1">
+                    <label>Fichier actuel (EN)</label>
+                    <a href="/uploads/documents/{{ filename_en }}" target="_blank" class="btn btn-light">
+                        <i class="mdi mdi-eye"></i> Voir le document (EN)
+                    </a>
+                </div>
             </div>
 
-            <div class="form-group1">
-                <label>Remplacer le fichier (EN)</label>
-                <button type="button" class="file-button" onclick="document.getElementById('form_file').click();">
-                    <i class="fa fa-file"></i> Joindre un fichier
-                </button>
-                {{ form_widget(form.file_en, {'attr': {'id': 'fileInputEn', 'class': 'd-none', 'onchange': 'updateFileName(this)'}}) }}
-                <div class="invalid-feedback">{{ form_errors(form.file_en) | striptags }}</div>
+            <!-- File Upload (EN) -->
+            <div class="form-group">
+                <div class="form-group1">
+                    <label>Remplacer le fichier (EN)</label>
+                    <button type="button" class="file-button-en" onclick="document.getElementById('fileInputEn').click();">
+                        <i class="fa fa-file"></i> Joindre un fichier
+                    </button>
+                    {{ form_widget(form.file_en, {'attr': {'id': 'fileInputEn', 'class': 'd-none', 'onchange': 'updateFileName(this)'}}) }}
+                    <span id="file-name-en" class="selected-file"></span>
+                    <div class="invalid-feedback">{{ form_errors(form.file_en) | striptags }}</div>
+                </div>
             </div>
         </div>
         {% endif %}
-<br>
+
+        <br>
         <!-- Submit Button -->
         <button type="submit" class="submit-button">Enregistrer</button>
 
@@ -98,13 +109,22 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        // Update button text when a file is selected
         function updateFileName(input) {
-            const button = input.id === 'fileInput' ? document.querySelector('.file-button') : document.querySelector('.file-button-en');
+            // Find the button and text span related to the input
+            const button = input.closest(".form-group").querySelector("button");
+            const fileNameSpan = input.closest(".form-group").querySelector(".selected-file");
+
             if (input.files.length > 0) {
+                // Update button text
                 button.innerHTML = `<i class="fa fa-file"></i> ${input.files[0].name}`;
+                // Show selected file name
+                fileNameSpan.textContent = input.files[0].name;
+                fileNameSpan.style.display = "inline";
             } else {
+                // Reset button text if no file is selected
                 button.innerHTML = `<i class="fa fa-file"></i> Joindre un fichier`;
+                fileNameSpan.textContent = "";
+                fileNameSpan.style.display = "none";
             }
         }
     </script>

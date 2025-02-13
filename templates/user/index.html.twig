@@ -170,7 +170,7 @@
                             <th>{{ 'Action'|trans }}</th>
                             <th>{{ 'Responsable'|trans }}</th>
                             <th>{{ 'Date de mise en place'|trans }}</th>
-                            <th>{{ 'Options'|trans }}</th>
+                            <th class="actionss">{{ 'Options'|trans }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -202,7 +202,7 @@
                             <th>{{ 'Délai de 72H'|trans }}</th>
                             <th>{{ 'Nature'|trans }}</th>
                             <th>{{ 'Date de mise en place'|trans }}</th>
-                            <th>{{ 'Options'|trans }}</th>
+                            <th class="actionss">{{ 'Options'|trans }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -307,7 +307,7 @@
                 {% for info in infos %}
                     <div class="item">
                         <div style="display: flex; gap: 15px; align-items: center;">
-                            <img src="{{ asset(info.picture) }}" alt="">
+<img src="{{ asset(info.picture ?: 'images/default.png') }}" alt="Image">
                             <div>
                                 <h4>{{ info.title }}</h4>
                                 <h5>{{ info.date|date('d/m/Y') }}</h5>

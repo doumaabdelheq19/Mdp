@@ -13,10 +13,17 @@
             <div class="gap">
                 <h4>{{ 'Base documentaire'|trans }}</h4>
                 
-                <div style="display: flex; gap: 20px;">
-                   <a data-toggle="modal" data-target="#AddDocumentModal" style="text-decoration: none; color: inherit;" target="_blanc">
+                <div style="display: flex; gap: 30px;">
+                   <a data-toggle="modal" data-target="#AddDocumentModal" style="width:250px;text-decoration: none; color: inherit;" target="_blanc">
                  <div class="imprimer" style="width: 100%; cursor: pointer;">
-               <i class="mdi mdi-file-plus"></i> Téléverser un document
+                Téléverser un document
+                   </div>
+             </a>
+
+
+              <a href="{{ path('manager_documents_types') }}" style="width:250px;text-decoration: none; color: inherit;" target="_blanc">
+                 <div class="exporter" style="width: 100%; cursor: pointer;">
+               Gérer les sous-catégories
                    </div>
              </a>
 
@@ -41,8 +48,8 @@
         {% for keyType, type in documentsTypes %}
         <div class="container-catogrophie" style="border: solid 1px #E1E8F4; border-radius:10px;padding:10px; margin-top:30px">
             <div class="title-cat">
-                <h4>{{ type.libelle }}</h4>
-                <a href="{{ path('manager_documents_types') }}">Gérer les sous-catégories</a>
+                <h4 style="color:#586E90">{{ type.libelle }}</h4>
+              
             </div>
             <table class="styled-table">
                 <thead>

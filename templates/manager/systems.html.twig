@@ -302,7 +302,7 @@ jmnode[nodeid="996"] .border {
    
  <div class="table-container-traitements">
         <div class="header">
-            <h2>{{ 'cartographie_du_si'|trans }}</h2>
+            <h2>{{ 'Mesures techniques standards'|trans }}</h2>
            <div style="display: flex; gap: 10px;">
                     <p style="color: #438492;">{{ 'Vue mindmap'|trans }}</p>
                     <div class="switch">
@@ -354,7 +354,7 @@ jmnode[nodeid="996"] .border {
             <th>Informations</th>
             <th>Type de Wifi</th>
             <th>Protocole Wifi</th>
-            <th>Options</th>
+            <th class="actionss">Options</th>
           </tr>
         </thead>
         <tbody>
@@ -372,10 +372,13 @@ jmnode[nodeid="996"] .border {
             <td >
             <div class="options">
               <button class="edit">
-                <a href="{{ path('user_systems_edit', {'id': item.id}) }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="m7 17.013l4.413-.015l9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583zM18.045 4.458l1.589 1.583l-1.597 1.582l-1.586-1.585zM9 13.417l6.03-5.973l1.586 1.586l-6.029 5.971L9 15.006z"/><path fill="currentColor" d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2"/></svg></a>
+                <a href="{{ path('manager_systems_edit', {'id': item.id}) }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="m7 17.013l4.413-.015l9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583zM18.045 4.458l1.589 1.583l-1.597 1.582l-1.586-1.585zM9 13.417l6.03-5.973l1.586 1.586l-6.029 5.971L9 15.006z"/><path fill="currentColor" d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2"/></svg></a>
               </button>
+              <a href="{{ path('manager_systems_translate', {'id': item.id, '_locale': 'en'}) }}" class="btn btn-secondary">
+                                    <button class="edit">EN</button>
+                                </a>
               <button class="delete">
-                <a href="{{ path('user_systems_delete', {'id': item.id}) }}" onclick="return confirm('Confirmer la suppression de cet élément ?');"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg></a>
+                <a href="{{ path('manager_systems_delete', {'id': item.id}) }}" onclick="return confirm('Confirmer la suppression de cet élément ?');"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg></a>
               </button>
               </div>
             </td>
@@ -416,7 +419,7 @@ jmnode[nodeid="996"] .border {
             <th>Informations</th>
             <th>Type de Wifi</th>
             <th>Protocole Wifi</th>
-            <th>Options</th>
+            <th class="actionss">Options</th>
           </tr>
         </thead>
         <tbody>
@@ -490,7 +493,7 @@ jmnode[nodeid="996"] .border {
                     <th>Informations</th>
                     <th>Type de Wifi</th>
                     <th>Protocole Wifi</th>
-                    <th>Options</th>
+                    <th class="actionss">Options</th>
                 </tr>
             </thead>
             <tbody>
@@ -508,15 +511,18 @@ jmnode[nodeid="996"] .border {
                     <td>
                         <div class="options">
                             <button class="edit">
-                                <a href="{{ path('user_systems_edit', {'id': item.id}) }}">
+                                <a href="{{ path('manager_systems_edit', {'id': item.id}) }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
                                         <path fill="currentColor" d="m7 17.013l4.413-.015l9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583zM18.045 4.458l1.589 1.583l-1.597 1.582l-1.586-1.585zM9 13.417l6.03-5.973l1.586 1.586l-6.029 5.971L9 15.006z"/>
                                         <path fill="currentColor" d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2"/>
                                     </svg>
                                 </a>
                             </button>
+                            <a href="{{ path('manager_systems_translate', {'id': item.id, '_locale': 'en'}) }}" class="btn btn-secondary">
+                                    <button class="edit">EN</button>
+                                </a>
                             <button class="delete">
-                                <a href="{{ path('user_systems_delete', {'id': item.id}) }}" onclick="return confirm('Confirmer la suppression de cet élément ?');">
+                                <a href="{{ path('manager_systems_delete', {'id': item.id}) }}" onclick="return confirm('Confirmer la suppression de cet élément ?');">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
                                         <path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/>
                                     </svg>
@@ -558,7 +564,7 @@ jmnode[nodeid="996"] .border {
             <th>Nom</th>
             <th>Type</th>
             <th>Informations</th>
-            <th>Options</th>
+            <th class="actionss">Options</th>
           </tr>
         </thead>
         <tbody>
@@ -574,10 +580,14 @@ jmnode[nodeid="996"] .border {
             <td>
               <div class="options">
                 <button class="edit">
-                  <a href="{{ path('user_systems_edit', {'id': item.id}) }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="m7 17.013l4.413-.015l9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583zM18.045 4.458l1.589 1.583l-1.597 1.582l-1.586-1.585zM9 13.417l6.03-5.973l1.586 1.586l-6.029 5.971L9 15.006z"/><path fill="currentColor" d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2"/></svg></a>
+                  <a href="{{ path('manager_systems_edit', {'id': item.id}) }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="m7 17.013l4.413-.015l9.632-9.54c.378-.378.586-.88.586-1.414s-.208-1.036-.586-1.414l-1.586-1.586c-.756-.756-2.075-.752-2.825-.003L7 12.583zM18.045 4.458l1.589 1.583l-1.597 1.582l-1.586-1.585zM9 13.417l6.03-5.973l1.586 1.586l-6.029 5.971L9 15.006z"/><path fill="currentColor" d="M5 21h14c1.103 0 2-.897 2-2v-8.668l-2 2V19H8.158c-.026 0-.053.01-.079.01c-.033 0-.066-.009-.1-.01H5V5h6.847l2-2H5c-1.103 0-2 .897-2 2v14c0 1.103.897 2 2 2"/></svg></a>
                 </button>
+
+                <a href="{{ path('manager_systems_translate', {'id': item.id, '_locale': 'en'}) }}" class="btn btn-secondary">
+                                    <button class="edit">EN</button>
+                                </a>
                 <button class="delete">
-                  <a href="{{ path('user_systems_delete', {'id': item.id}) }}" onclick="return confirm('Confirmer la suppression de cet élément ?');"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg></a>
+                  <a href="{{ path('manager_systems_delete', {'id': item.id}) }}" onclick="return confirm('Confirmer la suppression de cet élément ?');"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg></a>
                 </button>
               </div>
             </td>
@@ -674,5 +684,26 @@ jm.view.setZoom(initialZoom);
                 }
             });
         });
+
+       document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.table-container-traitements').forEach(container => {
+        const table = container.querySelector('.styled-table');
+        if (!table) return; // Ignore si aucun tableau trouvé
+
+        const rows = Array.from(table.querySelectorAll('tbody tr'));
+        const searchInput = container.querySelector('.search-bar input');
+
+        function filterTable() {
+            const query = searchInput.value.toLowerCase();
+
+            rows.forEach(row => {
+                row.style.display = row.innerText.toLowerCase().includes(query) ? '' : 'none';
+            });
+        }
+
+        searchInput.addEventListener('input', filterTable);
+    });
+});
+
     </script>
 {% endblock %}

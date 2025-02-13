@@ -62,24 +62,14 @@
     </div>
 
     <!-- Attach Practical Sheets Section -->
-    {% do form.sheets.setRendered() %}
-    <div class="form-group1" style="width:98%">
+    <div class="form-group">
+    <div class="form-group1" style="width:97%">
         <label for="sheets-search">{{ form_label(form.sheets) }}</label>
         <br>
-        <div class="dropdownform">
-            <input type="text" id="sheets-search" class="form-control" placeholder="{{ 'Rechercher des fiches pratiques'|trans }}" oninput="filterSheetsDropdown()">
-            <ul class="dropdown-menu" id="sheets-dropdown">
-                {% for sheet in form.sheets.vars.choices %}
-                    <li data-id="{{ sheet.value }}" onclick="selectSheet('{{ sheet.value }}', '{{ sheet.label }}')">
-                        <a href="javascript:void(0);" >
-                            {{ sheet.label }}
-                        </a>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-        <input type="hidden" id="selected-sheets" name="selectedSheets" value="" />
+        {{ form_widget(form.sheets, {'attr': {'class': 'form-control js-select2 ' ~ ((form_errors(form.sheets) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.sheets) | striptags  }}</div>
     </div>
+     </div>
 
     <!-- Existing Files -->
     <div id="block_old_documents" class="form-group1">
@@ -114,7 +104,20 @@
 
 {% block javascripts %}
     {{ parent() }}
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Inclure Select2 (CSS + JS) -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     <script>
+
+     $(document).ready(function() {
+            $('.js-select2').select2({
+                
+                allowClear: true,
+                width: '100%'
+            });
+        });
         document.getElementById("add_document_button").addEventListener("click", function () {
             const div = document.createElement("div");
             div.className = "form-group block_document";
@@ -145,49 +148,6 @@
             document.getElementById("block_documents").appendChild(div);
         });
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const sheetsSearchInput = document.getElementById("sheets-search");
-            const sheetsDropdownMenu = document.getElementById("sheets-dropdown");
-            const sheetsHiddenInput = document.getElementById("selected-sheets");
-            const selectedSheetsSet = new Set();
-
-            window.filterSheetsDropdown = () => {
-                const filter = sheetsSearchInput.value.toLowerCase();
-                const items = sheetsDropdownMenu.querySelectorAll("li");
-                items.forEach(item => {
-                    const text = item.textContent.toLowerCase();
-                    item.style.display = text.includes(filter) ? "block" : "none";
-                });
-            };
-
-            window.selectSheet = (id, name) => {
-                if (!selectedSheetsSet.has(id)) {
-                    selectedSheetsSet.add(id);
-                    sheetsHiddenInput.value = Array.from(selectedSheetsSet).join(',');
-
-                    const selectedItem = document.createElement('div');
-                    selectedItem.classList.add('selected-item', 'd-flex', 'align-items-center', 'mb-2');
-                    selectedItem.dataset.id = id;
-                    selectedItem.innerHTML = `<span>${name}</span> <span class="btn remove-button ml-2">x</span>`;
-                    selectedItem.querySelector('.remove-button').onclick = () => {
-                        selectedSheetsSet.delete(id);
-                        sheetsHiddenInput.value = Array.from(selectedSheetsSet).join(',');
-                        selectedItem.remove();
-                    };
-                    sheetsSearchInput.parentNode.appendChild(selectedItem);
-                }
-            };
-       // Show dropdown when input is focused
-    sheetsSearchInput.addEventListener("focus", () => {
-        sheetsDropdownMenu.style.display = "block";
-    });
-
-    // Hide dropdown when input loses focus
-    sheetsSearchInput.addEventListener("blur", () => {
-        setTimeout(() => {
-            sheetsDropdownMenu.style.display = "none";
-        }, 200); // Allow time for a click to register
-    });
-});
+        
     </script>
 {% endblock %}

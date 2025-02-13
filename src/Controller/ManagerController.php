@@ -4430,44 +4430,44 @@ class ManagerController extends AbstractController
     public function trainingsStatsAction(Request $request)
     {
         $training = $this->getDoctrine()->getRepository(Training::class)->findOneBy(["id" => $request->get("training")]);
-
+    
         if (!$training) {
             return new JsonResponse([
                 "success" => false
             ]);
         }
-
+    
         $questionsChoices = [];
         $questionsChoicesTotal = [];
         $questionsCount = [];
-
+    
         foreach ($training->getQuestions() as $questionKey => $question) {
             $questionsChoices[$questionKey] = $question["choices"];
             $questionsCount[$questionKey] = 0;
-
+    
             $questionsChoicesTotal[$questionKey] = [];
             foreach ($question["choices"] as $choiceKey => $choice) {
                 $questionsChoicesTotal[$questionKey][$choiceKey] = 0;
             }
         }
-
+    
         $trainingRequests = $this->getDoctrine()->getRepository(TrainingRequest::class)->findForTraining($training);
-
+    
         foreach ($trainingRequests as $trainingRequest) {
             if ($trainingRequest->getAnswerDate()) {
                 foreach ($training->getQuestions() as $key => $item) {
                     if (isset($questionsChoices[$key])) {
                         if ($item["choices"] == $questionsChoices[$key]) {
                             if (isset($trainingRequest->getUserAnswers()[$key])) {
-                                $questionsCount[$key] = $questionsCount[$key]+1;
+                                $questionsCount[$key] += 1;
                                 foreach ($item["choices"] as $choiceKey => $choice) {
                                     if ($item["multiple"]) {
                                         if (in_array($choiceKey, $trainingRequest->getUserAnswers()[$key])) {
-                                            $questionsChoicesTotal[$key][$choiceKey] = $questionsChoicesTotal[$key][$choiceKey]+1;
+                                            $questionsChoicesTotal[$key][$choiceKey] += 1;
                                         }
                                     } else {
                                         if ($choiceKey == $trainingRequest->getUserAnswers()[$key]) {
-                                            $questionsChoicesTotal[$key][$choiceKey] = $questionsChoicesTotal[$key][$choiceKey]+1;
+                                            $questionsChoicesTotal[$key][$choiceKey] += 1;
                                         }
                                     }
                                 }
@@ -4477,7 +4477,18 @@ class ManagerController extends AbstractController
                 }
             }
         }
+    
+        // ✅ Round percentages to 1 decimal place
+       // ✅ Round percentages correctly before passing to Twig
+foreach ($questionsChoicesTotal as $qKey => &$choices) {
+    foreach ($choices as $cKey => &$count) {
+        $total = $questionsCount[$qKey] ?? 1; // Avoid division by zero
+        $percentage = ($count / $total) * 100;
+        $count = number_format($percentage, 1, '.', ''); // Ensures 1 decimal place
+    }
+}
 
+    
         return new JsonResponse([
             "success" => true,
             "html" => $this->renderView('manager/includes/training_stats.html.twig', [
@@ -4488,6 +4499,8 @@ class ManagerController extends AbstractController
             ])
         ]);
     }
+    
+    
 
     /**
      * @Route("/trainings/add", name="trainings_add")

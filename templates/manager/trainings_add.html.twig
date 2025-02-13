@@ -58,33 +58,10 @@
 <br>
             <button type="button" onclick="openUsersModal();" class="imprimer">Sélectionner des clients</button>
             <div id="users-selected">{{ usersStr|join(', ') }}</div>
-            {% do form.users.setRendered() %}
             <input type="hidden" id="selected_users" name="selected_users" value="{{ users|join(',') }}">
 
         </div>
-
-        <!-- Ajouter un Contenu Section -->
-        <div class="sectt">
-            <h3>Ajouter un contenu</h3>
-            <div class="col-12" id="content_container">
-                <!-- Dynamically added questions will appear here -->
-            </div>
-            <div class="col-12 d-flex">
-                <a onclick="addQuestion();" class="ajoutercilent">
-                    <i class="mdi mdi-plus"></i>   <h5 class="pt-2">Ajouter une question</h5>
-                </a>
-             
-            </div>
-        </div>
-        <br>
-        <br>
-
-        <!-- Submit Button -->
-        <button type="submit" class="submit-button">Enregistrer</button>
-
-        {{ form_end(form) }}
-    </div>
-    <div class="modal fade" id="ModalUsers" tabindex="-1" role="dialog"
+  <div class="modal fade" id="ModalUsers" tabindex="-1" role="dialog"
                          aria-labelledby="ModalUsers" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
@@ -116,7 +93,28 @@
                             </div>
                         </div>
                     </div>
-</div>
+        <!-- Ajouter un Contenu Section -->
+        <div class="sectt">
+            <h3>Ajouter un contenu</h3>
+            <div class="col-12" id="content_container">
+                <!-- Dynamically added questions will appear here -->
+            </div>
+            <div class="col-12 d-flex">
+                <a onclick="addQuestion();" class="ajoutercilent">
+                    <i class="mdi mdi-plus"></i>   <h5 class="pt-2">Ajouter une question</h5>
+                </a>
+             
+            </div>
+        </div>
+        <br>
+        <br>
+
+        <!-- Submit Button -->
+        <button type="submit" class="submit-button">Enregistrer</button>
+
+        {{ form_end(form) }}
+    </div>
+  
 
 {% endblock %}
 
@@ -137,51 +135,113 @@ function updateFileName(input) {
 }
 
 // Function to add new questions dynamically
+
+
 function addQuestion() {
     const container = document.getElementById('content_container');
 
     var questionBlock = document.createElement("div");
-    questionBlock.className = "form-group1";
+    questionBlock.className = "form-group1 my-4"; // Garde le design du premier code
 
+    // Numéro de la question
     var questionHeader = document.createElement("h5");
     questionHeader.innerText = "Question " + questionCount;
     questionBlock.appendChild(questionHeader);
 
+    // Champ : Intitulé de la question
     var questionInput = document.createElement("input");
     questionInput.className = "w-100 form-control mb-2";
     questionInput.setAttribute("type", "text");
     questionInput.setAttribute("name", "form_items[" + questionCount + "][0]");
     questionInput.setAttribute("placeholder", "Intitulé de la question");
 
-    var answerType = document.createElement("select");
-    answerType.className = "w-100 form-control mb-2";
-    answerType.setAttribute("name", "form_items[" + questionCount + "][2]");
-    answerType.innerHTML = `
-        <option value="single">Choix unique</option>
-        <option value="multiple">Choix multiple</option>
-        <option value="text">Réponse texte</option>`;
-
+    // Champ : Choix (1 par ligne)
     var choicesInput = document.createElement("textarea");
     choicesInput.className = "w-100 form-control mb-2";
     choicesInput.setAttribute("name", "form_items[" + questionCount + "][1]");
     choicesInput.setAttribute("placeholder", "Ajoutez les choix (1 par ligne)");
+    choicesInput.setAttribute("rows", "4");
 
+    // Sélection type de réponse (radio boutons)
+    var radioContainer = document.createElement("div");
+    radioContainer.className = "mb-22 d-flex"; 
+
+    var radioUnique = createRadioOption("form_items[" + questionCount + "][2]", "0", "Choix unique", true, questionCount);
+    var radioMultiple = createRadioOption("form_items[" + questionCount + "][2]", "1", "Choix multiples", false, questionCount);
+    
+    radioContainer.appendChild(radioUnique);
+    radioContainer.appendChild(radioMultiple);
+
+    // Champ : Liens utiles
+    var linksInput = document.createElement("textarea");
+    linksInput.className = "w-100 form-control mb-2";
+    linksInput.setAttribute("name", "form_items[" + questionCount + "][3]");
+    linksInput.setAttribute("placeholder", "Liens utiles (1 par ligne)");
+    linksInput.setAttribute("rows", "3");
+
+    // Champ : Explication réponse
+    var explanationInput = document.createElement("textarea");
+    explanationInput.className = "w-100 form-control";
+    explanationInput.setAttribute("name", "form_items[" + questionCount + "][4]");
+    explanationInput.setAttribute("placeholder", "Explication de la réponse");
+    explanationInput.setAttribute("rows", "3");
+
+    // Bouton de suppression
     var removeBtn = document.createElement("button");
-    removeBtn.className = "btn btn-dangerr btn-sm";
+    removeBtn.className = "btn btn-dangerr btn-sm mt-2";
     removeBtn.innerText = "Supprimer";
     removeBtn.onclick = function () {
         questionBlock.remove();
-        questionCount--;
+        updateQuestionNumbers();
     };
 
+    // Ajouter les éléments au bloc question
     questionBlock.appendChild(questionInput);
-    questionBlock.appendChild(answerType);
     questionBlock.appendChild(choicesInput);
+    questionBlock.appendChild(radioContainer);
+    questionBlock.appendChild(linksInput);
+    questionBlock.appendChild(explanationInput);
     questionBlock.appendChild(removeBtn);
+
+    // Ajouter la question au conteneur principal
     container.appendChild(questionBlock);
 
     questionCount++;
+    updateQuestionNumbers();
 }
+
+// Fonction pour créer un bouton radio avec label
+function createRadioOption(name, value, labelText, checked, count) {
+    var radioDiv = document.createElement("div");
+    radioDiv.className = "custom-control custom-radio custom-control-inline";
+
+    var radioInput = document.createElement("input");
+    radioInput.className = "custom-control-input";
+    radioInput.setAttribute("type", "radio");
+    radioInput.setAttribute("value", value);
+    radioInput.setAttribute("name", name);
+    radioInput.setAttribute("id", "form_items_2_" + value + "_" + count);
+    if (checked) radioInput.setAttribute("checked", "checked");
+
+    var radioLabel = document.createElement("label");
+    radioLabel.className = "custom-control-label";
+    radioLabel.setAttribute("for", "form_items_2_" + value + "_" + count);
+    radioLabel.innerText = labelText;
+
+    radioDiv.appendChild(radioInput);
+    radioDiv.appendChild(radioLabel);
+
+    return radioDiv;
+}
+
+// Met à jour les numéros des questions
+function updateQuestionNumbers() {
+    var questionNumbers = document.getElementsByTagName('h5');
+    for (var j = 0; j < questionNumbers.length; j++) {
+        questionNumbers[j].innerText = 'Question ' + (j );
+    }
+}
+
 
 // Function to update hidden input field with selected users
 function updateSelectedUsers() {
@@ -189,6 +249,9 @@ function updateSelectedUsers() {
 }
 
 // Open Users Modal
+
+let selectedUserNames = {}; // Stocke les noms associés aux IDs
+
 function openUsersModal() {
     $.ajax({
         type: "POST",
@@ -213,6 +276,9 @@ function openUsersModal() {
                 if (selectedUsers.includes(item.id)) {
                     input.checked = true;
                 }
+
+                // Stocker le nom de l'utilisateur dans l'objet
+                selectedUserNames[item.id] = item.text;
 
                 input.addEventListener('change', function() {
                     if (this.checked) {
@@ -241,12 +307,13 @@ function openUsersModal() {
     });
 }
 
-// Select/Deselect All Users
+// Sélectionner/Désélectionner tous les utilisateurs
 function selectAllUsers() {
     $('.checkbox-user').prop('checked', true);
     $('.checkbox-user').each(function () {
-        if (!selectedUsers.includes(parseInt($(this).val()))) {
-            selectedUsers.push(parseInt($(this).val()));
+        let userId = parseInt($(this).val());
+        if (!selectedUsers.includes(userId)) {
+            selectedUsers.push(userId);
         }
     });
     refreshUsersContent();
@@ -260,10 +327,12 @@ function unselectAllUsers() {
     updateSelectedUsers();
 }
 
-// Refresh User List Display
+// Rafraîchir l'affichage des utilisateurs sélectionnés avec leurs **noms**
 function refreshUsersContent() {
-    document.getElementById("users-selected").innerText = selectedUsers.join(", ");
+    let selectedNames = selectedUsers.map(id => selectedUserNames[id]); // Convertir IDs en noms
+    document.getElementById("users-selected").innerText = selectedNames.join(", ");
 }
+
 
 
     </script>

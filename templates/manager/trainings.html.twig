@@ -34,7 +34,7 @@
                     <th>Nombre de questions</th>
                     <th>Réponses définies</th>
                     <th>Actif</th>
-                    <th>Actions</th>
+                    <th class="actionss">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -123,64 +123,70 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const rows = Array.from(document.querySelectorAll('#datatable tbody tr'));
-            const resultsSelect = document.getElementById('resultsSelect');
-            const paginationInfo = document.getElementById('paginationInfo');
-            const prevPage = document.getElementById('prevPage');
-            const nextPage = document.getElementById('nextPage');
-            const searchInput = document.getElementById('searchInput');
+document.addEventListener('DOMContentLoaded', function () {
+    const rows = Array.from(document.querySelectorAll('#datatable tbody tr'));
+    const resultsSelect = document.getElementById('resultsSelect');
+    const paginationInfo = document.getElementById('paginationInfo');
+    const prevPage = document.getElementById('prevPage');
+    const nextPage = document.getElementById('nextPage');
+    const searchInput = document.getElementById('searchInput');
 
-            let currentPage = 1;
-            let resultsPerPage = parseInt(resultsSelect.value);
-            let filteredRows = rows;
+    let currentPage = 1;
+    let resultsPerPage = parseInt(resultsSelect.value);
+    let filteredRows = [...rows]; // Create a copy of rows for filtering
 
-            function updateTable() {
-                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
-                const start = (currentPage - 1) * resultsPerPage;
-                const end = start + resultsPerPage;
+    function updateTable() {
+        const totalPages = Math.ceil(filteredRows.length / resultsPerPage) || 1;
+        currentPage = Math.min(currentPage, totalPages); // Ensure current page is within bounds
 
-                rows.forEach((row, index) => {
-                    row.style.display = filteredRows.includes(row) && index >= start && index < end ? '' : 'none';
-                });
+        const start = (currentPage - 1) * resultsPerPage;
+        const end = start + resultsPerPage;
 
-                paginationInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
-                prevPage.disabled = currentPage === 1;
-                nextPage.disabled = currentPage === totalPages;
-            }
+        // Hide all rows first
+        rows.forEach(row => row.style.display = 'none');
 
-            function filterTable() {
-                const query = searchInput.value.toLowerCase();
-                filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
-                currentPage = 1;
-                updateTable();
-            }
+        // Show only the rows for the current page
+        filteredRows.slice(start, end).forEach(row => row.style.display = '');
 
-            resultsSelect.addEventListener('change', function () {
-                resultsPerPage = parseInt(this.value);
-                currentPage = 1;
-                updateTable();
-            });
+        paginationInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
+        prevPage.disabled = currentPage === 1;
+        nextPage.disabled = currentPage >= totalPages;
+    }
 
-            prevPage.addEventListener('click', function () {
-                if (currentPage > 1) {
-                    currentPage--;
-                    updateTable();
-                }
-            });
+    function filterTable() {
+        const query = searchInput.value.toLowerCase();
+        filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
+        currentPage = 1; // Reset pagination to first page when searching
 
-            nextPage.addEventListener('click', function () {
-                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    updateTable();
-                }
-            });
+        updateTable();
+    }
 
-            searchInput.addEventListener('input', filterTable);
+    resultsSelect.addEventListener('change', function () {
+        resultsPerPage = parseInt(this.value);
+        currentPage = 1;
+        updateTable();
+    });
 
+    prevPage.addEventListener('click', function () {
+        if (currentPage > 1) {
+            currentPage--;
             updateTable();
-        });
+        }
+    });
+
+    nextPage.addEventListener('click', function () {
+        const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+        if (currentPage < totalPages) {
+            currentPage++;
+            updateTable();
+        }
+    });
+
+    searchInput.addEventListener('input', filterTable);
+
+    updateTable();
+});
+
 
         function showStats(trainingId) {
             $.ajax({
@@ -192,6 +198,20 @@
                     if (content.success) {
                         document.getElementById("modal_content_body").innerHTML = content.html;
                         $('#modal_content').modal('show');
+                        function roundDisplayedStats() {
+    document.querySelectorAll("#modal_content_body .badge-info").forEach(stat => {
+        let value = parseFloat(stat.textContent.trim()); // Get number from text
+        if (!isNaN(value)) {
+            stat.textContent = Math.round(value) + "%"; // Round to whole number
+        }
+    });
+}
+
+// Run after content is inserted into modal
+$(document).on('shown.bs.modal', '#modal_content', function () {
+    roundDisplayedStats();
+});
+
                     }
                 }
             });

@@ -3,7 +3,11 @@
 {% block title %}
     {{ parent() }} - Editer une info
 {% endblock %}
-
+{% block stylesheets %}
+    {{ parent() }}
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+{% endblock %}
 {% block content %}
 <div class="page">
     <div class="table-container-traitements">
@@ -86,7 +90,12 @@
         {{ form_end(form) }}
     </div>
 </div>
-
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         flatpickr(".datepicker-js", {
@@ -98,7 +107,9 @@
             maxDate: "today",
         });
 
-        function updateFileName(input) {
+       
+    });
+     function updateFileName(input) {
             const button = document.querySelector('.file-button');
             if (input.files.length > 0) {
                 button.innerHTML = `<i class="fa fa-file" aria-hidden="true"></i> ${input.files[0].name}`;
@@ -106,6 +117,5 @@
                 button.innerHTML = `<i class="fa fa-file" aria-hidden="true"></i> {{ 'joindre_un_document'|trans }}`;
             }
         }
-    });
 </script>
 {% endblock %}

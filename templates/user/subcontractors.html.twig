@@ -152,7 +152,7 @@
                     <th>{{ 'mail'|trans }}</th>
                     <th>{{ 'conformit'|trans }}</th>
                     <th>{{ 'doc'|trans }}</th>
-                    <th>{{ 'actions'|trans }}</th>
+                    <th class="actionss">{{ 'actions'|trans }}</th>
                 </tr>
             </thead>
            <tbody id="table-body">
@@ -344,7 +344,7 @@ document.addEventListener('DOMContentLoaded', function () {
             {% endfor %}
               {% else %}
         <tr>
-            <td colspan="9" class="text-center">{{ 'Aucun sous-traitant disponible'|trans }}</td>
+          <td colspan="9" class="text-center">{{ 'Aucun destinataire renseigné dans cette section'|trans }}</td>
         </tr>
     {% endif %}
         `;
@@ -418,7 +418,7 @@ document.addEventListener('DOMContentLoaded', function () {
         {% endfor %}
     {% else %}
     <tr>
-            <td colspan="9" class="text-center">{{ 'Aucun sous-traitant disponible'|trans }}</td>
+          <td colspan="9" class="text-center">{{ 'Aucun destinataire renseigné dans cette section'|trans }}</td>
         </tr>
     {% endif %}
         `;

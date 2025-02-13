@@ -54,41 +54,9 @@
 
             <p>OU</p>
             <button type="button" onclick="openUsersModal();" class="imprimer">Sélectionner des clients</button>
-            <div id="users-selected">{{ usersStr|join(', ') }}</div>
-            {% do form.users.setRendered() %}
-        </div>
-
-        <div class="sectt">
-            <h3>Ajouter un contenu</h3>
-            <div class="col-12" id="content_container">
-                {% for key, item in training.questions %}
-                    <div class="form-group1 question-block">
-                        <h5>Question {{ loop.index }}</h5>
-                        <input class="form-control" type="text" name="form_items[{{ key }}][0]" value="{{ item.title }}" placeholder="Intitulé de la question">
-                        <select class="form-control" name="form_items[{{ key }}][2]">
-                            <option value="single" {% if not item.multiple %}selected{% endif %}>Choix unique</option>
-                            <option value="multiple" {% if item.multiple %}selected{% endif %}>Choix multiple</option>
-                            <option value="text">Réponse texte</option>
-                        </select>
-                        <textarea class="form-control" name="form_items[{{ key }}][1]" placeholder="Ajoutez les choix (1 par ligne)">{{ item.choices|join('\n') }}</textarea>
-                        <button type="button" class="btn btn-dangerr btn-sm remove-btn">Supprimer</button>
-                    </div>
-                {% endfor %}
-            </div>
-
-            <div class="col-12 d-flex">
-                <a onclick="addQuestion();" class="ajoutercilent">
-                    <i class="mdi mdi-plus"></i> <h5 class="pt-2">Ajouter une question</h5>
-                </a>
-            </div>
-        </div>
-
-        <br><br>
-        <button type="submit" class="submit-button">Enregistrer</button>
-
-        {{ form_end(form) }}
-    </div>
-     <div class="modal fade" id="ModalUsers" tabindex="-1" role="dialog"
+                            <div id="users-selected">{{ usersStr|join(', ') }}</div>
+         </div>
+<div class="modal fade" id="ModalUsers" tabindex="-1" role="dialog"
                          aria-labelledby="ModalUsers" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered" role="document">
                             <div class="modal-content">
@@ -120,7 +88,62 @@
                             </div>
                         </div>
                     </div>
+
+        <div class="sectt">
+            <h3>Ajouter un contenu</h3>
+           <div class="col-12" id="content_container">
+    {% if training.questions is defined %}
+        {% for key, item in training.questions %}
+            <div class="form-group1 question-block my-4">
+                <h5>Question {{ loop.index }}</h5>
+                
+                <input class="form-control w-100 mb-2" type="text" placeholder="Intitulé de la question"
+                       name="form_items[{{ key }}][0]" id="form_items_0_{{ key }}" value="{{ item.title }}">
+
+                <textarea class="form-control w-100 mb-2" placeholder="Choix (1 par ligne)" rows="12"
+                          name="form_items[{{ key }}][1]" id="form_items_1_{{ key }}">{{ item.choices|join('\n') }}</textarea>
+
+                <div class="mb-22">
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input class="custom-control-input" type="radio" value="0"
+                               name="form_items[{{ key }}][2]" id="form_items_2_0_{{ key }}"
+                               {% if not item.multiple %}checked="checked"{% endif %}>
+                        <label class="custom-control-label" for="form_items_2_0_{{ key }}">Choix unique</label>
+                    </div>
+                    <div class="custom-control custom-radio custom-control-inline">
+                        <input class="custom-control-input" type="radio" value="1"
+                               name="form_items[{{ key }}][2]" id="form_items_2_1_{{ key }}"
+                               {% if item.multiple %}checked="checked"{% endif %}>
+                        <label class="custom-control-label" for="form_items_2_1_{{ key }}">Choix multiples</label>
+                    </div>
+                </div>
+
+                <textarea class="form-control w-100 mb-2" placeholder="Liens utiles (1 par ligne)" rows="4"
+                          name="form_items[{{ key }}][3]" id="form_items_3_{{ key }}">{{ item.links|join('\n') }}</textarea>
+
+                <textarea class="form-control w-100" placeholder="Explications réponse" rows="4"
+                          name="form_items[{{ key }}][4]" id="form_items_4_{{ key }}">{{ item.explanations }}</textarea>
+
+                <button type="button" class="btn btn-dangerr btn-sm mt-2 remove-btn">Supprimer</button>
+            </div>
+        {% endfor %}
+    {% endif %}
 </div>
+
+
+            <div class="col-12 d-flex">
+                <a onclick="addQuestion();" class="ajoutercilent">
+                    <i class="mdi mdi-plus"></i> <h5 class="pt-2">Ajouter une question</h5>
+                </a>
+            </div>
+        </div>
+
+        <br><br>
+        <button type="submit" class="submit-button">Enregistrer</button>
+
+        {{ form_end(form) }}
+    </div>
+     
 </div>
 
 {% endblock %}
@@ -139,30 +162,110 @@
             }
         }
 
-        function addQuestion() {
-            const container = document.getElementById('content_container');
+      function addQuestion() {
+    const container = document.getElementById('content_container');
 
-            var questionBlock = document.createElement("div");
-            questionBlock.className = "form-group1 question-block";
+    var questionBlock = document.createElement("div");
+    questionBlock.className = "form-group1 my-4"; // Garde le design du premier code
 
-            questionBlock.innerHTML = `
-                <h5>Question ${questionCount + 1}</h5>
-                <input class="form-control" type="text" name="form_items[${questionCount}][0]" placeholder="Intitulé de la question">
-                <select class="form-control" name="form_items[${questionCount}][2]">
-                    <option value="single">Choix unique</option>
-                    <option value="multiple">Choix multiple</option>
-                    <option value="text">Réponse texte</option>
-                </select>
-                <textarea class="form-control" name="form_items[${questionCount}][1]" placeholder="Ajoutez les choix (1 par ligne)"></textarea>
-                <button type="button" class="btn btn-dangerr btn-sm remove-btn">Supprimer</button>
-            `;
+    // Numéro de la question
+    var questionHeader = document.createElement("h5");
+    questionHeader.innerText = "Question " + questionCount;
+    questionBlock.appendChild(questionHeader);
 
-            questionBlock.querySelector('.remove-btn').addEventListener('click', () => questionBlock.remove());
+    // Champ : Intitulé de la question
+    var questionInput = document.createElement("input");
+    questionInput.className = "w-100 form-control mb-2";
+    questionInput.setAttribute("type", "text");
+    questionInput.setAttribute("name", "form_items[" + questionCount + "][0]");
+    questionInput.setAttribute("placeholder", "Intitulé de la question");
 
-            container.appendChild(questionBlock);
+    // Champ : Choix (1 par ligne)
+    var choicesInput = document.createElement("textarea");
+    choicesInput.className = "w-100 form-control mb-2";
+    choicesInput.setAttribute("name", "form_items[" + questionCount + "][1]");
+    choicesInput.setAttribute("placeholder", "Ajoutez les choix (1 par ligne)");
+    choicesInput.setAttribute("rows", "4");
 
-            questionCount++;
-        }
+    // Sélection type de réponse (radio boutons)
+    var radioContainer = document.createElement("div");
+    radioContainer.className = "mb-22 d-flex"; // Garder la structure du design
+
+    var radioUnique = createRadioOption("form_items[" + questionCount + "][2]", "0", "Choix unique", true, questionCount);
+    var radioMultiple = createRadioOption("form_items[" + questionCount + "][2]", "1", "Choix multiples", false, questionCount);
+    
+    radioContainer.appendChild(radioUnique);
+    radioContainer.appendChild(radioMultiple);
+
+    // Champ : Liens utiles
+    var linksInput = document.createElement("textarea");
+    linksInput.className = "w-100 form-control mb-2";
+    linksInput.setAttribute("name", "form_items[" + questionCount + "][3]");
+    linksInput.setAttribute("placeholder", "Liens utiles (1 par ligne)");
+    linksInput.setAttribute("rows", "3");
+
+    // Champ : Explication réponse
+    var explanationInput = document.createElement("textarea");
+    explanationInput.className = "w-100 form-control";
+    explanationInput.setAttribute("name", "form_items[" + questionCount + "][4]");
+    explanationInput.setAttribute("placeholder", "Explication de la réponse");
+    explanationInput.setAttribute("rows", "3");
+
+    // Bouton de suppression
+    var removeBtn = document.createElement("button");
+    removeBtn.className = "btn btn-dangerr btn-sm mt-2";
+    removeBtn.innerText = "Supprimer";
+    removeBtn.onclick = function () {
+        questionBlock.remove();
+        updateQuestionNumbers();
+    };
+
+    // Ajouter les éléments au bloc question
+    questionBlock.appendChild(questionInput);
+    questionBlock.appendChild(choicesInput);
+    questionBlock.appendChild(radioContainer);
+    questionBlock.appendChild(linksInput);
+    questionBlock.appendChild(explanationInput);
+    questionBlock.appendChild(removeBtn);
+
+    // Ajouter la question au conteneur principal
+    container.appendChild(questionBlock);
+
+    questionCount++;
+    updateQuestionNumbers();
+}
+
+// Fonction pour créer un bouton radio avec label
+function createRadioOption(name, value, labelText, checked, count) {
+    var radioDiv = document.createElement("div");
+    radioDiv.className = "custom-control custom-radio custom-control-inline";
+
+    var radioInput = document.createElement("input");
+    radioInput.className = "custom-control-input";
+    radioInput.setAttribute("type", "radio");
+    radioInput.setAttribute("value", value);
+    radioInput.setAttribute("name", name);
+    radioInput.setAttribute("id", "form_items_2_" + value + "_" + count);
+    if (checked) radioInput.setAttribute("checked", "checked");
+
+    var radioLabel = document.createElement("label");
+    radioLabel.className = "custom-control-label";
+    radioLabel.setAttribute("for", "form_items_2_" + value + "_" + count);
+    radioLabel.innerText = labelText;
+
+    radioDiv.appendChild(radioInput);
+    radioDiv.appendChild(radioLabel);
+
+    return radioDiv;
+}
+
+// Met à jour les numéros des questions
+function updateQuestionNumbers() {
+    var questionNumbers = document.getElementsByTagName('h5');
+    for (var j = 0; j < questionNumbers.length; j++) {
+        questionNumbers[j].innerText = 'Question ' + (j + 1);
+    }
+}
 
         function openUsersModal() {
             $('#ModalUsers').modal('show');

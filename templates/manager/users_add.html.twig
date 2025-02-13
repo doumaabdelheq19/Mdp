@@ -8,8 +8,9 @@
 <div class="page">
     <div class="table-container-traitements">
         <div class="header-con">
-            <div class="header">
-                <h2><img src="./imgs/iconamoon_arrow-up-2-light.svg" alt=""> Nouveau Client</h2>
+            <div class="headretour">
+                <h2>    <a href="javascript:history.back()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024"><path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/></svg></a>
+ Nouveau Client</h2>
             </div>
         </div>
 
@@ -213,37 +214,8 @@
                    <div class="form-group1" style="width:100%">
     <label for="childrenUsers-search">{{ form_label(form.childrenUsers) }}</label>
 
-    <div class="dropdownform">
-        <input 
-            type="text" 
-            id="childrenUsers-search" 
-            class="form-control" 
-            style="width:97%"
-            placeholder="{{ 'Rechercher un utilisateur'|trans }}" 
-            onfocus="showChildrenUsersDropdown()" 
-            readonly
-            required /> <!-- Keep required for validation -->
-
-        <ul class="dropdown-menu" id="childrenUsers-dropdown">
-            {% for user in form.childrenUsers.vars.choices %}
-                <li data-id="{{ user.value }}" onclick="selectChildrenUser('{{ user.value }}', '{{ user.label|e('js') }}')">
-                    <a href="javascript:void(0);">
-                        {{ user.label }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
-
-    <!-- Hidden Input to store selected user IDs -->
-    <input type="hidden" id="selected-childrenUsers" name="selected-childrenUsers" value="" required />
-    {{ form_widget(form.childrenUsers, {'attr': {'id': 'form_childrenUsers', 'class': 'd-none'}}) }}
-
-    <!-- Display Selected Users -->
-    <div id="selected-childrenUsers-list" class="selected-items"></div>
-
-    <!-- Validation Feedback -->
-    <div class="invalid-feedback">{{ form_errors(form.childrenUsers) | striptags }}</div>
+     {{ form_widget(form.childrenUsers, {'attr': {'class': 'form-control js-select2 ' ~ ((form_errors(form.childrenUsers) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.childrenUsers) | striptags  }}</div>
 </div>
 
              </div>
@@ -277,7 +249,22 @@
 
 {% block javascripts %}
     {{ parent() }}
+    <!-- Inclure jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Inclure Select2 (CSS + JS) -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+
     <script>
+     $(document).ready(function() {
+            $('.js-select2').select2({
+                placeholder: "Sélectionnez des utilisateurs",
+                allowClear: true,
+                width: '100%'
+            });
+        });
+
         document.addEventListener("DOMContentLoaded", function () {
             function readFile(input) {
                 if (input.files && input.files[0]) {
@@ -302,73 +289,7 @@
             });
         });
 
-      document.addEventListener("DOMContentLoaded", () => {
-    const childrenUsersSearchInput = document.getElementById("childrenUsers-search");
-    const childrenUsersDropdownMenu = document.getElementById("childrenUsers-dropdown");
-    const selectedChildrenUsersHiddenInput = document.getElementById("form_childrenUsers"); // Link to Symfony field
-    const selectedChildrenUsersList = document.getElementById("selected-childrenUsers-list");
-    const selectedChildrenUsersSet = new Set();
-
-    // ✅ Fix: Function to show the dropdown when clicking the input
-    window.showChildrenUsersDropdown = () => {
-        if (childrenUsersDropdownMenu) {
-            childrenUsersDropdownMenu.style.display = "block";
-        }
-    };
-
-    window.selectChildrenUser = (id, name) => {
-        if (!selectedChildrenUsersSet.has(id)) {
-            selectedChildrenUsersSet.add(id);
-
-            // ✅ Fix: Ensure the hidden input exists before setting its value
-            if (selectedChildrenUsersHiddenInput) {
-                selectedChildrenUsersHiddenInput.value = Array.from(selectedChildrenUsersSet).join(',');
-            }
-
-            // Create selected user element
-            const selectedItem = document.createElement('div');
-            selectedItem.classList.add('selected-item');
-            selectedItem.dataset.id = id;
-
-            const nameSpan = document.createElement('span');
-            nameSpan.textContent = name;
-
-            const removeButton = document.createElement('span');
-            removeButton.textContent = '×'; 
-            removeButton.classList.add('remove-button');
-            removeButton.onclick = () => {
-                selectedChildrenUsersSet.delete(id);
-
-                // ✅ Fix: Ensure hidden input exists before updating it
-                if (selectedChildrenUsersHiddenInput) {
-                    selectedChildrenUsersHiddenInput.value = Array.from(selectedChildrenUsersSet).join(',');
-                }
-                
-                selectedItem.remove();
-            };
-
-            selectedItem.appendChild(nameSpan);
-            selectedItem.appendChild(removeButton);
-            selectedChildrenUsersList.appendChild(selectedItem);
-        }
-    };
-
-    // ✅ Fix: Close dropdown when clicking outside
-    document.addEventListener("click", (event) => {
-        if (!childrenUsersSearchInput.contains(event.target) && !childrenUsersDropdownMenu.contains(event.target)) {
-            childrenUsersDropdownMenu.style.display = "none";
-        }
-    });
-
-    // ✅ Fix: Ensure dropdown does not disappear immediately on blur
-    childrenUsersSearchInput.addEventListener("blur", () => {
-        setTimeout(() => {
-            if (childrenUsersDropdownMenu) {
-                childrenUsersDropdownMenu.style.display = "none";
-            }
-        }, 200);
-    });
-});
+    
 
 
     </script>

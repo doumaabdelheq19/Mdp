@@ -97,7 +97,7 @@ class SlappExtensions extends AbstractExtension
 
     public function getUserAvatarHeader(User $user) {
         if ($user->getPicture()) {
-            return '<img src="/uploads/pictures/'.$user->getPicture().'" class="avatar-img-contain">';
+            return '<img src="/public/uploads/pictures/'.$user->getPicture().'" class="avatar-img-contain">';
         } else {
             $initials = mb_strtoupper(substr($user->getContactFirstName(), 0 ,1)).mb_strtoupper(substr($user->getContactLastName(), 0 ,1));
             return '<span class="avatar-title rounded-circle bg-dark">'.$initials.'</span>';

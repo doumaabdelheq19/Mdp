@@ -68,6 +68,13 @@
                         <p>{{ 'crer_une_action'|trans }}</p>
                     </a>
                 </div>
+
+                                            {% if app.user.user.mainGroupAgency %}
+                                            <div class="exporter" style="width:200px">
+                                            <a style="width:200px" href="{{ path('user_actions_grp_add') }}" class="btn btn-primary mb-2 mx-2">Créer une action de groupe</a>
+                                             </div>
+                                            {% endif %}
+
             </div>
         </div>
 
@@ -82,7 +89,7 @@
                     <th>{{ 'date_de_mise_en_place_souhaite'|trans }}</th>
                     <th>{{ 'priorite'|trans }}</th>
                     <th>{{ 'realise'|trans }}</th>
-                    <th>{{ 'actions'|trans }}</th>
+                    <th class="actionss">{{ 'actions'|trans }}</th>
                 </tr>
             </thead>
             <tbody id="table-body">
