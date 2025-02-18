@@ -603,6 +603,22 @@ jmnode[nodeid="996"] .border {
 
     
 </div>
+
+<div class="modal fade" id="modal_content" tabindex="-1" role="dialog"
+             aria-labelledby="modal_content" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal_content_title"></h5>
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Fermer">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modal_content_body"></div>
+                </div>
+            </div>
+        </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -610,8 +626,10 @@ jmnode[nodeid="996"] .border {
 <script type="text/javascript" src="//cdn.jsdelivr.net/npm/jsmind/es6/jsmind.js"></script>
     <script type="module">
 
-     document.addEventListener("DOMContentLoaded", () => {
+  document.addEventListener("DOMContentLoaded", () => {
 
+
+  
     // Initialize Mindmap
     const options = {
         container: 'map', // ID of the container
@@ -683,6 +701,25 @@ jm.view.setZoom(initialZoom);
                     tableurElements.forEach((tableur) => tableur.style.display = "none");
                 }
             });
+
+
+           setTimeout(function () {
+    document.querySelectorAll("jmnode").forEach(function (node) {
+        const nodeId = node.getAttribute("nodeid"); // Get the node's ID
+        if (nodeId) {
+            node.classList.add("jmnode-level-3"); // Apply custom class
+            
+            node.addEventListener("click", function (event) {
+                // Prevent click event if clicking inside <span class="node-3-actions options">
+                if (!event.target.closest(".node-3-actions.options")) {
+                    openModalInfo(nodeId);
+                }
+            });
+        }
+    });
+}, 1000); // 1000ms = 1 second
+
+
         });
 
        document.addEventListener('DOMContentLoaded', function () {
@@ -703,7 +740,36 @@ jm.view.setZoom(initialZoom);
 
         searchInput.addEventListener('input', filterTable);
     });
+
+
+
+    
 });
+
+
+
+
+    </script>
+
+
+    <script>
+
+            var systemsJs = {{ systemsJs|json_encode|raw }};
+
+ function openModalInfo(id) {
+            if (systemsJs[id]) {
+                document.getElementById('modal_content_title').innerText = systemsJs[id].name;
+                var contentHtml = "";
+                systemsJs[id].data.map(item => {
+                    if (item.value !== null) {
+                        contentHtml += "<b><u>" + item.title + "</u></b> : " + item.value + "<br/><br/>";
+                    }
+                })
+                document.getElementById('modal_content_body').innerHTML = contentHtml;
+                $('#modal_content').modal('show');
+            }
+        }
+
 
     </script>
 {% endblock %}

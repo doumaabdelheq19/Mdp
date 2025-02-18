@@ -44,7 +44,8 @@
             <tbody>
                 {% for partner in partners %}
                     <tr>
-                        <td><div class="avatar avatar-sm">{{ get_partner_avatar(partner)|raw }}</div></td>
+                        <td><div class="avatar avatar-sm"><img src="{{ asset('uploads/pictures/' ~ partner.getPicture) }}" class="avatar-img">
+</div></td>
                         <td>{{ partner.name }}</td>
                         <td style="text-align: left;">{{ partner.description }}</td>
                         <td>

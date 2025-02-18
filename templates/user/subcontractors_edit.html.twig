@@ -89,27 +89,18 @@
         <!-- Document Management Section -->
         <div class="sectt">
             <h3>{{ 'Documents'|trans }}</h3>
-            <div id="block_old_documents" class="form-group">
-                {% for document in subcontractor.documents %}
-                    <div class="form-group1 d-flex block_document">
-                        <input class="form-control" type="text" placeholder="{{ 'titre'|trans }}" name="appbundle_subcontractor_documents_{{ document.id }}" value="{{ document.name }}">
-                        <a href="{{ path('user_subcontractor_deletedoc', {'subcontractor': subcontractor.id, 'document': document.id}) }}" class="btn btn-danger ml-2" onclick="return confirm('{{ 'confirmer_la_suppression'|trans }}');">
-                            <i class="mdi mdi-file-remove"></i>
-                        </a>
-                        <a href="{{ path('user_read_user_documents', {'id': document.id}) }}" class="btn btn-info ml-2" target="_blank">
-                            <i class="mdi mdi-eye"></i>
-                        </a>
+                 <div class="form-row mb-5 mt-3">
+                        <div class="col-12 mb-2">
+                            <button type="button" class="file-button" id="add_document_button"><i class="mdi mdi-file-plus"></i> {{ 'fichiers'|trans }}</button>
+                        </div>
+                        <div id="block_old_documents" class="row col-12">
+                            {% for document in subcontractor.documents %}
+                                <div class="form-group col-md-12 d-flex block_document"><input class="form-control" type="text" placeholder="{{ 'titre'|trans }}" name="appbundle_subcontractor_documents_{{ document.id }}" value="{{ document.name }}"><a href="{{ path('user_subcontractor_deletedoc', {'subcontractor': subcontractor.id, 'document': document.id}) }}" class="btn btn-danger ml-2" onclick="return confirm('Confirmer la suppression de ce fichier ?\nCette action actualisera la page, toute autre modification sera perdue.');"><i class="mdi mdi-file-remove"></i></a><a href="{{ path('user_read_user_documents', {'id': document.id}) }}" class="btn btn-info ml-2" target="_blank"><i class="mdi mdi-eye"></i></a></div>
+                            {% endfor %}
+                        </div>
+                        <div id="block_documents" class="row col-12">
+                        </div>
                     </div>
-                {% endfor %}
-            </div>
-            <div id="block_documents" class="form-group">
-            </div>
-            <div class="form-group mt-3" style="margin-bottom: 40px;">
-                <button type="button" class="file-button" onclick="document.getElementById('documentFileInput').click();">
-                    <i class="fa fa-file" aria-hidden="true"></i> {{ 'joindre un fichier'|trans }}
-                </button>
-                <input type="file" id="documentFileInput" style="display: none;" onchange="updateFileName(this);">
-            </div>
         </div>
 
         <!-- Group Checkbox -->
@@ -130,87 +121,49 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        document.getElementById("standard-search").addEventListener("input", function () {
-            const query = this.value.toLowerCase();
-            const options = document.querySelectorAll("#dropdown-menu li");
-            options.forEach(option => {
-                if (option.textContent.toLowerCase().includes(query)) {
-                    option.style.display = "block";
-                } else {
-                    option.style.display = "none";
-                }
-            });
-        });
+       
 
-        function updateFileName(input) {
-            const button = document.querySelector('.file-button');
-            if (input.files.length > 0) {
-                button.innerHTML = `<i class="fa fa-file" aria-hidden="true"></i> ${input.files[0].name}`;
-            } else {
-                button.innerHTML = `<i class="fa fa-file" aria-hidden="true"></i> {{ 'joindre un fichier'|trans }}`;
-            }
+      
+
+      
+
+        (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                document.getElementById("add_document_button").addEventListener("click", function () {
+                    var div = document.createElement("div");
+                    div.className = "form-group col-md-12 d-flex block_document";
+
+                    var nameInput = document.createElement("input");
+                    nameInput.className = "form-control";
+                    nameInput.setAttribute("type", "text");
+                    nameInput.setAttribute("placeholder", "Titre");
+                    nameInput.setAttribute("name", "appbundle_subcontractor_documents_names[]");
+
+                    var fileInput = document.createElement("input");
+                    fileInput.className = "form-control ml-2";
+                    fileInput.setAttribute("type", "file");
+                    fileInput.setAttribute("name", "appbundle_subcontractor_documents[]");
+
+                    var fileInputRemoveButton = document.createElement("button");
+                    fileInputRemoveButton.className = "btn btn-danger ml-2 remove_document_button";
+                    fileInputRemoveButton.setAttribute("type", "button");
+                    fileInputRemoveButton.setAttribute("onclick", "removeDocument(this)");
+
+                   
+
+                    div.appendChild(nameInput);
+                    div.appendChild(fileInput);
+                    div.appendChild(fileInputRemoveButton);
+
+                    var element = document.getElementById("block_documents");
+                    element.appendChild(div);
+                });
+            });
+        })(window.jQuery);
+
+        function removeDocument(element) {
+            element.parentNode.remove();
         }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const searchInput = document.getElementById("standard-search");
-            const dropdownMenu = document.getElementById("dropdown-menu");
-          
-            searchInput.addEventListener("focus", () => {
-              dropdownMenu.style.display = "block";
-            });
-          
-            searchInput.addEventListener("input", () => {
-              const filter = searchInput.value.toLowerCase();
-              const items = dropdownMenu.querySelectorAll("li");
-              items.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                item.style.display = text.includes(filter) ? "block" : "none";
-              });
-            });
-          
-            searchInput.addEventListener("blur", () => {
-              setTimeout(() => {
-                dropdownMenu.style.display = "none";
-              }, 200);
-            });
-          
-            dropdownMenu.addEventListener("click", (e) => {
-              if (e.target.tagName === "LI") {
-                searchInput.value = e.target.textContent;
-                dropdownMenu.style.display = "none";
-              }
-            });
-        });
-
-        document.getElementById("add_document_button").addEventListener("click", function () {
-            const div = document.createElement("div");
-            div.className = "form-group1 d-flex block_document";
-
-            const nameInput = document.createElement("input");
-            nameInput.className = "form-control";
-            nameInput.type = "text";
-            nameInput.placeholder = "{{ 'titre'|trans }}";
-            nameInput.name = "appbundle_subcontractor_documents_names[]";
-
-            const fileInput = document.createElement("input");
-            fileInput.className = "form-control ml-2";
-            fileInput.type = "file";
-            fileInput.name = "appbundle_subcontractor_documents[]";
-
-            const removeButton = document.createElement("button");
-            removeButton.className = "btn btn-danger ml-2 remove_document_button";
-            removeButton.type = "button";
-            removeButton.onclick = function () { div.remove(); };
-
-            const icon = document.createElement("i");
-            icon.className = "mdi mdi-file-remove";
-            removeButton.appendChild(icon);
-
-            div.appendChild(nameInput);
-            div.appendChild(fileInput);
-            div.appendChild(removeButton);
-
-            document.getElementById("block_documents").appendChild(div);
-        });
     </script>
 {% endblock %}

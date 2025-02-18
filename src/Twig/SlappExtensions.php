@@ -59,7 +59,7 @@ class SlappExtensions extends AbstractExtension
     {
         return array(
             new TwigFunction('get_user_avatar', array($this, 'getUserAvatar')),
-            new TwigFunction('get_user_avatar_header', array($this, 'getUserAvatarHeader')),
+            new TwigFunction('_heget_user_avatarader', array($this, 'getUserAvatarHeader')),
             new TwigFunction('get_partner_avatar', array($this, 'getPartnerAvatar')),
             new TwigFunction('is_mdp_read_doc_allowed', array($this, 'isMdpReadDocAllowed')),
             new TwigFunction('is_print_export_allowed', array($this, 'isPrintExportAllowed')),

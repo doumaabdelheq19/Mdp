@@ -131,7 +131,7 @@
            <label class="questionnaire-item">
     {{ form_widget(chk, {'attr': {'id': chk.vars.id}}) }}
     <span class="radio-content">
-        {{ form_label(chk)|striptags }}
+        {{ form_label(chk) }}
     </span>
 </label>
 
@@ -204,12 +204,12 @@
                         </td>
                         <td>
                             {% if campain.traineeship %}
-                                <div style="color: #52B489; background-color:rgba(82, 180, 138, 0.14); border-radius: 10px; padding: 2px;">
+                                <div style=" text-align:center; color: #52B489; background-color:rgba(82, 180, 138, 0.14); border-radius: 10px; padding: 2px;">
                                     {{ 'oui'|trans }}
                                 </div>
                               
                             {% else %}
-                                <div style="color: #EF6D6F; background-color: #ef6d6f2a; border-radius: 10px; padding: 2px;">
+                                <div style="text-align:center; color: #EF6D6F; background-color: #ef6d6f2a; border-radius: 10px; padding: 2px;">
                                     {{ 'non'|trans }}
                                 </div>
                             {% endif %}

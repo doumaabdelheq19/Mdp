@@ -1828,27 +1828,33 @@ class ManagerController extends AbstractController
                 ];
     
                 foreach ($systems[$type][$subtype] as $item) {
-                    $subnode["children"][] = [
-                        "id" => $item->getId(),
-                        "topic" => "
-                              <div class='border border1'><div class='circle'></div></div>
-                                <div class='border border2'><div class='circle'></div></div>
-                                <div class='border border3'><div class='circle'></div></div>
-                                <div class='border border4'><div class='circle'></div></div>
-                                <div class='node-content'>
-                                   
-                                    <div class='text-wrapper'>" . $item->getName() . "</div>
-                            </div>
-                            <span class='node-3-actions options'>
-                                <a href=\"".$this->generateUrl("manager_systems_edit", ["id" => $item->getId()])."\" class=\"btn edit my-1 mr-1\">
-                                    <i class=\"mdi mdi-circle-edit-outline\"></i>
-                                </a>
-                                <a href=\"".$this->generateUrl("manager_systems_delete", ["id" => $item->getId()])."\" class=\"btn delete my-1\"  onclick=\"return confirm('Confirmer la suppression de cet élément ?');\">
-                                    <i class=\"mdi mdi-close\"></i>
-                                </a>
-                            </span>",
-                    ];
-                }
+    $subnode["children"][] = [
+        "id" => $item->getId(),
+        "topic" => "
+                <div class='border border1'><div class='circle'></div></div>
+                <div class='border border2'><div class='circle'></div></div>
+                <div class='border border3'><div class='circle'></div></div>
+                <div class='border border4'><div class='circle'></div></div>
+                <div class='node-content'>  
+                    <div class='text-wrapper'>" . htmlspecialchars($item->getName(), ENT_QUOTES, 'UTF-8') . "</div>
+                </div>
+                <span class='node-3-actions options'>
+                    <a href=\"" . $this->generateUrl("manager_systems_edit", ["id" => $item->getId()]) . "\" class=\"btn edit my-1 mr-1\">
+                        <i class=\"mdi mdi-circle-edit-outline\"></i>
+                    </a>
+                    <a href=\"" . $this->generateUrl("manager_systems_delete", ["id" => $item->getId()]) . "\" class=\"btn delete my-1\" onclick=\"return confirm('Confirmer la suppression de cet élément ?');\">
+                        <i class=\"mdi mdi-close\"></i>
+                    </a>
+                </span>
+            ",
+            "attr" => [
+                            "class" => "jmnode-level-3",
+                            "onclick" => "openModalInfo(".$item->getId().")",
+                        ]
+    ];
+}
+
+                
     
                 $node["children"][] = $subnode;
             }
@@ -4097,91 +4103,103 @@ class ManagerController extends AbstractController
 
             $subscription->setCreationDate($now);
 
-            if ($form['beginDate']->getData()) {
-                $beginDate = \DateTime::createFromFormat("d/m/Y", $form['beginDate']->getData());
-                if ($beginDate) {
-                    $beginDate->setTime(0, 0, 0);
-                    $subscription->setBeginDate($beginDate);
-                    $endDate = clone $subscription->getBeginDate();
-                    $endDate->sub(new \DateInterval("P1D"));
+            $beginDateInput = $form['beginDate']->getData();
 
-                    switch ($subscriptionType->getCode()) {
-                        case "ABOPLS":
-                        case "ABOSTD":
-                            $subscription->setInvolvementMonths(12);
-                            $endDate->add(new \DateInterval("P1Y"));
-                            break;
-                        case "PARTEN":
-                            $subscription->setInvolvementMonths(12);
-                            $endDate->add(new \DateInterval("P1Y"));
-                            break;
-                        case "ABOLIB":
-                            $subscription->setInvolvementMonths(1);
-                            $endDate->add(new \DateInterval("P1M"));
-                            break;
-                        case "FREE30D":
-                        case "DEMO":
-                            $subscription->setInvolvementMonths(0);
-                            $endDate->add(new \DateInterval("P30D"));
-                            break;
-                    }
-
-                    $subscription->setEndDate($endDate);
-
-                    if ($hasBillingType) {
-                        if ($form['billingType']->getData() == "m") {
-                            $subscription->setBillingMonths(1);
-                        } elseif ($form['billingType']->getData() == "t") {
-                            $subscription->setBillingMonths(3);
-                        } else {
-                            $subscription->setBillingMonths(12);
-                        }
-                    } else {
-                        $subscription->setBillingMonths(0);
-                    }
-
-                    if (!$hasBillingPrice) {
-                        $subscription->setUnitBillingPrice(0);
-                    }
-
-                    $subscription->setActive(true);
-
-                    $em->persist($subscription);
-                    $em->flush();
-
-                    if ($user->getCurrentSubscription()) {
-                        $user->getCurrentSubscription()->setActive(false);
-                        $em->flush();
-                    }
-                    $user->setCurrentSubscription($subscription);
-                    $em->flush();
-
-                    if ($user->getCurrentSubscription()->getUnitBillingPrice() == 0) {
-                        switch ($user->getCurrentSubscription()->getType()->getCode()) {
-                            case "ABOPLS":
-                            case "ABOSTD":
-                            case "PARTEN":
-                            case "ABOLIB":
-                                $paymentUntil = clone $user->getCurrentSubscription()->getBeginDate();
-                                $paymentUntil->sub(new \DateInterval("P1D"));
-
-                                if ($user->getCurrentSubscription()->getBillingMonths()) {
-                                    $paymentUntil->add(new \DateInterval("P".$user->getCurrentSubscription()->getBillingMonths()."M"));
-                                } else {
-                                    $paymentUntil->add(new \DateInterval("P".$user->getCurrentSubscription()->getInvolvementMonths()."M"));
-                                }
-
-                                $user->getCurrentSubscription()->setPaymentUntil($paymentUntil);
-                                $em->flush();
-
-                                break;
-                        }
-                    }
-
-                    $this->get('session')->getFlashBag()->add('success', 'Nouvel abonnement ajouté');
-                    return $this->redirectToRoute("manager_subscriptions_user", ["id" => $user->getId()]);
+            // ✅ Ensure `beginDate` is set to today if empty or null
+            if ($beginDateInput === null || empty($beginDateInput)) {
+                $beginDate = new \DateTime(); // ✅ Default to today
+            } else {
+                $beginDate = \DateTime::createFromFormat("d/m/Y", $beginDateInput);
+                if (!$beginDate) {
+                    // If parsing fails, default to today
+                    $beginDate = new \DateTime();
                 }
             }
+            
+            // ✅ Set the correct time and assign it to the subscription
+            $beginDate->setTime(0, 0, 0);
+            $subscription->setBeginDate($beginDate);
+            $endDate = clone $beginDate;
+            $endDate->sub(new \DateInterval("P1D"));
+            
+            // ✅ Handle end date based on subscription type
+            switch ($subscriptionType->getCode()) {
+                case "ABOPLS":
+                case "ABOSTD":
+                    $subscription->setInvolvementMonths(12);
+                    $endDate->add(new \DateInterval("P1Y"));
+                    break;
+                case "PARTEN":
+                    $subscription->setInvolvementMonths(12);
+                    $endDate->add(new \DateInterval("P1Y"));
+                    break;
+                case "ABOLIB":
+                    $subscription->setInvolvementMonths(1);
+                    $endDate->add(new \DateInterval("P1M"));
+                    break;
+                case "FREE30D":
+                case "DEMO":
+                    $subscription->setInvolvementMonths(0);
+                    $endDate->add(new \DateInterval("P30D"));
+                    break;
+            }
+            
+            $subscription->setEndDate($endDate);
+            
+            // ✅ Handle billing
+            if ($hasBillingType) {
+                if ($form['billingType']->getData() == "m") {
+                    $subscription->setBillingMonths(1);
+                } elseif ($form['billingType']->getData() == "t") {
+                    $subscription->setBillingMonths(3);
+                } else {
+                    $subscription->setBillingMonths(12);
+                }
+            } else {
+                $subscription->setBillingMonths(0);
+            }
+            
+            if (!$hasBillingPrice) {
+                $subscription->setUnitBillingPrice(0);
+            }
+            
+            $subscription->setActive(true);
+            $em->persist($subscription);
+            $em->flush();
+            
+            // ✅ Update user's current subscription
+            if ($user->getCurrentSubscription()) {
+                $user->getCurrentSubscription()->setActive(false);
+                $em->flush();
+            }
+            $user->setCurrentSubscription($subscription);
+            $em->flush();
+            
+            // ✅ Set payment until if unitBillingPrice is 0
+            if ($user->getCurrentSubscription()->getUnitBillingPrice() == 0) {
+                switch ($user->getCurrentSubscription()->getType()->getCode()) {
+                    case "ABOPLS":
+                    case "ABOSTD":
+                    case "PARTEN":
+                    case "ABOLIB":
+                        $paymentUntil = clone $user->getCurrentSubscription()->getBeginDate();
+                        $paymentUntil->sub(new \DateInterval("P1D"));
+            
+                        if ($user->getCurrentSubscription()->getBillingMonths()) {
+                            $paymentUntil->add(new \DateInterval("P".$user->getCurrentSubscription()->getBillingMonths()."M"));
+                        } else {
+                            $paymentUntil->add(new \DateInterval("P".$user->getCurrentSubscription()->getInvolvementMonths()."M"));
+                        }
+            
+                        $user->getCurrentSubscription()->setPaymentUntil($paymentUntil);
+                        $em->flush();
+                        break;
+                }
+            }
+            
+            $this->get('session')->getFlashBag()->add('success', 'Nouvel abonnement ajouté');
+            return $this->redirectToRoute("manager_subscriptions_user", ["id" => $user->getId()]);
+            
         }
 
         return $this->render('manager/subscriptions_user_add.html.twig', [
@@ -4430,44 +4448,44 @@ class ManagerController extends AbstractController
     public function trainingsStatsAction(Request $request)
     {
         $training = $this->getDoctrine()->getRepository(Training::class)->findOneBy(["id" => $request->get("training")]);
-    
+
         if (!$training) {
             return new JsonResponse([
                 "success" => false
             ]);
         }
-    
+
         $questionsChoices = [];
         $questionsChoicesTotal = [];
         $questionsCount = [];
-    
+
         foreach ($training->getQuestions() as $questionKey => $question) {
             $questionsChoices[$questionKey] = $question["choices"];
             $questionsCount[$questionKey] = 0;
-    
+
             $questionsChoicesTotal[$questionKey] = [];
             foreach ($question["choices"] as $choiceKey => $choice) {
                 $questionsChoicesTotal[$questionKey][$choiceKey] = 0;
             }
         }
-    
+
         $trainingRequests = $this->getDoctrine()->getRepository(TrainingRequest::class)->findForTraining($training);
-    
+
         foreach ($trainingRequests as $trainingRequest) {
             if ($trainingRequest->getAnswerDate()) {
                 foreach ($training->getQuestions() as $key => $item) {
                     if (isset($questionsChoices[$key])) {
                         if ($item["choices"] == $questionsChoices[$key]) {
                             if (isset($trainingRequest->getUserAnswers()[$key])) {
-                                $questionsCount[$key] += 1;
+                                $questionsCount[$key] = $questionsCount[$key]+1;
                                 foreach ($item["choices"] as $choiceKey => $choice) {
                                     if ($item["multiple"]) {
                                         if (in_array($choiceKey, $trainingRequest->getUserAnswers()[$key])) {
-                                            $questionsChoicesTotal[$key][$choiceKey] += 1;
+                                            $questionsChoicesTotal[$key][$choiceKey] = $questionsChoicesTotal[$key][$choiceKey]+1;
                                         }
                                     } else {
                                         if ($choiceKey == $trainingRequest->getUserAnswers()[$key]) {
-                                            $questionsChoicesTotal[$key][$choiceKey] += 1;
+                                            $questionsChoicesTotal[$key][$choiceKey] = $questionsChoicesTotal[$key][$choiceKey]+1;
                                         }
                                     }
                                 }
@@ -4477,18 +4495,7 @@ class ManagerController extends AbstractController
                 }
             }
         }
-    
-        // ✅ Round percentages to 1 decimal place
-       // ✅ Round percentages correctly before passing to Twig
-foreach ($questionsChoicesTotal as $qKey => &$choices) {
-    foreach ($choices as $cKey => &$count) {
-        $total = $questionsCount[$qKey] ?? 1; // Avoid division by zero
-        $percentage = ($count / $total) * 100;
-        $count = number_format($percentage, 1, '.', ''); // Ensures 1 decimal place
-    }
-}
 
-    
         return new JsonResponse([
             "success" => true,
             "html" => $this->renderView('manager/includes/training_stats.html.twig', [
@@ -4499,7 +4506,6 @@ foreach ($questionsChoicesTotal as $qKey => &$choices) {
             ])
         ]);
     }
-    
     
 
     /**

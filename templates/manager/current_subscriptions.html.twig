@@ -135,6 +135,28 @@
 </div>
 
 <script>
+(function ($) {
+            'use strict';
+            $(document).ready(function () {
+                $('#datatable').DataTable({
+                    "language": {
+                        "search": "Rechercher :",
+                        "lengthMenu": "Afficher _MENU_ résultats par page",
+                        "zeroRecords": "Aucun résultat",
+                        "info": "Page _PAGE_ sur _PAGES_",
+                        "infoEmpty": "Aucune données sur ce tableau",
+                        "infoFiltered": "(filtered from _MAX_ total records)",
+                        "paginate": {
+                            "previous": "Précédent",
+                            "next": "Suivant",
+
+                        }
+                    }
+                });
+
+            });
+
+        })(window.jQuery);
     document.addEventListener('DOMContentLoaded', function () {
     const table = document.getElementById('datatable');
     const headers = table.querySelectorAll('thead th');
@@ -171,30 +193,52 @@
         currentPage = 1;
         updateTable();
     }
-
-    function sortTable(columnIndex) {
-        if (sortColumn === columnIndex) {
-            sortDirection *= -1; // Toggle sorting order
-        } else {
-            sortColumn = columnIndex;
-            sortDirection = 1;
-        }
-
-        filteredRows.sort((a, b) => {
-            const aText = a.children[columnIndex].innerText.trim().toLowerCase();
-            const bText = b.children[columnIndex].innerText.trim().toLowerCase();
-
-            return aText.localeCompare(bText, 'fr', { numeric: true }) * sortDirection;
-        });
-
-        // Remove sorting classes from all headers
-        headers.forEach(th => th.classList.remove('sorting_asc', 'sorting_desc'));
-
-        // Add sorting class to active column
-        headers[columnIndex].classList.add(sortDirection === 1 ? 'sorting_asc' : 'sorting_desc');
-
-        updateTable();
+function sortTable(columnIndex) {
+    if (sortColumn === columnIndex) {
+        sortDirection *= -1; // Toggle sorting order
+    } else {
+        sortColumn = columnIndex;
+        sortDirection = 1;
     }
+
+    filteredRows.sort((a, b) => {
+        const aText = a.children[columnIndex].innerText.trim();
+        const bText = b.children[columnIndex].innerText.trim();
+
+        const aValue = parseValue(aText);
+        const bValue = parseValue(bText);
+
+        if (aValue < bValue) return -1 * sortDirection;
+        if (aValue > bValue) return 1 * sortDirection;
+        return 0;
+    });
+
+    // Remove sorting classes from all headers
+    headers.forEach(th => th.classList.remove('sorting_asc', 'sorting_desc'));
+
+    // Add sorting class to active column
+    headers[columnIndex].classList.add(sortDirection === 1 ? 'sorting_asc' : 'sorting_desc');
+
+    updateTable();
+}
+
+// Function to detect and convert values
+function parseValue(value) {
+    // Check if value is a date in DD/MM/YYYY format
+    if (value.match(/^(\d{2})\/(\d{2})\/(\d{4})$/)) {
+        const parts = value.split('/'); // Split by "/"
+        return new Date(parts[2], parts[1] - 1, parts[0]); // Convert to Date (YYYY, MM, DD)
+    }
+    
+    // Check if value is a number
+    if (!isNaN(value.replace(',', '.'))) {
+        return parseFloat(value.replace(',', '.')); // Handle decimal comma (e.g., "1,5" → 1.5)
+    }
+
+    // Default to lowercase string comparison
+    return value.toLowerCase();
+}
+
 
     // Attach sorting to column headers
     headers.forEach((th, index) => {

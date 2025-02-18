@@ -48,7 +48,7 @@
              {% if exercisingclaims|length > 0 %}
                 {% for exercisingclaim in exercisingclaims %}
                     <tr>
-                        <td style="color: #EF6D6F;">{{ exercisingclaim.requestDate ? exercisingclaim.requestDate|date('d/m/Y') : '' }}</td>
+                        <td style="text-align:center; color: #EF6D6F;">{{ exercisingclaim.requestDate ? exercisingclaim.requestDate|date('d/m/Y') : '' }}</td>
                         <td> {% if exercisingclaim.rights == "acces" %}
                                                 {{ 'accs'|trans }}
                                             {% elseif exercisingclaim.rights == "rectification" %}
@@ -64,7 +64,7 @@
                                             {% endif %}</td>
                         <td>{{ exercisingclaim.customer }}</td>
                         <td>
-                            <div style="  {% if exercisingclaim.answerDate %}
+                            <div style=" text-align:center;  {% if exercisingclaim.answerDate %}
                                     color: #52B489; background-color:rgba(82, 180, 138, 0.15);
                                 {% else %}
                                     color: #EF6D6F; background-color: #ef6d6f2a;

@@ -303,7 +303,7 @@ jmnode[nodeid="996"] .border {
         <div class="four">
             <div class="gap">
                 <h4>{{ 'cartographie_du_si'|trans }}</h4>
-                <p>{{ 'lensemble des elements de votre systeme dinformation'|trans }}</p>
+                <p>{{ "L'ensemble des éléments de votre système d'information"|trans }}</p>
                 <div style="display: flex; gap: 20px;">
                     <div class="imprimer" style="width: 50%;">
                         <p><a href="{{ path('user_systems_export_excel', {'type': 'computing'}) }}">{{ 'Exporter au format Excel'|trans }}</a></p>
@@ -615,6 +615,22 @@ jmnode[nodeid="996"] .border {
 
     
 </div>
+
+<div class="modal fade" id="modal_content" tabindex="-1" role="dialog"
+             aria-labelledby="modal_content" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modal_content_title"></h5>
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-label="Fermer">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="modal_content_body"></div>
+                </div>
+            </div>
+        </div>
 {% endblock %}
 
 {% block javascripts %}
@@ -695,6 +711,45 @@ jm.view.setZoom(initialZoom);
                     tableurElements.forEach((tableur) => tableur.style.display = "none");
                 }
             });
+
+             setTimeout(function () {
+    document.querySelectorAll("jmnode").forEach(function (node) {
+        const nodeId = node.getAttribute("nodeid"); // Get the node's ID
+        if (nodeId) {
+            node.classList.add("jmnode-level-3"); // Apply custom class
+
+            node.addEventListener("click", function (event) {
+                // Check if the click event target is inside a <span> with class "node-3-actions options"
+                if (!event.target.closest(".node-3-actions.options")) {
+                    openModalInfo(nodeId);
+                }
+            });
+        }
+    });
+}, 1000); // 1000ms = 1 second
+
         });
+    </script>
+
+
+    <script>
+
+            var systemsJs = {{ systemsJs|json_encode|raw }};
+
+ function openModalInfo(id) {
+            if (systemsJs[id]) {
+                document.getElementById('modal_content_title').innerText = systemsJs[id].name;
+                var contentHtml = "";
+                systemsJs[id].data.map(item => {
+                    if (item.value !== null) {
+                        contentHtml += "<b><u>" + item.title + "</u></b> : " + item.value + "<br/><br/>";
+                    }
+                })
+                document.getElementById('modal_content_body').innerHTML = contentHtml;
+                $('#modal_content').modal('show');
+            }
+        }
+
+
     </script>
 {% endblock %}

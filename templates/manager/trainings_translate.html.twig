@@ -42,10 +42,10 @@
                             </div>
                             <div class="w-100 d-flex flex-column">
                             <br>
-                                <input class="w-100 form-control mb-2" type="text" placeholder="Intitulé de la question" name="form_e_items[{{ loop.index0 }}][0]" id="form_items_0_{{ loop.index0 }}" value="{{ item.title }}">
+                               <div class="form-group"> <input style="width:100%" class="w-100 form-control mb-2" type="text" placeholder="Intitulé de la question" name="form_e_items[{{ loop.index0 }}][0]" id="form_items_0_{{ loop.index0 }}" value="{{ item.title }}"> </div>
                                 <br>
                                 <br>
-                                <textarea class="w-100 form-control mb-2" placeholder="Choix (1 par ligne)" rows="12" name="form_e_items[{{ loop.index0 }}][1]" id="form_items_1_{{ loop.index0 }}">{{ item.choices|array_to_textarea }}</textarea>
+                                <textarea style="width:94%" class="w-100 form-control mb-2" placeholder="Choix (1 par ligne)" rows="12" name="form_e_items[{{ loop.index0 }}][1]" id="form_items_1_{{ loop.index0 }}">{{ item.choices|array_to_textarea }}</textarea>
 
                                 <div class="mb-4">
                                     <div class="custom-control custom-radio custom-control-inline">
@@ -58,8 +58,8 @@
                                     </div>
                                 </div>
 
-                                <textarea class="w-100 form-control" placeholder="Liens utiles (1 par ligne)" rows="4" name="form_e_items[{{ loop.index0 }}][3]" id="form_items_3_{{ loop.index0 }}">{{ item.links|array_to_textarea }}</textarea>
-                                <textarea class="w-100 form-control" placeholder="Explications réponse" rows="4" name="form_e_items[{{ loop.index0 }}][4]" id="form_items_4_{{ loop.index0 }}">{{ item.explanations }}</textarea>
+                                <textarea style="width:94%" class="w-100 form-control" placeholder="Liens utiles (1 par ligne)" rows="4" name="form_e_items[{{ loop.index0 }}][3]" id="form_items_3_{{ loop.index0 }}">{{ item.links|array_to_textarea }}</textarea>
+                                <textarea style="width:94%" class="w-100 form-control" placeholder="Explications réponse" rows="4" name="form_e_items[{{ loop.index0 }}][4]" id="form_items_4_{{ loop.index0 }}">{{ item.explanations }}</textarea>
                             </div>
                         </div>
                     {% endfor %}

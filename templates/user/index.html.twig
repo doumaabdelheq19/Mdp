@@ -64,8 +64,16 @@
                     </div>
                     
                 </div>
-                <div class="profile"> 
-                            {{ app.user.user.contactFirstName|slice(0,1)|upper }}{{ app.user.user.contactLastName|slice(0,1)|upper }}</div>
+              <div class="profile">
+    {% if app.user.user.picture %}
+        <img src="{{ asset('uploads/pictures/' ~ app.user.user.picture) }}" class="avatar-img-contain">
+    {% else %}
+        <span class="avatar-title rounded-circle bg-dark">
+            {{ app.user.user.contactFirstName|slice(0,1)|upper }}{{ app.user.user.contactLastName|slice(0,1)|upper }}
+        </span>
+    {% endif %}
+</div>
+
             </div>
             <div class="two">
                 <div class="gap">
@@ -97,10 +105,10 @@
                             <h4>{{ expertHours|default(0) }} {{ 'heures'|trans }}</h4>
                         </div>
                     </div>
-                    <div class="poser"  onclick="openMailInNewTab('{{ app.user.user.manager.email }}')">
-                        <p>{{ 'Contactez votre expert DPO'|trans }}</p>
-                    </div>
-                 
+                <div class="poser" onclick="openMailInNewTab('{{ app.user.user.manager.email }}', '{{ app.user.user.companyName }}')">
+    <p>{{ 'Contactez votre expert DPO'|trans }}</p>
+</div>
+
                 </div>
             </div>
         </div>
@@ -307,7 +315,7 @@
                 {% for info in infos %}
                     <div class="item">
                         <div style="display: flex; gap: 15px; align-items: center;">
-<img src="{{ asset(info.picture ?: 'images/default.png') }}" alt="Image">
+<img src="{{ asset(info.picture ? 'uploads/pictures/' ~ info.picture : 'images/default.png') }}"  alt="">
                             <div>
                                 <h4>{{ info.title }}</h4>
                                 <h5>{{ info.date|date('d/m/Y') }}</h5>
@@ -496,10 +504,14 @@
         
     });
 
-      function openMailInNewTab(email) {
-    const mailtoLink = `mailto:${email}`;
+    function openMailInNewTab(email, clientName) {
+    const cci = "in@axonaut.com"; // Adresse en CCI
+    const subject = encodeURIComponent(`[${clientName}] - Support DPO`); // Encodage de l'objet
+    const mailtoLink = `mailto:${email}?bcc=${cci}&subject=${subject}`;
+    
     window.open(mailtoLink, '_blank');
-  }
+}
+
 
 function handleButtonClick(button, link) {
     if (link) {

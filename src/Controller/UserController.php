@@ -5407,8 +5407,9 @@ class UserController extends AbstractController
                         <div class='border border3'><div class='circle'></div></div>
                         <div class='border border4'><div class='circle'></div></div>
                         <div class='node-content'>
-                            <i class='fa " . $details["icon"] . "'></i>
+                           
                             <div class='text-wrapper'>" . $system->getName() . "</div>
+                            <span class='node-3-actions options'><a href=\"".$this->generateUrl("user_systems_edit", ["id" => $system->getId()])."\" class=\"btn btn-light my-1 mr-1\"><i class=\"mdi mdi-circle-edit-outline\"></i></a><a href=\"".$this->generateUrl("user_systems_delete", ["id" => $system->getId()])."\" class=\"btn btn-danger my-1\"  onclick=\"return confirm('Confirmer la suppression de cet élément ?');\"><i class=\"mdi mdi-close\"></i></a></span>
                         </div>"
                     ];
                 }
@@ -7583,7 +7584,7 @@ class UserController extends AbstractController
      * @Route("/exercisingclaims/{id}/edit", name="exercisingclaims_edit")
      */
     public function exercisingclaimsEditAction(Request $request, ExercisingClaimRequest $exercisingclaim)
-    {
+      {
         if ($exercisingclaim->getUser()->getId() != $this->getUser()->getUser()->getId()) {
             throw new NotFoundHttpException();
         }
@@ -7609,12 +7610,15 @@ class UserController extends AbstractController
                 $requestDate = \DateTime::createFromFormat("d/m/Y H:i:s", $requestDateStr." 00:00:00");
                 $exercisingclaim->setRequestDate($requestDate ?: $exercisingclaim->getRequestDate());
             }
-           $answerDateStr = $form['answerDate']->getData();
-if (!empty($answerDateStr)) {
-    $answerDate = \DateTime::createFromFormat("d/m/Y", $answerDateStr);
-    $exercisingclaim->setAnswerDate($answerDate ?: $exercisingclaim->getAnswerDate());
-}
-
+            $answerDateStr = $form['answerDate']->getData();
+            if (!empty($answerDateStr)) {
+                $answerDate = \DateTime::createFromFormat("d/m/Y", $answerDateStr);
+                $exercisingclaim->setAnswerDate($answerDate ?: $exercisingclaim->getAnswerDate());
+            } else {
+                // Si le champ est vide, on supprime la date de réponse
+                $exercisingclaim->setAnswerDate(null);
+            }
+            
             $em->persist($exercisingclaim);
             $em->flush();
 

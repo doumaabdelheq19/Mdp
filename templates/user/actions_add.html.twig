@@ -24,7 +24,7 @@
      <div class="form-group">
     <div class="form-group1">
       <label for="form_action_std">{{ 'rechercher_une_action_standard'|trans }}</label>
-      <select id="form_action_std" name="form_action_std" class="form-control js-select2" onchange="selectStd(this)">
+      <select id="form_action_std" name="form_action_std" class="form-control " onchange="selectStd(this)">
         <option id="foo" selected="selected" disabled="disabled">{{ 'rechercher_une_action'|trans }}</option>
         {% for actionStd in actionsStd %}
           <option value="{{ actionStd.id }}">{{ actionStd.name }}</option>
@@ -110,6 +110,7 @@
 </div>
 
 
+
     <!-- Priority -->
    <div class="form-group-container">
     <div class="form-group" style="margin-top:20px">
@@ -127,8 +128,8 @@
         </div>
     </div>
 </div>
-{% do form.sheets.setRendered() %}
 {% do form.treatments.setRendered() %}
+
 <br>
 <div class="form-group-container">
     <div class="form-group" style="margin-top:20px">
@@ -188,26 +189,10 @@
 
     <label for="sheets-search" style="margin-bottom:10px">{{ form_label(form.sheets) }}</label>
 
-    <div class="dropdownform">
-        <!-- Input field for search -->
-        <input 
-            type="text" 
-            id="sheets-search" 
-            class="form-control" 
-            placeholder="{{ 'annexer_des_fiches_pratiques'|trans }}" 
-            oninput="filterSheetsDropdown()">
+                                {{ form_widget(form.sheets, {'attr': {'class': 'form-control js-select2 ' ~ ((form_errors(form.sheets) == '') ? '' : 'is-invalid')} }) }}
 
-        <!-- Dropdown menu dynamically populated with documents -->
-        <ul class="dropdown-menu" id="sheets-dropdown">
-            {% for sheet in form.sheets.vars.choices %}
-                <li data-id="{{ sheet.value }}" onclick="selectSheet('{{ sheet.value }}', '{{ sheet.label }}')">
-                    <a href="javascript:void(0);" >
-                        {{ sheet.label }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+
+  
 </div>
 
 <!-- Hidden input to store selected sheets -->
@@ -246,7 +231,12 @@
     <input type="hidden" id="uploadedDocuments" name="uploadedDocuments" value="" />
 </div>
 
-
+  {% if isAdmin %}
+                        <div class="custom-control custom-checkbox my-4">
+                            {{ form_widget(form.forDpo, {'attr': {'class': 'custom-control-input'}}) }}
+                            {{ form_label(form.forDpo, null, {'label_attr': {'class': 'custom-control-label'}}) }}
+                        </div>
+                    {% endif %}
 <div class="form-group">
     <div class="form-group1">
         {{ form_label(form.estimationTime, 'Temps Estimé') }}
@@ -285,8 +275,19 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
     <script>
    
+   
+     $(document).ready(function() {
+            $('.js-select2').select2({
+                
+                allowClear: true,
+                width: '100%'
+            });
+        });
+
      var inputTreatmentsSelector;
 // Tables to dataTables
 (function ($) {

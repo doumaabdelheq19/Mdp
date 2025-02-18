@@ -151,6 +151,9 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
+    
+    var selectedUsers = {{ users|json_encode|raw }}; 
+
         var questionCount = {{ training.questions|length }};
 
         function updateFileName(input) {
@@ -266,15 +269,102 @@ function updateQuestionNumbers() {
         questionNumbers[j].innerText = 'Question ' + (j + 1);
     }
 }
+function updateSelectedUsers() {
+    document.getElementById("selected_users").value = selectedUsers.join(",");
+}
+let selectedUserNames = {}; // Stocke les noms associés aux IDs
+
 
         function openUsersModal() {
-            $('#ModalUsers').modal('show');
+    $('#ModalUsers').modal('show');
+
+    $.ajax({
+        type: "POST",
+        async: true,
+        url: "{{ path('manager_json_users') }}",
+        data: {},
+        beforeSend: function () {
+            // ✅ Show loading spinner or message
+            $("#ModalUsersContent").html('<div class="text-center"><i class="fa fa-spinner fa-spin"></i> Chargement...</div>');
+        },
+        success: function (content) {
+            var ModalUsersContent = document.getElementById("ModalUsersContent");
+            ModalUsersContent.innerHTML = ""; // Clear content
+
+            content.forEach(item => {
+                var div = document.createElement("div");
+                div.className = "custom-control custom-checkbox";
+
+                var input = document.createElement("input");
+                input.className = "custom-control-input checkbox-user";
+                input.type = "checkbox";
+                input.name = "appbundle_training[users][]";
+                input.value = item.id;
+                input.id = "appbundle_training_users_" + item.id;
+
+                if (selectedUsers.includes(item.id)) {
+                    input.checked = true;
+                }
+
+                // Store user name
+                selectedUserNames[item.id] = item.text;
+
+                input.addEventListener('change', function () {
+                    if (this.checked) {
+                        if (!selectedUsers.includes(parseInt(this.value))) {
+                            selectedUsers.push(parseInt(this.value));
+                        }
+                    } else {
+                        selectedUsers = selectedUsers.filter(id => id !== parseInt(this.value));
+                    }
+                    refreshUsersContent();
+                    updateSelectedUsers();
+                });
+
+                var label = document.createElement("label");
+                label.className = "custom-control-label";
+                label.setAttribute("for", input.id);
+                label.innerText = item.text;
+
+                div.appendChild(input);
+                div.appendChild(label);
+                ModalUsersContent.appendChild(div);
+            });
+        },
+        error: function () {
+            // Handle errors
+            $("#ModalUsersContent").html('<div class="text-center text-danger">Erreur lors du chargement des utilisateurs.</div>');
         }
+    });
+}
 
         document.querySelectorAll('.remove-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 this.parentNode.remove();
             });
         });
+        function selectAllUsers() {
+    $('.checkbox-user').prop('checked', true);
+    $('.checkbox-user').each(function () {
+        let userId = parseInt($(this).val());
+        if (!selectedUsers.includes(userId)) {
+            selectedUsers.push(userId);
+        }
+    });
+    refreshUsersContent();
+    updateSelectedUsers();
+}
+
+function unselectAllUsers() {
+    $('.checkbox-user').prop('checked', false);
+    selectedUsers = [];
+    refreshUsersContent();
+    updateSelectedUsers();
+}
+
+function refreshUsersContent() {
+    let selectedNames = selectedUsers.map(id => selectedUserNames[id]); // Convertir IDs en noms
+    document.getElementById("users-selected").innerText = selectedNames.join(", ");
+}
     </script>
 {% endblock %}

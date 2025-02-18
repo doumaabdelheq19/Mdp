@@ -55,7 +55,7 @@
             </li>
             <li class="menu-item {% if app.request.attributes.get('_route') == 'manager_subcontractors' %}active{% endif %}">
                 <a href="{{ path('manager_subcontractors') }}">
-                    <i class="fa fa-users"></i> Sous-traitants standards
+                    <i class="fa fa-users"></i> Destinataires standards
                 </a>
             </li>
             <li class="menu-item {% if app.request.attributes.get('_route') == 'manager_actions' %}active{% endif %}">
@@ -163,8 +163,12 @@ Registre des incidents
       <div class="dropdown">
              <button class="submittt" style="width: 100%" onclick="toggleDropdown(event)">Mon profil</button>
             <div class="dropdown-menu">
+             {% if not is_granted('ROLE_MANAGER') %}
                 <a class="dropdown-item" href="{{ path('user_account') }}">Modifier mon compte</a>
-           
+                {% else %}
+                                <a class="dropdown-item" href="{{ path('manager_account') }}">Modifier mon compte</a>
+
+           {% endif %}
                 <a class="dropdown-item" href="{{ path('default_logout') }}">Déconnexion</a>
             </div>
         </div>

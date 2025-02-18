@@ -79,7 +79,8 @@
                 <a href="{{ path('manager_actions_deletedoc', {'action': action.id, 'document': document.id}) }}" class="btn btn-danger ml-2" onclick="return confirm('Confirmer la suppression de ce fichier ?\nCette action actualisera la page, toute autre modification sera perdue.');">
                     <i class="mdi mdi-file-remove"></i>
                 </a>
-                <a href="/uploads/documents/{{ document.filename }}" class="btn btn-info ml-2" target="_blank">
+                
+<a href="{{ asset('uploads/documents/' ~ document.filename) }}" class="btn btn-info ml-2" target="_blank">
                     <i class="mdi mdi-eye"></i>
                 </a>
             </div>

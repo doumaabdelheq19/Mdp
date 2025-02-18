@@ -40,7 +40,8 @@
             <div class="form-group">
                 <div class="form-group1">
                     <label>Fichier actuel</label>
-                    <a href="/uploads/documents/{{ filename }}" target="_blank" class="btn btn-light">
+<a href="{{ asset('uploads/documents/' ~ filename) }}" target="_blank" class="btn btn-light">
+    
                         <i class="mdi mdi-eye"></i> Voir le document
                     </a>
                 </div>
@@ -76,7 +77,8 @@
             <div class="form-group">
                 <div class="form-group1">
                     <label>Fichier actuel (EN)</label>
-                    <a href="/uploads/documents/{{ filename_en }}" target="_blank" class="btn btn-light">
+<a href="{{ asset('uploads/documents/' ~ filename_en) }}" target="_blank" class="btn btn-light">
+   
                         <i class="mdi mdi-eye"></i> Voir le document (EN)
                     </a>
                 </div>
@@ -86,7 +88,7 @@
             <div class="form-group">
                 <div class="form-group1">
                     <label>Remplacer le fichier (EN)</label>
-                    <button type="button" class="file-button-en" onclick="document.getElementById('fileInputEn').click();">
+                    <button type="button" class="file-button" onclick="document.getElementById('form_file_en').click();">
                         <i class="fa fa-file"></i> Joindre un fichier
                     </button>
                     {{ form_widget(form.file_en, {'attr': {'id': 'fileInputEn', 'class': 'd-none', 'onchange': 'updateFileName(this)'}}) }}

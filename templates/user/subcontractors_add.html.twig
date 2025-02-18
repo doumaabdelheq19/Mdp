@@ -115,12 +115,32 @@
                     {{ form_widget(form.privacyPolicyLink, {'attr': {'placeholder': 'https://', 'class': 'form-control'}}) }}
                 </div>
             </div>
-            <div class="form-group mt-3" style="margin-bottom: 40px;">
-                <button type="button" class="file-button" onclick="document.getElementById('documentFileInput').click();">
-                    <i class="fa fa-file" aria-hidden="true"></i> {{ 'joindre un fichier'|trans }}
-                </button>
-                <input type="file" id="documentFileInput" style="display: none;" onchange="updateFileName(this);">
-            </div>
+         <div class="form-row mb-5 mt-3">
+    <div class="col-12 mb-2">
+        <button type="button" class="file-button" id="add_document_button">
+            <i class="fa fa-file" aria-hidden="true"></i> {{ 'joindre un fichier'|trans }}
+        </button>
+    </div>
+
+    {% if fromStd %}
+        <div id="block_old_documents" class="row col-12">
+            {% for document in subcontractorStd.documents %}
+                <div class="form-group col-md-12 d-flex block_document">
+                    <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" checked="checked" class="custom-control-input" id="appbundle_subcontractor_documents_{{ document.id }}" name="appbundle_subcontractor_documents_{{ document.id }}" value="1" />
+                        <label class="custom-control-label" for="appbundle_subcontractor_documents_{{ document.id }}">{{ document.name }}</label>
+                    </div>
+                    <a href="{{ asset('uploads/documents/' ~ document.filename) }}" class="btn btn-info ml-2" target="_blank">
+                        <i class="mdi mdi-eye"></i>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div id="block_documents" class="row col-12"></div>
+</div>
+
         </div>
 
         <!-- Group Checkbox -->
@@ -156,14 +176,7 @@
             saved = true;
             window.location.href = "{{ path('user_subcontractors_add') }}?std=" + e;
         }
-        function updateFileName(input) {
-            const button = document.querySelector('.file-button');
-            if (input.files.length > 0) {
-                button.innerHTML = `<i class="fa fa-file" aria-hidden="true"></i> ${input.files[0].name}`;
-            } else {
-                button.innerHTML = `<i class="fa fa-file" aria-hidden="true"></i> {{ 'joindre_un_fichier'|trans }}`;
-            }
-        }
+      
 
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -200,5 +213,48 @@
       }
     });
   });
+
+
+
+    (function ($) {
+            'use strict';
+            $(document).ready(function () {
+                document.getElementById("add_document_button").addEventListener("click", function () {
+                    var div = document.createElement("div");
+                    div.className = "form-group col-md-12 d-flex block_document";
+
+                    var nameInput = document.createElement("input");
+                    nameInput.className = "form-control";
+                    nameInput.setAttribute("type", "text");
+                    nameInput.setAttribute("placeholder", "Titre");
+                    nameInput.setAttribute("name", "appbundle_subcontractor_documents_names[]");
+
+                    var fileInput = document.createElement("input");
+                    fileInput.className = "form-control ml-2";
+                    fileInput.setAttribute("type", "file");
+                    fileInput.setAttribute("name", "appbundle_subcontractor_documents[]");
+
+                    var fileInputRemoveButton = document.createElement("button");
+                    fileInputRemoveButton.className = "btn btn-danger ml-2 remove_document_button";
+                    fileInputRemoveButton.setAttribute("type", "button");
+                    fileInputRemoveButton.setAttribute("onclick", "removeDocument(this)");
+
+                 
+
+                    div.appendChild(nameInput);
+                    div.appendChild(fileInput);
+                    div.appendChild(fileInputRemoveButton);
+
+                    var element = document.getElementById("block_documents");
+                    element.appendChild(div);
+                });
+
+            
+            });
+        })(window.jQuery);
+
+        function removeDocument(element) {
+            element.parentNode.remove();
+        }
     </script>
 {% endblock %}

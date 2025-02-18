@@ -34,7 +34,7 @@
       <div class="form-row justify-content-center avatar-upload-container">
     <label class="avatar-input-label">
         <div class="avatar-container">
-            {{ get_user_avatar(app.user.user)|raw }}
+        <img src="{{ asset('uploads/pictures/' ~ app.user.user.picture) }}" class="avatar-img-contain">
             <div class="avatar-upload-icon">
                 <i class="mdi mdi-upload mdi-24px"></i>
             </div>
@@ -178,6 +178,7 @@
                 </div>
             </div>
         </div>
+    <br>
         {{ form_widget(form.save, {'attr': {'class': 'submit-button'} }) }}
 
        

@@ -30,7 +30,16 @@
             <div class="form-group">
                 <div class="form-group1">
                     {{ form_label(form.beginDate) }}
-                    {{ form_widget(form.beginDate, {'attr': {'class': 'form-control datepicker-js ' ~ ((form_errors(form.beginDate) == '') ? '' : 'is-invalid')} }) }}
+{{ form_widget(form.beginDate, {
+    'attr': {
+        'class': 'form-control datepicker-js ' ~ ((form_errors(form.beginDate) == '') ? '' : 'is-invalid'),
+        'value': form.beginDate.vars.value is not empty and form.beginDate.vars.value is iterable
+            ? form.beginDate.vars.value|date('d-m-Y')  
+            : "now"|date('d-m-Y') 
+    }
+}) }}
+
+
                     <div class="invalid-feedback">{{ form_errors(form.beginDate) | striptags }}</div>
                 </div>
                 <div class="form-group1">
@@ -97,15 +106,18 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            flatpickr(".datepicker-js", {
-                dateFormat: "d-m-Y",
-                altInput: true,
-                altFormat: "d/m/Y",
-                locale: "fr",
-                allowInput: true
-            });
+ <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        flatpickr(".datepicker-js", {
+            dateFormat: "d-m-Y",  
+            altInput: true,
+              altFormat: "d/m/Y",
+            locale: "fr",
+            allowInput: true,
+            defaultDate: document.querySelector(".datepicker-js").value || new Date().toLocaleDateString('fr-FR').split('/').reverse().join('-')  
         });
-    </script>
+    });
+</script>
+
+
 {% endblock %}
