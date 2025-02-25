@@ -6209,28 +6209,6 @@ class UserController extends AbstractController
                 }
             ]);
 
-            if ($request->request->get('selectedSheets')) {
-                $selectedSheetIds = explode(',', $request->request->get('selectedSheets'));
-            
-                $sheets = $this->getDoctrine()
-                    ->getRepository(Document::class)
-                    ->findBy(['id' => $selectedSheetIds]);
-            
-                $action->setSheets($sheets);
-            }
-            if ($request->request->get('selectedTreatments')) {
-                $selectedTreatmentIds = explode(',', $request->request->get('selectedTreatments'));
-        
-                // Fetch the treatments from the database using the IDs
-                $treatments = $em->getRepository(Treatment::class)
-                    ->findBy(['id' => $selectedTreatmentIds]);
-        
-                // Assign the treatments to the Action entity
-                $action->setTreatments($treatments);
-            }            
-
-
-
         if ($this->isGranted("ROLE_PREVIOUS_ADMIN")) {
             $form->add('forDpo', CheckboxType::class, [
                 'label' => "action_a_realiser_par_mdp",
@@ -6530,6 +6508,7 @@ class UserController extends AbstractController
             "isAdmin" => $this->isGranted("ROLE_PREVIOUS_ADMIN")
         ]);
     }
+
 
     /**
      * @Route("/actions/{id}/edit", name="actions_edit")
@@ -7671,6 +7650,8 @@ class UserController extends AbstractController
      */
     public function documentsAction(Request $request, TranslatorInterface $translator)
     {
+
+        
         $documentsTypes = $this->getDoctrine()->getRepository(DocumentType::class)->findBy(["parent" => null]);
         $userDocuments = $this->getDoctrine()->getRepository(UserDocument::class)->findBy(["user" => $this->getUser()->getUser(), "subcontractor" => null, "action" => null], ['name' => "ASC", "filename" => "ASC"]);
         $actions = $this->getDoctrine()->getRepository(Action::class)->findForUserWithGroup($this->getUser()->getUser());

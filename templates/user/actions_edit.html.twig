@@ -115,7 +115,7 @@
         </div>
     </div>
 </div>
-{% do form.treatments.setRendered() %}
+
 <br>
 <div class="form-group-container">
     <div class="form-group" style="margin-top:20px">
@@ -144,30 +144,10 @@
     <!-- Attach Documents -->
 <div class="form-group1" style="margin-top:30px">
     <label for="treatments-search" style="margin-bottom:10px">{{ 'Traitements liés'|trans }}</label>
-    <div class="dropdownform">
-        <!-- Input field for search -->
-        <input 
-            type="text" 
-            id="treatments-search" 
-            class="form-control" 
-            placeholder="{{ 'traitements_lis'|trans }}" 
-            oninput="filterTreatmentsDropdown()">
-
-        <!-- Dropdown menu dynamically populated with treatments -->
-        <ul class="dropdown-menu" id="treatments-dropdown">
-            {% for treatment in form.treatments.vars.choices %}
-                <li data-id="{{ treatment.value }}" onclick="selectTreatment('{{ treatment.value }}', '{{ treatment.label }}')">
-                    <a href="javascript:void(0);" >
-                        {{ treatment.label }}
-                    </a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
+      {{ form_widget(form.treatments, {'attr': {'class': 'form-control ' ~ ((form_errors(form.treatments) == '') ? '' : 'is-invalid')} }) }}
+                            <div class="invalid-feedback">{{ form_errors(form.treatments) | striptags  }}</div>
 </div>
 
-<!-- Hidden input to store selected treatments -->
-<input type="hidden" id="selected-treatments" name="selectedTreatments" value="" />
 
 <div class="form-group1">
 
@@ -185,32 +165,17 @@
     <button type="button" class="file-button" id="add_document_button">
         <i class="fa fa-file" aria-hidden="true"></i> {{ 'joindre_un_document'|trans }}
     </button>
-{% set fromStd = actionStd is defined and actionStd is not empty %}
+<div id="block_old_documents" class="row col-12" style="margin-top:10px; ">
+                            {% for document in action.documents %}
+                                <div class="form-group col-md-12 d-flex block_document"><input class="form-control" type="text" placeholder="{{ 'titre'|trans }}" name="appbundle_action_documents_{{ document.id }}" value="{{ document.name }}"><a href="{{ path('user_actions_deletedoc', {'action': action.id, 'document': document.id}) }}" class="btn btn-danger ml-2" onclick="return confirm('Confirmer la suppression de ce fichier ?\nCette action actualisera la page, toute autre modification sera perdue.');"><i class="mdi mdi-file-remove"></i></a><a href="{{ path('user_read_user_documents', {'id': document.id}) }}" class="btn btn-info ml-2" target="_blank"><i class="mdi mdi-eye"></i></a></div>
+                            {% endfor %}
+                        </div>
+                        <div id="block_documents" class="row col-12" style="margin-top:10px">
+                        </div>
 
-    <!-- Existing Documents (Static Display) -->
-    {% if fromStd %}
-        <div id="block_old_documents" class="form-group mt-3">
-            {% for document in actionStd.documents %}
-                <div class="selected-item d-flex align-items-center mb-2">
-                    <span>{{ document.name }}</span>
-                    <a href="/uploads/documents/{{ document.filename }}" class="btn btn-info ml-2" target="_blank">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
 
-    <!-- Dynamic Documents Container -->
-    <div id="block_documents" class="form-group mt-3">
-        <!-- New documents added dynamically will appear here -->
-    </div>
+ 
 
-    <!-- Hidden File Input -->
-    <input type="file" id="documentFileInput" style="display: none;" multiple />
-
-    <!-- Hidden Input for Backend -->
-    <input type="hidden" id="uploadedDocuments" name="uploadedDocuments" value="" />
 </div>
 
  {% if isAdmin %}
@@ -268,27 +233,12 @@
                 allowClear: true,
                 width: '100%'
             });
-        });
-   
-     var inputTreatmentsSelector;
-// Tables to dataTables
-(function ($) {
-            'use strict';
-            $(document).ready(function () {
-              
-
-                inputTreatmentsSelector = $('#appbundle_action_treatments');
+            inputTreatmentsSelector = $('#appbundle_action_treatments');
                 inputTreatmentsSelector.select2({
-                    language: {
-                        searching: function() {
-                            return null;
-                        }
-                    },
-                    dropdownAutoWidth: true,
-                    width: '100%',
-                    height: 'auto',
-                    placeholder: "Rechercher un traitement",
-                    ajax: {
+                
+                allowClear: true,
+                width: '100%',
+                ajax: {
                         url: '{{ path('user_json_treatments') }}',
                         type: 'POST',
                         data: function (params) {
@@ -307,8 +257,16 @@
                             };
                         }
                     }
-                });
+            });
+        });
+   
+// Tables to dataTables
+(function ($) {
+            'use strict';
+            $(document).ready(function () {
+              
 
+               
                 document.getElementById("add_document_button").addEventListener("click", function () {
                     var div = document.createElement("div");
                     div.className = "form-group col-md-12 d-flex block_document";
@@ -329,10 +287,7 @@
                     fileInputRemoveButton.setAttribute("type", "button");
                     fileInputRemoveButton.setAttribute("onclick", "removeDocument(this)");
 
-                    var fileInputRemoveButtonI = document.createElement("i");
-                    fileInputRemoveButtonI.className = "mdi mdi-file-remove";
-
-                    fileInputRemoveButton.appendChild(fileInputRemoveButtonI);
+                
 
                     div.appendChild(nameInput);
                     div.appendChild(fileInput);
@@ -361,240 +316,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 locale: "fr",
                 allowInput: true,
             });
-      const treatmentSearchInput = document.getElementById("treatments-search"); // Search input
-    const treatmentDropdownMenu = document.getElementById("treatments-dropdown"); // Dropdown menu
-    const treatmentHiddenInput = document.getElementById("selected-treatments"); // Hidden input to store selected IDs
-    const selectedTreatmentSet = new Set(); // Set to manage selected treatments
 
-    // Filter dropdown options based on search input
-    window.filterTreatmentsDropdown = () => {
-        const filter = treatmentSearchInput.value.toLowerCase();
-        const items = treatmentDropdownMenu.querySelectorAll("li");
-
-        items.forEach(item => {
-            const text = item.textContent.toLowerCase();
-            item.style.display = text.includes(filter) ? "block" : "none";
-        });
-    };
-
-    // Select a treatment and add it to the hidden input
-    window.selectTreatment = (id, name) => {
-        if (!selectedTreatmentSet.has(id)) {
-            selectedTreatmentSet.add(id);
-
-            // Update the hidden input value
-            treatmentHiddenInput.value = Array.from(selectedTreatmentSet).join(',');
-
-            // Display selected treatment below the dropdown
-            const selectedItem = document.createElement('div');
-            selectedItem.classList.add('selected-item');
-            selectedItem.dataset.id = id; // Store treatment ID for easy removal
-
-            // Treatment name
-            const nameSpan = document.createElement('span');
-            nameSpan.textContent = name;
-
-            // Remove button (X)
-            const removeButton = document.createElement('span');
-            removeButton.textContent = '×'; // Unicode for 'X'
-            removeButton.classList.add('remove-button');
-            removeButton.onclick = () => {
-                selectedTreatmentSet.delete(id); // Remove from the set
-                treatmentHiddenInput.value = Array.from(selectedTreatmentSet).join(','); // Update hidden input
-                selectedItem.remove(); // Remove the element from the DOM
-            };
-
-            selectedItem.appendChild(nameSpan);
-            selectedItem.appendChild(removeButton);
-
-            // Append the selected treatment to the parent
-            treatmentSearchInput.parentNode.appendChild(selectedItem);
-        }
-    };
-
-    // Show dropdown when input is focused
-    treatmentSearchInput.addEventListener("focus", () => {
-        treatmentDropdownMenu.style.display = "block";
-    });
-
-    // Hide dropdown when input loses focus
-    treatmentSearchInput.addEventListener("blur", () => {
-        setTimeout(() => {
-            treatmentDropdownMenu.style.display = "none";
-        }, 200); // Allow time for a click to register
-    });
-
-
-        const sheetsSearchInput = document.getElementById("sheets-search"); // Unique ID for the search input
-    const sheetsDropdownMenu = document.getElementById("sheets-dropdown"); // Unique ID for the dropdown menu
-    const sheetsHiddenInput = document.getElementById("selected-sheets"); // Unique hidden input for selected sheets
-    const selectedSheetsSet = new Set(); // Set to track selected sheets
-
-    // Filter dropdown options based on search input
-    window.filterSheetsDropdown = () => {
-        const filter = sheetsSearchInput.value.toLowerCase();
-        const items = sheetsDropdownMenu.querySelectorAll("li");
-
-        items.forEach(item => {
-            const text = item.textContent.toLowerCase();
-            item.style.display = text.includes(filter) ? "block" : "none";
-        });
-    };
-
-    // Select a sheet and add it to the hidden input
-    window.selectSheet = (id, name) => {
-        if (!selectedSheetsSet.has(id)) {
-            selectedSheetsSet.add(id);
-
-            // Update the hidden input value
-            sheetsHiddenInput.value = Array.from(selectedSheetsSet).join(',');
-
-            // Display selected sheet below the dropdown
-            const selectedItem = document.createElement('div');
-            selectedItem.classList.add('selected-item');
-            selectedItem.dataset.id = id; // Store sheet ID for easy removal
-
-            // Sheet name
-            const nameSpan = document.createElement('span');
-            nameSpan.textContent = name;
-
-            // Remove button (X)
-            const removeButton = document.createElement('span');
-            removeButton.textContent = '×'; // Unicode for 'X'
-            removeButton.classList.add('remove-button');
-            removeButton.onclick = () => {
-                selectedSheetsSet.delete(id); // Remove from the set
-                sheetsHiddenInput.value = Array.from(selectedSheetsSet).join(','); // Update hidden input
-                selectedItem.remove(); // Remove the element from the DOM
-            };
-
-            selectedItem.appendChild(nameSpan);
-            selectedItem.appendChild(removeButton);
-
-            // Append the selected sheet to the parent
-            sheetsSearchInput.parentNode.appendChild(selectedItem);
-        }
-    };
-
-    // Show dropdown when input is focused
-    sheetsSearchInput.addEventListener("focus", () => {
-        sheetsDropdownMenu.style.display = "block";
-    });
-
-    // Hide dropdown when input loses focus
-    sheetsSearchInput.addEventListener("blur", () => {
-        setTimeout(() => {
-            sheetsDropdownMenu.style.display = "none";
-        }, 200); // Allow time for a click to register
-    });
 
   
-    const searchInput = document.getElementById("standard-search");
-   
-    const dropdownMenu = document.getElementById("dropdown-menu");
+
+    
+
+  
 
 
 
-    // Filter dropdown options based on search input
-    window.filterDropdown = () => {
-        const filter = searchInput.value.toLowerCase();
-        const items = dropdownMenu.querySelectorAll("li:not(.dropdown-header)");
-
-        items.forEach(item => {
-            const text = item.textContent.toLowerCase();
-            item.style.display = text.includes(filter) ? "block" : "none";
-        });
-    };
-
-    // Select a dropdown item and handle actions
-    window.selectStandard = (id, name) => {
-        searchInput.value = name; // Set the selected name
-        alert(`Selected ID: ${id}, Name: ${name}`); // Example action
-    };
-   
-
-    // Show dropdown when input is focused
-    searchInput.addEventListener("focus", () => {
-        dropdownMenu.style.display = "block";
-    }); 
-
-    // Hide dropdown when input loses focus
-    searchInput.addEventListener("blur", () => {
-        setTimeout(() => {
-            dropdownMenu.style.display = "none";
-        }, 200); // Allow time for a click to register
-    });
 
 
-
-    // Handle dynamic document addition
-       const addDocumentButton = document.getElementById("add_document_button");
-    const documentFileInput = document.getElementById("documentFileInput");
-    const blockDocuments = document.getElementById("block_documents");
-    const uploadedDocumentsInput = document.getElementById("uploadedDocuments");
-
-    let uploadedDocuments = []; // Array to hold selected file data
-
-    // Handle file selection
-    const handleFileSelection = (files) => {
-        for (const file of files) {
-            // Check if the file is already uploaded
-            if (uploadedDocuments.some(doc => doc.name === file.name)) {
-                alert(`File "${file.name}" is already added.`);
-                continue;
-            }
-
-            // Add the file to the array
-            uploadedDocuments.push(file);
-
-            // Create a new document block
-            const documentBlock = document.createElement("div");
-            documentBlock.classList.add("selected-item", "d-flex", "align-items-center", "mb-2");
-
-            // File name
-            const fileNameSpan = document.createElement("span");
-            fileNameSpan.textContent = file.name;
-            documentBlock.appendChild(fileNameSpan);
-
-            // Remove button
-            const removeButton = document.createElement("button");
-            removeButton.type = "button";
-            removeButton.classList.add("btn", "btn-danger", "ml-2");
-            removeButton.innerHTML = '<i class="fa fa-trash"></i>';
-            removeButton.onclick = () => {
-                // Remove file from the array
-                uploadedDocuments = uploadedDocuments.filter(doc => doc.name !== file.name);
-                // Update the hidden input
-                updateHiddenInput();
-                // Remove the element from the DOM
-                documentBlock.remove();
-            };
-
-            documentBlock.appendChild(removeButton);
-
-            // Append to the documents block
-            blockDocuments.appendChild(documentBlock);
-        }
-
-        // Update the hidden input
-        updateHiddenInput();
-    };
-
-    // Update hidden input with file names
-    const updateHiddenInput = () => {
-        const fileNames = uploadedDocuments.map(doc => doc.name);
-        uploadedDocumentsInput.value = fileNames.join(',');
-    };
-
-    // Handle button click to trigger file input
-    addDocumentButton.addEventListener("click", () => {
-        documentFileInput.click();
-    });
-
-    // Handle file input change
-    documentFileInput.addEventListener("change", (event) => {
-        handleFileSelection(event.target.files);
-    });
 });
 
       

@@ -4,153 +4,91 @@
     {{ parent() }} - {{ 'plan_dactions'|trans }}
 {% endblock %}
 
-{% block body %}
-    {{ parent() }}
-{% endblock %}
-
 {% block content %}
-    <div class="bg-dark">
-        <div class="container-fluid">
-            <div class="row align-items-center p-b-100 p-t-30">
-                <div class="col-md-6 text-white p-b-30">
-                    {{ include('user/includes/identity.html.twig') }}
-                </div>
-                <div class="col-md-6 text-white p-b-30">
-                    <div class="media">
-                        <div class="avatar avatar mr-3">
-                            <div class="avatar-title rounded-circle mdi mdi-map-legend">
+<div class="page">
+   
 
+    <!-- Table Section -->
+    <div class="table-container-traitements">
+     <div class="header">
+                           <h2>{{ 'plan_dactions'|trans }}</h2>
+
+        </div>
+        <div style="display: flex; justify-content: space-between; width: 100%;">
+            <!-- Search Bar -->
+            <div class="search-bar">
+                <span class="search-icon">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                </span>
+                <input type="text" placeholder="{{ 'Rechercher'|trans }}" id="search-input">
+            </div>
+            <!-- Action Buttons -->
+           
+        </div>
+
+        <!-- Actions Table -->
+        <table class="styled-table">
+            <thead>
+                <tr>
+                    <th>{{ 'societe'|trans }}</th>
+                    <th>{{ 'responsable'|trans }}</th>
+                    <th>{{ 'realise'|trans }}</th>
+                    <th class="actionss">{{ 'actions'|trans }}</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                {% for action in actions %}
+                    <tr 
+                        data-realise="{{ action.terminated ? 'true' : 'false' }}" 
+                        data-priority="{{ action.priority }}">
+                        
+                        <td><a href="{{ path('user_actions_edit', {'id': action.id}) }}">{{ action.user.companyName }}</a></td>
+                        <td>{{ action.accountantLastName }} {{ action.accountantFirstName }}</td>
+
+                        <td>
+                            <div class="switch">
+                                <input type="checkbox" id="action_r_input_{{ action.id }}" {% if action.terminated %}checked{% endif %} onchange="toggleRSwitch(this, {{ action.id }});">
+                                <label for="action_r_input_{{ action.id }}"></label>
                             </div>
-                        </div>
-                        <div class="media-body">
-                            <h1>{{ 'plan_dactions'|trans }}</h1>
-                            <p class="mb-1 opacity-75">
-                                {{ 'lensemble_de_vos_actions'|trans }}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container-fluid pull-up">
-        <div class="row justify-content-md-end">
+                        </td>
 
-        </div>
-        <div class="row">
-
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between">
-                        <h5>{{ mainAction.name }}</h5>
-                        <div>
-                            <a href="{{ path('user_actions_grp_delete_all', {"id": mainAction.id}) }}" class="btn btn-secondary" onclick="return confirm('Vous allez supprimer l\'ensemble de ces actions de groupe.');">Supprimer pour tous</a>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive p-t-10">
-                            <table class="table" style="width:100%">
-                                <thead>
-                                <tr>
-                                    <th>{{ 'societe'|trans }}</th>
-                                    <th>{{ 'responsable'|trans }}</th>
-                                    <th>{{ 'realise'|trans }}</th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for action in actions %}
-                                    <tr>
-                                        <td><a href="{{ path('user_actions_edit', {'id': action.id}) }}">{{ action.user.companyName }}</a></td>
-                                        <td>{{ action.accountantLastName }} {{ action.accountantFirstName }}</td>
-                                        <td>
-                                            <span class="d-none" id="action_r_label_{{ action.id }}">{% if action.terminated %}{{ 'oui'|trans }}{% else %}{{ 'non'|trans }}{% endif %}</span>
-                                            <div class=" m-b-10">
-                                                <label class="cstm-switch cstm-switch-bool">
-                                                    <input type="checkbox" name="option" value="1" class="cstm-switch-input" id="action_r_input_{{ action.id }}" {% if action.terminated %}checked="checked"{% endif %} onchange="toggleRSwitch(this, {{ action.id }});">
-                                                    <span class="cstm-switch-indicator"></span>
-                                                    <span class="cstm-switch-description"></span>
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div style="min-width: 240px;">
-                                                <a href="{{ path('user_actions_print', {'id': action.id}) }}" target="_blank" class="btn btn-md ml-1 mr-1 btn-info" data-toggle="tooltip" data-placement="top" data-original-title="Imprimer">
-                                                    <i class="mdi mdi-printer"></i>
-                                                </a>
-                                                <a href="{{ path('user_actions_delete', {'id': action.id}) }}" class="btn btn-md ml-1 mr-1 btn-danger" data-toggle="tooltip" data-placement="top" data-original-title="Supprimer" onclick="return confirm('Confirmer la suppression de cette action ?');">
-                                                    <i class="mdi mdi-close"></i>
-                                                </a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                        <td>
+                            <div class="options">
+                                <a href="{{ path('user_actions_print', {'id': action.id}) }}" target="_blank" class="edit">
+                                    <i class="fa fa-print" aria-hidden="true"></i>
+                                </a>
+                                <a href="{{ path('user_actions_delete', {'id': action.id}) }}" class="delete" onclick="return confirm('{{ 'confirmer_la_suppression'|trans }}');">
+                                    <i class="fa fa-trash" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
     </div>
+</div>
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
     <script>
-        (function ($) {
-            'use strict';
-            $(document).ready(function () {
-                {% if app.request.locale == "fr" %}
-                    $('#datatable').DataTable({
-                        "language": {
-                            "search": "Rechercher :",
-                            "lengthMenu": "Afficher _MENU_ résultats par page",
-                            "zeroRecords": "Aucun résultat",
-                            "info": "Page _PAGE_ sur _PAGES_",
-                            "infoEmpty": "Aucune données sur ce tableau",
-                            "infoFiltered": "(filtered from _MAX_ total records)",
-                            "paginate": {
-                                "previous": "Précédent",
-                                "next": "Suivant",
-
-                            }
-                        }
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('.switch input').forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    this.disabled = true;
+                    fetch("{{ path('user_json_toggle_action') }}", {
+                        method: "POST",
+                        body: JSON.stringify({ id: this.id.replace('action_r_input_', '') }),
+                        headers: { "Content-Type": "application/json" }
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        this.checked = data.state;
+                        this.disabled = false;
                     });
-                {% else %}
-                    $('#datatable').DataTable({});
-                {% endif %}
-
+                });
             });
-
-        })(window.jQuery);
-
-        function toggleRSwitch(element, id) {
-            element.disabled = true;
-
-            const initialState = !element.checked;
-
-            $.ajax({
-                type: "POST",
-                async: true,
-                url: "{{ path('user_json_toggle_action') }}",
-                data: {id: id},
-                success: function (content) {
-                    console.log(content);
-                    if (content.success) {
-                        element.checked = content.state;
-                    } else {
-                        element.checked = initialState;
-                    }
-                    if(element.checked === false) {
-                        $("#action_r_label_"+id).text("Non");
-                    }
-                    else {
-                        $("#action_r_label_"+id).text("Oui");
-                    }
-                    element.disabled = false;
-                }
-            });
-        }
+        });
     </script>
 {% endblock %}

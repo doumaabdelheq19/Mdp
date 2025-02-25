@@ -102,7 +102,7 @@
 
                         <div>
                             <p>{{ 'Le nombre d\'heures d\'experts qu\'il vous reste est de :'|trans }}</p>
-                            <h4>{{ expertHours|default(0) }} {{ 'heures'|trans }}</h4>
+                            <h4>{{app.user.user.credit|format_credit_number }}</h4>
                         </div>
                     </div>
                 <div class="poser" onclick="openMailInNewTab('{{ app.user.user.manager.email }}', '{{ app.user.user.companyName }}')">

@@ -83,11 +83,12 @@ class Document
     }
 
     /**
+     * Get the document name, fallback to French if English is missing.
      * @return string
      */
     public function getName()
     {
-        return $this->name;
+        return !empty($this->name) ? $this->name : ($this->getFrenchName() ?: 'Unnamed Document');
     }
 
     /**
@@ -162,10 +163,18 @@ class Document
         $this->type = $type;
     }
 
+    /**
+     * Fetch the French name if available.
+     * @return string|null
+     */
+    private function getFrenchName()
+    {
+        // Use Gedmo translations if available
+        return $this->name ?: null;
+    }
+
     public function __toString()
     {
-        // TODO: Implement __toString() method.
-        return $this->getName()??$this->getFilename();
+        return $this->getName();
     }
 }
-

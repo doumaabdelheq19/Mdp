@@ -3375,3 +3375,7 @@ top:1.5rem;
 .select2-container--default {
   width: 97% !important;
 }
+
+#appbundle_action_forDpo {
+  margin-bottom: 5px;
+}

@@ -4,6 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Account;
 use App\Entity\ActionStd;
+use Doctrine\ORM\EntityManagerInterface;
+
 use App\Entity\ActionStdDocument;
 use App\Entity\Credit;
 use App\Entity\Document;
@@ -3758,20 +3760,26 @@ class ManagerController extends AbstractController
         return $this->redirectToRoute("manager_actions");
     }
 
-    /**
-     * @Route("/actions/deletedoc/{action}/{document}", name="actions_deletedoc")
-     */
-    public function actionsDeleteDocAction(Request $request, ActionStd $action, ActionStdDocument $actionStdDocument)
-    {
-        $em = $this->getDoctrine()->getManager();
+  /**
+ * @Route("/actions/deletedoc/{action}/{document}", name="actions_deletedoc")
+ */
+public function actionsDeleteDocAction(Request $request, ActionStd $action, $document, EntityManagerInterface $em)
+{
+    // Manually fetch the ActionStdDocument using the ID
+    $actionStdDocument = $em->getRepository(ActionStdDocument::class)->find($document);
 
-        $em->remove($actionStdDocument);
-        $em->flush();
-
-        $this->get('session')->getFlashBag()->add('success', 'Document supprimé');
-
-        return $this->redirectToRoute('manager_actions_edit', ['id' => $action->getId()]);
+    if (!$actionStdDocument) {
+        throw $this->createNotFoundException('Document not found.');
     }
+
+    $em->remove($actionStdDocument);
+    $em->flush();
+
+    $this->addFlash('success', 'Document supprimé');
+
+    return $this->redirectToRoute('manager_actions_edit', ['id' => $action->getId()]);
+}
+
 
     /**
      * @Route("/infos", name="infos")
@@ -4236,10 +4244,10 @@ class ManagerController extends AbstractController
         if (!$this->isGranted("ROLE_DPO")) {
             throw new NotFoundHttpException();
         }
-
+    
         $em = $this->getDoctrine()->getManager();
-
-        if ($subscription->getPaymentUntil() == null) {
+    
+        if ($subscription->getPaymentUntil() === null) {
             $subscription->setPaymentUntil($subscription->getEndDate());
             switch ($subscription->getType()->getCode()) {
                 case "ABOPLS":
@@ -4252,22 +4260,26 @@ class ManagerController extends AbstractController
                     break;
             }
         }
-
+    
+        // Clone current paymentUntil date
         $paymentUntil = clone $subscription->getPaymentUntil();
-
+    
+        // Add the billing period (either BillingMonths or InvolvementMonths)
         if ($subscription->getBillingMonths()) {
             $paymentUntil->add(new \DateInterval("P".$subscription->getBillingMonths()."M"));
         } else {
             $paymentUntil->add(new \DateInterval("P".$subscription->getInvolvementMonths()."M"));
         }
-
+    
+        // Update both `paymentUntil` and `endDate`
         $subscription->setPaymentUntil($paymentUntil);
-        //$subscription->setEndDate($paymentUntil);
-
+        $subscription->setEndDate($paymentUntil); // ✅ Setting `endDate` to next billing date
+    
         $em->flush();
-
+    
         return $this->redirectToRoute("manager_subscriptions_user", ["id" => $user->getId()]);
     }
+    
 
     /**
      * @Route("/subscriptions/add", name="subscriptions_add")
@@ -4627,95 +4639,101 @@ class ManagerController extends AbstractController
                     return $user->getCompanyName();
                 },
             ]);
-
+    
         $form->handleRequest($request);
-
+    
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
-
-            $content = $training->getQuestions();
-
-            $questions_edit = $_POST['form_e_items']??[];
+    
+            $existingQuestions = $training->getQuestions(); // Store existing questions
+            $newQuestions = $existingQuestions; // Start with existing questions
+    
+            $questions_edit = $_POST['form_e_items'] ?? [];
             $questions_edit = array_values($questions_edit);
-
-            foreach ($content as $keyItem => $question) {
-                $toRemove = true;
-                if (count($questions_edit)) {
-                    if (isset($questions_edit[$keyItem])) {
-                        $content[$keyItem]['title'] = $questions_edit[$keyItem][0]??null;
-                        $content[$keyItem]['choices'] = explode("\n", str_replace("\r", "", $questions_edit[$keyItem][1]??null));
-                        $content[$keyItem]['multiple'] = $questions_edit[$keyItem][2]==1?true:false;
-                        $content[$keyItem]['links'] = explode("\n", str_replace("\r", "", $questions_edit[$keyItem][3]??null));
-                        $content[$keyItem]['explanations'] = $questions_edit[$keyItem][4]??null;
-
-                        if (count($content[$keyItem]['links']) == 1) {
-                            if ($content[$keyItem]['links'][0] == "") {
-                                $content[$keyItem]['links'] = [];
-                            }
-                        }
-
-                        $toRemove = false;
+    
+            $questionsModified = false; // Track if questions were modified
+    
+            foreach ($newQuestions as $keyItem => $question) {
+                if (isset($questions_edit[$keyItem])) {
+                    $updatedQuestion = [
+                        'title' => $questions_edit[$keyItem][0] ?? null,
+                        'choices' => explode("\n", str_replace("\r", "", $questions_edit[$keyItem][1] ?? null)),
+                        'multiple' => $questions_edit[$keyItem][2] == 1 ? true : false,
+                        'links' => explode("\n", str_replace("\r", "", $questions_edit[$keyItem][3] ?? null)),
+                        'explanations' => $questions_edit[$keyItem][4] ?? null,
+                    ];
+    
+                    if (count($updatedQuestion['links']) == 1 && $updatedQuestion['links'][0] == "") {
+                        $updatedQuestion['links'] = [];
                     }
-                }
-
-                if ($toRemove) {
-                    unset($content[$keyItem]);
+    
+                    // Use helper function to check for modifications
+                    if ($this->isQuestionModified($question, $updatedQuestion)) {
+                        $newQuestions[$keyItem] = $updatedQuestion;
+                        $questionsModified = true;
+                    }
+                } else {
+                    unset($newQuestions[$keyItem]); // Remove question
+                    $questionsModified = true;
                 }
             }
-
-            $questions = $_POST['form_items']??[];
+    
+            $questions = $_POST['form_items'] ?? [];
             $questions = array_values($questions);
-
+    
             if (count($questions)) {
                 foreach ($questions as $question) {
-                    $content[] = [
-                        'title' => $question[0]??null,
-                        'choices' => explode("\n", str_replace("\r", "", $question[1]??null)),
-                        'multiple' => $question[2]==1?true:false,
-                        'links' => explode("\n", str_replace("\r", "", $question[3]??null)),
-                        'explanations' => $question[4]??null,
+                    $newQuestions[] = [
+                        'title' => $question[0] ?? null,
+                        'choices' => explode("\n", str_replace("\r", "", $question[1] ?? null)),
+                        'multiple' => $question[2] == 1 ? true : false,
+                        'links' => explode("\n", str_replace("\r", "", $question[3] ?? null)),
+                        'explanations' => $question[4] ?? null,
                     ];
                 }
+                $questionsModified = true;
             }
-
-            if ($training->getQuestions() != $content) {
-                $training->setAnswered(false);
+    
+            // **Only update questions if something actually changed**
+            if ($questionsModified) {
+                $training->setQuestions($newQuestions);
+               
+            } else {
+                $training->setQuestions($existingQuestions); // Keep old questions if unchanged
             }
-
-            $training->setQuestions($content);
-
+    
             $em->flush();
-
+    
             /**
              * @var UploadedFile $file
              */
             $file = $form->get('pictureFile')->getData();
             if ($file != NULL) {
-                $fileName = "t".$training->getId()."_".md5(uniqid()) . '.' . $file->guessExtension();
-
+                $fileName = "t" . $training->getId() . "_" . md5(uniqid()) . '.' . $file->guessExtension();
+    
                 $file->move(
                     $this->getParameter('pictures_directory'), $fileName
                 );
-
+    
                 $training->setPicture($fileName);
-
+                $training->setAnswered(true);
                 $em->flush();
             }
-
+    
             $this->get('session')->getFlashBag()->add('success', 'Questionnaire mis à jour');
             return $this->redirectToRoute("manager_trainings");
         }
-
+    
         $users = [];
         $usersStr = [];
-
+    
         foreach ($training->getUsers() as $user) {
             $users[] = $user->getId();
             $usersStr[] = $user->getCompanyName();
         }
-
+    
         sort($usersStr);
-
+    
         return $this->render('manager/trainings_edit.html.twig', [
             "form" => $form->createView(),
             "training" => $training,
@@ -4723,6 +4741,10 @@ class ManagerController extends AbstractController
             "usersStr" => $usersStr,
         ]);
     }
+    
+    
+
+    
 
     /**
      * @Route("/trainings/{id}/answer", name="trainings_answer")

@@ -45,7 +45,7 @@
                             {% if subscription %}
                                 {% if subscription.type %}
                                     <span class="badge badge-info" data-toggle="tooltip" data-placement="top" title="{{ subscription.type.libelle }}">{{ subscription.type.code }}</span>
-                                {% else %}
+                                {% else %}  
                                     {{ subscription.offer }}
                                 {% endif %}
                             {% endif %}
@@ -60,7 +60,7 @@
                                 {{ subscription.endDate|date('d/m/Y') }}
                             {% endif %}
                         </td>
-                        <td>
+                        <td style="text-align:center">
                             {% if subscription %}
                                 {{ subscription.paymentUntil ? subscription.paymentUntil|date('d/m/Y') : '-' }}
                                 {% if subscription.active and (subscription.paymentUntil is null or subscription.paymentUntil < now) %}
@@ -134,31 +134,11 @@
     </div>
 </div>
 
+
 <script>
-(function ($) {
-            'use strict';
-            $(document).ready(function () {
-                $('#datatable').DataTable({
-                    "language": {
-                        "search": "Rechercher :",
-                        "lengthMenu": "Afficher _MENU_ résultats par page",
-                        "zeroRecords": "Aucun résultat",
-                        "info": "Page _PAGE_ sur _PAGES_",
-                        "infoEmpty": "Aucune données sur ce tableau",
-                        "infoFiltered": "(filtered from _MAX_ total records)",
-                        "paginate": {
-                            "previous": "Précédent",
-                            "next": "Suivant",
-
-                        }
-                    }
-                });
-
-            });
-
-        })(window.jQuery);
-    document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     const table = document.getElementById('datatable');
+    const tableBody = table.querySelector("tbody");
     const headers = table.querySelectorAll('thead th');
     const rows = Array.from(table.querySelectorAll('tbody tr'));
     const resultsSelect = document.getElementById('resultsSelect');
@@ -169,7 +149,7 @@
 
     let currentPage = 1;
     let resultsPerPage = parseInt(resultsSelect.value);
-    let filteredRows = rows;
+    let filteredRows = [...rows];
     let sortColumn = -1;
     let sortDirection = 1; // 1 = ascending, -1 = descending
 
@@ -178,13 +158,13 @@
         const start = (currentPage - 1) * resultsPerPage;
         const end = start + resultsPerPage;
 
-        rows.forEach((row, index) => {
-            row.style.display = filteredRows.includes(row) && index >= start && index < end ? '' : 'none';
-        });
+        // Clear table body and re-add sorted rows (only the visible ones)
+        tableBody.innerHTML = "";
+        filteredRows.slice(start, end).forEach(row => tableBody.appendChild(row));
 
-        paginationInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
+        paginationInfo.textContent = `Page ${currentPage} sur ${totalPages || 1}`;
         prevPage.disabled = currentPage === 1;
-        nextPage.disabled = currentPage === totalPages;
+        nextPage.disabled = currentPage === totalPages || totalPages === 0;
     }
 
     function filterTable() {
@@ -193,54 +173,75 @@
         currentPage = 1;
         updateTable();
     }
-function sortTable(columnIndex) {
-    if (sortColumn === columnIndex) {
-        sortDirection *= -1; // Toggle sorting order
-    } else {
-        sortColumn = columnIndex;
-        sortDirection = 1;
+
+    function sortTable(columnIndex) {
+        if (sortColumn === columnIndex) {
+            sortDirection *= -1; // Toggle sorting order
+        } else {
+            sortColumn = columnIndex;
+            sortDirection = 1;
+        }
+
+        function parseDate(value) {
+            const parts = value.split("/");
+            if (parts.length === 3) {
+                const day = parts[0].padStart(2, "0");
+                const month = parts[1].padStart(2, "0");
+                const year = parts[2];
+                return parseInt(`${year}${month}${day}`, 10);
+            }
+            return null;
+        }
+
+        function parseValue(text) {
+            const trimmedText = text.trim();
+
+            if (/^\d{2}\/\d{2}\/\d{4}$/.test(trimmedText)) {
+                return parseDate(trimmedText);
+            }
+
+            const num = parseFloat(trimmedText.replace(/,/g, ""));
+            if (!isNaN(num)) {
+                return num;
+            }
+
+            return trimmedText;
+        }
+
+        function compareRows(a, b) {
+            const aText = a.children[columnIndex].innerText.trim();
+            const bText = b.children[columnIndex].innerText.trim();
+
+            const aValue = parseValue(aText);
+            const bValue = parseValue(bText);
+
+            console.log(`Comparing: "${aText}" (${aValue}) vs "${bText}" (${bValue})`);
+
+            if (aValue === null && bValue !== null) return 1 * sortDirection;
+            if (aValue !== null && bValue === null) return -1 * sortDirection;
+            if (aValue === null && bValue === null) return 0;
+
+            if (typeof aValue === "number" && typeof bValue === "number") {
+                return (aValue - bValue) * sortDirection;
+            }
+
+            return String(aValue).localeCompare(String(bValue), undefined, { numeric: true }) * sortDirection;
+        }
+
+        console.log("Before Sorting:", filteredRows.map(row => row.children[columnIndex].innerText.trim()));
+
+        // Perform sorting
+        filteredRows.sort(compareRows);
+
+        console.log("After Sorting:", filteredRows.map(row => row.children[columnIndex].innerText.trim()));
+
+        // Remove sorting classes from all headers
+        headers.forEach(th => th.classList.remove('sorting_asc', 'sorting_desc'));
+        headers[columnIndex].classList.add(sortDirection === 1 ? 'sorting_asc' : 'sorting_desc');
+
+        updateTable();
     }
 
-    filteredRows.sort((a, b) => {
-        const aText = a.children[columnIndex].innerText.trim();
-        const bText = b.children[columnIndex].innerText.trim();
-
-        const aValue = parseValue(aText);
-        const bValue = parseValue(bText);
-
-        if (aValue < bValue) return -1 * sortDirection;
-        if (aValue > bValue) return 1 * sortDirection;
-        return 0;
-    });
-
-    // Remove sorting classes from all headers
-    headers.forEach(th => th.classList.remove('sorting_asc', 'sorting_desc'));
-
-    // Add sorting class to active column
-    headers[columnIndex].classList.add(sortDirection === 1 ? 'sorting_asc' : 'sorting_desc');
-
-    updateTable();
-}
-
-// Function to detect and convert values
-function parseValue(value) {
-    // Check if value is a date in DD/MM/YYYY format
-    if (value.match(/^(\d{2})\/(\d{2})\/(\d{4})$/)) {
-        const parts = value.split('/'); // Split by "/"
-        return new Date(parts[2], parts[1] - 1, parts[0]); // Convert to Date (YYYY, MM, DD)
-    }
-    
-    // Check if value is a number
-    if (!isNaN(value.replace(',', '.'))) {
-        return parseFloat(value.replace(',', '.')); // Handle decimal comma (e.g., "1,5" → 1.5)
-    }
-
-    // Default to lowercase string comparison
-    return value.toLowerCase();
-}
-
-
-    // Attach sorting to column headers
     headers.forEach((th, index) => {
         th.style.cursor = 'pointer';
         th.addEventListener('click', () => sortTable(index));
@@ -271,6 +272,7 @@ function parseValue(value) {
 
     updateTable();
 });
+
 
 </script>
 {% endblock %}

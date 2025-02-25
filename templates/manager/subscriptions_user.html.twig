@@ -54,11 +54,11 @@
                         </td>
                         <td>{{ subscription.beginDate|date('d/m/Y') }}</td>
                         <td>{{ subscription.endDate|date('d/m/Y') }}</td>
-                        <td>
+                        <td style="text-align:center">
                             {{ subscription.paymentUntil ? subscription.paymentUntil|date('d/m/Y') : '-' }}
                             {% if subscription.active and (subscription.paymentUntil is null or subscription.paymentUntil < now) %}
                                 <br>
-                                <a href="{{ path('manager_subscriptions_user_payment', {'user': user.id, 'subscription': subscription.id}) }}" class="btn btn-secondary btn-sm">
+                                <a href="{{ path('manager_subscriptions_user_payment', {'user': user.id, 'subscription': subscription.id}) }}" class="imprimer" style="color:#438492; width:auto; margin:3px; padding:3px 5px; height:auto">
                                     {{ 'Renouveler'|trans }}
                                 </a>
                             {% endif %}

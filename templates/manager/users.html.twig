@@ -156,97 +156,96 @@
     {{ parent() }}
     <script>
       document.addEventListener('DOMContentLoaded', function () {
-    const table = document.getElementById('datatable');
-    const headers = table.querySelectorAll('thead th');
-    const rows = Array.from(table.querySelectorAll('tbody tr'));
-    const resultsSelect = document.getElementById('resultsSelect');
-    const paginationInfo = document.getElementById('paginationInfo');
-    const prevPage = document.getElementById('prevPage');
-    const nextPage = document.getElementById('nextPage');
-    const searchInput = document.getElementById('searchInput');
+        const table = document.getElementById('datatable');
+        const headers = table.querySelectorAll('thead th');
+        const tbody = table.querySelector('tbody');
+        const rows = Array.from(tbody.querySelectorAll('tr'));
+        const resultsSelect = document.getElementById('resultsSelect');
+        const paginationInfo = document.getElementById('paginationInfo');
+        const prevPage = document.getElementById('prevPage');
+        const nextPage = document.getElementById('nextPage');
+        const searchInput = document.getElementById('searchInput');
 
-    let currentPage = 1;
-    let resultsPerPage = parseInt(resultsSelect.value);
-    let filteredRows = rows;
-    let sortColumn = -1;
-    let sortDirection = 1; // 1 for ascending, -1 for descending
+        let currentPage = 1;
+        let resultsPerPage = parseInt(resultsSelect.value);
+        let filteredRows = [...rows];
+        let sortColumn = -1;
+        let sortDirection = 1; // 1 for ascending, -1 for descending
 
-    function updateTable() {
-        const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
-        const start = (currentPage - 1) * resultsPerPage;
-        const end = start + resultsPerPage;
+        function updateTable() {
+            const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+            currentPage = Math.min(currentPage, totalPages) || 1;
 
-        rows.forEach((row, index) => {
-            row.style.display = filteredRows.includes(row) && index >= start && index < end ? '' : 'none';
-        });
+            const start = (currentPage - 1) * resultsPerPage;
+            const end = start + resultsPerPage;
 
-        paginationInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
-        prevPage.disabled = currentPage === 1;
-        nextPage.disabled = currentPage === totalPages;
-    }
+            tbody.innerHTML = ''; // Clear table body before re-adding rows
 
-    function filterTable() {
-        const query = searchInput.value.toLowerCase();
-        filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
-        currentPage = 1;
-        updateTable();
-    }
+            filteredRows.slice(start, end).forEach(row => tbody.appendChild(row));
 
-    function sortTable(columnIndex) {
-        if (sortColumn === columnIndex) {
-            sortDirection *= -1; // Toggle sorting order
-        } else {
-            sortColumn = columnIndex;
-            sortDirection = 1;
+            paginationInfo.textContent = `Page ${currentPage} sur ${totalPages || 1}`;
+            prevPage.disabled = currentPage === 1;
+            nextPage.disabled = currentPage === totalPages || totalPages === 0;
         }
 
-        filteredRows.sort((a, b) => {
-            const aText = a.children[columnIndex].innerText.trim().toLowerCase();
-            const bText = b.children[columnIndex].innerText.trim().toLowerCase();
-
-            return aText.localeCompare(bText, 'fr', { numeric: true }) * sortDirection;
-        });
-
-        // Remove sorting classes from all headers
-        headers.forEach(th => th.classList.remove('sorting_asc', 'sorting_desc'));
-
-        // Add sorting class to the active column
-        headers[columnIndex].classList.add(sortDirection === 1 ? 'sorting_asc' : 'sorting_desc');
-
-        updateTable();
-    }
-
-    // Attach sorting to column headers
-    headers.forEach((th, index) => {
-        th.style.cursor = 'pointer';
-        th.addEventListener('click', () => sortTable(index));
-    });
-
-    resultsSelect.addEventListener('change', function () {
-        resultsPerPage = parseInt(this.value);
-        currentPage = 1;
-        updateTable();
-    });
-
-    prevPage.addEventListener('click', function () {
-        if (currentPage > 1) {
-            currentPage--;
+        function filterTable() {
+            const query = searchInput.value.toLowerCase().trim();
+            filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
+            currentPage = 1;
             updateTable();
         }
-    });
 
-    nextPage.addEventListener('click', function () {
-        const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
-        if (currentPage < totalPages) {
-            currentPage++;
+        function sortTable(columnIndex) {
+            if (sortColumn === columnIndex) {
+                sortDirection *= -1; // Toggle sorting order
+            } else {
+                sortColumn = columnIndex;
+                sortDirection = 1;
+            }
+
+            filteredRows.sort((a, b) => {
+                const aText = a.children[columnIndex]?.innerText.trim().toLowerCase() || '';
+                const bText = b.children[columnIndex]?.innerText.trim().toLowerCase() || '';
+
+                return aText.localeCompare(bText, 'fr', { numeric: true }) * sortDirection;
+            });
+
+            headers.forEach(th => th.classList.remove('sorting_asc', 'sorting_desc'));
+            headers[columnIndex].classList.add(sortDirection === 1 ? 'sorting_asc' : 'sorting_desc');
+
             updateTable();
         }
-    });
 
-    searchInput.addEventListener('input', filterTable);
+        headers.forEach((th, index) => {
+            th.style.cursor = 'pointer';
+            th.addEventListener('click', () => sortTable(index));
+        });
 
-    updateTable();
-});
+        resultsSelect.addEventListener('change', function () {
+            resultsPerPage = parseInt(this.value);
+            currentPage = 1;
+            updateTable();
+        });
 
+        prevPage.addEventListener('click', function () {
+            if (currentPage > 1) {
+                currentPage--;
+                updateTable();
+            }
+        });
+
+        nextPage.addEventListener('click', function () {
+            const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+            if (currentPage < totalPages) {
+                currentPage++;
+                updateTable();
+            }
+        });
+
+        searchInput.addEventListener('input', filterTable);
+
+        updateTable();
+      });
     </script>
 {% endblock %}
+
