@@ -1,238 +1,245 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - {{ 'formation_des_quipes'|trans }}
+	{{ parent() }}
+	-
+	{{ 'formation_des_quipes'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
+	{{ parent() }}
 {% endblock %}
 
 {% block body %}
-    {{ parent() }}
-   
+	{{ parent() }}
+
 {% endblock %}
 
 {% block content %}
-  <div class="page">
-    <!-- Header Section -->
-    <div class="table-container-traitements">
-        <div class="header">
-        <div class="headretour" style="display:flex; align-items:center">
-                    <a href="javascript:history.back()" style="margin-top:4px"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024"><path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/></svg></a>
+	<div
+		class="page">
+		<!-- Header Section -->
+		<div class="table-container-traitements">
+			<div class="header">
+				<div class="headretour" >
+					<a href="javascript:history.back()" class="headretour-icon" >
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 1024 1024"><path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/></svg>
+					</a>
 
-            <h2>{{ 'formation_des_quipes'|trans }}</h2>
-            </div>
-            <p><a href="https://www.cnil.fr/fr/securite-impliquer-et-former-les-utilisateurs" target="_blac" class="text-primary">{{ 'En savoir plus sur la sensibilisation des personnes'|trans }}</a></p>
-        </div>
+					<h2>{{ 'formation_des_quipes'|trans }}</h2>
+				</div>
+				<p>
+					<a href="https://www.cnil.fr/fr/securite-impliquer-et-former-les-utilisateurs" target="_blac" class="text-primary">{{ 'En savoir plus sur la sensibilisation des personnes'|trans }}</a>
+				</p>
+			</div>
 
-        <!-- Search and Action Buttons -->
-        <div style="display: flex; justify-content: space-between; width: 100%;">
-            <div class="search-bar">
-                <span class="search-icon">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                </span>
-                <input type="text" placeholder="{{ 'Rechercher'|trans }}" />
-            </div>
-            <div class="buttons">
-                <div class="gerer">
-                    <a onclick="showStats()" href="#" class="btn btn-primary">{{ 'Voir les statistiques'|trans }}</a>
-                </div>
-                <div class="exporter">
-                    <a href="{{ path('user_trainings_requests_revive_all', {"trainingCampain": trainingCampain.id}) }}" onclick="return confirm('{% if app.request.locale == "fr" %}Vous allez relancer l\'ensemble des personnes n\'ayant pas répondu à ce questionnaire.{% else %}You are going to send a reminder to all the people who didn\'t answer this questionnaire.{% endif %}');" class="btn btn-primary" id="openpopup">{{ 'Tout relancer'|trans }}</a>
-                </div>
-            </div>
-        </div>
+			<!-- Search and Action Buttons -->
+			<div class="search-container" >
+				<div class="search-bar">
+					<span class="search-icon">
+						<i class="fa fa-search" aria-hidden="true"></i>
+					</span>
+					<input type="text" placeholder="{{ 'Rechercher'|trans }}"/>
+				</div>
+				<div class="buttons">
+					<div class="gerer">
+						<a onclick="showStats()" href="#" class="btn btn-primary">{{ 'Voir les statistiques'|trans }}</a>
+					</div>
+					<div class="exporter">
+						<a href="{{ path('user_trainings_requests_revive_all', {"trainingCampain": trainingCampain.id}) }}" onclick="return confirm('{% if app.request.locale == " fr" %}vous allez relancer l\'ensemble des personnes n\'ayant pas répondu à ce questionnaire.{% else %}you are going to send a reminder to all the people who didn\'t answer this questionnaire.{% endif %}');" class="btn btn-primary" id="openpopup">{{ 'Tout relancer'|trans }}</a>
+					</div>
+				</div>
+			</div>
 
-        <!-- Data Table -->
-        <table class="styled-table">
-            <thead>
-                <tr>
-                 <th>{{ 'nom'|trans }}</th>
-                                    <th>{{ 'prnom'|trans }}</th>
-                                    <th>{{ 'fonction'|trans }}</th>
-                                    <th>{{ 'email'|trans }}</th>
-                                    <th>{{ 'scores'|trans }}</th>
-                                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                {% if trainingRequests|length > 0 %}
-                       {% for trainingRequest in trainingRequests %}
-                                    <tr>
-                                        <td>{{ trainingRequest.lastName }}</td>
-                                        <td>{{ trainingRequest.firstName }}</td>
-                                        <td>{{ trainingRequest.position }}</td>
-                                        <td>{{ trainingRequest.email }}</td>
-                                        <td>
-                                           {% if trainingRequest.answerDate %}
-    {% set dataRateClass = "badge-danger" %}
-    {% if trainingRequest.result == 1 %}
-        {% set dataRateClass = "badge-success" %}
-    {% elseif trainingRequest.result >= 0.5 %}
-        {% set dataRateClass = "badge-warning" %}
-    {% endif %}
-    <span class="badge {{ dataRateClass }}" style="cursor: pointer;" onclick="showAnswers({{ trainingRequest.id }})">
-        {{ (trainingRequest.result * 100)|round }}%
-    </span>
-{% endif %}
+			<!-- Data Table -->
+			<table class="styled-table">
+				<thead>
+					<tr>
+						<th>{{ 'nom'|trans }}</th>
+						<th>{{ 'prnom'|trans }}</th>
+						<th>{{ 'fonction'|trans }}</th>
+						<th>{{ 'email'|trans }}</th>
+						<th>{{ 'scores'|trans }}</th>
+						<th></th>
+					</tr>
+				</thead>
+				<tbody>
+					{% if trainingRequests|length > 0 %}
+						{% for trainingRequest in trainingRequests %}
+							<tr>
+								<td>{{ trainingRequest.lastName }}</td>
+								<td>{{ trainingRequest.firstName }}</td>
+								<td>{{ trainingRequest.position }}</td>
+								<td>{{ trainingRequest.email }}</td>
+								<td>
+									{% if trainingRequest.answerDate %}
+										{% set dataRateClass = "badge-danger" %}
+										{% if trainingRequest.result == 1 %}
+											{% set dataRateClass = "badge-success" %}
+										{% elseif trainingRequest.result >= 0.5 %}
+											{% set dataRateClass = "badge-warning" %}
+										{% endif %}
+										<span class="badge {{ dataRateClass }}" class="pointer" onclick="showAnswers({{ trainingRequest.id }})">
+											{{ (trainingRequest.result * 100)|round }}%
+										</span>
+									{% endif %}
 
-                                        </td>
-                                        <td>
-                                        <div class="options">
-                                            {% set reviveAllowed = training_request_revive_allowed(trainingRequest) %}
-                                            {% if reviveAllowed %}
-                                                <a class="imprimer" style="width:140px; color:#438492" href="{{ path('user_trainings_requests_revive', {"trainingCampain": trainingRequest.trainingCampain.id, "trainingRequest": trainingRequest.id}) }}" class="btn btn-secondary">{{ 'relancer'|trans }}</a>
-                                            {% else %}
-                                                <a class="imprimer" style="width:140px; color:#438492" href="#" title="Vous ne pouvez envoyer des relances que toutes les 48h" class="btn btn-secondary disabled">{{ 'relancer'|trans }}</a>
-                                            {% endif %}
-                                            <div>
-                                        </td>
-                                    </tr>
-                                {% endfor %}
-                {% else %}
-                <tr>
-                    <td colspan="8" class="text-center">{{ 'Aucune campagne disponible'|trans }}</td>
-                </tr>
-                {% endif %}
-            </tbody>
-        </table>
+								</td>
+								<td>
+									<div class="options">
+										{% set reviveAllowed = training_request_revive_allowed(trainingRequest) %}
+										{% if reviveAllowed %}
+											<a class="imprimer training-imprimer"  href="{{ path('user_trainings_requests_revive', {"trainingCampain": trainingRequest.trainingCampain.id, "trainingRequest": trainingRequest.id}) }}" class="btn btn-secondary">{{ 'relancer'|trans }}</a>
+										{% else %}
+											<a class="imprimer training-imprimer" href="#" title="Vous ne pouvez envoyer des relances que toutes les 48h" class="btn btn-secondary disabled">{{ 'relancer'|trans }}</a>
+										{% endif %}
+										<div></td>
+									</tr>
+								{% endfor %}
+							{% else %}
+								<tr>
+									<td colspan="8" class="text-center">{{ 'Aucune campagne disponible'|trans }}</td>
+								</tr>
+							{% endif %}
+						</tbody>
+					</table>
 
-        <!-- Pagination -->
-        <div class="pagination-container">
-            <!-- Results per page selector -->
-            <div class="results-per-page">
-                <label for="results">{{ 'Afficher'|trans }}</label>
-                <select id="results" class="results-select">
-                    <option value="12" {% if app.request.query.get('results') == '12' %}selected{% endif %}>12</option>
-                    <option value="24" {% if app.request.query.get('results') == '24' %}selected{% endif %}>24</option>
-                    <option value="48" {% if app.request.query.get('results') == '48' %}selected{% endif %}>48</option>
-                </select>
-                <span>{{ 'résultats par page'|trans }}</span>
-            </div>
+					<!-- Pagination -->
+					<div
+						class="pagination-container">
+						<!-- Results per page selector -->
+						<div class="results-per-page">
+							<label for="results">{{ 'Afficher'|trans }}</label>
+							<select id="results" class="results-select">
+								<option value="12" {% if app.request.query.get('results') == '12' %} selected {% endif %}>12</option>
+								<option value="24" {% if app.request.query.get('results') == '24' %} selected {% endif %}>24</option>
+								<option value="48" {% if app.request.query.get('results') == '48' %} selected {% endif %}>48</option>
+							</select>
+							<span>{{ 'résultats par page'|trans }}</span>
+						</div>
 
-            <!-- Pagination Controls -->
-            <div class="pagination-controls">
-                {% set currentPage = app.request.query.get('page')|default('1')|number_format(0, '', '', '') %}
-                {% set totalPages = totalPages|default(1) %}
-                <button class="pagination-button" {% if currentPage == 1 %}disabled{% endif %}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
-                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19l-7-7l7-7"/>
-                    </svg>
-                </button>
-                <span class="pagination-info">{{ 'Page'|trans }} {{ currentPage }} {{ 'sur'|trans }} {{ totalPages }}</span>
-                <button class="pagination-button" {% if currentPage == totalPages %}disabled{% endif %}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
-                        <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5l7 7l-7 7"/>
-                    </svg>
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+						<!-- Pagination Controls -->
+						<div class="pagination-controls">
+							{% set currentPage = app.request.query.get('page')|default('1')|number_format(0, '', '', '') %}
+							{% set totalPages = totalPages|default(1) %}
+							<button class="pagination-button" {% if currentPage == 1 %} disabled {% endif %}>
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24">
+									<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19l-7-7l7-7"/>
+								</svg>
+							</button>
+							<span class="pagination-info">{{ 'Page'|trans }}
+								{{ currentPage }}
+								{{ 'sur'|trans }}
+								{{ totalPages }}</span>
+							<button class="pagination-button" {% if currentPage == totalPages %} disabled {% endif %}>
+								<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24">
+									<path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5l7 7l-7 7"/>
+								</svg>
+							</button>
+						</div>
+					</div>
+				</tbody>
+			</div>
+		</div>
 
 
-    <div class="modal fade" id="modal_content" tabindex="-1" role="dialog"
-         aria-labelledby="modal_content" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="modal_content_title">{{ 'rponses_au_questionnaire'|trans }}</h5>
-                    <button type="button" class="close" data-dismiss="modal"
-                            aria-label="{{ 'fermer'|trans }}">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="modal_content_body">
+		<div class="modal fade" id="modal_content" tabindex="-1" role="dialog" aria-labelledby="modal_content" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modal_content_title">{{ 'rponses_au_questionnaire'|trans }}</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="{{ 'fermer'|trans }}">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body" id="modal_content_body"></div>
+				</div>
+			</div>
+		</div>
+	{% endblock %}
 
-                </div>
-            </div>
-        </div>
-    </div>
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        (function ($) {
-            'use strict';
-            $(document).ready(function () {
-                {% if app.request.locale == "fr" %}
-                    $('#datatable').DataTable({
-                        "language": {
-                            "search": "Rechercher :",
-                            "lengthMenu": "Afficher _MENU_ résultats par page",
-                            "zeroRecords": "Aucun résultat",
-                            "info": "Page _PAGE_ sur _PAGES_",
-                            "infoEmpty": "Aucune données sur ce tableau",
-                            "infoFiltered": "(filtered from _MAX_ total records)",
-                            "paginate": {
-                                "previous": "Précédent",
-                                "next": "Suivant",
-
-                            }
-                        }
-                    });
-                {% else %}
-                    $('#datatable').DataTable({});
-                {% endif %}
-
-                // Handle pagination buttons
-                document.querySelectorAll('.pagination-button').forEach(button => {
-                    button.addEventListener('click', function () {
-                        const isDisabled = this.classList.contains('disabled');
-                        if (!isDisabled) {
-                            const direction = this.textContent.trim() === ">" ? 1 : -1;
-                            const urlParams = new URLSearchParams(window.location.search);
-                            const currentPage = parseInt(urlParams.get('page')) || 1;
-                            const nextPage = currentPage + direction;
-                            urlParams.set('page', nextPage);
-                            window.location.search = urlParams.toString();
-                        }
-                    });
-                });
-
-                // Handle results per page change
-                document.getElementById('results').addEventListener('change', function () {
-                    const selectedValue = this.value;
-                    const urlParams = new URLSearchParams(window.location.search);
-                    urlParams.set('results', selectedValue);
-                    urlParams.delete('page'); // Reset to the first page
-                    window.location.search = urlParams.toString();
-                });
-
-            });
-        })(window.jQuery);
-
-        function showAnswers(r, h) {
-            $.ajax({
-                type: "POST",
-                async: true,
-                url: "{{ path('user_trainings_requests_answers', {"training": trainingCampain.id}) }}",
-                data: {request: r},
-                success: function (content) {
-                    if (content.success) {
-                        document.getElementById("modal_content_body").innerHTML = content.html;
-                        $('#modal_content').modal('show');
-                    }
-                }
-            });
-        }
-
-        function showStats() {
-            $.ajax({
-                type: "POST",
-                async: true,
-                url: "{{ path('user_trainings_requests_stats', {"training": trainingCampain.id}) }}",
-                data: {},
-                success: function (content) {
-                    if (content.success) {
-                        document.getElementById("modal_content_body").innerHTML = content.html;
-                        $('#modal_content').modal('show');
-                    }
-                }
-            });
-        }
-
-    </script>
-{% endblock %}
+	{% block javascripts %}
+		{{ parent() }}
+		 <script>
+		        (function ($) {
+		            'use strict';
+		            $(document).ready(function () {
+		                {% if app.request.locale == "fr" %}
+		                    $('#datatable').DataTable({
+		                        "language": {
+		                            "search": "Rechercher :",
+		                            "lengthMenu": "Afficher _MENU_ résultats par page",
+		                            "zeroRecords": "Aucun résultat",
+		                            "info": "Page _PAGE_ sur _PAGES_",
+		                            "infoEmpty": "Aucune données sur ce tableau",
+		                            "infoFiltered": "(filtered from _MAX_ total records)",
+		                            "paginate": {
+		                                "previous": "Précédent",
+		                                "next": "Suivant",
+		
+		                            }
+		                        }
+		                    });
+		                {% else %}
+		                    $('#datatable').DataTable({});
+		                {% endif %}
+		
+		                // Handle pagination buttons
+		                document.querySelectorAll('.pagination-button').forEach(button => {
+		                    button.addEventListener('click', function () {
+		                        const isDisabled = this.classList.contains('disabled');
+		                        if (!isDisabled) {
+		                            const direction = this.textContent.trim() === ">" ? 1 : -1;
+		                            const urlParams = new URLSearchParams(window.location.search);
+		                            const currentPage = parseInt(urlParams.get('page')) || 1;
+		                            const nextPage = currentPage + direction;
+		                            urlParams.set('page', nextPage);
+		                            window.location.search = urlParams.toString();
+		                        }
+		                    });
+		                });
+		
+		                // Handle results per page change
+		                document.getElementById('results').addEventListener('change', function () {
+		                    const selectedValue = this.value;
+		                    const urlParams = new URLSearchParams(window.location.search);
+		                    urlParams.set('results', selectedValue);
+		                    urlParams.delete('page'); // Reset to the first page
+		                    window.location.search = urlParams.toString();
+		                });
+		
+		            });
+		        })(window.jQuery);
+		
+		        function showAnswers(r, h) {
+		            $.ajax({
+		                type: "POST",
+		                async: true,
+		                url: "{{ path('user_trainings_requests_answers', {"training": trainingCampain.id}) }}",
+		                data: {request: r},
+		                success: function (content) {
+		                    if (content.success) {
+		                        document.getElementById("modal_content_body").innerHTML = content.html;
+		                        $('#modal_content').modal('show');
+		                    }
+		                }
+		            });
+		        }
+		
+		        function showStats() {
+		            $.ajax({
+		                type: "POST",
+		                async: true,
+		                url: "{{ path('user_trainings_requests_stats', {"training": trainingCampain.id}) }}",
+		                data: {},
+		                success: function (content) {
+		                    if (content.success) {
+		                        document.getElementById("modal_content_body").innerHTML = content.html;
+		                        $('#modal_content').modal('show');
+		                    }
+		                }
+		            });
+		        }
+		
+		    </script>
+	{% endblock %}

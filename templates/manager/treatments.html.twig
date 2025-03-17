@@ -1,186 +1,194 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - Accueil
+	{{ parent() }}
+	- Accueil
 {% endblock %}
 
 {% block content %}
-<div class="page">
-    <div class="table-container-traitements">
-        <div class="header">
-            <h2>Traitements standards</h2>
-           
-        </div>
+	<div class="page">
+		<div class="table-container-traitements">
+			<div class="header">
+				<h2>Traitements standards</h2>
 
-        <!-- Search and Action Buttons -->
-        <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 20px;">
-            <div class="search-bar">
-                <span class="search-icon">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                </span>
-                <input type="text" id="searchInput" placeholder="Rechercher" />
-            </div>
-            <div class="buttons">
-                <div class="exporter">
-                    <a href="{{ path('manager_treatments_add') }}" class="btn btn-primary">Créer un traitement</a>
-                </div>
-            </div>
-        </div>
+			</div>
 
-        <!-- Data Table -->
-        <table class="styled-table" id="datatable">
-            <thead>
-                <tr>
-                    <th>Nom du traitement</th>
-                    <th>Date création</th>
-                    <th>Date mise à jour</th>
-                    <th>Finalité</th>
-                    <th>Données sensibles</th>
-                    <th class="actionss">Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for treatment in treatments %}
-                    <tr>
-                        <td><a href="{{ path('manager_treatments_edit', {'id': treatment.id}) }}">{{ treatment.name }}</a></td>
-                        <td style="color:#EF6D6F">{{ treatment.creationDate|date('d/m/Y') }}</td>
-                        <td style="color:#EF6D6F">{{ treatment.editDate|date('d/m/Y') }}</td>
-                        <td>{{ treatment.mainPurpose }}</td>
-                        <td style="color:#438492"   >{% if treatment.sensitiveData %}Oui{% else %}Non{% endif %}</td>
-                        <td>
-                            <div class="options">
-                                <a href="{{ path('manager_treatments_translate', {'id': treatment.id, '_locale': 'en'}) }}" class="btn btn-secondary">
-                                    <button class="edit">EN</button>
-                                </a>
-                                <a href="{{ path('manager_treatments_delete', {'id': treatment.id}) }}" class="btn btn-danger" onclick="return confirm('Confirmer la suppression de ce traitement ?');">
-                                    <button class="delete"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg></button>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+			<!-- Search and Action Buttons -->
+			<div class="search-container">
+				<div class="search-bar">
+					<span class="search-icon">
+						<i class="fa fa-search" aria-hidden="true"></i>
+					</span>
+					<input type="text" id="searchInput" placeholder="Rechercher"/>
+				</div>
+				<div class="buttons">
+					<div class="exporter">
+						<a href="{{ path('manager_treatments_add') }}" class="btn btn-primary">Créer un traitement</a>
+					</div>
+				</div>
+			</div>
 
-        <!-- Pagination -->
-        <div class="pagination-container">
-            <div class="results-per-page">
-                <label for="resultsSelect">Afficher</label>
-                <select id="resultsSelect" class="results-select">
-                    <option value="5">5</option>
-                    <option value="10" selected>10</option>
-                    <option value="20">20</option>
-                </select>
-                <span>résultats par page</span>
-            </div>
+			<!-- Data Table -->
+			<table class="styled-table" id="datatable">
+				<thead>
+					<tr>
+						<th>Nom du traitement</th>
+						<th>Date création</th>
+						<th>Date mise à jour</th>
+						<th>Finalité</th>
+						<th>Données sensibles</th>
+						<th class="actionss">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for treatment in treatments %}
+						<tr>
+							<td>
+								<a href="{{ path('manager_treatments_edit', {'id': treatment.id}) }}">{{ treatment.name }}</a>
+							</td>
+							<td class="daterouge">{{ treatment.creationDate|date('d/m/Y') }}</td>
+							<td class="daterouge">{{ treatment.editDate|date('d/m/Y') }}</td>
+							<td>{{ treatment.mainPurpose }}</td>
+							<td class="dategreen">
+								{% if treatment.sensitiveData %}Oui{% else %}Non
+								{% endif %}
+							</td>
+							<td>
+								<div class="options">
+									<a href="{{ path('manager_treatments_translate', {'id': treatment.id, '_locale': 'en'}) }}" class="btn btn-secondary">
+										<button class="edit">EN</button>
+									</a>
+									<a href="{{ path('manager_treatments_delete', {'id': treatment.id}) }}" class="btn btn-danger" onclick="return confirm('Confirmer la suppression de ce traitement ?');">
+										<button class="delete">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
+										</button>
+									</a>
+								</div>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 
-            <div class="pagination-controls">
-                <button class="pagination-button" id="prevPage" disabled>&lt;</button>
-                <span class="pagination-info" id="paginationInfo">Page 1 sur 1</span>
-                <button class="pagination-button" id="nextPage" disabled>&gt;</button>
-            </div>
-        </div>
-    </div>
-</div>
+			<!-- Pagination -->
+			<div class="pagination-container">
+				<div class="results-per-page">
+					<label for="resultsSelect">Afficher</label>
+					<select id="resultsSelect" class="results-select">
+						<option value="5">5</option>
+						<option value="10" selected>10</option>
+						<option value="20">20</option>
+					</select>
+					<span>résultats par page</span>
+				</div>
 
-<script>
- document.addEventListener('DOMContentLoaded', function () {
-    const table = document.getElementById('datatable');
-    const headers = table.querySelectorAll('thead th');
-    const rows = Array.from(table.querySelectorAll('tbody tr'));
-    const resultsSelect = document.getElementById('resultsSelect');
-    const paginationInfo = document.getElementById('paginationInfo');
-    const prevPage = document.getElementById('prevPage');
-    const nextPage = document.getElementById('nextPage');
-    const searchInput = document.getElementById('searchInput');
+				<div class="pagination-controls">
+					<button class="pagination-button" id="prevPage" disabled>&lt;</button>
+					<span class="pagination-info" id="paginationInfo">Page 1 sur 1</span>
+					<button class="pagination-button" id="nextPage" disabled>&gt;</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    let currentPage = 1;
-    let resultsPerPage = parseInt(resultsSelect.value);
-    let filteredRows = [...rows]; // Copy of all rows for filtering
-    let sortColumn = -1;
-    let sortDirection = 1; // 1 = ascending, -1 = descending
-
-    function updateTable() {
-        const totalPages = Math.ceil(filteredRows.length / resultsPerPage) || 1;
-        const start = (currentPage - 1) * resultsPerPage;
-        const end = start + resultsPerPage;
-
-        // Hide all rows first
-        rows.forEach(row => row.style.display = 'none');
-
-        // Show only the rows for the current page
-        filteredRows.slice(start, end).forEach(row => row.style.display = '');
-
-        paginationInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
-        prevPage.disabled = currentPage === 1;
-        nextPage.disabled = currentPage >= totalPages;
-    }
-
-    function filterTable() {
-        const query = searchInput.value.toLowerCase();
-        filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
-        currentPage = 1; // Reset pagination to first page after search
-
-        // If sorting was applied, reapply sorting to filtered data
-        if (sortColumn !== -1) {
-            sortTable(sortColumn, false);
-        }
-
-        updateTable();
-    }
-
-    function sortTable(columnIndex, resetPage = true) {
-        if (sortColumn === columnIndex) {
-            sortDirection *= -1; // Toggle sorting order
-        } else {
-            sortColumn = columnIndex;
-            sortDirection = 1;
-        }
-
-        filteredRows.sort((a, b) => {
-            const aText = a.children[columnIndex].innerText.trim().toLowerCase();
-            const bText = b.children[columnIndex].innerText.trim().toLowerCase();
-            return aText.localeCompare(bText, 'fr', { numeric: true }) * sortDirection;
-        });
-
-        headers.forEach(th => th.classList.remove('sorting_asc', 'sorting_desc'));
-        headers[columnIndex].classList.add(sortDirection === 1 ? 'sorting_asc' : 'sorting_desc');
-
-        if (resetPage) currentPage = 1;
-        updateTable();
-    }
-
-    headers.forEach((th, index) => {
-        th.style.cursor = 'pointer';
-        th.addEventListener('click', () => sortTable(index));
-    });
-
-    resultsSelect.addEventListener('change', function () {
-        resultsPerPage = parseInt(this.value);
-        currentPage = 1;
-        updateTable();
-    });
-
-    prevPage.addEventListener('click', function () {
-        if (currentPage > 1) {
-            currentPage--;
-            updateTable();
-        }
-    });
-
-    nextPage.addEventListener('click', function () {
-        const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
-        if (currentPage < totalPages) {
-            currentPage++;
-            updateTable();
-        }
-    });
-
-    searchInput.addEventListener('input', filterTable);
-
-    updateTable();
-});
-
-
-</script>
+	 <script>
+	 document.addEventListener('DOMContentLoaded', function () {
+	    const table = document.getElementById('datatable');
+	    const headers = table.querySelectorAll('thead th');
+	    const rows = Array.from(table.querySelectorAll('tbody tr'));
+	    const resultsSelect = document.getElementById('resultsSelect');
+	    const paginationInfo = document.getElementById('paginationInfo');
+	    const prevPage = document.getElementById('prevPage');
+	    const nextPage = document.getElementById('nextPage');
+	    const searchInput = document.getElementById('searchInput');
+	
+	    let currentPage = 1;
+	    let resultsPerPage = parseInt(resultsSelect.value);
+	    let filteredRows = [...rows]; // Copy of all rows for filtering
+	    let sortColumn = -1;
+	    let sortDirection = 1; // 1 = ascending, -1 = descending
+	
+	    function updateTable() {
+	        const totalPages = Math.ceil(filteredRows.length / resultsPerPage) || 1;
+	        const start = (currentPage - 1) * resultsPerPage;
+	        const end = start + resultsPerPage;
+	
+	        // Hide all rows first
+	        rows.forEach(row => row.style.display = 'none');
+	
+	        // Show only the rows for the current page
+	        filteredRows.slice(start, end).forEach(row => row.style.display = '');
+	
+	        paginationInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
+	        prevPage.disabled = currentPage === 1;
+	        nextPage.disabled = currentPage >= totalPages;
+	    }
+	
+	    function filterTable() {
+	        const query = searchInput.value.toLowerCase();
+	        filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
+	        currentPage = 1; // Reset pagination to first page after search
+	
+	        // If sorting was applied, reapply sorting to filtered data
+	        if (sortColumn !== -1) {
+	            sortTable(sortColumn, false);
+	        }
+	
+	        updateTable();
+	    }
+	
+	    function sortTable(columnIndex, resetPage = true) {
+	        if (sortColumn === columnIndex) {
+	            sortDirection *= -1; // Toggle sorting order
+	        } else {
+	            sortColumn = columnIndex;
+	            sortDirection = 1;
+	        }
+	
+	        filteredRows.sort((a, b) => {
+	            const aText = a.children[columnIndex].innerText.trim().toLowerCase();
+	            const bText = b.children[columnIndex].innerText.trim().toLowerCase();
+	            return aText.localeCompare(bText, 'fr', { numeric: true }) * sortDirection;
+	        });
+	
+	        headers.forEach(th => th.classList.remove('sorting_asc', 'sorting_desc'));
+	        headers[columnIndex].classList.add(sortDirection === 1 ? 'sorting_asc' : 'sorting_desc');
+	
+	        if (resetPage) currentPage = 1;
+	        updateTable();
+	    }
+	
+	    headers.forEach((th, index) => {
+	        th.style.cursor = 'pointer';
+	        th.addEventListener('click', () => sortTable(index));
+	    });
+	
+	    resultsSelect.addEventListener('change', function () {
+	        resultsPerPage = parseInt(this.value);
+	        currentPage = 1;
+	        updateTable();
+	    });
+	
+	    prevPage.addEventListener('click', function () {
+	        if (currentPage > 1) {
+	            currentPage--;
+	            updateTable();
+	        }
+	    });
+	
+	    nextPage.addEventListener('click', function () {
+	        const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+	        if (currentPage < totalPages) {
+	            currentPage++;
+	            updateTable();
+	        }
+	    });
+	
+	    searchInput.addEventListener('input', filterTable);
+	
+	    updateTable();
+	});
+	
+	
+	</script>
 {% endblock %}

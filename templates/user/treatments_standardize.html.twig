@@ -1,52 +1,54 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - Standardiser un traitement
+	{{ parent() }}
+	- Standardiser un traitement
 {% endblock %}
 
 {% block content %}
-<div class="page">
-    <!-- Header Section -->
-    <div class="table-container-traitements">
-        <div class="header">
-            <h2>Standardiser un traitement</h2>
-        </div>
+	<div
+		class="page">
+		<!-- Header Section -->
+		<div class="table-container-traitements">
+			<div class="header">
+				<h2>Standardiser un traitement</h2>
+			</div>
 
-        <!-- Form Section -->
-        {{ form_start(form, {"attr": {"class": "sous-traitantform", "enctype": "multipart/form-data"}}) }}
+			<!-- Form Section -->
+			{{ form_start(form, {"attr": {"class": "sous-traitantform", "enctype": "multipart/form-data"}}) }}
 
-        <!-- Category Section -->
-        <div class="sectt">
-            <h3>Catégorie</h3>
-            <div class="form-group">
-                <div class="form-group1">
-                    {{ form_label(form.category, 'Catégorie') }}
-                    {{ form_widget(form.category, {
+			<!-- Category Section -->
+			<div class="sectt">
+				<h3>Catégorie</h3>
+				<div class="form-group">
+					<div class="form-group1">
+						{{ form_label(form.category, 'Catégorie') }}
+						{{ form_widget(form.category, {
                         'attr': {
                             'class': 'form-control ' ~ ((form_errors(form.category) == '') ? '' : 'is-invalid'),
                             'placeholder': 'Choisissez une catégorie'
                         }
                     }) }}
-                    <div class="invalid-feedback">{{ form_errors(form.category) | striptags }}</div>
-                </div>
-            </div>
-        </div>
+						<div class="invalid-feedback">{{ form_errors(form.category) | striptags }}</div>
+					</div>
+				</div>
+			</div>
 
-        <!-- Submit Button -->
-        <button type="submit" class="submit-button">
-            Enregistrer
-        </button>
+			<!-- Submit Button -->
+			<button type="submit" class="submit-button">
+				Enregistrer
+			</button>
 
-        {{ form_end(form) }}
-    </div>
-</div>
+			{{ form_end(form) }}
+		</div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Add any required JavaScript for interactive elements
-        });
-    </script>
+	{{ parent() }}
+	 <script>
+	        document.addEventListener('DOMContentLoaded', function () {
+	            // Add any required JavaScript for interactive elements
+	        });
+	    </script>
 {% endblock %}

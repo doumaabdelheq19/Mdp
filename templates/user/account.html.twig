@@ -171,12 +171,8 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="form-group1 Fonction">
-                    {{ form_label(form.language) }}
-                    {{ form_widget(form.language, {'attr': {'placeholder': 'Français'}}) }}
-                </div>
-            </div>
+          {{ form_widget(form.language, {'attr': {'class': 'disp-none'}}) }}
+
         </div>
     <br>
         {{ form_widget(form.save, {'attr': {'class': 'submit-button'} }) }}

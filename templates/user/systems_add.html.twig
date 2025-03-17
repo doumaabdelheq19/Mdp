@@ -1,50 +1,53 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - {{ 'ajouter_un_lment_de_cartographie_du_si'|trans }}
+	{{ parent() }}
+	-
+	{{ 'ajouter_un_lment_de_cartographie_du_si'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <!-- Flatpickr CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	{{ parent() }}
+	<!-- Flatpickr CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 {% endblock %}
 
 {% block content %}
-<div class="page">
-    <!-- Header -->
-    <div class="table-container-traitements">
-        <div class="header headretour">
-            <a href="javascript:history.back()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024">
-                    <path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
-                </svg>
-            </a>
-            <h2 style="width:400px">{{ 'ajouter_un_lment_de_cartographie_du_si'|trans }}</h2>
-        </div>
+<div
+	class="page">
+	<!-- Header -->
+	<div class="table-container-traitements">
+		<div class="header headretour">
+			<a href="javascript:history.back()">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 1024 1024">
+					<path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
+				</svg>
+			</a>
+			<h2 class="width-400" >{{ 'ajouter_un_lment_de_cartographie_du_si'|trans }}</h2>
+		</div>
 
-        <!-- Form Start -->
-        {{ form_start(form, {"attr": {"class": "sous-traitantform"}}) }}
+		<!-- Form Start -->
+		{{ form_start(form, {"attr": {"class": "sous-traitantform"}}) }}
 
-        <!-- Standard Selector -->
-        {% if systemsStd %}
-        <div class="form-group">
-         <div class="form-group1">
-            <label for="form_system_std">{{ 'rechercher_une_mesure_standard'|trans }}</label>
-            <select id="form_system_std" name="form_system_std" class="form-control " onchange="selectStd(this)">
-                <option id="foo" selected="selected" disabled="disabled">{{ 'rechercher_un_standard'|trans }}</option>
-                {% for systemStd in systemsStd %}
-                    <option value="{{ systemStd.id }}">{{ systemStd.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
-         </div>
-        {% endif %}
+		<!-- Standard Selector -->
+		{% if systemsStd %}
+			<div class="form-group">
+				<div class="form-group1">
+					<label for="form_system_std">{{ 'rechercher_une_mesure_standard'|trans }}</label>
+					<select id="form_system_std" name="form_system_std" class="form-control " onchange="selectStd(this)">
+						<option id="foo" selected="selected" disabled="disabled">{{ 'rechercher_un_standard'|trans }}</option>
+						{% for systemStd in systemsStd %}
+							<option value="{{ systemStd.id }}">{{ systemStd.name }}</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+		{% endif %}
 
-        <!-- Name Field -->
-        <div class="form-group">
-        <div class="form-group1">
-            {{ form_label(form.name, 'Nom de l\'élément') }}
+		<!-- Name Field -->
+		<div class="form-group">
+			<div class="form-group1">
+				{{ form_label(form.name, 'Nom de l\'élément') }}
             {{ form_widget(form.name, {'attr': {'class': 'form-control ' ~ ((form_errors(form.name) == '') ? '' : 'is-invalid')} }) }}
             <div class="invalid-feedback">{{ form_errors(form.name) | striptags }}</div>
         </div>
@@ -75,7 +78,7 @@
 
         <!-- Group Checkbox -->
         {% if app.user.user.mainGroupAgency %}
-        <div class="checkbox-group" style="margin-top:10px; margin-bottom:20px">
+        <div class="checkbox-group chckbox-margin" >
             {{ form_widget(form.group, {'attr': {'id': 'group-checkbox'}}) }}
             {{ form_label(form.group, 'Appliquer à tout le groupe ?', {'label_attr': {'for': 'group-checkbox'}}) }}
         </div>
@@ -93,7 +96,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script>
+     <script>
         function selectStd(e) {
             {% if app.request.get("group") %}
             window.location.href = "{{ path('user_systems_add') }}?group=1&std=" + e.value;

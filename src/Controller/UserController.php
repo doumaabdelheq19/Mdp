@@ -53,6 +53,8 @@ use Doctrine\ORM\EntityRepository;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Filesystem\Filesystem;
@@ -698,7 +700,7 @@ class UserController extends AbstractController
 
                                         $content = "<p>Bonjour,<br/>
                                         <br/>
-                                        Un accès vous a été créé sur le site myDigitplace et nous vous invitons à définir votre mot de passe.<br/>
+                                        Un accès vous a été créé sur le site Pilot et nous vous invitons à définir votre mot de passe.<br/>
                                         <br/>
                                         <br/>
                                         Voici votre lien pour définir un nouveau mot de passe:<br/><a href='".$this->generateUrl("default_reset_password", ["email" => $account->getEmail(), "token" => $token], UrlGeneratorInterface::ABSOLUTE_URL)."'>
@@ -710,9 +712,9 @@ class UserController extends AbstractController
                                         <br/>
                                         Bien cordialement,<br/>
                                         <br/>
-                                        L’équipe myDigitplace<br/>
+                                        L’équipe Pilot<br/>
                                         <br/>
-                                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                                         </p>";
                                         $sendEmailService->send(
                                             "Votre accès myDigiplace",
@@ -770,7 +772,7 @@ class UserController extends AbstractController
 
                                 $content = "<p>Bonjour,<br/>
                                 <br/>
-                                Un accès vous a été créé sur le site myDigitplace et nous vous invitons à définir votre mot de passe.<br/>
+                                Un accès vous a été créé sur le site Pilot et nous vous invitons à définir votre mot de passe.<br/>
                                 <br/>
                                 <br/>
                                 Voici votre lien pour définir un nouveau mot de passe:<br/><a href='".$this->generateUrl("default_reset_password", ["email" => $account->getEmail(), "token" => $token], UrlGeneratorInterface::ABSOLUTE_URL)."'>
@@ -782,9 +784,9 @@ class UserController extends AbstractController
                                 <br/>
                                 Bien cordialement,<br/>
                                 <br/>
-                                L’équipe myDigitplace<br/>
+                                L’équipe Pilot<br/>
                                 <br/>
-                                <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                                <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                                 </p>";
                                 $sendEmailService->send(
                                     "Votre accès myDigiplace",
@@ -1384,7 +1386,7 @@ class UserController extends AbstractController
                         Précisions: ".$form['precision']->getData()."<br/><br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
             $sendEmailService->send(
                 "Demande de devis d'intervention",
@@ -1431,7 +1433,7 @@ class UserController extends AbstractController
                         Partenaire: ".$partner->getName()."<br/><br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
         $sendEmailService->send(
             "Demande d'accès à une remise partenaire",
@@ -2343,7 +2345,7 @@ class UserController extends AbstractController
                         Le client ".$this->getUser()->getUser()->getCompanyName()." a créé un nouveau traitement: ".$treatment->getName()."<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
             $sendEmailService->send(
                 "Nouveau traitement client",
@@ -3048,7 +3050,7 @@ class UserController extends AbstractController
                         Le client ".$this->getUser()->getUser()->getCompanyName()." a créé un nouveau traitement: ".$newTreatment->getName()."<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
             $sendEmailService->send(
                 "Nouveau traitement client",
@@ -3857,7 +3859,7 @@ class UserController extends AbstractController
                         Le client ".$this->getUser()->getUser()->getCompanyName()." a ajouté un nouveau sous-traitant: ".$subcontractor->getName()."<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
             $sendEmailService->send(
                 "Nouveau sous-traitant client",
@@ -3951,7 +3953,7 @@ class UserController extends AbstractController
                         Le client ".$this->getUser()->getUser()->getCompanyName()." a modifié le sous-traitant ".$subcontractor->getName()."<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
             $sendEmailService->send(
                 "Sous-traitant client modifié",
@@ -4041,7 +4043,7 @@ class UserController extends AbstractController
                         Le client ".$this->getUser()->getUser()->getCompanyName()." a ajouté un nouveau sous-traitant: ".$newSubcontractor->getName()."<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
             $sendEmailService->send(
                 "Nouveau sous-traitant client",
@@ -4894,7 +4896,7 @@ class UserController extends AbstractController
                         Le client ".$this->getUser()->getUser()->getCompanyName()." a ajouté un nouvel élément de cartographie du SI: ".$system->getName()."<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
             $sendEmailService->send(
                 "Nouvel élément de cartographie du SI client",
@@ -5205,7 +5207,7 @@ class UserController extends AbstractController
                         Le client ".$this->getUser()->getUser()->getCompanyName()." a modifié l'élément de cartographie du SI ".$system->getName()."<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
             $sendEmailService->send(
                 "Élément de cartographie du SI client modifié",
@@ -5766,7 +5768,7 @@ class UserController extends AbstractController
                         Le client ".$this->getUser()->getUser()->getCompanyName()." a ajouté un nouvel incident<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
             $sendEmailService->send(
                 "Nouvel incident client",
@@ -5838,7 +5840,7 @@ class UserController extends AbstractController
                         Le client ".$this->getUser()->getUser()->getCompanyName()." a modifié un incident<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
             $sendEmailService->send(
                 "Incident client modifié",
@@ -5917,7 +5919,7 @@ class UserController extends AbstractController
                         Le client ".$this->getUser()->getUser()->getCompanyName()." a ajouté un nouvel incident<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
             $sendEmailService->send(
                 "Nouvel incident client",
@@ -6362,7 +6364,7 @@ class UserController extends AbstractController
                         Le client ".$this->getUser()->getUser()->getCompanyName()." a ajouté une nouvelle action: ".$action->getName()."<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
             $sendEmailService->send(
                 "Nouvelle action client",
@@ -6475,7 +6477,7 @@ class UserController extends AbstractController
                     Pour plus de détails sur cette action, vous pouvez consulter le document en pièce jointe.<br/>
                     <br/>
                     <br/>
-                    <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                    <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                     </p>";
                     $sendEmailService->send(
                         "Nouvelle action",
@@ -6687,7 +6689,7 @@ class UserController extends AbstractController
                         Le client ".$this->getUser()->getUser()->getCompanyName()." a modifié l'action ".$action->getName()."<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
             $sendEmailService->send(
                 "Action client modifiée",
@@ -6859,7 +6861,7 @@ class UserController extends AbstractController
                         Le client ".$this->getUser()->getUser()->getCompanyName()." a ajouté une nouvelle action: ".$newAction->getName()."<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
             $sendEmailService->send(
                 "Nouvelle action client",
@@ -7019,24 +7021,29 @@ class UserController extends AbstractController
     /**
      * @Route("/actions/deletedoc/{action}/{document}", name="actions_deletedoc")
      */
-    public function actionsDeleteDocAction(Request $request, Action $action, UserDocument $userDocument)
+    public function actionsDeleteDocAction(Request $request, Action $action, $document, EntityManagerInterface $em)
     {
-        $em = $this->getDoctrine()->getManager();
-
-        if ($action->getUser()->getId() != $this->getUser()->getUser()->getId()) {
-            throw new NotFoundHttpException();
+        // Fetch the document using the ID
+        $userDocument = $em->getRepository(UserDocument::class)->find($document);
+    
+        if (!$userDocument) {
+            throw $this->createNotFoundException('Document not found.');
         }
-        if ($userDocument->getSubcontractor() == null || $userDocument->getAction()->getId() != $action->getId()) {
-            throw new NotFoundHttpException();
+    
+        // Ensure the document belongs to the correct action
+        if ($userDocument->getAction()->getId() !== $action->getId()) {
+            throw $this->createNotFoundException('Document does not belong to the specified action.');
         }
-
+    
+        // Delete the document
         $em->remove($userDocument);
         $em->flush();
-
-        $this->get('session')->getFlashBag()->add('success', 'Document supprimé');
-
+    
+        $this->addFlash('success', 'Document supprimé');
+    
         return $this->redirectToRoute('user_actions_edit', ['id' => $action->getId()]);
     }
+
 
     /**
      * @Route("/actionsgrp/add", name="actions_grp_add")
@@ -7368,7 +7375,7 @@ class UserController extends AbstractController
                         Pour plus de détails sur cette action, vous pouvez consulter le document en pièce jointe.<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
                             $sendEmailService->send(
                                 "Nouvelle action",
@@ -7536,7 +7543,7 @@ class UserController extends AbstractController
                         Précisions sur la demande: ".nl2br($exercisingclaim->getPrecisions())."<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
                         $sendEmailService->send(
                             "Nouvelle demande d’exercice de droits",
@@ -8126,7 +8133,7 @@ class UserController extends AbstractController
                         Le client ".$this->getUser()->getUser()->getCompanyName()." a ajouté un nouveau sous-traitant groupe: ".$subcontractor->getName()."<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
             $sendEmailService->send(
                 "Nouveau sous-traitant groupe",
@@ -8220,7 +8227,7 @@ class UserController extends AbstractController
                         Le client ".$this->getUser()->getUser()->getCompanyName()." a modifié le sous-traitant groupe ".$subcontractor->getName()."<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
             $sendEmailService->send(
                 "Sous-traitant groupe modifié",
@@ -8311,7 +8318,7 @@ class UserController extends AbstractController
                         Le client ".$this->getUser()->getUser()->getCompanyName()." a ajouté un nouveau sous-traitant groupe: ".$newSubcontractor->getName()."<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
             $sendEmailService->send(
                 "Nouveau sous-traitant groupe",
@@ -8607,7 +8614,7 @@ if ($form['teams']->getData()) {
                             <br/>
                             Bien cordialement,<br/>
                             <br/>
-                            <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                            <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                             </p>";
 
                         $sendEmailService->send(
@@ -8778,7 +8785,7 @@ if ($form['teams']->getData()) {
                             <br/>
                             Bien cordialement,<br/>
                             <br/>
-                            <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                            <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                             </p>";
 
                 $sendEmailService->send(
@@ -8828,7 +8835,7 @@ if ($form['teams']->getData()) {
                             <br/>
                             Bien cordialement,<br/>
                             <br/>
-                            <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                            <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                             </p>";
 
             $sendEmailService->send(

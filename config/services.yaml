@@ -5,6 +5,8 @@
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: fr
+    main_color: '%env(MAIN_COLOR)%'
+    logo_image: '%env(LOGO_IMAGE)%'
     documents_directory: '%kernel.project_dir%/public/uploads/documents/'
     pictures_directory: '%kernel.project_dir%/public/uploads/pictures/'
 

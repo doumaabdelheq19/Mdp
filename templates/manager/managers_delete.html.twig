@@ -1,98 +1,102 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - Supprimer un compte délégué
+	{{ parent() }}
+	- Supprimer un compte délégué
 {% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
+	{{ parent() }}
 {% endblock %}
 
 {% block body %}
-    {{ parent() }}
+	{{ parent() }}
 {% endblock %}
 
 {% block content %}
-    <div class="bg-dark">
-        <div class="container-fluid px-lg-5 m-b-30">
-            <div class="row">
-                <div class="col-12 text-white p-t-40 p-b-90">
+	<div class="bg-dark">
+		<div class="container-fluid px-lg-5 m-b-30">
+			<div class="row">
+				<div class="col-12 text-white p-t-40 p-b-90">
 
-                    <h4 class=""> <span class="btn btn-white-translucent">
-                                <i class="mdi mdi-account "></i></span> Supprimer un compte délégué
-                    </h4>
+					<h4 class="">
+						<span class="btn btn-white-translucent">
+							<i class="mdi mdi-account "></i>
+						</span>
+						Supprimer un compte délégué
+					</h4>
 
-                </div>
-            </div>
-        </div>
-    </div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <div class="container-fluid px-lg-5 pull-up">
+	<div class="container-fluid px-lg-5 pull-up">
 
-        <div class="card">
-            <div class="card-header">
-                <div class="card-body ">
-                    {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
+		<div class="card">
+			<div class="card-header">
+				<div class="card-body ">
+					{{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
 
-                    <h5>Documents</h5>
+					<h5>Documents</h5>
 
-                    <p>Ce compte délégué dispose de documents associés. Vous pouvez supprimer tous ces documents ou les associer à un autre délégué.</p>
+					<p>Ce compte délégué dispose de documents associés. Vous pouvez supprimer tous ces documents ou les associer à un autre délégué.</p>
 
-                    <div class="form-row">
-                        <div class="form-group col-12">
-                            <p>Action à réaliser</p>
-                            {% for chk in form.changeDocuments %}
-                                <div class="custom-control custom-radio custom-control-inline">
-                                    {{ form_widget(chk, {'attr': {'class': 'custom-control-input'} }) }}
-                                    {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label'}}) }}
-                                </div>
-                            {% endfor %}
-                            <div class="invalid-feedback">{{ form_errors(form.changeDocuments) | striptags  }}</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-12">
-                            {{ form_label(form.managerDocuments) }}
-                            {{ form_widget(form.managerDocuments, {'attr': {'class': 'form-control ' ~ ((form_errors(form.managerDocuments) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.managerDocuments) | striptags  }}</div>
-                        </div>
-                    </div>
+					<div class="form-row">
+						<div class="form-group col-12">
+							<p>Action à réaliser</p>
+							{% for chk in form.changeDocuments %}
+								<div class="custom-control custom-radio custom-control-inline">
+									{{ form_widget(chk, {'attr': {'class': 'custom-control-input'} }) }}
+									{{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label'}}) }}
+								</div>
+							{% endfor %}
+							<div class="invalid-feedback">{{ form_errors(form.changeDocuments) | striptags  }}</div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-12">
+							{{ form_label(form.managerDocuments) }}
+							{{ form_widget(form.managerDocuments, {'attr': {'class': 'form-control ' ~ ((form_errors(form.managerDocuments) == '') ? '' : 'is-invalid')} }) }}
+							<div class="invalid-feedback">{{ form_errors(form.managerDocuments) | striptags  }}</div>
+						</div>
+					</div>
 
-                    <h5 class="mt-2">Clients</h5>
+					<h5 class="mt-2">Clients</h5>
 
-                    <p>Ce compte délégué dispose de clients associés. Vous pouvez supprimer tous ces clients ou les associer à un autre délégué.</p>
+					<p>Ce compte délégué dispose de clients associés. Vous pouvez supprimer tous ces clients ou les associer à un autre délégué.</p>
 
-                    <div class="form-row">
-                        <div class="form-group col-12">
-                            <p>Action à réaliser</p>
-                            {% for chk in form.changeUsers %}
-                                <div class="custom-control custom-radio custom-control-inline">
-                                    {{ form_widget(chk, {'attr': {'class': 'custom-control-input'} }) }}
-                                    {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label'}}) }}
-                                </div>
-                            {% endfor %}
-                            <div class="invalid-feedback">{{ form_errors(form.changeUsers) | striptags  }}</div>
-                        </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-12">
-                            {{ form_label(form.managerUsers) }}
-                            {{ form_widget(form.managerUsers, {'attr': {'class': 'form-control ' ~ ((form_errors(form.managerUsers) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.managerUsers) | striptags  }}</div>
-                        </div>
-                    </div>
+					<div class="form-row">
+						<div class="form-group col-12">
+							<p>Action à réaliser</p>
+							{% for chk in form.changeUsers %}
+								<div class="custom-control custom-radio custom-control-inline">
+									{{ form_widget(chk, {'attr': {'class': 'custom-control-input'} }) }}
+									{{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label'}}) }}
+								</div>
+							{% endfor %}
+							<div class="invalid-feedback">{{ form_errors(form.changeUsers) | striptags  }}</div>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-12">
+							{{ form_label(form.managerUsers) }}
+							{{ form_widget(form.managerUsers, {'attr': {'class': 'form-control ' ~ ((form_errors(form.managerUsers) == '') ? '' : 'is-invalid')} }) }}
+							<div class="invalid-feedback">{{ form_errors(form.managerUsers) | striptags  }}</div>
+						</div>
+					</div>
 
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary">Enregistrer</button>
-                    </div>
-                    {{ form_end(form) }}
-                </div>
-            </div>
-        </div>
+					<div class="form-group">
+						<button type="submit" class="btn btn-primary">Enregistrer</button>
+					</div>
+					{{ form_end(form) }}
+				</div>
+			</div>
+		</div>
 
-    </div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
+	{{ parent() }}
 {% endblock %}

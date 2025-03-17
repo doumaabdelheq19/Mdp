@@ -1,78 +1,84 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - Répondre au questionnaire
+	{{ parent() }}
+	- Répondre au questionnaire
 {% endblock %}
 
 {% block content %}
-<div class="page">
-    <div class="table-container-traitements">
-        <!-- Header with Back Button -->
-        <div class="header headretour">
-            <a href="javascript:history.back()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024">
-                    <path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
-                </svg>
-            </a>
-            <h2>Répondre au Questionnaire</h2>
-        </div>
+	<div class="page">
+		<div
+			class="table-container-traitements">
+			<!-- Header with Back Button -->
+			<div class="header headretour">
+				<a href="javascript:history.back()">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 1024 1024">
+						<path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
+					</svg>
+				</a>
+				<h2>Répondre au Questionnaire</h2>
+			</div>
 
-        <!-- Form Start -->
-        {{ form_start(form, {"attr": {"class": "sous-traitantform"}}) }}
+			<!-- Form Start -->
+			{{ form_start(form, {"attr": {"class": "sous-traitantform"}}) }}
 
-        <div class="sectt" style="border-top:none">
-            <h3>Questions</h3>
-            <div class="col-12" id="content_container">
+			<div class="sectt border-top-none">
+				<h3>Questions</h3>
+				<div class="col-12" id="content_container">
 
-                {% if training.questions is defined %}
-                    {% for key, item in training.questions %}
-                        <div class="form-group1">
-                            <!-- Question Title -->
-                            <h5>{{ item.title }}</h5>
+					{% if training.questions is defined %}
+						{% for key, item in training.questions %}
+							<div
+								class="form-group1">
+								<!-- Question Title -->
+								<h5>{{ item.title }}</h5>
 
-                            <!-- Help Links (if available) -->
-                            {% if item.links %}
-                                <p class="mb-0 text-muted">
-                                    <i class="mdi mdi-help-circle"></i> Pour répondre à cette question :
-                                </p>
-                                <ul class="list-unstyled text-muted">
-                                    {% for link in item.links %}
-                                        <li><a href="{{ link }}" target="_blank" class="text-muted">{{ link }}</a></li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
+								<!-- Help Links (if available) -->
+								{% if item.links %}
+									<p class="mb-0 text-muted">
+										<i class="mdi mdi-help-circle"></i>
+										Pour répondre à cette question :
+									</p>
+									<ul class="list-unstyled text-muted">
+										{% for link in item.links %}
+											<li>
+												<a href="{{ link }}" target="_blank" class="text-muted">{{ link }}</a>
+											</li>
+										{% endfor %}
+									</ul>
+								{% endif %}
 
-                            <!-- Question Choices -->
-                            <div class="question-choices">
-                                {% for chk in form["question_" ~ key] %}
-                                    <div class="custom-control {% if item.multiple %}custom-checkbox{% else %}custom-radio{% endif %}">
-                                        {{ form_widget(chk, {'attr': {'class': 'custom-control-input'} }) }}
-                                        {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label'}}) }}
-                                    </div>
-                                {% endfor %}
-                            </div>
+								<!-- Question Choices -->
+								<div class="question-choices">
+									{% for chk in form["question_" ~ key] %}
+										<div class="custom-control {% if item.multiple %}custom-checkbox{% else %}custom-radio{% endif %}">
+											{{ form_widget(chk, {'attr': {'class': 'custom-control-input'} }) }}
+											{{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label'}}) }}
+										</div>
+									{% endfor %}
+								</div>
 
-                            <!-- Explanation (if available) -->
-                            {% if item.explanations %}
-                                <p class="mb-0 text-primary mt-3">{{ item.explanations|nl2br|raw }}</p>
-                            {% endif %}
+								<!-- Explanation (if available) -->
+								{% if item.explanations %}
+									<p class="mb-0 text-primary mt-3">{{ item.explanations|nl2br|raw }}</p>
+								{% endif %}
 
-                            <hr/>
-                        </div>
-                    {% endfor %}
-                {% endif %}
+								<hr/>
+							</div>
+						{% endfor %}
+					{% endif %}
 
-            </div>
-        </div>
+				</div>
+			</div>
 
-        <!-- Submit Button -->
-        <button type="submit" class="submit-button">Enregistrer</button>
+			<!-- Submit Button -->
+			<button type="submit" class="submit-button">Enregistrer</button>
 
-        {{ form_end(form) }}
-    </div>
-</div>
+			{{ form_end(form) }}
+		</div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
+	{{ parent() }}
 {% endblock %}

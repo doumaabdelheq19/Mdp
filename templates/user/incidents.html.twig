@@ -1,185 +1,192 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - Registre des incidents
+	{{ parent() }}
+	- Registre des incidents
 {% endblock %}
 
 {% block content %}
-<div class="page">
-    <div class="flex">
-        <div class="five">
-            <div class="gap">
-                <h4>Registre des incidents</h4>
-                <p>L'ensemble de vos incidents</p>
-                <p>
-                    <a href="https://www.cnil.fr/fr/notifier-une-violation-de-donnees-personnelles" target="_blank">
-                        Signaler un incident à la CNIL
-                    </a>
-                </p>
-                <div style="display: flex; gap: 20px;">
-                    <a href="{{ path('user_incidents_export') }}" class="imprimer">
-    <div class="imprimer">
-        <i class="fa fa-print" aria-hidden="true"></i>
-        <p>Imprimer mon registre</p>
-    </div>
-</a>
+	<div class="page">
+		<div class="flex">
+			<div class="five">
+				<div class="gap">
+					<h4>Registre des incidents</h4>
+					<p>L'ensemble de vos incidents</p>
+					<p>
+						<a href="https://www.cnil.fr/fr/notifier-une-violation-de-donnees-personnelles" target="_blank">
+							Signaler un incident à la CNIL
+						</a>
+					</p>
+					<div class="vos-actions" >
+						<a href="{{ path('user_incidents_export') }}" class="imprimer">
+							<div class="imprimer">
+								<i class="fa fa-print" aria-hidden="true"></i>
+								<p>Imprimer mon registre</p>
+							</div>
+						</a>
 
-                </div>
-            </div>
-        </div>
-    </div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-    <div class="table-container-traitements">
-        <!-- Search and Action Buttons -->
-        <div style="display: flex; justify-content: space-between; width: 100%;">
-            <div class="search-bar">
-                <span class="search-icon">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                </span>
-                <input type="text" id="searchInput" placeholder="Rechercher" />
-            </div>
-            <div class="buttons">
-                <div class="exporter">
-                    <a href="{{ path('user_incidents_add') }}" class="btn btn-primary">Déclarer un incident</a>
-                </div>
-            </div>
-        </div>
+		<div
+			class="table-container-traitements">
+			<!-- Search and Action Buttons -->
+			<div class="search-container">
+				<div class="search-bar">
+					<span class="search-icon">
+						<i class="fa fa-search" aria-hidden="true"></i>
+					</span>
+					<input type="text" id="searchInput" placeholder="Rechercher"/>
+				</div>
+				<div class="buttons">
+					<div class="exporter">
+						<a href="{{ path('user_incidents_add') }}" class="btn btn-primary">Déclarer un incident</a>
+					</div>
+				</div>
+			</div>
 
-        <!-- Data Table -->
-        <table class="styled-table" id="incidentsTable">
-            <thead>
-                <tr>
-                    <th>CNIL INFORMÉE</th>
-                    <th>DÉLAI DE 72H</th>
-                    <th>NATURE</th>
-                    <th>DATE</th>
-                    <th class="actionss">ACTIONS</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-             {% if incidents|length > 0 %}
-                {% for incident in incidents %}
-                    <tr>
-                        <td>{{ incident.cnilInformed ? 'Oui' : 'Non' }}</td>
-                        <td>{{ incident.notice72H ? 'Oui' : 'Non' }}</td>
-                        <td>{{ incident.type }}</td>
-                        <td style="color: #EF6D6F;">{{ incident.date|date('d/m/Y') }}</td>
-                        <td >
-                        <div class="options">
-                        {% if incident.user.id == app.user.user.id %}
-                        <a href="{{ path('user_incidents_copy', {'id': incident.id}) }}">
-                                <button class="edit">
-                                    <i class="fa fa-clone" aria-hidden="true"></i>
-                                </button>
-                                </a>
-                                 <a href="{{ path('user_incidents_edit', {'id': incident.id}) }}" class="edit">
-                                <i class="fa fa-edit" aria-hidden="true"></i>
-                            </a>
-                                <a href="{{ path('user_incidents_delete', {'id': incident.id}) }}" onclick="return confirm('Confirmer la suppression de cet incident ?');">
-                                <button class="delete">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
-                                </button>
-                                 </a>
-                            {% else %}
-                                <button class="view">
-                                    <i class="fa fa-eye" aria-hidden="true"></i>
-                                </button>
-                            {% endif %}
-                        </div>
-                            
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-             {% else %}
-                <tr>
-                    <td colspan="8" class="text-center">{{ 'Aucune incidents disponible'|trans }}</td>
-                </tr>
-                {% endif %}
-        </table>
+			<!-- Data Table -->
+			<table class="styled-table" id="incidentsTable">
+				<thead>
+					<tr>
+						<th>CNIL INFORMÉE</th>
+						<th>DÉLAI DE 72H</th>
+						<th>NATURE</th>
+						<th>DATE</th>
+						<th class="actionss">ACTIONS</th>
+					</tr>
+				</thead>
+				<tbody id="tableBody">
+					{% if incidents|length > 0 %}
+						{% for incident in incidents %}
+							<tr>
+								<td>{{ incident.cnilInformed ? 'Oui' : 'Non' }}</td>
+								<td>{{ incident.notice72H ? 'Oui' : 'Non' }}</td>
+								<td>{{ incident.type }}</td>
+								<td class="daterouge" >{{ incident.date|date('d/m/Y') }}</td>
+								<td>
+									<div class="options">
+										{% if incident.user.id == app.user.user.id %}
+											<a href="{{ path('user_incidents_copy', {'id': incident.id}) }}">
+												<button class="edit">
+													<i class="fa fa-clone" aria-hidden="true"></i>
+												</button>
+											</a>
+											<a href="{{ path('user_incidents_edit', {'id': incident.id}) }}" class="edit">
+												<i class="fa fa-edit" aria-hidden="true"></i>
+											</a>
+											<a href="{{ path('user_incidents_delete', {'id': incident.id}) }}" onclick="return confirm('Confirmer la suppression de cet incident ?');">
+												<button class="delete">
+													<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
+												</button>
+											</a>
+										{% else %}
+											<button class="view">
+												<i class="fa fa-eye" aria-hidden="true"></i>
+											</button>
+										{% endif %}
+									</div>
 
-        <!-- Pagination -->
-        <div class="pagination-container">
-            <!-- Results per page selector -->
-            <div class="results-per-page">
-                <label for="results">Afficher</label>
-                <select id="resultsSelect" class="results-select">
-                    <option value="5">5</option>
-                    <option value="10" selected>10</option>
-                    <option value="20">20</option>
-                </select>
-                <span>résultats par page</span>
-            </div>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				{% else %}
+					<tr>
+						<td colspan="8" class="text-center">{{ 'Aucune incidents disponible'|trans }}</td>
+					</tr>
+				{% endif %}
+			</table>
 
-            <!-- Pagination Controls -->
-            <div class="pagination-controls">
-                <button class="pagination-button" id="prevPage" disabled><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19l-7-7l7-7"/></svg></button>
-                <span class="pagination-info" id="paginationInfo">Page 1 sur 1</span>
-                <button class="pagination-button" id="nextPage" disabled><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5l7 7l-7 7"/></svg></button>
-            </div>
-        </div>
-    </div>
-</div>
+			<!-- Pagination -->
+			<div
+				class="pagination-container">
+				<!-- Results per page selector -->
+				<div class="results-per-page">
+					<label for="results">Afficher</label>
+					<select id="resultsSelect" class="results-select">
+						<option value="5">5</option>
+						<option value="10" selected>10</option>
+						<option value="20">20</option>
+					</select>
+					<span>résultats par page</span>
+				</div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const rows = Array.from(document.querySelectorAll('#tableBody tr'));
-        const resultsSelect = document.getElementById('resultsSelect');
-        const paginationInfo = document.getElementById('paginationInfo');
-        const prevPage = document.getElementById('prevPage');
-        const nextPage = document.getElementById('nextPage');
-        const searchInput = document.getElementById('searchInput');
+				<!-- Pagination Controls -->
+				<div class="pagination-controls">
+					<button class="pagination-button" id="prevPage" disabled>
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19l-7-7l7-7"/></svg>
+					</button>
+					<span class="pagination-info" id="paginationInfo">Page 1 sur 1</span>
+					<button class="pagination-button" id="nextPage" disabled>
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5l7 7l-7 7"/></svg>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
-        let currentPage = 1;
-        let resultsPerPage = parseInt(resultsSelect.value);
-        let filteredRows = rows;
-
-        function updateTable() {
-            const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
-            const start = (currentPage - 1) * resultsPerPage;
-            const end = start + resultsPerPage;
-
-            rows.forEach((row, index) => {
-                row.style.display = filteredRows.includes(row) && index >= start && index < end ? '' : 'none';
-            });
-
-            paginationInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
-            prevPage.disabled = currentPage === 1;
-            nextPage.disabled = currentPage === totalPages;
-        }
-
-        function filterTable() {
-            const query = searchInput.value.toLowerCase();
-            filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
-            currentPage = 1; // Reset to first page after search
-            updateTable();
-        }
-
-        resultsSelect.addEventListener('change', function () {
-            resultsPerPage = parseInt(this.value);
-            currentPage = 1;
-            updateTable();
-        });
-
-        prevPage.addEventListener('click', function () {
-            if (currentPage > 1) {
-                currentPage--;
-                updateTable();
-            }
-        });
-
-        nextPage.addEventListener('click', function () {
-            const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
-            if (currentPage < totalPages) {
-                currentPage++;
-                updateTable();
-            }
-        });
-
-        searchInput.addEventListener('input', filterTable);
-
-        // Initialize table
-        updateTable();
-    });
-</script>
+	 <script>
+	    document.addEventListener('DOMContentLoaded', function () {
+	        const rows = Array.from(document.querySelectorAll('#tableBody tr'));
+	        const resultsSelect = document.getElementById('resultsSelect');
+	        const paginationInfo = document.getElementById('paginationInfo');
+	        const prevPage = document.getElementById('prevPage');
+	        const nextPage = document.getElementById('nextPage');
+	        const searchInput = document.getElementById('searchInput');
+	
+	        let currentPage = 1;
+	        let resultsPerPage = parseInt(resultsSelect.value);
+	        let filteredRows = rows;
+	
+	        function updateTable() {
+	            const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+	            const start = (currentPage - 1) * resultsPerPage;
+	            const end = start + resultsPerPage;
+	
+	            rows.forEach((row, index) => {
+	                row.style.display = filteredRows.includes(row) && index >= start && index < end ? '' : 'none';
+	            });
+	
+	            paginationInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
+	            prevPage.disabled = currentPage === 1;
+	            nextPage.disabled = currentPage === totalPages;
+	        }
+	
+	        function filterTable() {
+	            const query = searchInput.value.toLowerCase();
+	            filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
+	            currentPage = 1; // Reset to first page after search
+	            updateTable();
+	        }
+	
+	        resultsSelect.addEventListener('change', function () {
+	            resultsPerPage = parseInt(this.value);
+	            currentPage = 1;
+	            updateTable();
+	        });
+	
+	        prevPage.addEventListener('click', function () {
+	            if (currentPage > 1) {
+	                currentPage--;
+	                updateTable();
+	            }
+	        });
+	
+	        nextPage.addEventListener('click', function () {
+	            const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+	            if (currentPage < totalPages) {
+	                currentPage++;
+	                updateTable();
+	            }
+	        });
+	
+	        searchInput.addEventListener('input', filterTable);
+	
+	        // Initialize table
+	        updateTable();
+	    });
+	</script>
 {% endblock %}

@@ -1,48 +1,52 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - {{ 'crer_une_action'|trans }}
+	{{ parent() }}
+	-
+	{{ 'crer_une_action'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <!-- Flatpickr CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	{{ parent() }}
+	<!-- Flatpickr CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 {% endblock %}
 {% block content %}
 <div class="page">
-  <div class="table-container-traitements">
-    <div class="header headretour">
-    <a href="javascript:history.back()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024"><path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/></svg></a>
+	<div class="table-container-traitements">
+		<div class="header headretour">
+			<a href="javascript:history.back()">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 1024 1024"><path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/></svg>
+			</a>
 
-      <h2>{{ 'crer_une_action'|trans }}</h2>
-    </div>
+			<h2>{{ 'crer_une_action'|trans }}</h2>
+		</div>
 
-    {{ form_start(form, {"attr": {"class": "sous-traitantform", "enctype": "multipart/form-data"}}) }}
+		{{ form_start(form, {"attr": {"class": "sous-traitantform", "enctype": "multipart/form-data"}}) }}
 
-    <!-- Standard Action Search -->
-     <div class="form-group">
-    <div class="form-group1">
-      <label for="form_action_std">{{ 'rechercher_une_action_standard'|trans }}</label>
-      <select id="form_action_std" name="form_action_std" class="form-control " onchange="selectStd(this)">
-        <option id="foo" selected="selected" disabled="disabled">{{ 'rechercher_une_action'|trans }}</option>
-        {% for actionStd in actionsStd %}
-          <option value="{{ actionStd.id }}">{{ actionStd.name }}</option>
-        {% endfor %}
-      </select>
-    </div>
-    </div>
+		<!-- Standard Action Search -->
+		<div class="form-group">
+			<div class="form-group1">
+				<label for="form_action_std">{{ 'rechercher_une_action_standard'|trans }}</label>
+				<select id="form_action_std" name="form_action_std" class="form-control " onchange="selectStd(this)">
+					<option id="foo" selected="selected" disabled="disabled">{{ 'rechercher_une_action'|trans }}</option>
+					{% for actionStd in actionsStd %}
+						<option value="{{ actionStd.id }}">{{ actionStd.name }}</option>
+					{% endfor %}
+				</select>
+			</div>
+		</div>
 
-    <!-- Action Name and Budget -->
-    <div class="form-group">
-      <div class="form-group1">
-        <label style="display:flex">{{ form_label(form.name) }}*</label>
-        {{ form_widget(form.name, {'attr': {'class': 'form-control ' ~ ((form_errors(form.name) == '') ? '' : 'is-invalid'), 'placeholder': 'Nom de l\'action'}}) }}
+		<!-- Action Name and Budget -->
+		<div class="form-group">
+			<div class="form-group1">
+				<label class="disp-flex">{{ form_label(form.name) }}*</label>
+				{{ form_widget(form.name, {'attr': {'class': 'form-control ' ~ ((form_errors(form.name) == '') ? '' : 'is-invalid'), 'placeholder': 'Nom de l\'action'}}) }}
         <div class="invalid-feedback">{{ form_errors(form.name) | striptags }}</div>
       </div>
 
       <div class="form-group1">
-        <label style="display:flex">{{ form_label(form.budget) }}*</label>
+        <label class="disp-flex">{{ form_label(form.budget) }}*</label>
         {{ form_widget(form.budget, {'attr': {'class': 'form-control ' ~ ((form_errors(form.budget) == '') ? '' : 'is-invalid'), 'placeholder': 'Budget'}}) }}
         <div class="invalid-feedback">{{ form_errors(form.budget) | striptags }}</div>
       </div>
@@ -84,7 +88,7 @@
 <h3 class="mt-4">{{ 'informations'|trans }}</h3>
 <div class="form-group">
     <div class="form-group1">
-      <label style="display:flex">  {{ form_label(form.goal, 'Objectif') }}*</label>
+      <label class="disp-flex">  {{ form_label(form.goal, 'Objectif') }}*</label>
         {{ form_widget(form.goal, {'attr': {'class': 'form-control ' ~ ((form_errors(form.goal) == '') ? '' : 'is-invalid'), 'placeholder': 'Objectif'}}) }}
         <div class="invalid-feedback">{{ form_errors(form.goal) | striptags }}</div>
     </div>
@@ -113,12 +117,12 @@
 
     <!-- Priority -->
    <div class="form-group-container">
-    <div class="form-group" style="margin-top:20px">
+    <div class="form-group margin-top" >
         <div class="form-group1">
             <label>{{ 'action_ralise'|trans }}</label>
-            <div style="display: flex; margin-top: 10px; width: 100%; justify-content: flex-start; gap:20px; align-items:center" class="radiosbutt">
+            <div  class="radiosbutt action-realise">
                 {% for chk in form.terminated %}
-                    <div style="display: flex; gap: 7px; align-items: center; ">
+                    <div class="chk" >
                         {{ form_widget(chk, {'attr': {'class': 'custom-control-input'}}) }}
                         {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label'}}) }}
                     </div>
@@ -131,12 +135,12 @@
 
 <br>
 <div class="form-group-container">
-    <div class="form-group" style="margin-top:20px">
+    <div class="form-group margin-top" >
         <div class="form-group1">
             <label>{{ 'priorite'|trans }}</label>
-            <div style="display: flex; margin: 10px 0px; width: 100%; gap:15px;" class="radiosbutt">
+            <div class="radiosbutt priorite">
                 {% for chk in form.priority %}
-                    <div style="display: flex; gap: 7px; align-items: center;">
+                    <div class="chk">
                         {{ form_widget(chk, {'attr': {'class': 'custom-control-input'}}) }}
                         {% if loop.index == 1 %}
                             {{ form_label(chk, null, {'label_attr': {'class': 'custom-control-label text-danger'}}) }}
@@ -155,8 +159,8 @@
 
 
     <!-- Attach Documents -->
-<div class="form-group1" style="margin-top:30px">
-    <label for="treatments-search" style="margin-bottom:10px">{{ 'Traitements liés'|trans }}</label>
+<div class="form-group1 margin-top-30">
+    <label for="treatments-search" class="margin-bottom-10">{{ 'Traitements liés'|trans }}</label>
       
                             {{ form_widget(form.treatments, {'attr': {'class': 'form-control ' ~ ((form_errors(form.treatments) == '') ? '' : 'is-invalid')} }) }}
 
@@ -167,7 +171,7 @@
 
 <div class="form-group1">
 
-    <label for="sheets-search" style="margin-bottom:10px">{{ form_label(form.sheets) }}</label>
+    <label for="sheets-search" class="margin-bottom-10">{{ form_label(form.sheets) }}</label>
 
                                 {{ form_widget(form.sheets, {'attr': {'class': 'form-control js-select2 ' ~ ((form_errors(form.sheets) == '') ? '' : 'is-invalid')} }) }}
 
@@ -179,7 +183,7 @@
 <input type="hidden" id="selected-sheets" name="selectedSheets" value="" />
 
 
-<div class=" mt-3" style="margin: 40px 0px;">
+<div class=" mt-3 " >
     <!-- Custom File Button -->
     <button type="button" class="file-button" id="add_document_button">
         <i class="fa fa-file" aria-hidden="true"></i> {{ 'joindre_un_document'|trans }}
@@ -191,10 +195,10 @@
                                     <div class="form-group col-md-12 d-flex block_document"><div class="custom-control custom-checkbox custom-control-inline"><input type="checkbox" checked="checked" class="custom-control-input" id="appbundle_action_documents_{{ document.id }}" name="appbundle_action_documents_{{ document.id }}" value="1" /><label class="custom-control-label" for="appbundle_action_documents_{{ document.id }}">{{ document.name }}</label></div><a href="/uploads/documents/{{ document.filename }}" class="btn btn-info ml-2" target="_blank"><i class="mdi mdi-eye"></i></a></div>
                                 {% endfor %}
                             </div>
-                        {% endif %}
-                        <div id="block_documents" class="row col-12" style="margin-top:10px">
-                        </div>
-</div>
+                                 {% endif %}
+                                <div id="block_documents" class="row col-12" >
+                                </div>
+                                     </div>
 
   {% if isAdmin %}
                         <div class="custom-control custom-checkbox my-4">
@@ -235,14 +239,14 @@
 
 {% block javascripts %}
     {{ parent() }}
-        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
+         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+ <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+ <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-    <script>
+ <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+     <script>
    
    
      $(document).ready(function() {
@@ -259,90 +263,91 @@
                 width: '100%',
                 ajax: {
                         url: '{{ path('user_json_treatments') }}',
-                        type: 'POST',
-                        data: function (params) {
-                            return {
-                                name: params.term,
-                            };
-                        },
-                        processResults: function (data) {
-                            if (data) {
-                                return {
-                                    results: data
-                                };
-                            }
-                            return {
-                                results: []
-                            };
-                        }
-                    }
-            });
-        });
+					                        type: 'POST',
+					                        data: function (params) {
+					                            return {
+					                                name: params.term,
+					                            };
+					                        },
+					                        processResults: function (data) {
+					                            if (data) {
+					                                return {
+					                                    results: data
+					                                };
+					                            }
+					                            return {
+					                                results: []
+					                            };
+					                        }
+					                    }
+					            });
+					        });
+					
+					     var inputTreatmentsSelector;
+					// Tables to dataTables
+					(function ($) {
+					            'use strict';
+					            $(document).ready(function () {
+					               
+					
+					               
+					
+					                document.getElementById("add_document_button").addEventListener("click", function () {
+					                    var div = document.createElement("div");
+					                    div.className = "form-group col-md-12 d-flex block_document";
+					
+					                    var nameInput = document.createElement("input");
+					                    nameInput.className = "form-control";
+					                    nameInput.setAttribute("type", "text");
+					                    nameInput.setAttribute("placeholder", "Titre");
+					                    nameInput.setAttribute("name", "appbundle_action_documents_names[]");
+					
+					                    var fileInput = document.createElement("input");
+					                    fileInput.className = "form-control ml-2";
+					                    fileInput.setAttribute("type", "file");
+					                    fileInput.setAttribute("name", "appbundle_action_documents[]");
+					
+					                    var fileInputRemoveButton = document.createElement("button");
+					                    fileInputRemoveButton.className = "btn btn-danger ml-2 remove_document_button";
+					                    fileInputRemoveButton.setAttribute("type", "button");
+					                    fileInputRemoveButton.setAttribute("onclick", "removeDocument(this)");
+					
+					               
+					
+					                    div.appendChild(nameInput);
+					                    div.appendChild(fileInput);
+					                    div.appendChild(fileInputRemoveButton);
+					
+					                    var element = document.getElementById("block_documents");
+					                    element.appendChild(div);
+					                });
+					            });
+					        })(window.jQuery);
+					
+					function removeDocument(element) {
+					    element.parentNode.remove();
+					}
+					
+					function selectStd(e) {
+					    saved = true;
+					    window.location.href = "{{ path('user_actions_add') }}?std=" + e.value;
+					}
+					document.addEventListener("DOMContentLoaded", () => {
+					      flatpickr(".datepicker-js", {
+					                dateFormat: "Y-m-d",
+					                altInput: true,
+					                altFormat: "d/m/Y",
+					                locale: "fr",
+					                allowInput: true,
+					            });
+					
+					
+					
+					    
+					
+					});
 
-     var inputTreatmentsSelector;
-// Tables to dataTables
-(function ($) {
-            'use strict';
-            $(document).ready(function () {
-               
 
-               
-
-                document.getElementById("add_document_button").addEventListener("click", function () {
-                    var div = document.createElement("div");
-                    div.className = "form-group col-md-12 d-flex block_document";
-
-                    var nameInput = document.createElement("input");
-                    nameInput.className = "form-control";
-                    nameInput.setAttribute("type", "text");
-                    nameInput.setAttribute("placeholder", "Titre");
-                    nameInput.setAttribute("name", "appbundle_action_documents_names[]");
-
-                    var fileInput = document.createElement("input");
-                    fileInput.className = "form-control ml-2";
-                    fileInput.setAttribute("type", "file");
-                    fileInput.setAttribute("name", "appbundle_action_documents[]");
-
-                    var fileInputRemoveButton = document.createElement("button");
-                    fileInputRemoveButton.className = "btn btn-danger ml-2 remove_document_button";
-                    fileInputRemoveButton.setAttribute("type", "button");
-                    fileInputRemoveButton.setAttribute("onclick", "removeDocument(this)");
-
-               
-
-                    div.appendChild(nameInput);
-                    div.appendChild(fileInput);
-                    div.appendChild(fileInputRemoveButton);
-
-                    var element = document.getElementById("block_documents");
-                    element.appendChild(div);
-                });
-            });
-        })(window.jQuery);
-
-function removeDocument(element) {
-    element.parentNode.remove();
-}
-
-function selectStd(e) {
-    saved = true;
-    window.location.href = "{{ path('user_actions_add') }}?std=" + e.value;
-}
-document.addEventListener("DOMContentLoaded", () => {
-      flatpickr(".datepicker-js", {
-                dateFormat: "Y-m-d",
-                altInput: true,
-                altFormat: "d/m/Y",
-                locale: "fr",
-                allowInput: true,
-            });
-
-
-
-    
-
-});
-
-      
-    </script>
-{% endblock %}
+				</script>
+				--!#}
+			{% endblock %}

@@ -1,167 +1,172 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - {{ 'traitements_du_groupe'|trans }}
+	{{ parent() }}
+	-
+	{{ 'traitements_du_groupe'|trans }}
 {% endblock %}
 
 {% block content %}
-<div class="page">
-    <!-- Header Section -->
-    <div class="table-container-traitements">
-        <div class="header">
-            <h2>{{ 'traitements_du_groupe'|trans }}</h2>
-           
-            <p>
-                <a data-toggle="modal" data-target="#RGPDModal" href="#">{{ 'le_rglement_gnral_sur_la_protection_des_donnes_rgp'|trans }}</a>
-            </p>
-        </div>
+	<div
+		class="page">
+		<!-- Header Section -->
+		<div class="table-container-traitements">
+			<div class="header">
+				<h2>{{ 'traitements_du_groupe'|trans }}</h2>
 
-        <!-- Form Start -->
-        {{ form_start(form, {"attr": {"class": "sous-traitantform"}}) }}
- <div style="display: flex; justify-content: space-between; width: 100%;">
-         <p>{{ 'lensemble_de_vos_traitements_exemple_1_exemple_2'|trans }}</p>
-        <div class="dropdownn">
-                    <a class="traitment-button" style="color:#438492; align-content:center">
-                        {{ 'Traitements du groupe'|trans }} <span class="dropdown-icon"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9l-7 7l-7-7"/></svg></span>
-                    </a>
-                    <ul class="traitment-menu">
-                      <li>
-                              <a href="{{ path('user_treatments') }}">
-                                 Mes traitements 
-                              </a>
-                          </li>
-                      {% if app.user.user.mainGroupAgency %}
-                          <li>
-                              <a href="{{ path('user_treatments_std') }}">
-                                  Traitements standards
-                              </a>
-                          </li>
-                      {% endif %}
-                
-                        
-                      
-                    </ul>
-                </div>
-        </div>
-        <!-- Data Table -->
-        <table class="styled-table">
-       
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>{{ 'nom_du_traitement'|trans }}</th>
-                    <th>{{ 'n_du_traitement'|trans }}</th>
-                    <th>{{ 'cration'|trans }}</th>
-                    <th>{{ 'mise_jour'|trans }}</th>
-                    <th>{{ 'finalit'|trans }}</th>
-                    <th>{{ 'pia'|trans }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% if treatments|length > 0 %}
-                    {% for treatment in treatments %}
-                        <tr>
-                            <td>
-                                <div class="custom-checkbox">
-                                    {{ form_widget(form["t_"~treatment.id], {'attr': {'class': 'checkbox-input'}}) }}
-                                    {{ form_label(form["t_"~treatment.id], null, {'label_attr': {'class': 'checkbox-label'}}) }}
-                                </div>
-                            </td>
-                            <td>
-                                <a href="{{ path('user_treatments_show', {'id': treatment.id}) }}" target="_blank">{{ treatment.name }}</a>
-                            </td>
-                            <td>{{ treatment.number|format_treatment_number }}</td>
-                            <td>{{ treatment.creationDate|date('d/m/Y') }}</td>
-                            <td>{{ treatment.editDate|date('d/m/Y') }}</td>
-                            <td>{{ treatment.mainPurpose }}</td>
-                            <td>
-                                {% if treatment.piaFile %}
-                                    <span class="badge badge-success">{{ 'realise'|trans }}</span>
-                                {% else %}
-                                    {% if treatment.insufficientCriteria %}
-                                        <span>{{ 'non_concern'|trans }}</span>
-                                    {% else %}
-                                        {% if treatment.piaNeeded %}
-                                            {% if treatment.piaExoneration %}
-                                                <span>{{ 'exonr'|trans }}</span>
-                                            {% else %}
-                                                <span class="badge badge-danger">{{ 'raliser'|trans }}</span>
-                                            {% endif %}
-                                        {% else %}
-                                            {% if treatment.sensitiveData %}
-                                                <span class="badge badge-warning" data-toggle="tooltip" title="{{ 'Ce traitement comporte des données sensibles.'|trans }}">{{ 'recommand'|trans }}</span>
-                                            {% else %}
-                                                <span>{{ 'non_concern'|trans }}</span>
-                                            {% endif %}
-                                        {% endif %}
-                                    {% endif %}
-                                {% endif %}
-                            </td>
-                        </tr>
-                    {% endfor %}
-                {% else %}
-                    <tr>
-                        <td colspan="7" class="text-center">{{ 'Aucun traitement disponible'|trans }}</td>
-                    </tr>
-                {% endif %}
-            </tbody>
-        </table>
+				<p>
+					<a data-toggle="modal" data-target="#RGPDModal" href="#">{{ 'le_rglement_gnral_sur_la_protection_des_donnes_rgp'|trans }}</a>
+				</p>
+			</div>
 
-        <!-- Submit Button -->
-        <div class="form-group d-flex justify-content-end mt-3">
-            <button type="submit" class="submit-button">
-                {{ 'enregistrer'|trans }}
-            </button>
-        </div>
-        {{ form_end(form) }}
-    </div>
-</div>
+			<!-- Form Start -->
+			{{ form_start(form, {"attr": {"class": "sous-traitantform"}}) }}
+			<div class="search-container">
+				<p>{{ 'lensemble_de_vos_traitements_exemple_1_exemple_2'|trans }}</p>
+				<div class="dropdownn">
+					<a class="traitment-button traitment-green" >
+						{{ 'Traitements du groupe'|trans }}
+						<span class="dropdown-icon">
+							<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 9l-7 7l-7-7"/></svg>
+						</span>
+					</a>
+					<ul class="traitment-menu">
+						<li>
+							<a href="{{ path('user_treatments') }}">
+								Mes traitements
+							</a>
+						</li>
+						{% if app.user.user.mainGroupAgency %}
+							<li>
+								<a href="{{ path('user_treatments_std') }}">
+									Traitements standards
+								</a>
+							</li>
+						{% endif %}
 
-<!-- RGPD Modal -->
-<div class="modal fade" id="RGPDModal" tabindex="-1" role="dialog" aria-labelledby="RGPDModal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">{{ 'le_rglement_gnral_sur_la_protection_des_donnes_rgp'|trans|raw }}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'fermer'|trans }}">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <p>
-                    {{ 'rglement_ue_2016679_du_parlement_europen_et_du_con'|trans }}
-                </p>
-            </div>
-        </div>
-    </div>
-</div>
+
+					</ul>
+				</div>
+			</div>
+			<!-- Data Table -->
+			<table class="styled-table">
+
+				<thead>
+					<tr>
+						<th></th>
+						<th>{{ 'nom_du_traitement'|trans }}</th>
+						<th>{{ 'n_du_traitement'|trans }}</th>
+						<th>{{ 'cration'|trans }}</th>
+						<th>{{ 'mise_jour'|trans }}</th>
+						<th>{{ 'finalit'|trans }}</th>
+						<th>{{ 'pia'|trans }}</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% if treatments|length > 0 %}
+						{% for treatment in treatments %}
+							<tr>
+								<td>
+									<div class="custom-checkbox">
+										{{ form_widget(form["t_"~treatment.id], {'attr': {'class': 'checkbox-input'}}) }}
+										{{ form_label(form["t_"~treatment.id], null, {'label_attr': {'class': 'checkbox-label'}}) }}
+									</div>
+								</td>
+								<td>
+									<a href="{{ path('user_treatments_show', {'id': treatment.id}) }}" target="_blank">{{ treatment.name }}</a>
+								</td>
+								<td>{{ treatment.number|format_treatment_number }}</td>
+								<td>{{ treatment.creationDate|date('d/m/Y') }}</td>
+								<td>{{ treatment.editDate|date('d/m/Y') }}</td>
+								<td>{{ treatment.mainPurpose }}</td>
+								<td>
+									{% if treatment.piaFile %}
+										<span class="badge badge-success">{{ 'realise'|trans }}</span>
+									{% else %}
+										{% if treatment.insufficientCriteria %}
+											<span>{{ 'non_concern'|trans }}</span>
+										{% else %}
+											{% if treatment.piaNeeded %}
+												{% if treatment.piaExoneration %}
+													<span>{{ 'exonr'|trans }}</span>
+												{% else %}
+													<span class="badge badge-danger">{{ 'raliser'|trans }}</span>
+												{% endif %}
+											{% else %}
+												{% if treatment.sensitiveData %}
+													<span class="badge badge-warning" data-toggle="tooltip" title="{{ 'Ce traitement comporte des données sensibles.'|trans }}">{{ 'recommand'|trans }}</span>
+												{% else %}
+													<span>{{ 'non_concern'|trans }}</span>
+												{% endif %}
+											{% endif %}
+										{% endif %}
+									{% endif %}
+								</td>
+							</tr>
+						{% endfor %}
+					{% else %}
+						<tr>
+							<td colspan="7" class="text-center">{{ 'Aucun traitement disponible'|trans }}</td>
+						</tr>
+					{% endif %}
+				</tbody>
+			</table>
+
+			<!-- Submit Button -->
+			<div class="form-group d-flex justify-content-end mt-3">
+				<button type="submit" class="submit-button">
+					{{ 'enregistrer'|trans }}
+				</button>
+			</div>
+			{{ form_end(form) }}
+		</div>
+	</div>
+
+	<!-- RGPD Modal -->
+	<div class="modal fade" id="RGPDModal" tabindex="-1" role="dialog" aria-labelledby="RGPDModal" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">{{ 'le_rglement_gnral_sur_la_protection_des_donnes_rgp'|trans|raw }}</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="{{ 'fermer'|trans }}">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<p>
+						{{ 'rglement_ue_2016679_du_parlement_europen_et_du_con'|trans }}
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Initialize the DataTable
-            $('#datatable').DataTable({
-                "language": {
-                    "search": "{{ 'Rechercher :'|trans }}",
-                    "lengthMenu": "{{ 'Afficher _MENU_ résultats par page'|trans }}",
-                    "zeroRecords": "{{ 'Aucun résultat'|trans }}",
-                    "info": "{{ 'Page _PAGE_ sur _PAGES_'|trans }}",
-                    "infoEmpty": "{{ 'Aucune données sur ce tableau'|trans }}",
-                    "infoFiltered": "{{ '(filtered from _MAX_ total records)'|trans }}",
-                    "paginate": {
-                        "previous": "{{ 'Précédent'|trans }}",
-                        "next": "{{ 'Suivant'|trans }}"
-                    }
-                }
-            });
-        });
-
-
-         document.querySelector('.traitment-button').addEventListener('click', function() {
-            const menu = document.querySelector('.traitment-menu');
-            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-        });
-    </script>
+	{{ parent() }}
+	 <script>
+	        document.addEventListener('DOMContentLoaded', function () {
+	            // Initialize the DataTable
+	            $('#datatable').DataTable({
+	                "language": {
+	                    "search": "{{ 'Rechercher :'|trans }}",
+	                    "lengthMenu": "{{ 'Afficher _MENU_ résultats par page'|trans }}",
+	                    "zeroRecords": "{{ 'Aucun résultat'|trans }}",
+	                    "info": "{{ 'Page _PAGE_ sur _PAGES_'|trans }}",
+	                    "infoEmpty": "{{ 'Aucune données sur ce tableau'|trans }}",
+	                    "infoFiltered": "{{ '(filtered from _MAX_ total records)'|trans }}",
+	                    "paginate": {
+	                        "previous": "{{ 'Précédent'|trans }}",
+	                        "next": "{{ 'Suivant'|trans }}"
+	                    }
+	                }
+	            });
+	        });
+	
+	
+	         document.querySelector('.traitment-button').addEventListener('click', function() {
+	            const menu = document.querySelector('.traitment-menu');
+	            menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+	        });
+	    </script>
 {% endblock %}

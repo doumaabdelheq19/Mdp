@@ -1,38 +1,40 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - {{ 'ajouter_un_abonnement'|trans }}
+	{{ parent() }}
+	-
+	{{ 'ajouter_un_abonnement'|trans }}
 {% endblock %}
 
 {% block content %}
-<div class="page">
-    <div class="table-container-traitements">
-        <div class="header headretour">
-            <a href="javascript:history.back()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024">
-                    <path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
-                </svg>
-            </a>
-            <h2>{{ 'Ajouter un abonnement'|trans }}</h2>
-        </div>
+	<div class="page">
+		<div class="table-container-traitements">
+			<div class="header headretour">
+				<a href="javascript:history.back()">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 1024 1024">
+						<path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
+					</svg>
+				</a>
+				<h2>{{ 'Ajouter un abonnement'|trans }}</h2>
+			</div>
 
-        {{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
+			{{ form_start(form, {"attr": {"class": "needs-validation", "enctype": "multipart/form-data"}}) }}
 
-        <!-- Utilisateur Section -->
-        <div class="sectt">
-            <h3>{{ 'Utilisateur'|trans }}</h3>
-            <div class="form-group">
-                <div class="form-group1">
-                    {{ form_label(form.user) }}
-                    {{ form_widget(form.user, {'attr': {'class': 'form-control ' ~ ((form_errors(form.user) == '') ? '' : 'is-invalid')} }) }}
-                    <div class="invalid-feedback">{{ form_errors(form.user) | striptags }}</div>
-                </div>
-            </div>
-        </div>
+			<!-- Utilisateur Section -->
+			<div class="sectt">
+				<h3>{{ 'Utilisateur'|trans }}</h3>
+				<div class="form-group">
+					<div class="form-group1">
+						{{ form_label(form.user) }}
+						{{ form_widget(form.user, {'attr': {'class': 'form-control ' ~ ((form_errors(form.user) == '') ? '' : 'is-invalid')} }) }}
+						<div class="invalid-feedback">{{ form_errors(form.user) | striptags }}</div>
+					</div>
+				</div>
+			</div>
 
-        <!-- Détails de l'Abonnement Section -->
-        <div class="sectt">
-            <h3>{{ 'Détails de l\'abonnement'|trans }}</h3>
+			<!-- Détails de l'Abonnement Section -->
+			<div class="sectt">
+				<h3>{{ 'Détails de l\'abonnement'|trans }}</h3>
             <div class="form-group">
                 <div class="form-group1">
                     {{ form_label(form.beginDate) }}
@@ -60,26 +62,28 @@
         </div>
 
         <!-- Bouton d'Enregistrement -->
-        <div class="sectt" style="padding-top:20px">
+        <div class="sectt" >
+		<br>
+		<br>
             <button type="submit" class="submit-button">{{ 'enregistrer'|trans }}</button>
-        </div>
+			</div>
 
-        {{ form_end(form) }}
-    </div>
-</div>
+			{{ form_end(form) }}
+		</div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script>
-        (function ($) {
-            'use strict';
-            $(document).ready(function () {
-                $(".datepicker-js").datepicker({
-                    language: 'fr',
-                    format: 'yyyy-mm-dd'
-                });
-            });
-        })(window.jQuery);
-    </script>
+	{{ parent() }}
+	 <script>
+	        (function ($) {
+	            'use strict';
+	            $(document).ready(function () {
+	                $(".datepicker-js").datepicker({
+	                    language: 'fr',
+	                    format: 'yyyy-mm-dd'
+	                });
+	            });
+	        })(window.jQuery);
+	    </script>
 {% endblock %}

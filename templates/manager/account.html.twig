@@ -1,119 +1,121 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - {{ 'mon_compte'|trans }}
+	{{ parent() }}
+	-
+	{{ 'mon_compte'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="/path/to/your/custom/styles.css">
+	{{ parent() }}
+	<link rel="stylesheet" href="/path/to/your/custom/styles.css">
 {% endblock %}
 
 {% block body %}
-    {{ parent() }}
+	{{ parent() }}
 {% endblock %}
 
 {% block content %}
-<div class="page">
-    <div class="table-container-traitements">
-        <div class="header-con">
-            <div class="header">
-                <h2><img src="/imgs/iconamoon_arrow-up-2-light.svg" alt=""> {{ 'mon_compte'|trans }}</h2>
-            </div>
-          
-        </div>
+	<div class="page">
+		<div class="table-container-traitements">
+			<div class="header-con">
+				<div class="header">
+					<h2><img src="/imgs/iconamoon_arrow-up-2-light.svg" alt="">
+						{{ 'mon_compte'|trans }}</h2>
+				</div>
 
-        {{ form_start(form, {'attr': {'class': 'sous-traitantform'}}) }}
+			</div>
 
-        <!-- Avatar Upload -->
-      
+			{{ form_start(form, {'attr': {'class': 'sous-traitantform'}}) }}
 
-        <!-- Company Information -->
-        <div class="sectt no_boder">
-            <h3>{{ 'societe'|trans }}</h3>
-            <div class="form-group">
-                <div class="form-group1">
-                    {{ form_label(form.companyName) }}
-                    {{ form_widget(form.companyName, {'attr': {'placeholder': 'Nom'}}) }}
-                </div>
-               
-            </div>
+			<!-- Avatar Upload -->
 
-            <div class="form-group">
-                <div class="form-group1">
-                    {{ form_label(form.address) }}
-                    {{ form_widget(form.address, {'attr': {'placeholder': '99 AVENUE ACHILLE PERETTI'}}) }}
-                </div>
-                <div class="form-group1">
-                    {{ form_label(form.address2) }}
-                    {{ form_widget(form.address2, {'attr': {'placeholder': 'Complément'}}) }}
-                </div>
-            </div>
 
-            <div class="form-group">
-                <div class="form-group1">
-                    {{ form_label(form.zipCode) }}
-                    {{ form_widget(form.zipCode, {'attr': {'placeholder': '99200'}}) }}
-                </div>
-                <div class="form-group1">
-                    {{ form_label(form.city) }}
-                    {{ form_widget(form.city, {'attr': {'placeholder': 'NEUILLY-SUR-SEINE'}}) }}
-                </div>
-            </div>
-        </div>
+			<!-- Company Information -->
+				<div class="sectt no_boder"> <h3>{{ 'societe'|trans }}</h3>
+				<div class="form-group">
+					<div class="form-group1">
+						{{ form_label(form.companyName) }}
+						{{ form_widget(form.companyName, {'attr': {'placeholder': 'Nom'}}) }}
+					</div>
 
-        <!-- User Profile -->
-        <div class="sectt">
-            <h3>{{ 'utilisateur'|trans }}</h3>
-              <div class="form-group">
-                <div class="form-group1">
-                    {{ form_label(form.lastName) }}
-                    {{ form_widget(form.lastName, {'attr': {'placeholder': 'Téléphone'}}) }}
-                </div>
-                <div class="form-group1">
-                    {{ form_label(form.firstName) }}
-                    {{ form_widget(form.firstName, {'attr': {'placeholder': 'Email'}}) }}
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="form-group1">
-                    {{ form_label(form.phone) }}
-                    {{ form_widget(form.phone, {'attr': {'placeholder': 'Téléphone'}}) }}
-                </div>
-                <div class="form-group1">
-                    {{ form_label(form.email) }}
-                    {{ form_widget(form.email, {'attr': {'placeholder': 'Email'}}) }}
-                </div>
-            </div>
-        </div>
+				</div>
 
-        <button type="submit" class="submit-button">{{ 'enregistrer'|trans }}</button>
-        {{ form_end(form) }}
+				<div class="form-group">
+					<div class="form-group1">
+						{{ form_label(form.address) }}
+						{{ form_widget(form.address, {'attr': {'placeholder': '99 AVENUE ACHILLE PERETTI'}}) }}
+					</div>
+					<div class="form-group1">
+						{{ form_label(form.address2) }}
+						{{ form_widget(form.address2, {'attr': {'placeholder': 'Complément'}}) }}
+					</div>
+				</div>
 
-        <!-- Change Password -->
-       
-            {{ form_start(form2, {"attr": {"class": "sous-traitantform"}}) }}
-            <div class="sectt no_boder">
-                <h3>Modifier mon mot de passe</h3>
-                <div class="form-group">
-                    <div class="form-group1">
-                        {{ form_label(form2.password.first) }}
-                        {{ form_widget(form2.password.first, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                    <div class="form-group1">
-                        {{ form_label(form2.password.second) }}
-                        {{ form_widget(form2.password.second, {'attr': {'class': 'form-control'}}) }}
-                    </div>
-                </div>
-            </div>
-            <div class="bondou">
-                <h3>Règle de mot de passe :</h3>
-                <p>12 caractères de types différents (majuscules, minuscules, chiffres, caractères spéciaux).</p>
-            </div>
-            <button type="submit" class="submit-button">Enregistrer</button>
-            {{ form_end(form2) }}
-        
+				<div class="form-group">
+					<div class="form-group1">
+						{{ form_label(form.zipCode) }}
+						{{ form_widget(form.zipCode, {'attr': {'placeholder': '99200'}}) }}
+					</div>
+					<div class="form-group1">
+						{{ form_label(form.city) }}
+						{{ form_widget(form.city, {'attr': {'placeholder': 'NEUILLY-SUR-SEINE'}}) }}
+					</div>
+				</div>
+			</div>
 
-    </div>
-</div>
+			<!-- User Profile -->
+			<div class="sectt">
+				<h3>{{ 'utilisateur'|trans }}</h3>
+				<div class="form-group">
+					<div class="form-group1">
+						{{ form_label(form.lastName) }}
+						{{ form_widget(form.lastName, {'attr': {'placeholder': 'Téléphone'}}) }}
+					</div>
+					<div class="form-group1">
+						{{ form_label(form.firstName) }}
+						{{ form_widget(form.firstName, {'attr': {'placeholder': 'Email'}}) }}
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="form-group1">
+						{{ form_label(form.phone) }}
+						{{ form_widget(form.phone, {'attr': {'placeholder': 'Téléphone'}}) }}
+					</div>
+					<div class="form-group1">
+						{{ form_label(form.email) }}
+						{{ form_widget(form.email, {'attr': {'placeholder': 'Email'}}) }}
+					</div>
+				</div>
+			</div>
+
+			<button type="submit" class="submit-button">{{ 'enregistrer'|trans }}</button>
+			{{ form_end(form) }}
+
+			<!-- Change Password -->
+
+			{{ form_start(form2, {"attr": {"class": "sous-traitantform"}}) }}
+			<div class="sectt no_boder">
+				<h3>Modifier mon mot de passe</h3>
+				<div class="form-group">
+					<div class="form-group1">
+						{{ form_label(form2.password.first) }}
+						{{ form_widget(form2.password.first, {'attr': {'class': 'form-control'}}) }}
+					</div>
+					<div class="form-group1">
+						{{ form_label(form2.password.second) }}
+						{{ form_widget(form2.password.second, {'attr': {'class': 'form-control'}}) }}
+					</div>
+				</div>
+			</div>
+			<div class="bondou">
+				<h3>Règle de mot de passe :</h3>
+				<p>12 caractères de types différents (majuscules, minuscules, chiffres, caractères spéciaux).</p>
+			</div>
+			<button type="submit" class="submit-button">Enregistrer</button>
+			{{ form_end(form2) }}
+
+
+		</div>
+	</div>
 {% endblock %}

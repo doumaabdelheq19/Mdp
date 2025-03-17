@@ -1,109 +1,112 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - {{ 'editer_un_soustraitant'|trans }}
+	{{ parent() }}
+	-
+	{{ 'editer_un_soustraitant'|trans }}
 {% endblock %}
 
 {% block content %}
 <div class="page">
-    <div class="table-container-traitements">
-        <div class="header">
-            <h2>{{ 'editer_un_soustraitant'|trans }}</h2>
-        </div>
-        {{ form_start(form, {"attr": {"class": "sous-traitantform"}}) }}
+	<div class="table-container-traitements">
+		<div class="header">
+			<h2>{{ 'editer_un_soustraitant'|trans }}</h2>
+		</div>
+		{{ form_start(form, {"attr": {"class": "sous-traitantform"}}) }}
 
-        <!-- Type of Subcontractor -->
-        <div class="form-group1">
-            {{ form_label(form.subcontractorType, 'Type de sous-traitance', {'label_attr': {'class': 'required'}}) }}
-            {{ form_widget(form.subcontractorType, {'attr': {'class': 'form-control'}}) }}
-            <div class="invalid-feedback">
-                {{ form_errors(form.subcontractorType) }}
-            </div>
-        </div>
+		<!-- Type of Subcontractor -->
+		<div class="form-group1">
+			{{ form_label(form.subcontractorType, 'Type de sous-traitance', {'label_attr': {'class': 'required'}}) }}
+			{{ form_widget(form.subcontractorType, {'attr': {'class': 'form-control'}}) }}
+			<div class="invalid-feedback">
+				{{ form_errors(form.subcontractorType) }}
+			</div>
+		</div>
 
-        <!-- Company Section -->
-        <div class="sectt">
-            <h3>{{ 'societe'|trans }}</h3>
-            <div class="form-group">
-                <div class="form-group1">
-                    {{ form_label(form.name, 'Nom') }}
-                    {{ form_widget(form.name, {'attr': {'placeholder': 'Nom', 'class': 'form-control'}}) }}
-                </div>
-                <div class="form-group1">
-                    {{ form_label(form.type, 'Typologie') }}
-                    {{ form_widget(form.type, {'attr': {'placeholder': 'Typologie', 'class': 'form-control'}}) }}
-                </div>
-            </div>
-        </div>
+		<!-- Company Section -->
+		<div class="sectt">
+			<h3>{{ 'societe'|trans }}</h3>
+			<div class="form-group">
+				<div class="form-group1">
+					{{ form_label(form.name, 'Nom') }}
+					{{ form_widget(form.name, {'attr': {'placeholder': 'Nom', 'class': 'form-control'}}) }}
+				</div>
+				<div class="form-group1">
+					{{ form_label(form.type, 'Typologie') }}
+					{{ form_widget(form.type, {'attr': {'placeholder': 'Typologie', 'class': 'form-control'}}) }}
+				</div>
+			</div>
+		</div>
 
-        <!-- Contact Section -->
-        <div class="sectt">
-            <h3>{{ 'contact'|trans }}</h3>
-            <div class="form-group">
-                <div class="form-group1">
-                    {{ form_label(form.contactLastName, 'Nom') }}
-                    {{ form_widget(form.contactLastName, {'attr': {'placeholder': 'Nom', 'class': 'form-control'}}) }}
-                </div>
-                <div class="form-group1">
-                    {{ form_label(form.contactFirstName, 'Prénom') }}
-                    {{ form_widget(form.contactFirstName, {'attr': {'placeholder': 'Prénom', 'class': 'form-control'}}) }}
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="form-group1">
-                    {{ form_label(form.contactEmail, 'Email') }}
-                    {{ form_widget(form.contactEmail, {'attr': {'placeholder': 'Email', 'class': 'form-control'}}) }}
-                </div>
-                <div class="form-group1">
-                    {{ form_label(form.contactPhone, 'Téléphone') }}
-                    {{ form_widget(form.contactPhone, {'attr': {'placeholder': 'Téléphone', 'class': 'form-control'}}) }}
-                </div>
-            </div>
-        </div>
+		<!-- Contact Section -->
+		<div class="sectt">
+			<h3>{{ 'contact'|trans }}</h3>
+			<div class="form-group">
+				<div class="form-group1">
+					{{ form_label(form.contactLastName, 'Nom') }}
+					{{ form_widget(form.contactLastName, {'attr': {'placeholder': 'Nom', 'class': 'form-control'}}) }}
+				</div>
+				<div class="form-group1">
+					{{ form_label(form.contactFirstName, 'Prénom') }}
+					{{ form_widget(form.contactFirstName, {'attr': {'placeholder': 'Prénom', 'class': 'form-control'}}) }}
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="form-group1">
+					{{ form_label(form.contactEmail, 'Email') }}
+					{{ form_widget(form.contactEmail, {'attr': {'placeholder': 'Email', 'class': 'form-control'}}) }}
+				</div>
+				<div class="form-group1">
+					{{ form_label(form.contactPhone, 'Téléphone') }}
+					{{ form_widget(form.contactPhone, {'attr': {'placeholder': 'Téléphone', 'class': 'form-control'}}) }}
+				</div>
+			</div>
+		</div>
 
-        <!-- Conformity Section -->
-        <div class="sectt">
-            <h3>{{ 'conformit_maj'|trans }}</h3>
-            <div class="form-group">
-                <div class="form-group1">
-                    {{ form_label(form.conformity, 'Conformité') }}
-                    {{ form_widget(form.conformity, {'attr': {'class': 'form-control'}}) }}
-                </div>
-                <div class="form-group1">
-                    {{ form_label(form.privacyPolicyLink, 'Lien vers la politique de confidentialité') }}
-                    {{ form_widget(form.privacyPolicyLink, {'attr': {'placeholder': 'https://', 'class': 'form-control'}}) }}
-                </div>
-            </div>
-        </div>
+		<!-- Conformity Section -->
+		<div class="sectt">
+			<h3>{{ 'conformit_maj'|trans }}</h3>
+			<div class="form-group">
+				<div class="form-group1">
+					{{ form_label(form.conformity, 'Conformité') }}
+					{{ form_widget(form.conformity, {'attr': {'class': 'form-control'}}) }}
+				</div>
+				<div class="form-group1">
+					{{ form_label(form.privacyPolicyLink, 'Lien vers la politique de confidentialité') }}
+					{{ form_widget(form.privacyPolicyLink, {'attr': {'placeholder': 'https://', 'class': 'form-control'}}) }}
+				</div>
+			</div>
+		</div>
 
-        <!-- Document Management Section -->
-        <div class="sectt">
-            <h3>{{ 'documents'|trans }}</h3>
-            <div id="block_old_documents" class="form-group">
-                {% for document in subcontractor.documents %}
-                    <div class="form-group1 d-flex block_document">
-                        <input class="form-control" type="text" placeholder="{{ 'titre'|trans }}" name="appbundle_subcontractor_documents_{{ document.id }}" value="{{ document.name }}">
-                        <a href="{{ path('user_subcontractor_deletedoc', {'subcontractor': subcontractor.id, 'document': document.id}) }}" class="btn btn-danger ml-2" onclick="return confirm('{{ 'confirmer_la_suppression'|trans }}');">
-                            <i class="mdi mdi-file-remove"></i>
-                        </a>
-                        <a href="{{ path('user_read_user_documents', {'id': document.id}) }}" class="btn btn-info ml-2" target="_blank">
-                            <i class="mdi mdi-eye"></i>
-                        </a>
-                    </div>
-                {% endfor %}
-            </div>
-            <div id="block_documents" class="form-group"></div>
-            <div class="form-group mt-3" style="margin-bottom: 40px;">
-                <button type="button" class="file-button" id="add_document_button">
-                    <i class="fa fa-file" aria-hidden="true"></i> {{ 'joindre un fichier'|trans }}
-                </button>
-            </div>
-        </div>
+		<!-- Document Management Section -->
+		<div class="sectt">
+			<h3>{{ 'documents'|trans }}</h3>
+			<div id="block_old_documents" class="form-group">
+				{% for document in subcontractor.documents %}
+					<div class="form-group1 d-flex block_document">
+						<input class="form-control" type="text" placeholder="{{ 'titre'|trans }}" name="appbundle_subcontractor_documents_{{ document.id }}" value="{{ document.name }}">
+						<a href="{{ path('user_subcontractor_deletedoc', {'subcontractor': subcontractor.id, 'document': document.id}) }}" class="btn btn-danger ml-2" onclick="return confirm('{{ 'confirmer_la_suppression'|trans }}');">
+							<i class="mdi mdi-file-remove"></i>
+						</a>
+						<a href="{{ path('user_read_user_documents', {'id': document.id}) }}" class="btn btn-info ml-2" target="_blank">
+							<i class="mdi mdi-eye"></i>
+						</a>
+					</div>
+				{% endfor %}
+			</div>
+			<div id="block_documents" class="form-group"></div>
+			<div class="form-group mt-3">
+				<button type="button" class="file-button" id="add_document_button">
+					<i class="fa fa-file" aria-hidden="true"></i>
+					{{ 'joindre un fichier'|trans }}
+				</button>
+			</div>
+		</div>
 
-        <!-- Group Checkbox -->
-        <div class="checkbox-group">
-            {{ form_widget(form.group, {'attr': {'id': 'destinataire-commun'}}) }}
-            {{ form_label(form.group, 'Destinataire commun à l\'ensemble du groupe ?', {'label_attr': {'for': 'destinataire-commun'}}) }}
+		<!-- Group Checkbox -->
+		<div class="checkbox-group">
+			{{ form_widget(form.group, {'attr': {'id': 'destinataire-commun'}}) }}
+			{{ form_label(form.group, 'Destinataire commun à l\'ensemble du groupe ?', {'label_attr': {'for': 'destinataire-commun'}}) }}
         </div>
 
         <!-- Submit Button -->
@@ -115,7 +118,7 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script>
+     <script>
         document.getElementById("add_document_button").addEventListener("click", function () {
             const div = document.createElement("div");
             div.className = "form-group1 d-flex block_document";

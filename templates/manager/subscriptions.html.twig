@@ -1,198 +1,202 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - {{ 'Abonnements'|trans }}
+	{{ parent() }}
+	-
+	{{ 'Abonnements'|trans }}
 {% endblock %}
 
 {% block content %}
-<div class="page">
-    <div class="table-container-traitements">
-        <div class="header">
-            <h2>{{ 'Gestion des abonnements'|trans }}</h2>
-        </div>
+	<div class="page">
+		<div class="table-container-traitements">
+			<div class="header">
+				<h2>{{ 'Gestion des abonnements'|trans }}</h2>
+			</div>
 
-        <!-- Search and Action Buttons -->
-        <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 20px;">
-            <div class="search-bar">
-                <span class="search-icon">
-                    <i class="fa fa-search" aria-hidden="true"></i>
-                </span>
-                <input type="text" id="searchInput" placeholder="{{ 'Rechercher'|trans }}" />
-            </div>
-            <div class="buttons">
-                <div class="exporter">
-                    <a href="{{ path('manager_subscriptions_add') }}" class="btn btn-primary">{{ 'Ajouter un abonnement'|trans }}</a>
-                </div>
-            </div>
-        </div>
+			<!-- Search and Action Buttons -->
+			<div class="search-container">
+				<div class="search-bar">
+					<span class="search-icon">
+						<i class="fa fa-search" aria-hidden="true"></i>
+					</span>
+					<input type="text" id="searchInput" placeholder="{{ 'Rechercher'|trans }}"/>
+				</div>
+				<div class="buttons">
+					<div class="exporter">
+						<a href="{{ path('manager_subscriptions_add') }}" class="btn btn-primary">{{ 'Ajouter un abonnement'|trans }}</a>
+					</div>
+				</div>
+			</div>
 
-        <!-- Data Table -->
-        <table class="styled-table" id="datatable">
-            <thead>
-                <tr>
-                    <th>{{ 'Nom'|trans }}</th>
-                    <th>{{ 'Date de création'|trans }}</th>
-                    <th>{{ 'Offre souscrite'|trans }}</th>
-                    <th>{{ 'Date démarrage'|trans }}</th>
-                    <th>{{ 'Date de fin'|trans }}</th>
-                    <th>{{ 'Dernière connexion client'|trans }}</th>
-                    <th>{{ 'Facturation'|trans }}</th>
-                    <th class="actionss">{{ 'Actions'|trans }}</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for subscription in subscriptions %}
-                    <tr>
-                        <td>{{ subscription.user.companyName }}</td>
-                        <td>{{ subscription.creationDate|date('d/m/Y') }}</td>
-                        <td>{{ subscription.offer }}</td>
-                        <td>{{ subscription.beginDate|date('d/m/Y') }}</td>
-                        <td>{{ subscription.endDate|date('d/m/Y') }}</td>
-                        <td>
-                            {% if subscription.user.account %}
-                                {% if subscription.user.account.lastLogin %}
-                                    {{ subscription.user.account.lastLogin|date('d/m/Y') }}
-                                {% else %}
-                                    {{ 'Jamais'|trans }}
-                                {% endif %}
-                            {% else %}
-                                {{ 'Compte supprimé'|trans }}
-                            {% endif %}
-                        </td>
-                        <td>{{ subscription.billing }}</td>
-                        <td>
-                            <div class="options">
-                                <a href="{{ path('manager_subscriptions_edit', {'id': subscription.id}) }}" class="btn btn-secondary">
-                                    <button class="edit"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
-                                </a>
-                                <a href="{{ path('manager_subscriptions_delete', {'id': subscription.id}) }}" class="btn btn-danger" onclick="return confirm('{{ 'Confirmer la suppression de cet abonnement ?'|trans }}');">
-                                    <button class="delete">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
-                                            <path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/>
-                                        </svg>
-                                    </button>
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+			<!-- Data Table -->
+			<table class="styled-table" id="datatable">
+				<thead>
+					<tr>
+						<th>{{ 'Nom'|trans }}</th>
+						<th>{{ 'Date de création'|trans }}</th>
+						<th>{{ 'Offre souscrite'|trans }}</th>
+						<th>{{ 'Date démarrage'|trans }}</th>
+						<th>{{ 'Date de fin'|trans }}</th>
+						<th>{{ 'Dernière connexion client'|trans }}</th>
+						<th>{{ 'Facturation'|trans }}</th>
+						<th class="actionss">{{ 'Actions'|trans }}</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for subscription in subscriptions %}
+						<tr>
+							<td>{{ subscription.user.companyName }}</td>
+							<td>{{ subscription.creationDate|date('d/m/Y') }}</td>
+							<td>{{ subscription.offer }}</td>
+							<td>{{ subscription.beginDate|date('d/m/Y') }}</td>
+							<td>{{ subscription.endDate|date('d/m/Y') }}</td>
+							<td>
+								{% if subscription.user.account %}
+									{% if subscription.user.account.lastLogin %}
+										{{ subscription.user.account.lastLogin|date('d/m/Y') }}
+									{% else %}
+										{{ 'Jamais'|trans }}
+									{% endif %}
+								{% else %}
+									{{ 'Compte supprimé'|trans }}
+								{% endif %}
+							</td>
+							<td>{{ subscription.billing }}</td>
+							<td>
+								<div class="options">
+									<a href="{{ path('manager_subscriptions_edit', {'id': subscription.id}) }}" class="btn btn-secondary">
+										<button class="edit">
+											<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+										</button>
+									</a>
+									<a href="{{ path('manager_subscriptions_delete', {'id': subscription.id}) }}" class="btn btn-danger" onclick="return confirm('{{ 'Confirmer la suppression de cet abonnement ?'|trans }}');">
+										<button class="delete">
+											<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24">
+												<path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/>
+											</svg>
+										</button>
+									</a>
+								</div>
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 
-        <!-- Pagination -->
-        <div class="pagination-container">
-            <div class="results-per-page">
-                <label for="resultsSelect">{{ 'Afficher'|trans }}</label>
-                <select id="resultsSelect" class="results-select">
-                    <option value="5">5</option>
-                    <option value="10" selected>10</option>
-                    <option value="20">20</option>
-                </select>
-                <span>{{ 'résultats par page'|trans }}</span>
-            </div>
+			<!-- Pagination -->
+			<div class="pagination-container">
+				<div class="results-per-page">
+					<label for="resultsSelect">{{ 'Afficher'|trans }}</label>
+					<select id="resultsSelect" class="results-select">
+						<option value="5">5</option>
+						<option value="10" selected>10</option>
+						<option value="20">20</option>
+					</select>
+					<span>{{ 'résultats par page'|trans }}</span>
+				</div>
 
-            <div class="pagination-controls">
-                <button class="pagination-button" id="prevPage" disabled>&lt;</button>
-                <span class="pagination-info" id="paginationInfo">{{ 'Page 1 sur 1'|trans }}</span>
-                <button class="pagination-button" id="nextPage" disabled>&gt;</button>
-            </div>
-        </div>
-    </div>
-</div>
+				<div class="pagination-controls">
+					<button class="pagination-button" id="prevPage" disabled>&lt;</button>
+					<span class="pagination-info" id="paginationInfo">{{ 'Page 1 sur 1'|trans }}</span>
+					<button class="pagination-button" id="nextPage" disabled>&gt;</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const table = document.getElementById('datatable');
-    const headers = table.querySelectorAll('thead th');
-    const rows = Array.from(table.querySelectorAll('tbody tr'));
-    const resultsSelect = document.getElementById('resultsSelect');
-    const paginationInfo = document.getElementById('paginationInfo');
-    const prevPage = document.getElementById('prevPage');
-    const nextPage = document.getElementById('nextPage');
-    const searchInput = document.getElementById('searchInput');
-
-    let currentPage = 1;
-    let resultsPerPage = parseInt(resultsSelect.value);
-    let filteredRows = rows;
-    let sortColumn = -1;
-    let sortDirection = 1; // 1 = ascending, -1 = descending
-
-    function updateTable() {
-        const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
-        const start = (currentPage - 1) * resultsPerPage;
-        const end = start + resultsPerPage;
-
-        rows.forEach((row, index) => {
-            row.style.display = filteredRows.includes(row) && index >= start && index < end ? '' : 'none';
-        });
-
-        paginationInfo.textContent = `{{ 'Page'|trans }} ${currentPage} {{ 'sur'|trans }} ${totalPages}`;
-        prevPage.disabled = currentPage === 1;
-        nextPage.disabled = currentPage === totalPages;
-    }
-
-    function filterTable() {
-        const query = searchInput.value.toLowerCase();
-        filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
-        currentPage = 1;
-        updateTable();
-    }
-
-    function sortTable(columnIndex) {
-        if (sortColumn === columnIndex) {
-            sortDirection *= -1; // Toggle sorting order
-        } else {
-            sortColumn = columnIndex;
-            sortDirection = 1;
-        }
-
-        filteredRows.sort((a, b) => {
-            const aText = a.children[columnIndex].innerText.trim().toLowerCase();
-            const bText = b.children[columnIndex].innerText.trim().toLowerCase();
-
-            return aText.localeCompare(bText, 'fr', { numeric: true }) * sortDirection;
-        });
-
-        // Remove sorting classes from all headers
-        headers.forEach(th => th.classList.remove('sorting_asc', 'sorting_desc'));
-
-        // Add sorting class to active column
-        headers[columnIndex].classList.add(sortDirection === 1 ? 'sorting_asc' : 'sorting_desc');
-
-        updateTable();
-    }
-
-    // Attach sorting to column headers
-    headers.forEach((th, index) => {
-        th.style.cursor = 'pointer';
-        th.addEventListener('click', () => sortTable(index));
-    });
-
-    resultsSelect.addEventListener('change', function () {
-        resultsPerPage = parseInt(this.value);
-        currentPage = 1;
-        updateTable();
-    });
-
-    prevPage.addEventListener('click', function () {
-        if (currentPage > 1) {
-            currentPage--;
-            updateTable();
-        }
-    });
-
-    nextPage.addEventListener('click', function () {
-        const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
-        if (currentPage < totalPages) {
-            currentPage++;
-            updateTable();
-        }
-    });
-
-    searchInput.addEventListener('input', filterTable);
-
-    updateTable();
-});
-
-</script>
+	 <script>
+	  document.addEventListener('DOMContentLoaded', function () {
+	    const table = document.getElementById('datatable');
+	    const headers = table.querySelectorAll('thead th');
+	    const rows = Array.from(table.querySelectorAll('tbody tr'));
+	    const resultsSelect = document.getElementById('resultsSelect');
+	    const paginationInfo = document.getElementById('paginationInfo');
+	    const prevPage = document.getElementById('prevPage');
+	    const nextPage = document.getElementById('nextPage');
+	    const searchInput = document.getElementById('searchInput');
+	
+	    let currentPage = 1;
+	    let resultsPerPage = parseInt(resultsSelect.value);
+	    let filteredRows = rows;
+	    let sortColumn = -1;
+	    let sortDirection = 1; // 1 = ascending, -1 = descending
+	
+	    function updateTable() {
+	        const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+	        const start = (currentPage - 1) * resultsPerPage;
+	        const end = start + resultsPerPage;
+	
+	        rows.forEach((row, index) => {
+	            row.style.display = filteredRows.includes(row) && index >= start && index < end ? '' : 'none';
+	        });
+	
+	        paginationInfo.textContent = `{{ 'Page'|trans }} ${currentPage} {{ 'sur'|trans }} ${totalPages}`;
+	        prevPage.disabled = currentPage === 1;
+	        nextPage.disabled = currentPage === totalPages;
+	    }
+	
+	    function filterTable() {
+	        const query = searchInput.value.toLowerCase();
+	        filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
+	        currentPage = 1;
+	        updateTable();
+	    }
+	
+	    function sortTable(columnIndex) {
+	        if (sortColumn === columnIndex) {
+	            sortDirection *= -1; // Toggle sorting order
+	        } else {
+	            sortColumn = columnIndex;
+	            sortDirection = 1;
+	        }
+	
+	        filteredRows.sort((a, b) => {
+	            const aText = a.children[columnIndex].innerText.trim().toLowerCase();
+	            const bText = b.children[columnIndex].innerText.trim().toLowerCase();
+	
+	            return aText.localeCompare(bText, 'fr', { numeric: true }) * sortDirection;
+	        });
+	
+	        // Remove sorting classes from all headers
+	        headers.forEach(th => th.classList.remove('sorting_asc', 'sorting_desc'));
+	
+	        // Add sorting class to active column
+	        headers[columnIndex].classList.add(sortDirection === 1 ? 'sorting_asc' : 'sorting_desc');
+	
+	        updateTable();
+	    }
+	
+	    // Attach sorting to column headers
+	    headers.forEach((th, index) => {
+	        th.style.cursor = 'pointer';
+	        th.addEventListener('click', () => sortTable(index));
+	    });
+	
+	    resultsSelect.addEventListener('change', function () {
+	        resultsPerPage = parseInt(this.value);
+	        currentPage = 1;
+	        updateTable();
+	    });
+	
+	    prevPage.addEventListener('click', function () {
+	        if (currentPage > 1) {
+	            currentPage--;
+	            updateTable();
+	        }
+	    });
+	
+	    nextPage.addEventListener('click', function () {
+	        const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+	        if (currentPage < totalPages) {
+	            currentPage++;
+	            updateTable();
+	        }
+	    });
+	
+	    searchInput.addEventListener('input', filterTable);
+	
+	    updateTable();
+	});
+	
+	</script>
 {% endblock %}

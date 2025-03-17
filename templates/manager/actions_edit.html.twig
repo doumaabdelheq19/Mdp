@@ -1,28 +1,30 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - {{ 'modifier_une_action'|trans }}
+	{{ parent() }}
+	-
+	{{ 'modifier_une_action'|trans }}
 {% endblock %}
 
 {% block content %}
 <div class="page">
-  <div class="table-container-traitements">
-    <div class="header headretour">
-        <a href="javascript:history.back()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024">
-                <path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
-            </svg>
-        </a>
-        <h2>{{ 'modifier_une_action'|trans }}</h2>
-    </div>
+	<div class="table-container-traitements">
+		<div class="header headretour">
+			<a href="javascript:history.back()">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 1024 1024">
+					<path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
+				</svg>
+			</a>
+			<h2>{{ 'modifier_une_action'|trans }}</h2>
+		</div>
 
-    {{ form_start(form, {"attr": {"class": "sous-traitantform", "enctype": "multipart/form-data"}}) }}
+		{{ form_start(form, {"attr": {"class": "sous-traitantform", "enctype": "multipart/form-data"}}) }}
 
-    <!-- Action Name and Budget -->
-    <div class="form-group">
-      <div class="form-group1">
-        {{ form_label(form.name) }}
-        {{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Nom de l\'action'}}) }}
+		<!-- Action Name and Budget -->
+		<div class="form-group">
+			<div class="form-group1">
+				{{ form_label(form.name) }}
+				{{ form_widget(form.name, {'attr': {'class': 'form-control', 'placeholder': 'Nom de l\'action'}}) }}
         <div class="invalid-feedback">{{ form_errors(form.name) | striptags }}</div>
       </div>
 
@@ -37,7 +39,7 @@
     <div class="sectt">
       <h3>{{ 'informations'|trans }}</h3>
       <div class="form-group">
-        <div class="form-group1" style="width:100%">
+        <div class="form-group1 width-100" >
           {{ form_label(form.goal) }}
           {{ form_widget(form.goal, {'attr': {'class': 'form-control', 'placeholder': 'Objectif'}}) }}
           <div class="invalid-feedback">{{ form_errors(form.goal) | striptags }}</div>
@@ -45,15 +47,15 @@
       </div>
 
       <div class="form-group">
-        <div class="form-group1" style="width:99%;">
+        <div class="form-group1 width-99" >
           {{ form_label(form.information) }}
-          {{ form_widget(form.information, {'attr': {'class': 'form-control', 'placeholder': 'Informations','style' : 'height:100px'}}) }}
+          {{ form_widget(form.information, {'attr': {'class': 'form-control height-100', 'placeholder': 'Informations'}}) }}
           <div class="invalid-feedback">{{ form_errors(form.information) | striptags }}</div>
         </div>
       </div>
 
       <div class="form-group">
-        <div class="form-group1" style="width:100%">
+        <div class="form-group1 width-100" >
           {{ form_label(form.usefulLink) }}
           {{ form_widget(form.usefulLink, {'attr': {'class': 'form-control', 'placeholder': 'Lien utile'}}) }}
           <div class="invalid-feedback">{{ form_errors(form.usefulLink) | striptags }}</div>
@@ -63,7 +65,7 @@
 
     <!-- Attach Practical Sheets Section -->
     <div class="form-group">
-    <div class="form-group1" style="width:97%">
+    <div class="form-group1 width-97">
         <label for="sheets-search">{{ form_label(form.sheets) }}</label>
         <br>
         {{ form_widget(form.sheets, {'attr': {'class': 'form-control js-select2 ' ~ ((form_errors(form.sheets) == '') ? '' : 'is-invalid')} }) }}
@@ -93,8 +95,7 @@
     </button>
     <div id="block_documents" class="form-group mt-3"></div>
 <br>
-<br>
-<br>
+
     <!-- Submit Button -->
     <button type="submit" class="submit-button">{{ 'Enregistrer'|trans }}</button>
 
@@ -105,12 +106,12 @@
 
 {% block javascripts %}
     {{ parent() }}
-     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!-- Inclure Select2 (CSS + JS) -->
 <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-    <script>
+ <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+     <script>
 
      $(document).ready(function() {
             $('.js-select2').select2({

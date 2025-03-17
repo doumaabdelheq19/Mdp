@@ -1,32 +1,34 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - {{ 'ajouter_un_abonnement'|trans }}
+	{{ parent() }}
+	-
+	{{ 'ajouter_un_abonnement'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <!-- Flatpickr CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	{{ parent() }}
+	<!-- Flatpickr CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 {% endblock %}
 
 {% block content %}
-<div class="page">
-    <div class="table-container-traitements">
-        <div class="header headretour">
-            <a href="javascript:history.back()">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024">
-                    <path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
-                </svg>
-            </a>
-            <h2>{{ 'Ajouter un abonnement'|trans }}</h2>
-        </div>
+	<div class="page">
+		<div class="table-container-traitements">
+			<div class="header headretour">
+				<a href="javascript:history.back()">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 1024 1024">
+						<path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
+					</svg>
+				</a>
+				<h2>{{ 'Ajouter un abonnement'|trans }}</h2>
+			</div>
 
-        {{ form_start(form, {"attr": {"class": "sous-traitantform needs-validation", "enctype": "multipart/form-data"}}) }}
+			{{ form_start(form, {"attr": {"class": "sous-traitantform needs-validation", "enctype": "multipart/form-data"}}) }}
 
-        <!-- Informations de l'abonnement -->
-        <div class="sectt" style="border-top:none;">
-            <h3>{{ 'Informations de l\'abonnement'|trans }}</h3>
+			<!-- Informations de l'abonnement -->
+			<div class="sectt border-top-none">
+				<h3>{{ 'Informations de l\'abonnement'|trans }}</h3>
             <div class="form-group">
                 <div class="form-group1">
                     {{ form_label(form.beginDate) }}
@@ -91,33 +93,35 @@
         </div>
 
         <!-- Bouton d'Enregistrement -->
-        <div class="sectt" style="padding-top:20px; border-top:none">
+        <div class="sectt border-top-none">
+        <br>
+        <br>
             <button type="submit" class="submit-button">{{ 'enregistrer'|trans }}</button>
-        </div>
+			</div>
 
-        {{ form_end(form) }}
-    </div>
-</div>
+			{{ form_end(form) }}
+		</div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <!-- Flatpickr JS -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
+	{{ parent() }}
+<!-- Flatpickr JS -->
+	 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
 
- <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        flatpickr(".datepicker-js", {
-            dateFormat: "d-m-Y",  
-            altInput: true,
-              altFormat: "d/m/Y",
-            locale: "fr",
-            allowInput: true,
-            defaultDate: document.querySelector(".datepicker-js").value || new Date().toLocaleDateString('fr-FR').split('/').reverse().join('-')  
-        });
-    });
-</script>
+	 <script>
+	    document.addEventListener("DOMContentLoaded", function () {
+	        flatpickr(".datepicker-js", {
+	            dateFormat: "d-m-Y",  
+	            altInput: true,
+	              altFormat: "d/m/Y",
+	            locale: "fr",
+	            allowInput: true,
+	            defaultDate: document.querySelector(".datepicker-js").value || new Date().toLocaleDateString('fr-FR').split('/').reverse().join('-')  
+	        });
+	    });
+	</script>
 
 
 {% endblock %}

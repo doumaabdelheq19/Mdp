@@ -141,7 +141,7 @@ class DefaultController extends AbstractController
                         Une compte utilisateur du client ".$account->getUser()->getCompanyName()." a été bloqué suite à un nombre trop important de tentatives de connexion.<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
                                 $sendEmailService->send(
                                     "Compte utilisateur bloqué",
@@ -238,7 +238,7 @@ class DefaultController extends AbstractController
 
                             $content = "<p>Bonjour ".$firstName.",<br/>
                         <br/>
-                        Vous venez de demander à réinitialiser votre mot de passe sur le site myDigitplace.<br/>
+                        Vous venez de demander à réinitialiser votre mot de passe sur le site Pilot.<br/>
                         <br/>
                         <br/>
                         Voici votre lien pour définir un nouveau mot de passe:<br/><a href='".$this->generateUrl("default_reset_password", ["email" => $account->getEmail(), "token" => $token], UrlGeneratorInterface::ABSOLUTE_URL)."'>
@@ -251,9 +251,9 @@ class DefaultController extends AbstractController
                         <br/>
                         Bien cordialement,<br/>
                         <br/>
-                        L’équipe myDigitplace<br/>
+                        L’équipe Pilot<br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
                             $sendEmailService->send(
                                 "Réinitialisation de votre mot de passe",

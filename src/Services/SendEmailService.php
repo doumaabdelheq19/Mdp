@@ -15,41 +15,35 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Templating\EngineInterface;
 use Twig\Environment;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
 
 class SendEmailService
 {
-    private $doctrine;
-    private $container;
-
     private $mailer;
     private $templating;
 
-    public function __construct(ContainerInterface $container, EntityManagerInterface $doctrine, \Swift_Mailer $mailer, Environment $templating)
+    public function __construct(MailerInterface $mailer, Environment $templating)
     {
-        $this->container = $container;
-        $this->doctrine = $doctrine;
-
         $this->mailer = $mailer;
         $this->templating = $templating;
     }
 
-    public function send($subject, $to, $template, $vars, $attachements = [])
+    public function send($subject, $to, $template, $vars, $attachments = [])
     {
-        $message = new \Swift_Message();
-        $message->setSubject($subject)
+        $email = (new Email())
+            ->from('noreply@mdp-data.com')
+            ->to($to)
+            ->subject($subject)
+            ->html($this->templating->render($template, $vars));
 
-            ->setTo($to)
-            ->setBody($this->templating->render($template, $vars), 'text/html');
-
-        if ($attachements) {
-            foreach ($attachements as $attachement) {
-                $message->attach(Swift_Attachment::fromPath($attachement['path'])->setFilename($attachement['fileName']));
-            }
+        foreach ($attachments as $attachment) {
+            $email->attachFromPath($attachment['path'], $attachment['fileName']);
         }
 
-        $this->mailer->send($message);
+        $this->mailer->send($email);
     }
-
 }
+
 
 

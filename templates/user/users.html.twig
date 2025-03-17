@@ -1,176 +1,198 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - {{ 'comptes_rattachs'|trans }}
+	{{ parent() }}
+	-
+	{{ 'comptes_rattachs'|trans }}
 {% endblock %}
 
 {% block content %}
-<div class="page">
-<div class="table-container-traitements">
-    <!-- Header Section -->
-    <div class="header">
-        <h2>{{ 'comptes_rattachs'|trans }}</h2>
-       
-    </div>
+	<div class="page">
+		<div
+			class="table-container-traitements">
+			<!-- Header Section -->
+			<div class="header">
+				<h2>{{ 'comptes_rattachs'|trans }}</h2>
 
-    <!-- Search and Actions Section -->
-    <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 15px;">
-        <div class="search-bar">
-            <span class="search-icon">
-                <i class="fa fa-search" aria-hidden="true"></i>
-            </span>
-            <input type="text" placeholder="{{ 'Rechercher'|trans }}" id="search-input" />
-        </div>
-        <div class="buttons">
-            <!-- Additional buttons or filters can be added here -->
-        </div>
-    </div>
+			</div>
 
-    <!-- Table Section -->
-    
-        <table class="styled-table">
-            <thead>
-                <tr>
-                    <th>{{ 'societe'|trans }}</th>
-                    <th>{{ 'email'|trans }}</th>
-                    <th>{{ 'tlphone'|trans }}</th>
-                    <th>{{ 'adresse'|trans }}</th>
-                    <th>{{ 'contact'|trans }}</th>
-                    <th>{{ 'dlgu'|trans }}</th>
-                    <th>{{ 'cration'|trans }}</th>
-                    <th>{{ 'statut'|trans }}</th>
-                    <th class="actionss">{{ 'actions'|trans }}</th>
-                </tr>
-            </thead>
-            <tbody id="table-body">
-                {% for user in users %}
-                    <tr>
-                        <td>{{ user.companyName }}</td>
-                        <td style="color: #EF6D6F;">{{ user.email }}</td>
-                        <td>{{ user.phone }}</td>
-                        <td>
-                            {{ user.companyName }}<br />
-                            {{ user.address }}{% if user.address2 %}, {{ user.address2 }}{% endif %}<br />
-                            {{ user.zipCode }}, {{ user.city }}
-                        </td>
-                        <td>{{ user.contactFirstName }} {{ user.contactLastName }}</td>
-                        <td>{% if user.manager %}{{ user.manager.firstName }} {{ user.manager.lastName }}{% endif %}</td>
-                        <td style="color: #EF6D6F;">{{ user.account.registrationDate|date('d/m/Y') }}</td>
-                        <td>
+			<!-- Search and Actions Section -->
+			<div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 15px;">
+				<div class="search-bar">
+					<span class="search-icon">
+						<i class="fa fa-search" aria-hidden="true"></i>
+					</span>
+					<input type="text" placeholder="{{ 'Rechercher'|trans }}" id="search-input"/>
+				</div>
+				<div
+					class="buttons"><!-- Additional buttons or filters can be added here -->
+				</div>
+			</div>
 
-                         {% if user.account.enabled %}
-                                     <div style="color: #52B489; background-color:rgba(82, 180, 138, 0.15); border-radius: 10px; padding: 2px 10px; width: auto;">
-                                
-                                    {{ 'oui_maj'|trans }}
-                                
-                            </div>
-                                {% else %}
-                                     <div style="color: #EF6D6F; background-color: #ef6d6f2a; border-radius: 10px; padding: 2px; width: auto;">
-                              
-                               
-                                    {{ 'non_maj'|trans }}
-                              
-                            </div>
-                                {% endif %}
-                          
-                        </td>
-                        <td >
-                        <div class="options">
-                        <div class="exporter">
-                                <a href="{{ path('user_user_switch', {'id': user.id}) }}">
-                                    <p>{{ 'Se connecter'|trans }}</p>
-                                </a>
-                            </div></div>
-                            
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+			<!-- Table Section -->
 
-        <!-- Pagination -->
-        <div class="pagination-container">
-            <!-- Results per page selector -->
-            <div class="results-per-page">
-                <label for="results">{{ 'Afficher'|trans }}</label>
-                <select id="results" class="results-select">
-                    <option value="5">5</option>
-                    <option value="10" selected>10</option>
-                    <option value="20">20</option>
-                </select>
-                <span>{{ 'résultats par page'|trans }}</span>
-            </div>
+			<table class="styled-table">
+				<thead>
+					<tr>
+						<th>{{ 'societe'|trans }}</th>
+						<th>{{ 'email'|trans }}</th>
+						<th>{{ 'tlphone'|trans }}</th>
+						<th>{{ 'adresse'|trans }}</th>
+						<th>{{ 'contact'|trans }}</th>
+						<th>{{ 'dlgu'|trans }}</th>
+						<th>{{ 'cration'|trans }}</th>
+						<th>{{ 'statut'|trans }}</th>
+						<th class="actionss">{{ 'actions'|trans }}</th>
+					</tr>
+				</thead>
+				<tbody id="table-body">
+					{% for user in users %}
+						<tr>
+							<td>{{ user.companyName }}</td>
+							<td style="color: #EF6D6F;">{{ user.email }}</td>
+							<td>{{ user.phone }}</td>
+							<td>
+								{{ user.companyName }}<br/>
+								{{ user.address }}
+								{% if user.address2 %},
+									{{ user.address2 }}
+								{% endif %}<br/>
+								{{ user.zipCode }},
+								{{ user.city }}
+							</td>
+							<td>{{ user.contactFirstName }}
+								{{ user.contactLastName }}</td>
+							<td>
+								{% if user.manager %}
+									{{ user.manager.firstName }}
+									{{ user.manager.lastName }}
+								{% endif %}
+							</td>
+							<td style="color: #EF6D6F;">{{ user.account.registrationDate|date('d/m/Y') }}</td>
+							<td>
 
-            <!-- Pagination Controls -->
-            <div class="pagination-controls">
-                <button id="prevPage" class="pagination-button" disabled><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19l-7-7l7-7"/></svg></button>
-                <span id="paginationInfo">{{ 'Page'|trans }} 1 {{ 'sur'|trans }} 1</span>
-                <button id="nextPage" class="pagination-button" disabled><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5l7 7l-7 7"/></svg></button>
-            </div>
-        </div>
-    </div>
-</div>
+								{% if user.account.enabled %}
+									<div style="color: #52B489; background-color:rgba(82, 180, 138, 0.15); border-radius: 10px; padding: 2px 10px; width: auto;">
+
+										{{ 'oui_maj'|trans }}
+
+									</div>
+								{% else %}
+									<div style="color: #EF6D6F; background-color: #ef6d6f2a; border-radius: 10px; padding: 2px; width: auto;">
+
+
+										{{ 'non_maj'|trans }}
+
+									</div>
+								{% endif %}
+
+							</td>
+							<td>
+								<div class="options">
+									<div class="exporter">
+										<a href="{{ path('user_user_switch', {'id': user.id}) }}">
+											<p>{{ 'Se connecter'|trans }}</p>
+										</a>
+									</div>
+								</div>
+
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+
+			<!-- Pagination -->
+			<div
+				class="pagination-container">
+				<!-- Results per page selector -->
+				<div class="results-per-page">
+					<label for="results">{{ 'Afficher'|trans }}</label>
+					<select id="results" class="results-select">
+						<option value="5">5</option>
+						<option value="10" selected>10</option>
+						<option value="20">20</option>
+					</select>
+					<span>{{ 'résultats par page'|trans }}</span>
+				</div>
+
+				<!-- Pagination Controls -->
+				<div class="pagination-controls">
+					<button id="prevPage" class="pagination-button" disabled>
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m15 19l-7-7l7-7"/></svg>
+					</button>
+					<span id="paginationInfo">{{ 'Page'|trans }}
+						1
+						{{ 'sur'|trans }}
+						1</span>
+					<button id="nextPage" class="pagination-button" disabled>
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m9 5l7 7l-7 7"/></svg>
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const rows = Array.from(document.querySelectorAll('#table-body tr'));
-            const resultsSelect = document.getElementById('results');
-            const paginationInfo = document.getElementById('paginationInfo');
-            const prevPage = document.getElementById('prevPage');
-            const nextPage = document.getElementById('nextPage');
-            const searchInput = document.getElementById('search-input');
-
-            let currentPage = 1;
-            let resultsPerPage = parseInt(resultsSelect.value);
-            let filteredRows = rows;
-
-            function updateTable() {
-                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
-                const start = (currentPage - 1) * resultsPerPage;
-                const end = start + resultsPerPage;
-
-                rows.forEach((row, index) => {
-                    row.style.display = filteredRows.includes(row) && index >= start && index < end ? '' : 'none';
-                });
-
-                paginationInfo.textContent = `{{ 'Page'|trans }} ${currentPage} {{ 'sur'|trans }} ${totalPages}`;
-                prevPage.disabled = currentPage === 1;
-                nextPage.disabled = currentPage === totalPages;
-            }
-
-            resultsSelect.addEventListener('change', () => {
-                resultsPerPage = parseInt(resultsSelect.value);
-                currentPage = 1;
-                updateTable();
-            });
-
-            prevPage.addEventListener('click', () => {
-                if (currentPage > 1) {
-                    currentPage--;
-                    updateTable();
-                }
-            });
-
-            nextPage.addEventListener('click', () => {
-                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    updateTable();
-                }
-            });
-
-            searchInput.addEventListener('input', function () {
-                const query = this.value.toLowerCase();
-                filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
-                currentPage = 1; // Reset to the first page
-                updateTable();
-            });
-
-            // Initialize the table on load
-            updateTable();
-        });
-    </script>
+	{{ parent() }}
+	 <script>
+	        document.addEventListener('DOMContentLoaded', function () {
+	            const rows = Array.from(document.querySelectorAll('#table-body tr'));
+	            const resultsSelect = document.getElementById('results');
+	            const paginationInfo = document.getElementById('paginationInfo');
+	            const prevPage = document.getElementById('prevPage');
+	            const nextPage = document.getElementById('nextPage');
+	            const searchInput = document.getElementById('search-input');
+	
+	            let currentPage = 1;
+	            let resultsPerPage = parseInt(resultsSelect.value);
+	            let filteredRows = rows;
+	
+	            function updateTable() {
+	                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+	                const start = (currentPage - 1) * resultsPerPage;
+	                const end = start + resultsPerPage;
+	
+	                rows.forEach((row, index) => {
+	                    row.style.display = filteredRows.includes(row) && index >= start && index < end ? '' : 'none';
+	                });
+	
+	                paginationInfo.textContent = `{{ 'Page'|trans }} ${currentPage} {{ 'sur'|trans }} ${totalPages}`;
+	                prevPage.disabled = currentPage === 1;
+	                nextPage.disabled = currentPage === totalPages;
+	            }
+	
+	            resultsSelect.addEventListener('change', () => {
+	                resultsPerPage = parseInt(resultsSelect.value);
+	                currentPage = 1;
+	                updateTable();
+	            });
+	
+	            prevPage.addEventListener('click', () => {
+	                if (currentPage > 1) {
+	                    currentPage--;
+	                    updateTable();
+	                }
+	            });
+	
+	            nextPage.addEventListener('click', () => {
+	                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+	                if (currentPage < totalPages) {
+	                    currentPage++;
+	                    updateTable();
+	                }
+	            });
+	
+	            searchInput.addEventListener('input', function () {
+	                const query = this.value.toLowerCase();
+	                filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
+	                currentPage = 1; // Reset to the first page
+	                updateTable();
+	            });
+	
+	            // Initialize the table on load
+	            updateTable();
+	        });
+	    </script>
 {% endblock %}

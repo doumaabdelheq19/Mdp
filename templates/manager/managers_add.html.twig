@@ -1,96 +1,97 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - Ajouter un délégué
+	{{ parent() }}
+	- Ajouter un délégué
 {% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
+	{{ parent() }}
 {% endblock %}
 
 {% block content %}
-<div class="page">
-    <div class="table-container-traitements">
-        <div class="header headretour">
-            <h2>
-                <a href="javascript:history.back()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024">
-                        <path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
-                    </svg>
-                </a>
-                Ajouter un délégué
-            </h2>
-        </div>
+	<div class="page">
+		<div class="table-container-traitements">
+			<div class="header headretour">
+				<h2>
+					<a href="javascript:history.back()">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 1024 1024">
+							<path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/>
+						</svg>
+					</a>
+					Ajouter un délégué
+				</h2>
+			</div>
 
-        {{ form_start(form, {"attr": {"class": "sous-traitantform", "enctype": "multipart/form-data"}}) }}
+			{{ form_start(form, {"attr": {"class": "sous-traitantform", "enctype": "multipart/form-data"}}) }}
 
-        <h3 class="mt-4">Société</h3>
-        <div class="form-group" >
-            <div class="form-group1"  style="width:100%">
-                {{ form_widget(form.companyName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.companyName) == '') ? '' : 'is-invalid'), 'style': 'width: 97%;'} }) }}
-                <div class="invalid-feedback">{{ form_errors(form.companyName) | striptags }}</div>
-            </div>
-            
-        </div>
+			<h3 class="mt-4">Société</h3>
+			<div class="form-group">
+				<div class="form-group1 width-100">
+					{{ form_widget(form.companyName, {'attr': {'class': 'form-control width-97' ~ ((form_errors(form.companyName) == '') ? '' : 'is-invalid'), } }) }}
+					<div class="invalid-feedback">{{ form_errors(form.companyName) | striptags }}</div>
+				</div>
 
-        <div class="form-group">
-        <div class="form-group1">
-                {{ form_widget(form.address, {'attr': {'class': 'form-control ' ~ ((form_errors(form.address) == '') ? '' : 'is-invalid')} }) }}
-                <div class="invalid-feedback">{{ form_errors(form.address) | striptags }}</div>
-            </div>
-            <div class="form-group1">
-                {{ form_widget(form.address2, {'attr': {'class': 'form-control ' ~ ((form_errors(form.address2) == '') ? '' : 'is-invalid')} }) }}
-                <div class="invalid-feedback">{{ form_errors(form.address2) | striptags }}</div>
-            </div>
-            
-        </div>
-        <div class="form-group">
-        <div class="form-group1">
-                {{ form_widget(form.zipCode, {'attr': {'class': 'form-control ' ~ ((form_errors(form.zipCode) == '') ? '' : 'is-invalid')} }) }}
-                <div class="invalid-feedback">{{ form_errors(form.zipCode) | striptags }}</div>
-            </div>
+			</div>
 
-            <div class="form-group1">
-                {{ form_widget(form.city, {'attr': {'class': 'form-control ' ~ ((form_errors(form.city) == '') ? '' : 'is-invalid')} }) }}
-                            <div class="invalid-feedback">{{ form_errors(form.city) | striptags  }}</div>
-            </div>
-        </div>
+			<div class="form-group">
+				<div class="form-group1">
+					{{ form_widget(form.address, {'attr': {'class': 'form-control ' ~ ((form_errors(form.address) == '') ? '' : 'is-invalid')} }) }}
+					<div class="invalid-feedback">{{ form_errors(form.address) | striptags }}</div>
+				</div>
+				<div class="form-group1">
+					{{ form_widget(form.address2, {'attr': {'class': 'form-control ' ~ ((form_errors(form.address2) == '') ? '' : 'is-invalid')} }) }}
+					<div class="invalid-feedback">{{ form_errors(form.address2) | striptags }}</div>
+				</div>
 
-        <h3 class="mt-4">Profil</h3>
-        <div class="form-group">
-            <div class="form-group1">
-                {{ form_widget(form.lastName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.lastName) == '') ? '' : 'is-invalid')} }) }}
-                <div class="invalid-feedback">{{ form_errors(form.lastName) | striptags }}</div>
-            </div>
-            <div class="form-group1">
-                {{ form_widget(form.firstName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.firstName) == '') ? '' : 'is-invalid')} }) }}
-                <div class="invalid-feedback">{{ form_errors(form.firstName) | striptags }}</div>
-            </div>
-        </div>
+			</div>
+			<div class="form-group">
+				<div class="form-group1">
+					{{ form_widget(form.zipCode, {'attr': {'class': 'form-control ' ~ ((form_errors(form.zipCode) == '') ? '' : 'is-invalid')} }) }}
+					<div class="invalid-feedback">{{ form_errors(form.zipCode) | striptags }}</div>
+				</div>
 
-        <div class="form-group">
-            <div class="form-group1">
-                {{ form_widget(form.phone, {'attr': {'class': 'form-control ' ~ ((form_errors(form.phone) == '') ? '' : 'is-invalid')} }) }}
-                <div class="invalid-feedback">{{ form_errors(form.phone) | striptags }}</div>
-            </div>
-            <div class="form-group1">
-                {{ form_widget(form.email, {'attr': {'class': 'form-control ' ~ ((form_errors(form.email) == '') ? '' : 'is-invalid')} }) }}
-                <div class="invalid-feedback">{{ form_errors(form.email) | striptags }}</div>
-            </div>
-        </div>
+				<div class="form-group1">
+					{{ form_widget(form.city, {'attr': {'class': 'form-control ' ~ ((form_errors(form.city) == '') ? '' : 'is-invalid')} }) }}
+					<div class="invalid-feedback">{{ form_errors(form.city) | striptags  }}</div>
+				</div>
+			</div>
 
-        <div class="form-group" >
-            <div class="form-group1" style="width:100%">
-                {{ form_widget(form.role, {'attr': {'class': 'form-control ' ~ ((form_errors(form.role) == '') ? '' : 'is-invalid')} }) }}
-                <div class="invalid-feedback">{{ form_errors(form.role) | striptags }}</div>
-            </div>
-        </div>
+			<h3 class="mt-4">Profil</h3>
+			<div class="form-group">
+				<div class="form-group1">
+					{{ form_widget(form.lastName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.lastName) == '') ? '' : 'is-invalid')} }) }}
+					<div class="invalid-feedback">{{ form_errors(form.lastName) | striptags }}</div>
+				</div>
+				<div class="form-group1">
+					{{ form_widget(form.firstName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.firstName) == '') ? '' : 'is-invalid')} }) }}
+					<div class="invalid-feedback">{{ form_errors(form.firstName) | striptags }}</div>
+				</div>
+			</div>
 
-        <button type="submit" class="submit-button">
-            Enregistrer
-        </button>
+			<div class="form-group">
+				<div class="form-group1">
+					{{ form_widget(form.phone, {'attr': {'class': 'form-control ' ~ ((form_errors(form.phone) == '') ? '' : 'is-invalid')} }) }}
+					<div class="invalid-feedback">{{ form_errors(form.phone) | striptags }}</div>
+				</div>
+				<div class="form-group1">
+					{{ form_widget(form.email, {'attr': {'class': 'form-control ' ~ ((form_errors(form.email) == '') ? '' : 'is-invalid')} }) }}
+					<div class="invalid-feedback">{{ form_errors(form.email) | striptags }}</div>
+				</div>
+			</div>
 
-        {{ form_end(form) }}
-    </div>
-</div>
+			<div class="form-group">
+				<div class="form-group1 width-100" >
+					{{ form_widget(form.role, {'attr': {'class': 'form-control ' ~ ((form_errors(form.role) == '') ? '' : 'is-invalid')} }) }}
+					<div class="invalid-feedback">{{ form_errors(form.role) | striptags }}</div>
+				</div>
+			</div>
+
+			<button type="submit" class="submit-button">
+				Enregistrer
+			</button>
+
+			{{ form_end(form) }}
+		</div>
+	</div>
 {% endblock %}

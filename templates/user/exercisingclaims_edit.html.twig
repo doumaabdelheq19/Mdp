@@ -1,151 +1,158 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - {{ 'modifier_une_demande'|trans }}
+	{{ parent() }}
+	-
+	{{ 'modifier_une_demande'|trans }}
 {% endblock %}
 
 {% block stylesheets %}
-    {{ parent() }}
-    <!-- Flatpickr CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+	{{ parent() }}
+	<!-- Flatpickr CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 {% endblock %}
 
 {% block content %}
-<div class="page">
-    <!-- Header Section -->
-    <div class="table-container-traitements">
-        <div class="header headretour">
-            <a href="javascript:history.back()"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 1024 1024"><path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/></svg></a>
+	<div
+		class="page">
+		<!-- Header Section -->
+		<div class="table-container-traitements">
+			<div class="header headretour">
+				<a href="javascript:history.back()">
+					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 1024 1024"><path fill="currentColor" d="M609.408 149.376L277.76 489.6a32 32 0 0 0 0 44.672l331.648 340.352a29.12 29.12 0 0 0 41.728 0a30.59 30.59 0 0 0 0-42.752L339.264 511.936l311.872-319.872a30.59 30.59 0 0 0 0-42.688a29.12 29.12 0 0 0-41.728 0"/></svg>
+				</a>
 
-            <h2>{{ 'modifier_une_demande'|trans }}</h2>
-        </div>
+				<h2>{{ 'modifier_une_demande'|trans }}</h2>
+			</div>
 
-        <!-- Form Start -->
-        {{ form_start(form, {"attr": {"class": "sous-traitantform", "enctype": "multipart/form-data"}}) }}
+			<!-- Form Start -->
+			{{ form_start(form, {"attr": {"class": "sous-traitantform", "enctype": "multipart/form-data"}}) }}
 
-        <!-- Customer and Rights Row -->
-        <div class="form-group">
-            <div class="form-group1">
-                {{ form_label(form.customer, 'Client') }}
-                {{ form_widget(form.customer, {'attr': {'class': 'form-control ' ~ ((form_errors(form.customer) == '') ? '' : 'is-invalid')}}) }}
-                <div class="invalid-feedback">{{ form_errors(form.customer) | striptags }}</div>
-            </div>
-            <div class="form-group1">
-                {{ form_label(form.rights, 'Droits') }}
-                {{ form_widget(form.rights, {'attr': {'class': 'form-control ' ~ ((form_errors(form.rights) == '') ? '' : 'is-invalid')}}) }}
-                <div class="invalid-feedback">{{ form_errors(form.rights) | striptags }}</div>
-            </div>
-        </div>
+			<!-- Customer and Rights Row -->
+			<div class="form-group">
+				<div class="form-group1">
+					{{ form_label(form.customer, 'Client') }}
+					{{ form_widget(form.customer, {'attr': {'class': 'form-control ' ~ ((form_errors(form.customer) == '') ? '' : 'is-invalid')}}) }}
+					<div class="invalid-feedback">{{ form_errors(form.customer) | striptags }}</div>
+				</div>
+				<div class="form-group1">
+					{{ form_label(form.rights, 'Droits') }}
+					{{ form_widget(form.rights, {'attr': {'class': 'form-control ' ~ ((form_errors(form.rights) == '') ? '' : 'is-invalid')}}) }}
+					<div class="invalid-feedback">{{ form_errors(form.rights) | striptags }}</div>
+				</div>
+			</div>
 
-        <!-- Request Section -->
-        <h3 class="mt-4">{{ 'demande'|trans }}</h3>
-        <div class="form-group">
-            <div class="form-group1">
-                {{ form_label(form.requestDate, 'Date de Demande') }}
-                {{ form_widget(form.requestDate, {'attr': {'class': 'form-control datepicker-js ' ~ ((form_errors(form.requestDate) == '') ? '' : 'is-invalid')}}) }}
-                <div class="invalid-feedback">{{ form_errors(form.requestDate) | striptags }}</div>
-            </div>
-            <div class="form-group1">
-                {{ form_label(form.precisions, 'Précisions') }}
-                {{ form_widget(form.precisions, {'attr': {'class': 'form-control ' ~ ((form_errors(form.precisions) == '') ? '' : 'is-invalid')}}) }}
-                <div class="invalid-feedback">{{ form_errors(form.precisions) | striptags }}</div>
-            </div>
-        </div>
+			<!-- Request Section -->
+			<h3 class="mt-4">{{ 'demande'|trans }}</h3>
+			<div class="form-group">
+				<div class="form-group1">
+					{{ form_label(form.requestDate, 'Date de Demande') }}
+					{{ form_widget(form.requestDate, {'attr': {'class': 'form-control datepicker-js ' ~ ((form_errors(form.requestDate) == '') ? '' : 'is-invalid')}}) }}
+					<div class="invalid-feedback">{{ form_errors(form.requestDate) | striptags }}</div>
+				</div>
+				<div class="form-group1">
+					{{ form_label(form.precisions, 'Précisions') }}
+					{{ form_widget(form.precisions, {'attr': {'class': 'form-control ' ~ ((form_errors(form.precisions) == '') ? '' : 'is-invalid')}}) }}
+					<div class="invalid-feedback">{{ form_errors(form.precisions) | striptags }}</div>
+				</div>
+			</div>
 
-        <!-- Responsible Section -->
-        <h3 class="mt-4">{{ 'responsable'|trans }}</h3>
-        <div class="form-group">
-            <div class="form-group1">
-                {{ form_label(form.accountantName, 'Nom du Responsable') }}
-                {{ form_widget(form.accountantName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.accountantName) == '') ? '' : 'is-invalid')}}) }}
-                <div class="invalid-feedback">{{ form_errors(form.accountantName) | striptags }}</div>
-            </div>
-            <div class="form-group1">
-                {{ form_label(form.accountantEmail, 'Email du Responsable') }}
-                {{ form_widget(form.accountantEmail, {'attr': {'class': 'form-control ' ~ ((form_errors(form.accountantEmail) == '') ? '' : 'is-invalid')}}) }}
-                <div class="invalid-feedback">{{ form_errors(form.accountantEmail) | striptags }}</div>
-            </div>
-        </div>
+			<!-- Responsible Section -->
+			<h3 class="mt-4">{{ 'responsable'|trans }}</h3>
+			<div class="form-group">
+				<div class="form-group1">
+					{{ form_label(form.accountantName, 'Nom du Responsable') }}
+					{{ form_widget(form.accountantName, {'attr': {'class': 'form-control ' ~ ((form_errors(form.accountantName) == '') ? '' : 'is-invalid')}}) }}
+					<div class="invalid-feedback">{{ form_errors(form.accountantName) | striptags }}</div>
+				</div>
+				<div class="form-group1">
+					{{ form_label(form.accountantEmail, 'Email du Responsable') }}
+					{{ form_widget(form.accountantEmail, {'attr': {'class': 'form-control ' ~ ((form_errors(form.accountantEmail) == '') ? '' : 'is-invalid')}}) }}
+					<div class="invalid-feedback">{{ form_errors(form.accountantEmail) | striptags }}</div>
+				</div>
+			</div>
 
-        <!-- Response Section -->
-        <h3 class="mt-4">{{ 'Réponse'|trans }}</h3>
-        <div class="form-group">
-            <div class="form-group1">
-                {{ form_label(form.answerDate, 'Date de Réponse') }}
-                {{ form_widget(form.answerDate, {'attr': {'class': 'form-control datepicker-js ' ~ ((form_errors(form.answerDate) == '') ? '' : 'is-invalid')}}) }}
-                <div class="invalid-feedback">{{ form_errors(form.answerDate) | striptags }}</div>
-            </div>
-        </div>
+			<!-- Response Section -->
+			<h3 class="mt-4">{{ 'Réponse'|trans }}</h3>
+			<div class="form-group">
+				<div class="form-group1">
+					{{ form_label(form.answerDate, 'Date de Réponse') }}
+					{{ form_widget(form.answerDate, {'attr': {'class': 'form-control datepicker-js ' ~ ((form_errors(form.answerDate) == '') ? '' : 'is-invalid')}}) }}
+					<div class="invalid-feedback">{{ form_errors(form.answerDate) | striptags }}</div>
+				</div>
+			</div>
 
-        <!-- Attach File Section -->
-        <h3 class="mt-4">{{ 'joindre_un_document'|trans }}</h3>
-        <div class="form-group">
-            {% if exercisingclaim.file %}
-                <div class="form-group">
-                    <a href="/uploads/documents/{{ exercisingclaim.file }}" target="_blank">
-                        <i class="fa fa-eye"></i> {{ 'Visualiser le fichier existant'|trans }}
-                    </a>
-                </div>
-            {% endif %}
+			<!-- Attach File Section -->
+			<h3 class="mt-4">{{ 'joindre_un_document'|trans }}</h3>
+			<div class="form-group">
+				{% if exercisingclaim.file %}
+					<div class="form-group">
+						<a href="/uploads/documents/{{ exercisingclaim.file }}" target="_blank">
+							<i class="fa fa-eye"></i>
+							{{ 'Visualiser le fichier existant'|trans }}
+						</a>
+					</div>
+				{% endif %}
 
-            <!-- Custom File Button -->
-            <button type="button" class="file-button" onclick="document.getElementById('appbundle_exercising_claim_request_documentFile').click();">
-                <i class="fa fa-file" aria-hidden="true"></i> {{ 'joindre_un_document'|trans }}
-            </button>
+				<!-- Custom File Button -->
+				<button type="button" class="file-button" onclick="document.getElementById('appbundle_exercising_claim_request_documentFile').click();">
+					<i class="fa fa-file" aria-hidden="true"></i>
+					{{ 'joindre_un_document'|trans }}
+				</button>
 
-            <!-- Hidden File Input -->
-            <div style="opacity: 0; pointer-events: none;">
-                {{ form_widget(form.documentFile, {'attr': {'id': 'documentFileInput', 'onchange': 'updateFileName(this)', 'class': 'form-control ' ~ ((form_errors(form.documentFile) == '') ? '' : 'is-invalid')}}) }}
-            </div>
-            <div class="invalid-feedback">{{ form_errors(form.documentFile) | striptags }}</div>
-        </div>
+				<!-- Hidden File Input -->
+				<div class="hiddenfile">
+					{{ form_widget(form.documentFile, {'attr': {'id': 'documentFileInput', 'onchange': 'updateFileName(this)', 'class': 'form-control ' ~ ((form_errors(form.documentFile) == '') ? '' : 'is-invalid')}}) }}
+				</div>
+				<div class="invalid-feedback">{{ form_errors(form.documentFile) | striptags }}</div>
+			</div>
 
-<br>
-<br>
+			<br>
+			<br>
 
-        <!-- Submit Button -->
-        <button type="submit" class="submit-button">
-            {{ 'enregistrer'|trans }}
-        </button>
+			<!-- Submit Button -->
+			<button type="submit" class="submit-button">
+				{{ 'enregistrer'|trans }}
+			</button>
 
-        {{ form_end(form) }}
-    </div>
-</div>
+			{{ form_end(form) }}
+		</div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <!-- Flatpickr JS -->
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
-    <script>
-        // Initialize Flatpickr
-       document.querySelectorAll(".datepicker-js").forEach(function (input) {
-        let existingDate = input.getAttribute("value"); 
-        flatpickr(input, {
-            dateFormat: "d-m-Y",
-            altInput: true,
-            altFormat: "d/m/Y",
-            locale: "fr",
-            allowInput: true,
-            defaultDate: existingDate || "", 
-        });
-    });
-
-    
-
-        // Update File Name Function
-        function updateFileName(input) {
-            const button = document.querySelector('.file-button');
-            if (input.files.length > 0) {
-                button.innerHTML = `<i class="fa fa-file" aria-hidden="true"></i> ${input.files[0].name}`;
-            } else {
-                button.innerHTML = `<i class="fa fa-file" aria-hidden="true"></i> {{ 'joindre_un_document'|trans }}`;
-            }
-        }
-
-        document.getElementById('documentFileInput').addEventListener('change', function () {
-            updateFileName(this);
-        });
-    </script>
+	{{ parent() }}
+<!-- Flatpickr JS -->
+	 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+	 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
+	 <script>
+	        // Initialize Flatpickr
+	       document.querySelectorAll(".datepicker-js").forEach(function (input) {
+	        let existingDate = input.getAttribute("value"); 
+	        flatpickr(input, {
+	            dateFormat: "d-m-Y",
+	            altInput: true,
+	            altFormat: "d/m/Y",
+	            locale: "fr",
+	            allowInput: true,
+	            defaultDate: existingDate || "", 
+	        });
+	    });
+	
+	    
+	
+	        // Update File Name Function
+	        function updateFileName(input) {
+	            const button = document.querySelector('.file-button');
+	            if (input.files.length > 0) {
+	                button.innerHTML = `<i class="fa fa-file" aria-hidden="true"></i> ${input.files[0].name}`;
+	            } else {
+	                button.innerHTML = `<i class="fa fa-file" aria-hidden="true"></i> {{ 'joindre_un_document'|trans }}`;
+	            }
+	        }
+	
+	        document.getElementById('documentFileInput').addEventListener('change', function () {
+	            updateFileName(this);
+	        });
+	    </script>
 {% endblock %}

@@ -1,124 +1,128 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - {{ 'soustraitants_groupe'|trans }}
+	{{ parent() }}
+	-
+	{{ 'soustraitants_groupe'|trans }}
 {% endblock %}
 
 {% block content %}
-<div class="page">
-    <!-- Header Section -->
-    <div class="table-container-traitements">
-        <div class="header">
-            <h2>{{ 'soustraitants_groupe'|trans }}</h2>
-           
-            <p>
-                <a data-toggle="modal" data-target="#RGPDModal" href="#">{{ 'article_28_soustraitant'|trans }}</a>
-            </p>
-        </div>
+	<div
+		class="page">
+		<!-- Header Section -->
+		<div class="table-container-traitements">
+			<div class="header">
+				<h2>{{ 'soustraitants_groupe'|trans }}</h2>
 
-        <!-- Table Content -->
-         <p>{{ 'lensemble_de_vos_soustraitants_groupe'|trans }}</p>
-        
-            <table class="styled-table">
-                <thead>
-                    <tr>
-                        <th>{{ 'societe'|trans }}</th>
-                        <th>{{ 'typologie'|trans }}</th>
-                        <th>{{ 'traitements'|trans }}</th>
-                        <th>{{ 'contact'|trans }}</th>
-                        <th>{{ 'tl'|trans }}</th>
-                        <th>{{ 'mail'|trans }}</th>
-                        <th>{{ 'conformit'|trans }}</th>
-                        <th>{{ 'doc'|trans }}</th>
-                        <th class="actionss">{{ 'actions'|trans }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% if subcontractors|length > 0 %}
-                        {% for subcontractor in subcontractors %}
-                            <tr>
-                                <td>{{ subcontractor.name }}</td>
-                                <td>{{ subcontractor.type }}</td>
-                                <td>
-                                    {% for treatment in subcontractor.treatments %}
-                                        <span class="badge badge-soft-secondary">{{ treatment.number|format_treatment_number }}</span>
-                                    {% endfor %}
-                                </td>
-                                <td>{{ subcontractor.contactLastName }} {{ subcontractor.contactFirstName }}</td>
-                                <td>{{ subcontractor.contactPhone }}</td>
-                                <td>{{ subcontractor.contactEmail }}</td>
-                                <td>{{ subcontractor.conformity.libelle }}</td>
-                                <td>
-                                    {% for document in subcontractor.documents %}
-                                        <a href="{{ path('user_read_user_documents', {'id': document.id}) }}" target="_blank" class="badge badge-soft-primary">{{ document.name }}</a>
-                                    {% endfor %}
-                                </td>
-                                <td>
-                                    {% if subcontractor.user.id == app.user.user.id %}
-                                        <div class="options">
-                                            <a href="{{ path('user_subcontractors_grp_edit', {'id': subcontractor.id}) }}" class="edit">
-                                                <i class="fa fa-edit"></i>
-                                            </a>
-                                            <a href="{{ path('user_subcontractors_grp_copy', {'id': subcontractor.id}) }}" class="edit">
-                                                <i class="fa fa-clone"></i>
-                                            </a>
-                                            <a href="{{ path('user_subcontractors_grp_delete', {'id': subcontractor.id}) }}" class="delete" onclick="return confirm('{{ 'Confirmer la suppression de ce sous-traitant ?'|trans }}')">
-                                                <i class="fa fa-trash-o"></i>
-                                            </a>
-                                        </div>
-                                    {% endif %}
-                                </td>
-                            </tr>
-                        {% endfor %}
-                    {% else %}
-                        <tr>
-                            <td colspan="9" class="text-center">{{ 'Aucun sous-traitant disponible'|trans }}</td>
-                        </tr>
-                    {% endif %}
-                </tbody>
-            </table>
-       
-    </div>
+				<p>
+					<a data-toggle="modal" data-target="#RGPDModal" href="#">{{ 'article_28_soustraitant'|trans }}</a>
+				</p>
+			</div>
 
-    <!-- RGPD Modal -->
-    <div class="modal fade" id="RGPDModal" tabindex="-1" role="dialog" aria-labelledby="RGPDModal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{ 'article_28_soustraitant'|trans }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="{{ 'fermer'|trans }}">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>
-                        {{ 'Lorsqu’un traitement doit être effectué pour le compte d’un responsable du traitement...'|trans }}
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+			<!-- Table Content -->
+			<p>{{ 'lensemble_de_vos_soustraitants_groupe'|trans }}</p>
+
+			<table class="styled-table">
+				<thead>
+					<tr>
+						<th>{{ 'societe'|trans }}</th>
+						<th>{{ 'typologie'|trans }}</th>
+						<th>{{ 'traitements'|trans }}</th>
+						<th>{{ 'contact'|trans }}</th>
+						<th>{{ 'tl'|trans }}</th>
+						<th>{{ 'mail'|trans }}</th>
+						<th>{{ 'conformit'|trans }}</th>
+						<th>{{ 'doc'|trans }}</th>
+						<th class="actionss">{{ 'actions'|trans }}</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% if subcontractors|length > 0 %}
+						{% for subcontractor in subcontractors %}
+							<tr>
+								<td>{{ subcontractor.name }}</td>
+								<td>{{ subcontractor.type }}</td>
+								<td>
+									{% for treatment in subcontractor.treatments %}
+										<span class="badge badge-soft-secondary">{{ treatment.number|format_treatment_number }}</span>
+									{% endfor %}
+								</td>
+								<td>{{ subcontractor.contactLastName }}
+									{{ subcontractor.contactFirstName }}</td>
+								<td>{{ subcontractor.contactPhone }}</td>
+								<td>{{ subcontractor.contactEmail }}</td>
+								<td>{{ subcontractor.conformity.libelle }}</td>
+								<td>
+									{% for document in subcontractor.documents %}
+										<a href="{{ path('user_read_user_documents', {'id': document.id}) }}" target="_blank" class="badge badge-soft-primary">{{ document.name }}</a>
+									{% endfor %}
+								</td>
+								<td>
+									{% if subcontractor.user.id == app.user.user.id %}
+										<div class="options">
+											<a href="{{ path('user_subcontractors_grp_edit', {'id': subcontractor.id}) }}" class="edit">
+												<i class="fa fa-edit"></i>
+											</a>
+											<a href="{{ path('user_subcontractors_grp_copy', {'id': subcontractor.id}) }}" class="edit">
+												<i class="fa fa-clone"></i>
+											</a>
+											<a href="{{ path('user_subcontractors_grp_delete', {'id': subcontractor.id}) }}" class="delete" onclick="return confirm('{{ 'Confirmer la suppression de ce sous-traitant ?'|trans }}')">
+												<i class="fa fa-trash-o"></i>
+											</a>
+										</div>
+									{% endif %}
+								</td>
+							</tr>
+						{% endfor %}
+					{% else %}
+						<tr>
+							<td colspan="9" class="text-center">{{ 'Aucun sous-traitant disponible'|trans }}</td>
+						</tr>
+					{% endif %}
+				</tbody>
+			</table>
+
+		</div>
+
+		<!-- RGPD Modal -->
+		<div class="modal fade" id="RGPDModal" tabindex="-1" role="dialog" aria-labelledby="RGPDModal" aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title">{{ 'article_28_soustraitant'|trans }}</h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="{{ 'fermer'|trans }}">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<p>
+							{{ 'Lorsqu’un traitement doit être effectué pour le compte d’un responsable du traitement...'|trans }}
+						</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            $('#datatable').DataTable({
-                "language": {
-                    "search": "{{ 'Rechercher :'|trans }}",
-                    "lengthMenu": "{{ 'Afficher _MENU_ résultats par page'|trans }}",
-                    "zeroRecords": "{{ 'Aucun résultat'|trans }}",
-                    "info": "{{ 'Page _PAGE_ sur _PAGES_'|trans }}",
-                    "infoEmpty": "{{ 'Aucune données sur ce tableau'|trans }}",
-                    "infoFiltered": "{{ '(filtered from _MAX_ total records)'|trans }}",
-                    "paginate": {
-                        "previous": "{{ 'Précédent'|trans }}",
-                        "next": "{{ 'Suivant'|trans }}"
-                    }
-                }
-            });
-        });
-    </script>
+	{{ parent() }}
+	 <script>
+	        document.addEventListener('DOMContentLoaded', function () {
+	            $('#datatable').DataTable({
+	                "language": {
+	                    "search": "{{ 'Rechercher :'|trans }}",
+	                    "lengthMenu": "{{ 'Afficher _MENU_ résultats par page'|trans }}",
+	                    "zeroRecords": "{{ 'Aucun résultat'|trans }}",
+	                    "info": "{{ 'Page _PAGE_ sur _PAGES_'|trans }}",
+	                    "infoEmpty": "{{ 'Aucune données sur ce tableau'|trans }}",
+	                    "infoFiltered": "{{ '(filtered from _MAX_ total records)'|trans }}",
+	                    "paginate": {
+	                        "previous": "{{ 'Précédent'|trans }}",
+	                        "next": "{{ 'Suivant'|trans }}"
+	                    }
+	                }
+	            });
+	        });
+	    </script>
 {% endblock %}

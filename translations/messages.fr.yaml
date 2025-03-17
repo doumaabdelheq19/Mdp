@@ -166,6 +166,8 @@ en_cours_with_progress: 'En cours (%inProgress%)'
 non_conformes: 'Non conformes'
 non_conformes_with_progress: 'Non conformes (%invalid%)'
 nombre_total_de_soustraitants: 'Nombre total de sous-traitants : %total%'
+nombre_total_de_cotritants: 'Nombre total de cotraitants : %total%'
+nombre_total_de_responsable: 'Nombre total de responsables de traitements : %total%'
 lensemble_de_vos_soustraitants: 'L''ensemble de vos sous-traitants'
 conformit_maj: Conformité
 rechercher_un_soustraitant: 'Rechercher un sous-traitant'

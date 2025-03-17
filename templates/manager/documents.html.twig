@@ -1,192 +1,193 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - Base documentaire
+	{{ parent() }}
+	- Base documentaire
 {% endblock %}
 
 {% block content %}
-<div class="page">
+	<div class="page">
 
-<div class="flex">
-        <!-- Plan d'actions Overview -->
-        <div class="four" style="width:100%">
-            <div class="gap">
-                <h4>{{ 'Base documentaire'|trans }}</h4>
-                
-                <div style="display: flex; gap: 30px;">
-                   <a data-toggle="modal" data-target="#AddDocumentModal" style="width:250px;text-decoration: none; color: inherit;" target="_blanc">
-                 <div class="imprimer" style="width: 100%; cursor: pointer;">
-                Téléverser un document
-                   </div>
-             </a>
+		<div
+			class="flex">
+			<!-- Plan d'actions Overview -->
+			<div class="four width-100">
+				<div class="gap">
+					<h4>{{ 'Base documentaire'|trans }}</h4>
+
+					<div class="consentasked">
+						<a data-toggle="modal" data-target="#AddDocumentModal" class="add-doc-modalbutton"  target="_blanc">
+							<div class="imprimer actions-imprimer" >
+								Téléverser un document
+							</div>
+						</a>
 
 
-              <a href="{{ path('manager_documents_types') }}" style="width:250px;text-decoration: none; color: inherit;" target="_blanc">
-                 <div class="exporter" style="width: 100%; cursor: pointer;">
-               Gérer les sous-catégories
-                   </div>
-             </a>
+						<a href="{{ path('manager_documents_types') }}" class="add-doc-modalbutton" target="_blanc">
+							<div class="exporter actions-imprimer" >
+								Gérer les sous-catégories
+							</div>
+						</a>
 
-                </div>
-            </div>
-        </div>
+					</div>
+				</div>
+			</div>
 
-      
-    </div>
-    <div class="table-container-traitements">
-        
 
-        <div style="display: flex; justify-content: space-between; width: 100%;">
-            <div class="search-bar">
-                <span class="search-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
-                <input type="text" placeholder="Rechercher un document..." id="searchInput" />
-            </div>
-        </div>
+		</div>
+		<div class="table-container-traitements">
 
-        <!-- Table for Documents -->
-        <div style="display:flex; gap:10px" >
-        {% for keyType, type in documentsTypes %}
-        <div class="container-catogrophie" style="border: solid 1px #E1E8F4; border-radius:10px;padding:10px; margin-top:30px">
-            <div class="title-cat">
-                <h4 style="color:#586E90">{{ type.libelle }}</h4>
-              
-            </div>
-            <table class="styled-table">
-                <thead>
-                    <tr>
-                    
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for document in type.documents %}
-                    <tr>
-                        <td>{{ document.name }}</td>
-                    
-                        <td>
-                            <div class="options">
-                                <button class="edit">
-                                    <a href="{{ path('manager_documents_edit', {'id': document.id}) }}">
-                                        <i class="mdi mdi-circle-edit-outline"></i>
-                                    </a>
-                                </button>
-                                <button class="delete">
-                                    <a href="{{ path('manager_documents_delete', {'id': document.id}) }}" 
-                                       onclick="return confirm('Confirmer la suppression de ce fichier ?');">
-                                        <i class="mdi mdi-file-remove"></i>
-                                    </a>
-                                </button>
-                                {% if not document.translatedEn %}
-                                    <a href="{{ path('manager_documents_translate', {'id': document.id}) }}" 
-                                       class="edit" title="Fichier non traduit en anglais">EN</a>
-                                {% endif %}
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
 
-                    {% for keyTypeChild, typeChild in type.children %}
-                    <tr class="category-row">
-                        <td colspan="3" style="text-align:left; color:#7096D1"><strong>{{ typeChild.libelle }}</strong></td>
-                    </tr>
-                    {% for document in typeChild.documents %}
-                    <tr style="color:#586E90">
-                        <td>{{ document.name }}</td>
-                        
-                        <td>
-                            <div class="options">
-                                <button class="edit">
-                                    <a href="{{ path('manager_documents_edit', {'id': document.id}) }}">
-                                        <i class="mdi mdi-circle-edit-outline"></i>
-                                    </a>
-                                </button>
-                                <button class="delete">
-                                    <a href="{{ path('manager_documents_delete', {'id': document.id}) }}" 
-                                       onclick="return confirm('Confirmer la suppression de ce fichier ?');">
-                                        <i class="mdi mdi-file-remove"></i>
-                                    </a>
-                                </button>
-                                {% if not document.translatedEn %}
-                                    <a href="{{ path('manager_documents_translate', {'id': document.id}) }}" 
-                                       class="edit" title="Fichier non traduit en anglais">EN</a>
-                                {% endif %}
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {% endfor %}
-        </div>
-    </div>
-</div>
+			<div class="search-container">
+				<div class="search-bar">
+					<span class="search-icon">
+						<i class="fa fa-search" aria-hidden="true"></i>
+					</span>
+					<input type="text" placeholder="Rechercher un document..." id="searchInput"/>
+				</div>
+			</div>
 
-<!-- Modal for Uploading Documents -->
-<div class="modal fade" id="AddDocumentModal" tabindex="-1" role="dialog" aria-labelledby="AddDocumentModal" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Téléverser un document</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                {{ form_start(form, {"attr": {"class": "sous-traitantform", "enctype": "multipart/form-data"}}) }}
+			<!-- Table for Documents -->
+			<div class="measures-container">
+				{% for keyType, type in documentsTypes %}
+					<div class="container-catogrophie cartographie-cont-style" >
+						<div class="title-cat">
+							<h4 class="libellecolor">{{ type.libelle }}</h4>
 
-                <div class="form-group1">
-                    <label>Fichier</label>
-                    <button type="button" class="file-button" onclick="document.getElementById('form_file').click();">
-                        <i class="fa fa-file"></i> Joindre un fichier
-                    </button>
-                    {{ form_widget(form.file, {'attr': {'id': 'fileInput', 'class': 'd-none', 'onchange': 'updateFileName(this)'}}) }}
-                </div>
+						</div>
+						<table class="styled-table">
+							<thead>
+								<tr></tr>
+							</thead>
+							<tbody>
+								{% for document in type.documents %}
+									<tr>
+										<td>{{ document.name }}</td>
 
-                <div class="form-group1" style="width:100%">
-                    {{ form_label(form.name) }}
-                    {{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
-                </div>
+										<td>
+											<div class="options">
+												<button class="edit">
+													<a href="{{ path('manager_documents_edit', {'id': document.id}) }}">
+														<i class="mdi mdi-circle-edit-outline"></i>
+													</a>
+												</button>
+												<button class="delete">
+													<a href="{{ path('manager_documents_delete', {'id': document.id}) }}" onclick="return confirm('Confirmer la suppression de ce fichier ?');">
+														<i class="mdi mdi-file-remove"></i>
+													</a>
+												</button>
+												{% if not document.translatedEn %}
+													<a href="{{ path('manager_documents_translate', {'id': document.id}) }}" class="edit" title="Fichier non traduit en anglais">EN</a>
+												{% endif %}
+											</div>
+										</td>
+									</tr>
+								{% endfor %}
 
-                <div class="form-group1" style="width:100%">
-                    {{ form_label(form.type) }}
-                    {{ form_widget(form.type, {'attr': {'class': 'form-control'}}) }}
-                </div>
+								{% for keyTypeChild, typeChild in type.children %}
+									<tr class="category-row">
+										<td colspan="3" class="typechild" >
+											<strong>{{ typeChild.libelle }}</strong>
+										</td>
+									</tr>
+									{% for document in typeChild.documents %}
+										<tr class="libellecolor">
+											<td>{{ document.name }}</td>
 
-                <div class="form-group1">
-                    <button type="submit" class="submit-button">Téléverser</button>
-                </div>
+											<td>
+												<div class="options">
+													<button class="edit">
+														<a href="{{ path('manager_documents_edit', {'id': document.id}) }}">
+															<i class="mdi mdi-circle-edit-outline"></i>
+														</a>
+													</button>
+													<button class="delete">
+														<a href="{{ path('manager_documents_delete', {'id': document.id}) }}" onclick="return confirm('Confirmer la suppression de ce fichier ?');">
+															<i class="mdi mdi-file-remove"></i>
+														</a>
+													</button>
+													{% if not document.translatedEn %}
+														<a href="{{ path('manager_documents_translate', {'id': document.id}) }}" class="edit" title="Fichier non traduit en anglais">EN</a>
+													{% endif %}
+												</div>
+											</td>
+										</tr>
+									{% endfor %}
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+				{% endfor %}
+			</div>
+		</div>
+	</div>
 
-                {{ form_end(form) }}
-            </div>
-        </div>
-    </div>
-</div>
+	<!-- Modal for Uploading Documents -->
+	<div class="modal fade" id="AddDocumentModal" tabindex="-1" role="dialog" aria-labelledby="AddDocumentModal" aria-hidden="true">
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Téléverser un document</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Fermer">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					{{ form_start(form, {"attr": {"class": "sous-traitantform", "enctype": "multipart/form-data"}}) }}
+
+					<div class="form-group1">
+						<label>Fichier</label>
+						<button type="button" class="file-button" onclick="document.getElementById('form_file').click();">
+							<i class="fa fa-file"></i>
+							Joindre un fichier
+						</button>
+						{{ form_widget(form.file, {'attr': {'id': 'fileInput', 'class': 'd-none', 'onchange': 'updateFileName(this)'}}) }}
+					</div>
+
+					<div class="form-group1 width-100">
+						{{ form_label(form.name) }}
+						{{ form_widget(form.name, {'attr': {'class': 'form-control'}}) }}
+					</div>
+
+					<div class="form-group1 width-100">
+						{{ form_label(form.type) }}
+						{{ form_widget(form.type, {'attr': {'class': 'form-control'}}) }}
+					</div>
+
+					<div class="form-group1">
+						<button type="submit" class="submit-button">Téléverser</button>
+					</div>
+
+					{{ form_end(form) }}
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script>
-        function updateFileName(input) {
-            const button = document.querySelector('.file-button');
-            if (input.files.length > 0) {
-                button.innerHTML = `<i class="fa fa-file"></i> ${input.files[0].name}`;
-            } else {
-                button.innerHTML = `<i class="fa fa-file"></i> Joindre un fichier`;
-            }
-        }
-
-        document.getElementById('searchInput').addEventListener('keyup', function () {
-            let filter = this.value.toLowerCase();
-            let rows = document.querySelectorAll('.styled-table tbody tr');
-            rows.forEach(row => {
-                let documentName = row.cells[0].innerText.toLowerCase();
-                if (documentName.includes(filter)) {
-                    row.style.display = "";
-                } else {
-                    row.style.display = "none";
-                }
-            });
-        });
-    </script>
+	{{ parent() }}
+	 <script>
+	        function updateFileName(input) {
+	            const button = document.querySelector('.file-button');
+	            if (input.files.length > 0) {
+	                button.innerHTML = `<i class="fa fa-file"></i> ${input.files[0].name}`;
+	            } else {
+	                button.innerHTML = `<i class="fa fa-file"></i> Joindre un fichier`;
+	            }
+	        }
+	
+	        document.getElementById('searchInput').addEventListener('keyup', function () {
+	            let filter = this.value.toLowerCase();
+	            let rows = document.querySelectorAll('.styled-table tbody tr');
+	            rows.forEach(row => {
+	                let documentName = row.cells[0].innerText.toLowerCase();
+	                if (documentName.includes(filter)) {
+	                    row.style.display = "";
+	                } else {
+	                    row.style.display = "none";
+	                }
+	            });
+	        });
+	    </script>
 {% endblock %}

@@ -61,7 +61,7 @@ class CronEmailing extends Command {
                         Précisions sur la demande: ".nl2br($exercisingclaim->getPrecisions())."<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
                             $this->sendEmailService->send(
                                 "Rappel de demande d’exercice de droits",
@@ -109,7 +109,7 @@ class CronEmailing extends Command {
             $content = "<p>L'abonnement “".$subscription->getType()->getLibelle()."“ du client ".$subscription->getUser()->getCompanyName()." expire dans 30 jours. Merci de vous rapprocher des équipes techniques pour procéder au renouvellement de l'abonnement ou, en cas de résiliation, à la désactivation du compte.<br/>
                         <br/>
                         <br/>
-                        <i>Cet e-mail a été envoyé depuis le site myDigitplace. NE PAS répondre à ce message automatique.</i><br/>
+                        <i>Cet e-mail a été envoyé depuis le site Pilot. NE PAS répondre à ce message automatique.</i><br/>
                         </p>";
             $this->sendEmailService->send(
                 "Alerte fin d'abonnement",

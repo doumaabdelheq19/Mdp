@@ -1,109 +1,102 @@
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" name="viewport">
-    <meta content="yes" name="apple-mobile-web-app-capable">
-    <meta content="yes" name="apple-touch-fullscreen">
-    <meta content="default" name="apple-mobile-web-app-status-bar-style">
+	<head>
+		<meta charset="UTF-8">
+		<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" name="viewport">
+		<meta content="yes" name="apple-mobile-web-app-capable">
+		<meta content="yes" name="apple-touch-fullscreen">
+		<meta content="default" name="apple-mobile-web-app-status-bar-style">
 
 
-    <title>{% block title %}MyDigitPlace{% endblock %}</title>
-    <!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<title>
+			{% block title %}MyDigitPlace
+			{% endblock %}
+		</title>
+		<!-- jQuery -->
+		 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-<!-- Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-
-    <link href="{{ asset('assets/img/logo.png') }}" rel="icon" type="image/x-icon"/>
-    <link href="{{ asset('assets/img/logo.png') }}" rel="icon" sizes="16x16" type="image/png">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
-
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
-   
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-   
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsmind@latest/style/jsmind.css">
+		<!-- Bootstrap JS -->
+		 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 
+		<link href="{{ asset('assets/img/logo.png') }}" rel="icon" type="image/x-icon"/> <link
+		href="{{ asset('assets/img/logo.png') }}" rel="icon" sizes="16x16" type="image/png">
+		 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css">
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+		<link
+		rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+		 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-     <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Tagify CSS -->
-<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet">
-
-<!-- Tagify JS -->
-<script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
-
-    
-
-    {% block stylesheets %}
-    <style>
-      :root {
-        --main-color: {{ get_config('main_color')|default('#3498db') }};
-    }
-    </style>
-    
-    {% endblock %}
-        <link href="{{ asset('assets/css/theme.css') }}" rel="stylesheet" type="text/css">
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/jsmind@latest/style/jsmind.css">
 
 
-    <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet" type="text/css">
+		<link
+		rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+
+		 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
+		 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<!-- Tagify CSS -->
+		<link href="https://cdn.jsdelivr.net/npm/@yaireo/tagify/dist/tagify.css" rel="stylesheet"> <!-- Tagify JS -->
+		 <script src="https://cdn.jsdelivr.net/npm/@yaireo/tagify"></script>
+
+
+	{% block stylesheets %}
+		<style>
+            :root
+              {
+	           --main-color: {{main_color}};
+              }
+	    </style>
+
+	{% endblock %}
+	<link href="{{ asset('assets/css/theme.css') }}" rel="stylesheet" type="text/css"> <link href="{{ asset('assets/css/style.css') }}" rel="stylesheet" type="text/css">
 </head>
 <body class="{% block body_class %}sidebar-pinned{% endblock %}">
-{% block body %}
+	{% block body %}
 
-    {% include 'includes/sidebar.html.twig' %}
+		{% include 'includes/sidebar.html.twig' %}
 
-    <div class="content-wrapper">
-      
-    <main class="admin-main">
-        
-        <section class="admin-content">
-            <div class="alertt-container alertt">
-                {% for type, messages in app.session.flashbag.all %}
-                    {% for message in messages %}
-                        <div class="alert-cont alertt-{{ type }} alertt-dismissible fade show" role="alertt">
-                            {{ message|raw }}
-                           
-                            <a data-dismiss="alertt" aria-label="Fermer">
-                                <span aria-hidden="true">×</span>
-                                </a>
-                           
-                        </div>
-                    {% endfor %}
-                {% endfor %}
-            </div>
-            {% block content %}{% endblock %}
-        </section>
-    </main>
-    {% endblock %}
-    </div>
-<script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/jquery-ui/jquery-ui.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/popper/popper.js') }}"></script>
-<script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+		<div class="content-wrapper">
 
-<script src="{{ asset('assets/vendor/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/listjs/listjs.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/moment/moment.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/daterangepicker/daterangepicker.js') }}"></script>
-<script src="{{ asset('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/DataTables/datatables.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/jquery.mask/jquery.mask.min.js') }}"></script>
-<script src="{{ asset('assets/js/atmos.min.js') }}"></script>
-<script src="{{ asset('assets/vendor/apexchart/apexcharts.min.js') }}"></script>
+			<main class="admin-main">
 
-{% block javascripts %}{% endblock %}
-</body>
-</html>
+				<section class="admin-content">
+					<div class="alertt-container alertt">
+						{% for type, messages in app.session.flashbag.all %}
+							{% for message in messages %}
+								<div class="alert-cont alertt-{{ type }} alertt-dismissible fade show" role="alertt">
+									{{ message|raw }}
+
+									<a data-dismiss="alertt" aria-label="Fermer">
+										<span aria-hidden="true">×</span>
+									</a>
+
+								</div>
+							{% endfor %}
+						{% endfor %}
+					</div>
+					{% block content %}{% endblock %}
+				</section>
+			</main>
+		{% endblock %}
+	</div>
+	 <script src="{{ asset('assets/vendor/jquery/jquery.min.js') }}"></script>
+	 <script src="{{ asset('assets/vendor/jquery-ui/jquery-ui.min.js') }}"></script>
+	 <script src="{{ asset('assets/vendor/popper/popper.js') }}"></script>
+	 <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+
+	 <script src="{{ asset('assets/vendor/jquery-scrollbar/jquery.scrollbar.min.js') }}"></script>
+	 <script src="{{ asset('assets/vendor/listjs/listjs.min.js') }}"></script>
+	 <script src="{{ asset('assets/vendor/moment/moment.min.js') }}"></script>
+	 <script src="{{ asset('assets/vendor/daterangepicker/daterangepicker.js') }}"></script>
+	 <script src="{{ asset('assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js') }}"></script>
+	 <script src="{{ asset('assets/vendor/bootstrap-notify/bootstrap-notify.min.js') }}"></script>
+	 <script src="{{ asset('assets/vendor/DataTables/datatables.min.js') }}"></script>
+	 <script src="{{ asset('assets/vendor/jquery.mask/jquery.mask.min.js') }}"></script>
+	 <script src="{{ asset('assets/js/atmos.min.js') }}"></script>
+	 <script src="{{ asset('assets/vendor/apexchart/apexcharts.min.js') }}"></script>{% block javascripts %}
+{% endblock %}</body></html>

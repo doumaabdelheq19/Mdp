@@ -1,136 +1,139 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}
-    {{ parent() }} - Journaux de connexion
+	{{ parent() }}
+	- Journaux de connexion
 {% endblock %}
 
 {% block content %}
-<div class="page">
-    <div class="table-container-traitements">
-        <div class="header">
-            <h2>Journaux de connexion</h2>
-        </div>
+	<div class="page">
+		<div class="table-container-traitements">
+			<div class="header">
+				<h2>Journaux de connexion</h2>
+			</div>
 
-        <!-- Search & Filters -->
-        <div style="display: flex; justify-content: space-between; width: 100%; margin-bottom: 20px;">
-            <div class="search-bar">
-                <span class="search-icon">
-                    <i class="fa fa-search"></i>
-                </span>
-                <input type="text" id="searchInput" placeholder="Rechercher un journal..." />
-            </div>
-        </div>
+			<!-- Search & Filters -->
+			<div class="search-container">
+				<div class="search-bar">
+					<span class="search-icon">
+						<i class="fa fa-search"></i>
+					</span>
+					<input type="text" id="searchInput" placeholder="Rechercher un journal..."/>
+				</div>
+			</div>
+			<br>
+			<br>
 
-        <!-- Connection Logs Table -->
-        <table class="styled-table" id="datatable">
-            <thead>
-                <tr>
-                    <th>Date de connexion</th>
-                    <th>Dernière action</th>
-                    <th>IP</th>
-                    <th>Compte</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for loginLog in loginLogs %}
-                    <tr>
-                        <td>{{ loginLog.date|date('d/m/Y H:i') }}</td>
-                        <td>{{ loginLog.endDate ? loginLog.endDate|date('d/m/Y H:i') : 'N/A' }}</td>
-                        <td>{{ loginLog.ip }}</td>
-                        <td>
-                            {% if loginLog.account %}
-                                {{ loginLog.account.email }}
-                            {% else %}
-                                <span class="text-muted">N/A</span>
-                            {% endif %}
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+			<!-- Connection Logs Table -->
+			<table class="styled-table" id="datatable">
+				<thead>
+					<tr>
+						<th>Date de connexion</th>
+						<th>Dernière action</th>
+						<th>IP</th>
+						<th>Compte</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for loginLog in loginLogs %}
+						<tr>
+							<td>{{ loginLog.date|date('d/m/Y H:i') }}</td>
+							<td>{{ loginLog.endDate ? loginLog.endDate|date('d/m/Y H:i') : 'N/A' }}</td>
+							<td>{{ loginLog.ip }}</td>
+							<td>
+								{% if loginLog.account %}
+									{{ loginLog.account.email }}
+								{% else %}
+									<span class="text-muted">N/A</span>
+								{% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
 
-        <!-- Pagination -->
-        <div class="pagination-container">
-            <div class="results-per-page">
-                <label for="resultsSelect">Afficher</label>
-                <select id="resultsSelect" class="results-select">
-                    <option value="5">5</option>
-                    <option value="10" selected>10</option>
-                    <option value="20">20</option>
-                </select>
-                <span>résultats par page</span>
-            </div>
+			<!-- Pagination -->
+			<div class="pagination-container">
+				<div class="results-per-page">
+					<label for="resultsSelect">Afficher</label>
+					<select id="resultsSelect" class="results-select">
+						<option value="5">5</option>
+						<option value="10" selected>10</option>
+						<option value="20">20</option>
+					</select>
+					<span>résultats par page</span>
+				</div>
 
-            <div class="pagination-controls">
-                <button class="pagination-button" id="prevPage" disabled>&lt;</button>
-                <span class="pagination-info" id="paginationInfo">Page 1 sur 1</span>
-                <button class="pagination-button" id="nextPage" disabled>&gt;</button>
-            </div>
-        </div>
-    </div>
-</div>
+				<div class="pagination-controls">
+					<button class="pagination-button" id="prevPage" disabled>&lt;</button>
+					<span class="pagination-info" id="paginationInfo">Page 1 sur 1</span>
+					<button class="pagination-button" id="nextPage" disabled>&gt;</button>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const rows = Array.from(document.querySelectorAll('#datatable tbody tr'));
-            const resultsSelect = document.getElementById('resultsSelect');
-            const paginationInfo = document.getElementById('paginationInfo');
-            const prevPage = document.getElementById('prevPage');
-            const nextPage = document.getElementById('nextPage');
-            const searchInput = document.getElementById('searchInput');
-
-            let currentPage = 1;
-            let resultsPerPage = parseInt(resultsSelect.value);
-            let filteredRows = rows;
-
-            function updateTable() {
-                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
-                const start = (currentPage - 1) * resultsPerPage;
-                const end = start + resultsPerPage;
-
-                rows.forEach((row, index) => {
-                    row.style.display = filteredRows.includes(row) && index >= start && index < end ? '' : 'none';
-                });
-
-                paginationInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
-                prevPage.disabled = currentPage === 1;
-                nextPage.disabled = currentPage === totalPages;
-            }
-
-            function filterTable() {
-                const query = searchInput.value.toLowerCase();
-                filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
-                currentPage = 1;
-                updateTable();
-            }
-
-            resultsSelect.addEventListener('change', function () {
-                resultsPerPage = parseInt(this.value);
-                currentPage = 1;
-                updateTable();
-            });
-
-            prevPage.addEventListener('click', function () {
-                if (currentPage > 1) {
-                    currentPage--;
-                    updateTable();
-                }
-            });
-
-            nextPage.addEventListener('click', function () {
-                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    updateTable();
-                }
-            });
-
-            searchInput.addEventListener('input', filterTable);
-
-            updateTable();
-        });
-    </script>
+	{{ parent() }}
+	 <script>
+	        document.addEventListener('DOMContentLoaded', function () {
+	            const rows = Array.from(document.querySelectorAll('#datatable tbody tr'));
+	            const resultsSelect = document.getElementById('resultsSelect');
+	            const paginationInfo = document.getElementById('paginationInfo');
+	            const prevPage = document.getElementById('prevPage');
+	            const nextPage = document.getElementById('nextPage');
+	            const searchInput = document.getElementById('searchInput');
+	
+	            let currentPage = 1;
+	            let resultsPerPage = parseInt(resultsSelect.value);
+	            let filteredRows = rows;
+	
+	            function updateTable() {
+	                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+	                const start = (currentPage - 1) * resultsPerPage;
+	                const end = start + resultsPerPage;
+	
+	                rows.forEach((row, index) => {
+	                    row.style.display = filteredRows.includes(row) && index >= start && index < end ? '' : 'none';
+	                });
+	
+	                paginationInfo.textContent = `Page ${currentPage} sur ${totalPages}`;
+	                prevPage.disabled = currentPage === 1;
+	                nextPage.disabled = currentPage === totalPages;
+	            }
+	
+	            function filterTable() {
+	                const query = searchInput.value.toLowerCase();
+	                filteredRows = rows.filter(row => row.innerText.toLowerCase().includes(query));
+	                currentPage = 1;
+	                updateTable();
+	            }
+	
+	            resultsSelect.addEventListener('change', function () {
+	                resultsPerPage = parseInt(this.value);
+	                currentPage = 1;
+	                updateTable();
+	            });
+	
+	            prevPage.addEventListener('click', function () {
+	                if (currentPage > 1) {
+	                    currentPage--;
+	                    updateTable();
+	                }
+	            });
+	
+	            nextPage.addEventListener('click', function () {
+	                const totalPages = Math.ceil(filteredRows.length / resultsPerPage);
+	                if (currentPage < totalPages) {
+	                    currentPage++;
+	                    updateTable();
+	                }
+	            });
+	
+	            searchInput.addEventListener('input', filterTable);
+	
+	            updateTable();
+	        });
+	    </script>
 {% endblock %}
