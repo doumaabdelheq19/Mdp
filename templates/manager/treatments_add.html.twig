@@ -131,7 +131,7 @@
 					</div>
 				</div>
 				<div class="form-group1">
-					{{ form_label(form.legalBasis, 'Finalité principale*') }}
+					{{ form_label(form.legalBasis, 'Bases légales*') }}
 					{{ form_widget(form.legalBasis, { 'attr': { 'class': 'form-control ' ~ ((form_errors(form.legalBasis) == '') ? '' : 'is-invalid')} }) }}
 					<div class="invalid-feedback">{{ form_errors(form.legalBasis) | striptags }}</div>
 				</div>

@@ -1,6 +1,6 @@
 <aside class="sidebar">
     <div class="logosidebar">
-        <img src="{{ asset(logo_image) }}" alt="LOGO DATA SOLUTION" />
+        <img src="{{ asset(get_config('logo_image')) }}" alt="LOGO DATA SOLUTION" />
     </div>
     {% if not is_granted('ROLE_MANAGER') %}
     <h2 class="mobile">Service DPO - {{app.user.user.companyName}}</h2>

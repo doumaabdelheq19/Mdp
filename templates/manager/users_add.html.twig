@@ -231,14 +231,7 @@
 					</div>
 				</div>
 
-				<div class="form-group">
-
-					<div class="form-group1 width-100">
-						{{ form_label(form.language) }}
-						{{ form_widget(form.language, {'attr': {'class': 'form-control ' ~ ((form_errors(form.language) == '') ? '' : 'is-invalid')} }) }}
-						<div class="invalid-feedback">{{ form_errors(form.language) | striptags  }}</div>
-					</div>
-				</div>
+				 {{ form_widget(form.language, {'attr': {'class': 'disp-none'}}) }}
 
 			</div>
 

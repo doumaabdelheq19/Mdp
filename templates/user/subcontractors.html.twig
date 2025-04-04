@@ -49,7 +49,7 @@
 							{%endif%}
 						</h4>
 						<div class="checkbox">
-							<div class="chck-gap" >
+							<div class="chck-gap">
 								<input type="checkbox" {% if filter == 'invalid' %} checked {% endif %} onclick="window.location.href='{{ path('user_subcontractors', {type: type, filter: 'invalid'}) }}'">
 								<p>{{ 'non_conformes_with_progress'|trans({'%invalid%': subcontractorsStats.invalid}) }}</p>
 							</div>
@@ -102,34 +102,34 @@
 						<span class="search-icon">
 							<i class="fa fa-search" aria-hidden="true"></i>
 						</span>
-						<input type="text" placeholder="{{ 'Rechercher'|trans }}" id="search-input">
+						<input type="text" placeholder="{{ 'Rechercher'|trans }}" id="searchInput">
 
 
 					</div>
 					<div class="buttons">
 
+						{% if (app.user.user.childrenUsers|length) or (subcontractorsGrp|length) %}
+							<div class="gerer" {% if type ==3 %} style="width:350px" {% else %} style="width:250px" {% endif %}>
+								{% if type == 1 %}
+									<a href="#" id="traitmentsent" class="btn btn-primary disp-none">{{ 'Les sous-traitants de mon entité'|trans }}</a>
 
-						<div class="gerer" {% if type ==3 %} style="width:350px" {% else %} style="width:250px" {% endif %}>
-							{% if type == 1 %}
-								<a href="#" id="traitmentsent"  class="btn btn-primary disp-none">{{ 'Les sous-traitants de mon entité'|trans }}</a>
+									<a href="#" id="traitmentsgrp" class="btn btn-primary">{{ 'Les sous traitants de mon groupe'|trans }}</a>
 
-								<a href="#" id="traitmentsgrp" class="btn btn-primary">{{ 'Les sous traitants de mon groupe'|trans }}</a>
+								{% elseif type == 2 %}
+									<a href="#" id="traitmentsent" class="btn btn-primary disp-none">{{ 'Les cotraitants de mon entité'|trans }}</a>
 
-							{% elseif type == 2 %}
-								<a href="#"  id="traitmentsent" class="btn btn-primary disp-none">{{ 'Les cotraitants de mon entité'|trans }}</a>
+									<a href="#" id="traitmentsgrp" class="btn btn-primary">{{ 'Les cotraitants de mon groupe'|trans }}</a>
 
-								<a href="#" id="traitmentsgrp" class="btn btn-primary">{{ 'Les cotraitants de mon groupe'|trans }}</a>
+								{% elseif type == 3 %}
+									<a href="#" id="traitmentsent" class="btn btn-primary disp-none">{{ 'Les responsables de traitements de mon entité'|trans }}</a>
 
-							{% elseif type == 3 %}
-								<a href="#"  id="traitmentsent" class="btn btn-primary disp-none">{{ 'Les responsables de traitements de mon entité'|trans }}</a>
+									<a href="#" id="traitmentsgrp" class="btn btn-primary">{{ 'Les responsables de traitements de mon groupe'|trans }}</a>
 
-								<a href="#" id="traitmentsgrp" class="btn btn-primary">{{ 'Les responsables de traitements de mon groupe'|trans }}</a>
-
-							{% endif %}
+								{% endif %}
 
 
-						</div>
-
+							</div>
+						{% endif %}
 
 						<div class="exporter">
 							<a href="{{ path('user_subcontractors_add') }}">
@@ -140,84 +140,81 @@
 				</div>
 
 				<!-- Styled Table -->
-				<table class="styled-table">
-					<thead>
-						<tr>
-							<th>{{ 'societe'|trans }}</th>
-							<th>{{ 'typologie'|trans }}</th>
-							<th>{{ 'traitements'|trans }}</th>
-							<th>{{ 'contact'|trans }}</th>
-							<th>{{ 'tl'|trans }}</th>
-							<th>{{ 'mail'|trans }}</th>
-							<th>{{ 'conformit'|trans }}</th>
-							<th>{{ 'doc'|trans }}</th>
-							<th class="actionss">{{ 'actions'|trans }}</th>
-						</tr>
-					</thead>
-					<tbody id="table-body">
-						{% if subcontractors|length > 0 %}
-							{% for subcontractor in subcontractors %}
-								<tr>
-									{% if subcontractor.user.id == app.user.user.id %}
-										{% if subcontractor.group %}
-											<td>
-												<a href="{{ path('user_subcontractors_edit', {'id': subcontractor.id}) }}">{{ subcontractor.name }}</a>
-											</td>
-										{% else %}
-											<td>
-												<a href="{{ path('user_subcontractors_edit', {'id': subcontractor.id}) }}">{{ subcontractor.name }}</a>
-											</td>
-										{% endif %}
-									{% else %}
-										<td>{{ subcontractor.name }}</td>
-									{% endif %}
-									<td>{{ subcontractor.type }}</td>
-									<td>
-										{% for treatment in subcontractor.treatments %}
-											<span class="badge">{{ treatment.number }}</span>
-										{% endfor %}
-									</td>
-									<td>{{ subcontractor.contactLastName }}
-										{{ subcontractor.contactFirstName }}</td>
-									<td>{{ subcontractor.contactPhone }}</td>
-									<td class="daterouge">{{ subcontractor.contactEmail }}</td>
-									<td>{{ subcontractor.conformity.libelle }}</td>
-									<td>
-										{% for document in subcontractor.documents %}
-											<a href="{{ path('user_read_user_documents', {'id': document.id}) }}" target="_blank" class="badge">{{ document.name }}</a>
-										{% endfor %}
-									</td>
-									<td>
-										<div class="options">
-
-											<a href="{{ path('user_subcontractors_copy', {'id': subcontractor.id}) }}">
-												<button class="edit">
-													<i class="fa fa-clone" aria-hidden="true"></i>
-												</button>
-											</a>
-											<a href="{{ path('user_subcontractors_delete', {'id': subcontractor.id}) }}" onclick="return confirm('{{ 'confirmer_la_suppression'|trans }}');">
-												<button class="delete">
-													<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
-												</button>
-											</a>
-										</div>
-									</td>
-								</tr>
-							{% endfor %}
-						{% else %}
+				<div class="table-responsive">
+					<table class="styled-table">
+						<thead>
 							<tr>
-								<td colspan="9" class="text-center">{{ 'Aucun destinataire renseigné dans cette section'|trans }}</td>
-
+								<th>{{ 'societe'|trans }}</th>
+								<th>{{ 'typologie'|trans }}</th>
+								<th>{{ 'traitements'|trans }}</th>
+								<th>{{ 'contact'|trans }}</th>
+								<th>{{ 'tl'|trans }}</th>
+								<th>{{ 'mail'|trans }}</th>
+								<th>{{ 'conformit'|trans }}</th>
+								<th>{{ 'doc'|trans }}</th>
+								<th class="actionss">{{ 'actions'|trans }}</th>
 							</tr>
-						{% endif %}
-					</tbody>
+						</thead>
+						<tbody id="table-body">
+							{% if subcontractors|length > 0 %}
+								{% for subcontractor in subcontractors %}
+									<tr>
+										{% if subcontractor.user.id == app.user.user.id %}
+											{% if subcontractor.group %}
+												<td>
+													<a href="{{ path('user_subcontractors_edit', {'id': subcontractor.id}) }}">{{ subcontractor.name }}</a>
+												</td>
+											{% else %}
+												<td>
+													<a href="{{ path('user_subcontractors_edit', {'id': subcontractor.id}) }}">{{ subcontractor.name }}</a>
+												</td>
+											{% endif %}
+										{% else %}
+											<td>{{ subcontractor.name }}</td>
+										{% endif %}
+										<td>{{ subcontractor.type }}</td>
+										<td>
+											{% for treatment in subcontractor.treatments %}
+												<span class="badge">{{ treatment.number }}</span>
+											{% endfor %}
+										</td>
+										<td>{{ subcontractor.contactLastName }}
+											{{ subcontractor.contactFirstName }}</td>
+										<td>{{ subcontractor.contactPhone }}</td>
+										<td class="daterouge">{{ subcontractor.contactEmail }}</td>
+										<td>{{ subcontractor.conformity.libelle }}</td>
+										<td>
+											{% for document in subcontractor.documents %}
+												<a href="{{ path('user_read_user_documents', {'id': document.id}) }}" target="_blank" class="badge">{{ document.name }}</a>
+											{% endfor %}
+										</td>
+										<td>
+											<div class="options">
 
-				</table>
-				<div
-					class="pagination-container">
-					<!-- Results per page selector -->
-					<div class="results-per-page">
-						<label for="results">{{ 'Afficher'|trans }}</label>
+												<a href="{{ path('user_subcontractors_copy', {'id': subcontractor.id}) }}">
+													<button class="edit">
+														<i class="fa fa-clone" aria-hidden="true"></i>
+													</button>
+												</a>
+												<a href="{{ path('user_subcontractors_delete', {'id': subcontractor.id}) }}" onclick="return confirm('{{ 'confirmer_la_suppression'|trans }}');">
+													<button class="delete">
+														<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewbox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
+													</button>
+												</a>
+											</div>
+										</td>
+									</tr>
+								{% endfor %}
+							{% else %}
+								<tr>
+									<td colspan="9" class="text-center">{{ 'Aucun destinataire renseigné dans cette section'|trans }}</td>
+
+								</tr>
+							{% endif %}
+						</tbody>
+
+					</table>
+					<div{{'Afficher'|trans}}</label <div class="pagination-container"> <!-- Results per page selector --> <div class="results-per-page"> <label for="results">
 						<select id="results" class="results-select">
 							<option value="12" {% if app.request.query.get('results') == '12' %} selected {% endif %}>12</option>
 							<option value="24" {% if app.request.query.get('results') == '24' %} selected {% endif %}>24</option>
@@ -271,192 +268,250 @@
 			{% block javascripts %}
 				{{ parent() }}
 				 <script>
+								
+								document.addEventListener('DOMContentLoaded', function () {
+								    // Handle pagination button clicks
+								    document.querySelectorAll('.pagination-button').forEach(button => {
+								        button.addEventListener('click', function () {
+								            const isDisabled = this.classList.contains('disabled');
+								            if (!isDisabled) {
+								                const direction = this.textContent.trim() === ">" ? 1 : -1;
+								                const urlParams = new URLSearchParams(window.location.search);
+								                const currentPage = parseInt(urlParams.get('page')) || 1;
+								                const nextPage = currentPage + direction;
+								                urlParams.set('page', nextPage);
+								                window.location.search = urlParams.toString();
+								            }
+								        });
+								    });
+								
+								    // Handle results per page dropdown change
+								    document.getElementById('results').addEventListener('change', function () {
+								        const selectedValue = this.value;
+								        const urlParams = new URLSearchParams(window.location.search);
+								        urlParams.set('results', selectedValue);
+								        urlParams.delete('page'); // Reset to the first page
+								        window.location.search = urlParams.toString();
+								    });
+								
+								    // Handle table update on "traitmentsgrp" button click
+									
+								   const traitmentsGrp = document.getElementById('traitmentsgrp');
+
+if (traitmentsGrp) {
+    traitmentsGrp.addEventListener('click', function (e) {
+								        e.preventDefault();
+								        document.getElementById('traitmentsent').style.display="block";
+								        document.getElementById('traitmentsgrp').style.display="none"
+								        const urlParams = new URLSearchParams(window.location.search);
+								      const tableBody = document.getElementById("table-body")
+								         tableBody.innerHTML = `
+								         {% if subcontractorsGrp|length > 0 %}
+								            {% for subcontractor in subcontractorsGrp %}
+								                <tr>
+								                       {% if subcontractor.user.id == app.user.user.id %}
+								                                                    {% if subcontractor.group %}
+								                                                        <td><a href="{{ path('user_subcontractors_edit', {'id': subcontractor.id}) }}">{{ subcontractor.name }}</a></td>
+								                                                    {% else %}
+								                                                        <td><a href="{{ path('user_subcontractors_edit', {'id': subcontractor.id}) }}">{{ subcontractor.name }}</a></td>
+								                                                    {% endif %}
+								                                                {% else %}
+								                                                    <td>{{ subcontractor.name }}</td>
+								                                                {% endif %}
+								                    <td>{{ subcontractor.type }}</td>
+								                    <td>
+								                        {% for treatment in subcontractor.treatments %}
+								                            <span class="badge">{{ treatment.number }}</span>
+								                        {% endfor %}
+								                    </td>
+								                    <td>{{ subcontractor.contactLastName }} {{ subcontractor.contactFirstName }}</td>
+								                    <td>{{ subcontractor.contactPhone }}</td>
+								                    <td>{{ subcontractor.contactEmail }}</td>
+								                    <td>{{ subcontractor.conformity }}</td>
+								                    <td>
+								                        {% for document in subcontractor.documents %}
+								                            <a href="{{ path('user_read_user_documents', {'id': document.id}) }}" target="_blank" class="badge">{{ document.name }}</a>
+								                        {% endfor %}
+								                    </td>
+								                    <td>
+								                        <div class="options">
+								                            <a href="{{ path('user_subcontractors_grp_edit', {'id': subcontractor.id}) }}">
+								                                <button class="edit"><i class="fa fa-edit" aria-hidden="true"></i></button>
+								                            </a>
+								                              <a href="{{ path('user_subcontractors_grp_copy', {'id': subcontractor.id}) }}">
+								                                <button class="edit">
+								                                    <i class="fa fa-clone" aria-hidden="true"></i>
+								                                </button>
+								                                </a>
+								                            <a href="{{ path('user_subcontractors_grp_delete', {'id': subcontractor.id}) }}" onclick="return confirm('{{ 'confirmer_la_suppression'|trans }}');">
+								                                <button class="delete">
+								                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
+								                                </button>
+								                            </a>
+								                        </div>
+								                    </td>
+								                </tr>
+								            {% endfor %}
+								              {% else %}
+								        <tr>
+								          <td colspan="9" class="text-center">{{ 'Aucun destinataire renseigné dans cette section'|trans }}</td>
+								        </tr>
+								    {% endif %}
+								        `;
+								
+								        document.querySelectorAll('.pagination-button').forEach(button => {
+								        button.addEventListener('click', function () {
+								            const isDisabled = this.classList.contains('disabled');
+								            if (!isDisabled) {
+								                const direction = this.textContent.trim() === ">" ? 1 : -1;
+								                const urlParams = new URLSearchParams(window.location.search);
+								                const currentPage = parseInt(urlParams.get('page')) || 1;
+								                const nextPage = currentPage + direction;
+								                urlParams.set('page', nextPage);
+								                window.location.search = urlParams.toString();
+								            }
+								        });
+								    });
+								
+								    // Handle results per page dropdown change
+								    document.getElementById('results').addEventListener('change', function () {
+								        const selectedValue = this.value;
+								        const urlParams = new URLSearchParams(window.location.search);
+								        urlParams.set('results', selectedValue);
+								        urlParams.delete('page'); // Reset to the first page
+								        window.location.search = urlParams.toString();
+								    });
+								    });}
+								
+
+if (traitmentsGrp) {
+    traitmentsGrp.addEventListener('click', function (e) {
+								        e.preventDefault();
+								        document.getElementById('traitmentsgrp').style.display="block";
+								        document.getElementById('traitmentsent').style.display="none"
+								        const urlParams = new URLSearchParams(window.location.search);
+								      const tableBody = document.getElementById("table-body")
+								         tableBody.innerHTML = `
+								            {% if subcontractors|length > 0 %}
+								        {% for subcontractor in subcontractors %}
+								            <tr>
+								                <td>{{ subcontractor.name }}</td>
+								                <td>{{ subcontractor.type }}</td>
+								                <td>
+								                    {% for treatment in subcontractor.treatments %}
+								                        <span class="badge">{{ treatment.number }}</span>
+								                    {% endfor %}
+								                </td>
+								                <td>{{ subcontractor.contactLastName }} {{ subcontractor.contactFirstName }}</td>
+								                <td>{{ subcontractor.contactPhone }}</td>
+								                <td class="daterouge">{{ subcontractor.contactEmail }}</td>
+								                <td>{{ subcontractor.conformity.libelle }}</td>
+								                <td>
+								                    {% for document in subcontractor.documents %}
+								                        <a href="{{ path('user_read_user_documents', {'id': document.id}) }}" target="_blank" class="badge">{{ document.name }}</a>
+								                    {% endfor %}
+								                </td>
+								                <td>
+								                    <div class="options">
+								                       
+								                          <a href="{{ path('user_subcontractors_copy', {'id': subcontractor.id}) }}">
+								                                <button class="edit">
+								                                    <i class="fa fa-clone" aria-hidden="true"></i>
+								                                </button>
+								                                </a>
+								                        <a href="{{ path('user_subcontractors_delete', {'id': subcontractor.id}) }}" onclick="return confirm('{{ 'confirmer_la_suppression'|trans }}');">
+								                            <button class="delete">
+								                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
+								                            </button>
+								                        </a>
+								                    </div>
+								                </td>
+								            </tr>
+								        {% endfor %}
+								    {% else %}
+								    <tr>
+								          <td colspan="9" class="text-center">{{ 'Aucun destinataire renseigné dans cette section'|trans }}</td>
+								        </tr>
+								    {% endif %}
+								        `;
+								
+								       document.querySelectorAll('.pagination-button').forEach(button => {
+								        button.addEventListener('click', function () {
+								            const isDisabled = this.classList.contains('disabled');
+								            if (!isDisabled) {
+								                const direction = this.textContent.trim() === ">" ? 1 : -1;
+								                const urlParams = new URLSearchParams(window.location.search);
+								                const currentPage = parseInt(urlParams.get('page')) || 1;
+								                const nextPage = currentPage + direction;
+								                urlParams.set('page', nextPage);
+								                window.location.search = urlParams.toString();
+								            }
+								        });
+								    });
 				
-				document.addEventListener('DOMContentLoaded', function () {
-				    // Handle pagination button clicks
-				    document.querySelectorAll('.pagination-button').forEach(button => {
-				        button.addEventListener('click', function () {
-				            const isDisabled = this.classList.contains('disabled');
-				            if (!isDisabled) {
-				                const direction = this.textContent.trim() === ">" ? 1 : -1;
-				                const urlParams = new URLSearchParams(window.location.search);
-				                const currentPage = parseInt(urlParams.get('page')) || 1;
-				                const nextPage = currentPage + direction;
-				                urlParams.set('page', nextPage);
-				                window.location.search = urlParams.toString();
-				            }
+									document.getElementById('search-input').addEventListener('keyup', function () {
+					            const searchValue = this.value.toLowerCase();
+					            const rows = document.querySelectorAll('#datatable tbody tr');
+					
+					            rows.forEach(row => {
+					                const text = row.innerText.toLowerCase();
+					                row.style.display = text.includes(searchValue) ? '' : 'none';
+					            });
+					        });
+							 function setupSearch(inputId, tableBodyId) {
+        const searchInput = document.getElementById(inputId);
+        if (!searchInput) return;
+
+        searchInput.addEventListener('keyup', function () {
+            const query = this.value.toLowerCase();
+            const rows = document.querySelectorAll(`#${tableBodyId} tr`);
+
+            rows.forEach(row => {
+                const rowText = row.innerText.toLowerCase();
+                row.style.display = rowText.includes(query) ? '' : 'none';
+            });
+        });
+    }
+
+    // Initialize search for both entity and group tables
+    setupSearch('searchInput', 'table-body');
+
+    // Reinitialize search when switching between entity/group views
+
+
+if (traitmentsGrp) {
+    traitmentsGrp.addEventListener('click', () => {
+        setTimeout(() => setupSearch('searchInput', 'table-body'), 100);
+    });}
+
+    document.getElementById('traitmentsent')?.addEventListener('click', () => {
+        setTimeout(() => setupSearch('searchInput', 'table-body'), 100);
+    });
+
+								
+								    // Handle results per page dropdown change
+								    document.getElementById('results').addEventListener('change', function () {
+								        const selectedValue = this.value;
+								        const urlParams = new URLSearchParams(window.location.search);
+								        urlParams.set('results', selectedValue);
+								        urlParams.delete('page'); // Reset to the first page
+								        window.location.search = urlParams.toString();
+								    });
+								    });}
+									 const searchInput = document.getElementById('searchInput');
+				    if (searchInput) {
+				        searchInput.addEventListener('keyup', function () {
+				            const searchValue = this.value.toLowerCase();
+				            const rows = document.querySelectorAll('#table-body tr');
+				
+				            rows.forEach(row => {
+				                const text = row.innerText.toLowerCase();
+				                row.style.display = text.includes(searchValue) ? '' : 'none';
+				            });
 				        });
-				    });
-				
-				    // Handle results per page dropdown change
-				    document.getElementById('results').addEventListener('change', function () {
-				        const selectedValue = this.value;
-				        const urlParams = new URLSearchParams(window.location.search);
-				        urlParams.set('results', selectedValue);
-				        urlParams.delete('page'); // Reset to the first page
-				        window.location.search = urlParams.toString();
-				    });
-				
-				    // Handle table update on "traitmentsgrp" button click
-				    document.getElementById('traitmentsgrp').addEventListener('click', function (e) {
-				        e.preventDefault();
-				        document.getElementById('traitmentsent').style.display="block";
-				        document.getElementById('traitmentsgrp').style.display="none"
-				        const urlParams = new URLSearchParams(window.location.search);
-				      const tableBody = document.getElementById("table-body")
-				         tableBody.innerHTML = `
-				         {% if subcontractorsGrp|length > 0 %}
-				            {% for subcontractor in subcontractorsGrp %}
-				                <tr>
-				                       {% if subcontractor.user.id == app.user.user.id %}
-				                                                    {% if subcontractor.group %}
-				                                                        <td><a href="{{ path('user_subcontractors_edit', {'id': subcontractor.id}) }}">{{ subcontractor.name }}</a></td>
-				                                                    {% else %}
-				                                                        <td><a href="{{ path('user_subcontractors_edit', {'id': subcontractor.id}) }}">{{ subcontractor.name }}</a></td>
-				                                                    {% endif %}
-				                                                {% else %}
-				                                                    <td>{{ subcontractor.name }}</td>
-				                                                {% endif %}
-				                    <td>{{ subcontractor.type }}</td>
-				                    <td>
-				                        {% for treatment in subcontractor.treatments %}
-				                            <span class="badge">{{ treatment.number }}</span>
-				                        {% endfor %}
-				                    </td>
-				                    <td>{{ subcontractor.contactLastName }} {{ subcontractor.contactFirstName }}</td>
-				                    <td>{{ subcontractor.contactPhone }}</td>
-				                    <td>{{ subcontractor.contactEmail }}</td>
-				                    <td>{{ subcontractor.conformity }}</td>
-				                    <td>
-				                        {% for document in subcontractor.documents %}
-				                            <a href="{{ path('user_read_user_documents', {'id': document.id}) }}" target="_blank" class="badge">{{ document.name }}</a>
-				                        {% endfor %}
-				                    </td>
-				                    <td>
-				                        <div class="options">
-				                            <a href="{{ path('user_subcontractors_edit', {'id': subcontractor.id}) }}">
-				                                <button class="edit"><i class="fa fa-edit" aria-hidden="true"></i></button>
-				                            </a>
-				                              <a href="{{ path('user_subcontractors_copy', {'id': subcontractor.id}) }}">
-				                                <button class="edit">
-				                                    <i class="fa fa-clone" aria-hidden="true"></i>
-				                                </button>
-				                                </a>
-				                            <a href="{{ path('user_subcontractors_delete', {'id': subcontractor.id}) }}" onclick="return confirm('{{ 'confirmer_la_suppression'|trans }}');">
-				                                <button class="delete">
-				                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
-				                                </button>
-				                            </a>
-				                        </div>
-				                    </td>
-				                </tr>
-				            {% endfor %}
-				              {% else %}
-				        <tr>
-				          <td colspan="9" class="text-center">{{ 'Aucun destinataire renseigné dans cette section'|trans }}</td>
-				        </tr>
-				    {% endif %}
-				        `;
-				
-				        document.querySelectorAll('.pagination-button').forEach(button => {
-				        button.addEventListener('click', function () {
-				            const isDisabled = this.classList.contains('disabled');
-				            if (!isDisabled) {
-				                const direction = this.textContent.trim() === ">" ? 1 : -1;
-				                const urlParams = new URLSearchParams(window.location.search);
-				                const currentPage = parseInt(urlParams.get('page')) || 1;
-				                const nextPage = currentPage + direction;
-				                urlParams.set('page', nextPage);
-				                window.location.search = urlParams.toString();
-				            }
-				        });
-				    });
-				
-				    // Handle results per page dropdown change
-				    document.getElementById('results').addEventListener('change', function () {
-				        const selectedValue = this.value;
-				        const urlParams = new URLSearchParams(window.location.search);
-				        urlParams.set('results', selectedValue);
-				        urlParams.delete('page'); // Reset to the first page
-				        window.location.search = urlParams.toString();
-				    });
-				    });
-				
-				    document.getElementById('traitmentsent').addEventListener('click', function (e) {
-				        e.preventDefault();
-				        document.getElementById('traitmentsgrp').style.display="block";
-				        document.getElementById('traitmentsent').style.display="none"
-				        const urlParams = new URLSearchParams(window.location.search);
-				      const tableBody = document.getElementById("table-body")
-				         tableBody.innerHTML = `
-				            {% if subcontractors|length > 0 %}
-				        {% for subcontractor in subcontractors %}
-				            <tr>
-				                <td>{{ subcontractor.name }}</td>
-				                <td>{{ subcontractor.type }}</td>
-				                <td>
-				                    {% for treatment in subcontractor.treatments %}
-				                        <span class="badge">{{ treatment.number }}</span>
-				                    {% endfor %}
-				                </td>
-				                <td>{{ subcontractor.contactLastName }} {{ subcontractor.contactFirstName }}</td>
-				                <td>{{ subcontractor.contactPhone }}</td>
-				                <td class="daterouge">{{ subcontractor.contactEmail }}</td>
-				                <td>{{ subcontractor.conformity.libelle }}</td>
-				                <td>
-				                    {% for document in subcontractor.documents %}
-				                        <a href="{{ path('user_read_user_documents', {'id': document.id}) }}" target="_blank" class="badge">{{ document.name }}</a>
-				                    {% endfor %}
-				                </td>
-				                <td>
-				                    <div class="options">
-				                       
-				                          <a href="{{ path('user_subcontractors_copy', {'id': subcontractor.id}) }}">
-				                                <button class="edit">
-				                                    <i class="fa fa-clone" aria-hidden="true"></i>
-				                                </button>
-				                                </a>
-				                        <a href="{{ path('user_subcontractors_delete', {'id': subcontractor.id}) }}" onclick="return confirm('{{ 'confirmer_la_suppression'|trans }}');">
-				                            <button class="delete">
-				                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2h4a1 1 0 1 1 0 2h-1.069l-.867 12.142A2 2 0 0 1 17.069 22H6.93a2 2 0 0 1-1.995-1.858L4.07 8H3a1 1 0 0 1 0-2h4zm2 2h6V4H9zM6.074 8l.857 12H17.07l.857-12zM10 10a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1m4 0a1 1 0 0 1 1 1v6a1 1 0 1 1-2 0v-6a1 1 0 0 1 1-1"/></svg>
-				                            </button>
-				                        </a>
-				                    </div>
-				                </td>
-				            </tr>
-				        {% endfor %}
-				    {% else %}
-				    <tr>
-				          <td colspan="9" class="text-center">{{ 'Aucun destinataire renseigné dans cette section'|trans }}</td>
-				        </tr>
-				    {% endif %}
-				        `;
-				
-				       document.querySelectorAll('.pagination-button').forEach(button => {
-				        button.addEventListener('click', function () {
-				            const isDisabled = this.classList.contains('disabled');
-				            if (!isDisabled) {
-				                const direction = this.textContent.trim() === ">" ? 1 : -1;
-				                const urlParams = new URLSearchParams(window.location.search);
-				                const currentPage = parseInt(urlParams.get('page')) || 1;
-				                const nextPage = currentPage + direction;
-				                urlParams.set('page', nextPage);
-				                window.location.search = urlParams.toString();
-				            }
-				        });
-				    });
-				
-				    // Handle results per page dropdown change
-				    document.getElementById('results').addEventListener('change', function () {
-				        const selectedValue = this.value;
-				        const urlParams = new URLSearchParams(window.location.search);
-				        urlParams.set('results', selectedValue);
-				        urlParams.delete('page'); // Reset to the first page
-				        window.location.search = urlParams.toString();
-				    });
-				    });
-				});
-				
-				
-				    </script>
+				    }
+								});
+								
+								
+								    </script>
 			{% endblock %}
